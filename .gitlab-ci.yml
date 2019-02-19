@@ -1,0 +1,13 @@
+stages:
+  - build
+  - test
+  - deploy
+
+
+Build Site:
+  image: node:latest
+  stage: build
+  script:
+    - npm install --progress=false
+    - npm run build
+    - echo "complete"
