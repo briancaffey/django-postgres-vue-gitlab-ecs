@@ -22,5 +22,6 @@ deploy:
     - build
   before_script:
     - pip install awscli
+    - aws iam get-user
   script:
-    - aws s3 sync dist/* s3://briancaffey.com/ --delete
+    - aws s3 sync dist/ s3://briancaffey.com/ --delete
