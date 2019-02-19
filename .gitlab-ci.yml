@@ -1,8 +1,31 @@
 stages:
-  - build
   - test
+  - build
   - deploy
 
+unit:
+  image: node:latest
+  stage: test
+  before_script:
+    - npm install --progress=false
+  script:
+    - npm run lint
+    - npm run test:unit
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    paths:
+      - tests/e2e/videos/
+      - tests/e2e/screenshots/
+    expire_in: 7 days
+
+e2e:
+  image: cypress/base:10
+  stage: test
+  before_script:
+    - npm install --progress=false
+  script:
+    - npm run serve &
+    - $(npm bin)/cypress run
 
 build:
   image: node:latest
@@ -14,7 +37,6 @@ build:
     - npm install --progress=false
     - npm run build
     - echo "Build Complete"
-
 
 deploy:
   image: python:3.6
