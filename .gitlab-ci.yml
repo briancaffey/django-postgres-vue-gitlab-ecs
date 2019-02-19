@@ -4,10 +4,23 @@ stages:
   - deploy
 
 
-Build Site:
+build:
   image: node:latest
   stage: build
+  artifacts:
+    untracked: true
   script:
     - npm install --progress=false
     - npm run build
-    - echo "complete"
+    - echo "Build Complete"
+
+
+deploy:
+  image: python:3.6
+  stage: deploy
+  dependencies:
+    - build
+  before_script:
+    - pip install awscli
+  script:
+    - aws s3 sync dist/* s3://briancaffey.com/ --delete
