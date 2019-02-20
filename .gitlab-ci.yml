@@ -19,7 +19,9 @@ e2e:
   before_script:
     - npm install --progress=false
   script:
+    - apt install httping
     - npm run serve &
+    - while ! httping -qc1 http://localhost:8080/login ; do sleep 1 ; done
     - $(npm bin)/cypress run
   artifacts:
     paths:
