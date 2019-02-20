@@ -16,7 +16,7 @@ export default {
   },
   data(){
     return {
-      commit: process.env.CI_COMMIT_SHORT_SHA || 'some commit'
+      commit: process.env.CI_COMMIT_SHORT_SHA
     }
   }
 }
