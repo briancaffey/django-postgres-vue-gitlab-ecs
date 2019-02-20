@@ -30,6 +30,8 @@ e2e:
 build:
   image: node:latest
   stage: build
+  variables:
+    CI_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
   artifacts:
     paths:
       - dist/
