@@ -52,3 +52,4 @@ deploy:
     - aws iam get-user
   script:
     - aws s3 sync dist/ s3://briancaffey.com/ --delete
+    - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
