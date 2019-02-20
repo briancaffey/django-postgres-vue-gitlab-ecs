@@ -3,7 +3,7 @@ stages:
   - build
   - deploy
 
-unit:
+.unit:
   image: node:latest
   stage: test
   before_script:
@@ -13,7 +13,7 @@ unit:
     - npm run test:unit
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
-e2e:
+.e2e:
   image: cypress/base:10
   stage: test
   before_script:
@@ -33,7 +33,7 @@ build:
   image: node:latest
   stage: build
   variables:
-    CI_COMMIT_SHORT_SHA: $CI_COMMIT_SHORT_SHA
+    CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
   artifacts:
     paths:
       - dist/
