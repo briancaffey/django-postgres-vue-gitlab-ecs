@@ -6,6 +6,8 @@ stages:
 build-backend:
   stage: build
   image: docker:stable
+  services:
+    - docker:dind
   variables:
     REPOSITORY_URL: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend
   before_script:
