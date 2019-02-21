@@ -3,20 +3,36 @@ stages:
   - build
   - deploy
 
-.unit:
+build-backend:
+  stage: build
+  image: docker:stable
+  variables:
+    REPOSITORY_URL: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend
+  before_script:
+    - cd backend
+    - apk add --no-cache curl jq python py-pip
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+  script:
+    - docker build -t $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA .
+    - docker push $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA
+
+unit:
   image: node:latest
   stage: test
   before_script:
+    - cd frontend
     - npm install --progress=false
   script:
     - npm run lint
     - npm run test:unit
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
-.e2e:
+e2e:
   image: cypress/base:10
   stage: test
   before_script:
+    - cd frontend
     - npm install --progress=false
   script:
     - apt install httping
@@ -29,7 +45,7 @@ stages:
       - tests/e2e/screenshots/
     expire_in: 7 days
 
-build:
+build-frontend:
   image: node:latest
   stage: build
   variables:
@@ -37,17 +53,20 @@ build:
   artifacts:
     paths:
       - dist/
-  script:
+  before_script:
+    - cd frontend
     - npm install --progress=false
+  script:
     - npm run build
     - echo "Build Complete"
 
-deploy:
+deploy-frontend:
   image: python:3.6
   stage: deploy
   dependencies:
     - build
   before_script:
+    - cd frontend
     - pip install awscli
     - aws iam get-user
   script:

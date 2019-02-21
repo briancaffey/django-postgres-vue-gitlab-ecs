@@ -1,31 +1,12 @@
-# briancaffey.com
+Build the backend container with:
 
-## Project setup
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+docker build -t briancaffey.com:latest .
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Run the backend container with:
 
-### Lints and fixes files
 ```
-npm run lint
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Run your end-to-end tests
-```
-npm run test:e2e
+docker run -it -v /home/brian/gitlab/briancaffey.com/backend/:/code briancaffey
+.com:latest /bin/bash
 ```
