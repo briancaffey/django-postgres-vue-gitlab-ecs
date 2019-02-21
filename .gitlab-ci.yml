@@ -64,7 +64,7 @@ deploy-frontend:
   image: python:3.6
   stage: deploy
   dependencies:
-    - build
+    - build-frontend
   before_script:
     - cd frontend
     - pip install awscli
