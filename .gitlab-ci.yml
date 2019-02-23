@@ -3,7 +3,7 @@ stages:
   - build
   - deploy
 
-build-backend:
+.build-backend:
   stage: build
   image: docker:stable
   services:
@@ -19,7 +19,7 @@ build-backend:
     - docker build -t $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA .
     - docker push $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA
 
-unit:
+.unit:
   image: node:latest
   stage: test
   before_script:
@@ -52,9 +52,10 @@ build-frontend:
   stage: build
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
+    VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
   artifacts:
     paths:
-      - dist/
+      - frontend/dist/
   before_script:
     - cd frontend
     - npm install --progress=false

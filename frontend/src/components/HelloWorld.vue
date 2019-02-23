@@ -5,6 +5,7 @@
     <p>The site is updated through a GitLab CI/CD pipeline.</p>
     <p>Commit ref: {{ commit }}</p>
     <p>Using cache invalidation</p>
+    <a href="{{ ciJobUrl }}">View CI Job</a>
   </div>
 </template>
 
@@ -16,7 +17,8 @@ export default {
   },
   data(){
     return {
-      commit: process.env.VUE_APP_CI_COMMIT_SHORT_SHA
+      commit: process.env.VUE_APP_CI_COMMIT_SHORT_SHA,
+      ciJobUrl: process.env.VUE_APP_CI_JOB_URL
     }
   }
 }
