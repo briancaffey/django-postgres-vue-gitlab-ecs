@@ -69,12 +69,11 @@ deploy-frontend:
   dependencies:
     - build-frontend
   before_script:
-    - ls
-    - ls ..
-    - pwd
+    - ls frontend
+    - ls frontend/dist || echo "nothing in frontend/dist"
     - cd frontend
     - pip install awscli
     - aws iam get-user
   script:
-    - aws s3 sync frontend/dist/ s3://briancaffey.com/ --delete
+    - aws s3 sync dist/ s3://briancaffey.com/ --delete
     - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
