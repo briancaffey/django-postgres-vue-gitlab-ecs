@@ -2,10 +2,11 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>This is a static site that is served with a CloudFront distribution in front of an S3 bucket.</p>
-    <p>The site is updated through a GitLab CI/CD pipeline.</p>
+    <p>The site is updated through a <a href="https://gitlab.com/briancaffey/briancaffey.com">GitLab CI/CD pipeline</a>.</p>
     <p>Commit ref: {{ commit }}</p>
     <p>Using cache invalidation</p>
-    <a href="{{ ciJobUrl }}">View CI Job</a>
+    <a :href="ciJobUrl">View CI Job</a>
+    <p>New the site now has a Django backend that deploys to ECS via CloudFormation templates.
   </div>
 </template>
 
