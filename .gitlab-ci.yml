@@ -50,6 +50,8 @@ stages:
 build-frontend:
   image: node:latest
   stage: build
+  only:
+    - master
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
@@ -66,6 +68,8 @@ build-frontend:
 deploy-frontend:
   image: python:3.6
   stage: deploy
+  only:
+    - master
   dependencies:
     - build-frontend
   before_script:
