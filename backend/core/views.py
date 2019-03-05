@@ -5,3 +5,8 @@ from django.http import JsonResponse
 def hello_world(request):
     response = JsonResponse({'message': 'Hello World!'})
     return response
+
+
+def home(request):
+    response = JsonResponse({'message':'Home Page'})
+    return response

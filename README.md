@@ -2,13 +2,13 @@
 
 Build the backend container with:
 
-```
+```bash
 docker build -t briancaffey.com:latest .
 ```
 
 Run the backend container with:
 
-```
+```bash
 docker run -it -v /home/brian/gitlab/briancaffey.com/backend/:/code briancaffey
 .com:latest /bin/bash
 ```
@@ -17,14 +17,18 @@ docker run -it -v /home/brian/gitlab/briancaffey.com/backend/:/code briancaffey
 
 ### sync templates to S3 bucket
 
-```
+Creating and updating stacks requires a template that is located in an S3 bucket. We provide the bucket URL in the `create-stack` and `update-stack` commands with the `--template-url` option.
+
+```bash
 aws s3 sync . s3://briancaffey.com-cloudformation/
 ```
 
 ### validate-template
 
-```
-aws cloudformation validate-template --template-body file:///home/brian/gitlab/briancaffey.com/infrastructure/master.yaml
+The following command can be used to validate CloudFormation templates locally:
+
+```bash
+aws cloudformation validate-template --template-body file:///home/brian/gitlab/briancaffey.com/cloudformation/master.yaml
 ```
 
 The above command will have this output:
@@ -45,12 +49,12 @@ The above command will have this output:
 
 ### create-stack
 
-```
+```bash
 aws cloudformation create-stack --stack-name briancaffey --template-url https://s3.amazonaws.com/briancaffey.com-cloudformation/master.yaml --capabilities=CAPABILITY_NAMED_IAM
 ```
 
 ### update-stack
 
-```
+```bash
 aws cloudformation update-stack --stack-name briancaffey --template-url https://s3.amazonaws.com/briancaffey.com-cloudformation/master.yaml --capabilities=CAPABILITY_NAMED_IAM
 ```

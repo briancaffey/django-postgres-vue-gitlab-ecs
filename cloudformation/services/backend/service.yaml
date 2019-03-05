@@ -1,6 +1,5 @@
 Description: >
-  This is an example of a long running ECS service that needs to connect to another ECS service (product-service)
-  via it's load balancer. We use environment variables to pass the URL of the product-service to this one's container(s).
+  This is an example of a long running ECS service that serves a JSON API of products.
 
 Parameters:
   VPC:
@@ -16,15 +15,6 @@ Parameters:
     Type: Number
     Default: 2
 
-  MaxCount:
-    Description: Maximum number of instances of this task we can run across our cluster
-    Type: Number
-    Default: 3
-
-  ProductServiceUrl:
-    Description: The URL of the Product Service (used to fetch product information)
-    Type: String
-
   Listener:
     Description: The Application Load Balancer listener to register with
     Type: String
@@ -33,10 +23,6 @@ Parameters:
     Description: The path to register with the Application Load Balancer
     Type: String
     Default: /
-
-  ECSServiceAutoScalingRoleARN:
-    Description: The ECS service auto scaling role ARN
-    Type: String
 
 Resources:
   Service:
@@ -48,22 +34,19 @@ Resources:
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
-        - ContainerName: "website-service"
+        - ContainerName: "backend"
           ContainerPort: 8000
           TargetGroupArn: !Ref TargetGroup
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: website-service
+      Family: backend
       ContainerDefinitions:
-        - Name: website-service
+        - Name:backend
           Essential: true
-          Image: 275396840892.dkr.ecr.us-east-1.amazonaws.com/ecs-refarch-cloudformation/website-service:1.0.0
+          Image: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend:latest
           Memory: 128
-          Environment:
-            - Name: PRODUCT_SERVICE_URL
-              Value: !Ref ProductServiceUrl
           PortMappings:
             - ContainerPort: 8000
           LogConfiguration:
@@ -87,7 +70,7 @@ Resources:
       Matcher:
         HttpCode: 200-299
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
+      HealthCheckPath: /api/hello-world
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
@@ -96,7 +79,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       ListenerArn: !Ref Listener
-      Priority: 1
+      Priority: 2
       Conditions:
         - Field: path-pattern
           Values:
@@ -146,85 +129,3 @@ Resources:
                   }
                 ]
             }
-
-  ServiceScalableTarget:
-    Type: "AWS::ApplicationAutoScaling::ScalableTarget"
-    Properties:
-      MaxCapacity: !Ref MaxCount
-      MinCapacity: !Ref DesiredCount
-      ResourceId: !Join
-        - /
-        - - service
-          - !Ref Cluster
-          - !GetAtt Service.Name
-      RoleARN: !Ref ECSServiceAutoScalingRoleARN
-      ScalableDimension: ecs:service:DesiredCount
-      ServiceNamespace: ecs
-
-  ServiceScaleOutPolicy:
-    Type: "AWS::ApplicationAutoScaling::ScalingPolicy"
-    Properties:
-      PolicyName: ServiceScaleOutPolicy
-      PolicyType: StepScaling
-      ScalingTargetId: !Ref ServiceScalableTarget
-      StepScalingPolicyConfiguration:
-        AdjustmentType: ChangeInCapacity
-        Cooldown: 1800
-        MetricAggregationType: Average
-        StepAdjustments:
-          - MetricIntervalLowerBound: 0
-            ScalingAdjustment: 1
-
-  ServiceScaleInPolicy:
-    Type: "AWS::ApplicationAutoScaling::ScalingPolicy"
-    Properties:
-      PolicyName: ServiceScaleInPolicy
-      PolicyType: StepScaling
-      ScalingTargetId: !Ref ServiceScalableTarget
-      StepScalingPolicyConfiguration:
-        AdjustmentType: ChangeInCapacity
-        Cooldown: 1800
-        MetricAggregationType: Average
-        StepAdjustments:
-          - MetricIntervalUpperBound: 0
-            ScalingAdjustment: -1
-
-  CPUScaleOutAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: CPU utilization greater than 90%
-      AlarmDescription: Alarm if cpu utilization greater than 90% of reserved cpu
-      Namespace: AWS/ECS
-      MetricName: CPUUtilization
-      Dimensions:
-        - Name: ClusterName
-          Value: !Ref Cluster
-        - Name: ServiceName
-          Value: !GetAtt Service.Name
-      Statistic: Maximum
-      Period: "60"
-      EvaluationPeriods: "3"
-      Threshold: "90"
-      ComparisonOperator: GreaterThanThreshold
-      AlarmActions:
-        - !Ref ServiceScaleOutPolicy
-
-  CPUScaleInAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmName: CPU utilization less than 70%
-      AlarmDescription: Alarm if cpu utilization greater than 70% of reserved cpu
-      Namespace: AWS/ECS
-      MetricName: CPUUtilization
-      Dimensions:
-        - Name: ClusterName
-          Value: !Ref Cluster
-        - Name: ServiceName
-          Value: !GetAtt Service.Name
-      Statistic: Maximum
-      Period: "60"
-      EvaluationPeriods: "10"
-      Threshold: "70"
-      ComparisonOperator: LessThanThreshold
-      AlarmActions:
-        - !Ref ServiceScaleInPolicy

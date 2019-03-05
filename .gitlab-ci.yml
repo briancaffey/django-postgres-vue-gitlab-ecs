@@ -3,7 +3,7 @@ stages:
   - build
   - deploy
 
-.build-backend:
+build-backend:
   stage: build
   image: docker:stable
   services:
@@ -16,8 +16,8 @@ stages:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region us-east-1)
   script:
-    - docker build -t $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA .
-    - docker push $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA
+    - docker build -t $REPOSITORY_URL:latest .
+    - docker push $REPOSITORY_URL:latest
 
 .unit:
   image: node:latest

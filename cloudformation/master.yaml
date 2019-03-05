@@ -11,7 +11,7 @@ Description: >
   Finally, it deploys a pair of example ECS services from containers published in
   Amazon EC2 Container Registry (Amazon ECR).
 
-  Last Modified: 22nd September 2016
+  Last Modified: 5th Match 2019
   Author: Paul Maddox <pmaddox@amazon.com>
 
 Resources:
@@ -51,7 +51,7 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/infrastructure/ecs-cluster.yaml
       Parameters:
         EnvironmentName: !Ref AWS::StackName
-        InstanceType: t2.large
+        InstanceType: t2.small
         ClusterSize: 4
         VPC: !GetAtt VPC.Outputs.VPC
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
@@ -60,27 +60,13 @@ Resources:
   ProductService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/services/product-service/service.yaml
+      TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/services/backend/service.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 2
         Listener: !GetAtt ALB.Outputs.Listener
-        Path: /products
-
-  WebsiteService:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/services/website-service/service.yaml
-      Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: 2
-        ProductServiceUrl:
-          !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "products"]]
-        Listener: !GetAtt ALB.Outputs.Listener
-        Path: /
-        ECSServiceAutoScalingRoleARN: !GetAtt ECS.Outputs.ECSServiceAutoScalingRole
+        Path: /api/hello-world
 
   LifecycleHook:
     Type: AWS::CloudFormation::Stack
@@ -93,8 +79,4 @@ Resources:
 Outputs:
   ProductServiceUrl:
     Description: The URL endpoint for the product service
-    Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "products"]]
-
-  WebsiteServiceUrl:
-    Description: The URL endpoint for the website service
-    Value: !Join ["", [!GetAtt ALB.Outputs.LoadBalancerUrl, "/"]]
+    Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "api", "hello-world"]]
