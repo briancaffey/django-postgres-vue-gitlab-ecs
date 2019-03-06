@@ -24,6 +24,10 @@ Parameters:
     Type: String
     Default: /
 
+  DBEndpoint:
+    Description: The DB Endpoint
+    Type: String
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -43,10 +47,21 @@ Resources:
     Properties:
       Family: backend
       ContainerDefinitions:
-        - Name:backend
+        - Name: backend
           Essential: true
           Image: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend:latest
           Memory: 128
+          Environment:
+            - Name: RDS_DB_NAME
+              Value: postgres
+            - Name: RDS_USERNAME
+              Value: postgres
+            - Name: RDS_PASSWORD
+              Value: postgres
+            - Name: RDS_HOSTNAME
+              Value: !Ref DBEndpoint
+            - Name: RDS_PORT
+              Value: 5432
           PortMappings:
             - ContainerPort: 8000
           LogConfiguration:

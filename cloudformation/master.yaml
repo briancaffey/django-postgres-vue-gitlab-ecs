@@ -45,6 +45,15 @@ Resources:
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
+  RDSPostgres:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/infrastructure/rds-postgres.yaml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
+        SourceSecurityGroupId: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
+
   ECS:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -57,7 +66,7 @@ Resources:
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
         Subnets: !GetAtt VPC.Outputs.PrivateSubnets
 
-  ProductService:
+  BackendService:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/services/backend/service.yaml
@@ -67,6 +76,7 @@ Resources:
         DesiredCount: 2
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /api/hello-world
+        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
 
   LifecycleHook:
     Type: AWS::CloudFormation::Stack

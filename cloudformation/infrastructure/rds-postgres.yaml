@@ -1,0 +1,57 @@
+Description: >
+  This template deploys a Postgres RDS instance
+
+Parameters:
+  VPC:
+    Description: Main VPC
+    Type: AWS::EC2::VPC::Id
+
+  PrivateSubnets:
+    Description: List of private subnets for RDS
+    Type: String
+
+  SourceSecurityGroupId:
+    Description: VPC Security Group ID
+    Type: AWS::EC2::SecurityGroup::Id
+
+Resources:
+
+  DatabaseSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'briancaffey-DBSG'
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref SourceSecurityGroupId
+
+  DBSubnetGroup:
+    Type: 'AWS::RDS::DBSubnetGroup'
+    Properties:
+      DBSubnetGroupName: 'My DB Subnet Group'
+      DBSubnetGroupDescription: !Ref 'AWS::StackName'
+      SubnetIds: !Split [',', !Ref PrivateSubnets]
+
+  RDSPostgres:
+    Type: 'AWS::RDS::DBInstance'
+    DeletionPolicy: Delete
+    Properties:
+      AllocatedStorage: "5"
+      DBInstanceClass: db.t2.small
+      Engine: "postgres"
+      EngineVersion: "10.4"
+      MasterUsername: "postgres"
+      MasterUserPassword: "postgres"
+      Port: "5432"
+      PubliclyAccessible: false
+      StorageType: standard
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      VPCSecurityGroups:
+        - !GetAtt DatabaseSecurityGroup.GroupId
+
+Outputs:
+  DBEndpoint:
+    Description: The endpoint for the Postgres DB instance
+    Value: !GetAtt RDSPostgres.Endpoint.Address
