@@ -58,3 +58,11 @@ aws cloudformation create-stack --stack-name briancaffey --template-url https://
 ```bash
 aws cloudformation update-stack --stack-name briancaffey --template-url https://s3.amazonaws.com/briancaffey.com-cloudformation/master.yaml --capabilities=CAPABILITY_NAMED_IAM
 ```
+
+## Enable SSH Access to EC2 Instances with KeyPair
+
+https://github.com/aws-samples/ecs-refarch-cloudformation/issues/62
+
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-keyname
+
+Also, we need to update a security group rule to allow SSH connections on port 22.

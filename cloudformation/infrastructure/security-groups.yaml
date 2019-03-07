@@ -25,6 +25,10 @@ Resources:
         # Only allow inbound access to ECS from the ELB
         - SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
           IpProtocol: -1
+        - IpProtocol: tcp
+          CidrIp: 0.0.0.0/0
+          FromPort: 22
+          ToPort: 22
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-ECS-Hosts
