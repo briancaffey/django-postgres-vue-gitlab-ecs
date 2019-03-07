@@ -47,7 +47,7 @@ Resources:
       VPCZoneIdentifier: !Ref Subnets
       LaunchConfigurationName: !Ref ECSLaunchConfiguration
       MinSize: !Ref ClusterSize
-      MaxSize: !Ref ClusterSize
+      MaxSize: 2
       DesiredCapacity: !Ref ClusterSize
       Tags:
         - Key: Name
