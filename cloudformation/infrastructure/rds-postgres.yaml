@@ -45,7 +45,7 @@ Resources:
       MasterUsername: "postgres"
       MasterUserPassword: "postgres"
       Port: "5432"
-      PubliclyAccessible: false
+      PubliclyAccessible: true
       StorageType: standard
       DBSubnetGroupName: !Ref DBSubnetGroup
       VPCSecurityGroups:

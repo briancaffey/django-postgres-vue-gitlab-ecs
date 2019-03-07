@@ -2,6 +2,7 @@ stages:
   - test
   - build
   - deploy
+  - infrastructure
 
 build-backend:
   stage: build
@@ -81,3 +82,15 @@ build-backend:
   script:
     - aws s3 sync dist/ s3://briancaffey.com/ --delete
     - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
+
+cloudformation:
+  image: python:3.6
+  stage: infrastructure
+  before_script:
+    - pip install awscli
+    - aws iam get-user
+  script:
+    - aws ecs update-service --cluster briancaffey --service briancaffey-BackendService-18JKS9X5UFPO-Service-1WNNUD02CKVU9 --force-new-deployment
+    - aws s3 sync cloudformation/ s3://briancaffey.com-cloudformation/
+    - aws cloudformation update-stack --stack-name briancaffey --template-url https://s3.amazonaws.com/briancaffey.com-cloudformation/master.yaml --capabilities=CAPABILITY_NAMED_IAM
+    - echo "Finished"

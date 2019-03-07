@@ -98,7 +98,7 @@ Resources:
       Conditions:
         - Field: path-pattern
           Values:
-            - !Ref Path
+            - "*"
       Actions:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward
