@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'corsheaders',
+
     'core',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -81,7 +85,7 @@ DATABASES = {
         'NAME': os.environ.get('RDS_DB_NAME', 'postgres'),
         'USER': os.environ.get('RDS_USERNAME', 'postgres'),
         'PASSWORD': os.environ.get('RDS_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('RDS_HOSTNAME', 'postgres'),
+        'HOST': os.environ.get('RDS_HOSTNAME', 'db'),
         'PORT': os.environ.get('RDS_PORT', 5432),
     }
 }

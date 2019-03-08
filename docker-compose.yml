@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+
+  db:
+    container_name: db
+    image: postgres
+    networks:
+      - main
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: nginx/dev/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx/dev/dev.conf:/etc/nginx/nginx.conf:ro
+      - django-static:/usr/src/app/static
+    networks:
+      - main
+
+  backend:
+    container_name: backend
+    build: ./backend
+    command: /code/start_dev.sh
+    volumes:
+      - ./backend:/code
+      - django-static:/code/static
+    ports:
+      - "8000:8000"
+    networks:
+      - main
+    environment:
+      - DEBUG=True
+    depends_on:
+      - db
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/app/
+      - '/app/node_modules'
+    ports:
+      - "8080:8080"
+    networks:
+      - main
+    depends_on:
+      - backend
+      - db
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  pg-data:
+  django-static:
+
+networks:
+  main:
+    driver: bridge
