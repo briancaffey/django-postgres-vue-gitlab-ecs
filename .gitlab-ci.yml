@@ -9,6 +9,8 @@ build-backend:
   image: docker:stable
   services:
     - docker:dind
+  only:
+    - master
   variables:
     REPOSITORY_URL: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend
   before_script:
@@ -86,6 +88,8 @@ build-backend:
 cloudformation:
   image: python:3.6
   stage: infrastructure
+  only:
+    - master
   before_script:
     - pip install awscli
     - aws iam get-user
