@@ -6,12 +6,12 @@ from core.tasks import debug_task
 # Create your views here.
 
 def hello_world(request):
-    response = JsonResponse({'message': 'Hello World!'})
+    response = JsonResponse({'message': 'Hello, World!'})
     return response
 
 
 def home(request):
-    response = JsonResponse({'message':'Home Page'})
+    response = JsonResponse({'message':'Root'})
     return response
 
 
