@@ -60,6 +60,7 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/infrastructure/elasticache-redis.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
+        PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
         SourceSecurityGroupId: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
 
   ECS:
