@@ -4,7 +4,7 @@ stages:
   - deploy
   - infrastructure
 
-.build-backend:
+build-backend:
   stage: build
   image: docker:stable
   services:
