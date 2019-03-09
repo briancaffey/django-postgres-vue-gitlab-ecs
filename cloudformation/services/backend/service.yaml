@@ -69,7 +69,7 @@ Resources:
             - Name: CELERY_BROKER_URL
               Value: !Ref RedisEndpoint
             - Name: CELERY_RESULT_BACKEND
-              Value: !Red RedisEndpoint
+              Value: !Ref RedisEndpoint
           PortMappings:
             - ContainerPort: 8000
           LogConfiguration:
