@@ -36,7 +36,6 @@ Resources:
     Properties:
       Engine: redis
       CacheNodeType: cache.t2.micro
-      ClusterName: ElastiCache Redis Cluster
       NumCacheNodes: 1
       CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
       VpcSecurityGroupIds:
