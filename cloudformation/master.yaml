@@ -54,6 +54,13 @@ Resources:
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
         SourceSecurityGroupId: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
 
+  ElasticacheRedis:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/infrastructure/elasticache-redis.yaml
+      VPC: !GetAtt VPC.Outputs.VPC
+      SourceSecurityGroupId: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
+
   ECS:
     Type: AWS::CloudFormation::Stack
     Properties:

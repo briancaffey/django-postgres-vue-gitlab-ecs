@@ -3,15 +3,16 @@
     <h1>This is an about page</h1>
     <p>Updates coming soon...</p>
     <p>Message from the backend: {{ message }}</p>
+    <p>Latest addition: Elasticache Cluster and Celery</p>
   </div>
 </template>
 
 <script>
-  import axios from 'axios';
+  import apiCall from '@/utils/api';
   export default {
     data() {
       return {
-        message: '',
+        message: '...',
       }
     },
     created(){
@@ -19,8 +20,9 @@
     },
     methods: {
       fetchMessage: function(){
-        axios.get('/api/hello-world').then(
+        apiCall.get('/api/hello-world').then(
           (resp) => {
+            console.log(resp.data.message);
             this.message = resp.data.message;
           }
         )

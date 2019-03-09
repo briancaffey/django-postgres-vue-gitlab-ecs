@@ -10,6 +10,14 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
 
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    container_name: redis
+    networks:
+      - main
+
   nginx:
     container_name: nginx
     build:
@@ -20,6 +28,7 @@ services:
     depends_on:
       - backend
       - frontend
+      - flower
     volumes:
       - ./nginx/dev/dev.conf:/etc/nginx/nginx.conf:ro
       - django-static:/usr/src/app/static
@@ -58,10 +67,62 @@ services:
       - db
     environment:
       - NODE_ENV=development
+      - VUE_APP_API_BASE_URL=http://localhost
+
+  celery:
+    build: ./backend
+    container_name: celery
+    command: bash -c 'python3 manage.py watch_celery'
+    volumes:
+      - ./backend:/code
+    depends_on:
+      - db
+      - redis
+    networks:
+      - main
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=True
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+
+  beat:
+    build: ./backend
+    container_name: beat
+    command: bash -c 'python3 manage.py watch_celery_beat'
+    volumes:
+      - ./backend:/code
+    depends_on:
+      - db
+      - redis
+    networks:
+      - main
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+
+  flower:
+    image: mher/flower
+    container_name: flower
+    command: flower --url_prefix=flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379
+      - FLOWER_PORT=5555
+    ports:
+      - 5555:5555
+    networks:
+      - main
+    depends_on:
+      - celery
+      - redis
+      - beat
 
 volumes:
   pg-data:
   django-static:
+  redis-data:
 
 networks:
   main:

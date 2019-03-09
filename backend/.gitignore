@@ -1,2 +1,5 @@
 __pycache__
 .coverage
+
+celerybeat-schedule
+celerybeat.pid

@@ -50,7 +50,7 @@ build-backend:
       - tests/e2e/screenshots/
     expire_in: 7 days
 
-.build-frontend:
+build-frontend:
   image: node:latest
   stage: build
   only:
@@ -58,6 +58,7 @@ build-backend:
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
+    VUE_APP_API_BASE_URL: https://backend.briancaffey.com
   artifacts:
     paths:
       - frontend/dist/
@@ -68,7 +69,7 @@ build-backend:
     - npm run build
     - echo "Build Complete"
 
-.deploy-frontend:
+deploy-frontend:
   image: python:3.6
   stage: deploy
   only:

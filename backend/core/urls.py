@@ -12,4 +12,9 @@ urlpatterns = [
         views.hello_world,
         name="hello-world"
     ),
+    path(
+        'debug-task/',
+        views.debug_task_view,
+        name="debug-task"
+    )
 ]
