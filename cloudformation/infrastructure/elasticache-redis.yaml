@@ -28,7 +28,6 @@ Resources:
   ElastiCacheSubnetGroup:
     Type: AWS::ElastiCache::SubnetGroup
     Properties:
-      CacheSubnetGroupName: ElastiCacheRedis Subnet Group
       Description: ElastiCache Subnet Group
       SubnetIds: !Split [',', !Ref PrivateSubnets]
 
