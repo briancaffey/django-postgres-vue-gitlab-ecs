@@ -3,7 +3,7 @@
     <h1>This is an about page</h1>
     <p>Updates coming soon...</p>
     <p>Message from the backend: {{ message }}</p>
-    <p>Latest addition: Elasticache Cluster and Celery</p>
+    <p>Latest addition: ElastiCache Cluster and Celery</p>
   </div>
 </template>
 

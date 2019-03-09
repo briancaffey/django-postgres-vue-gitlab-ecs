@@ -54,7 +54,7 @@ Resources:
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
         SourceSecurityGroupId: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
 
-  ElasticacheRedis:
+  ElastiCacheRedis:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/infrastructure/elasticache-redis.yaml
@@ -84,6 +84,7 @@ Resources:
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /api/hello-world
         DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
 
   LifecycleHook:
     Type: AWS::CloudFormation::Stack

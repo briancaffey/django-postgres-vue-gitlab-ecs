@@ -1,17 +1,12 @@
 ## Local Development
 
-Build the backend container with:
-
-```bash
-docker build -t briancaffey.com:latest .
+```
+docker-compose up --build
 ```
 
-Run the backend container with:
+Open `http://localhost` in your browser
 
-```bash
-docker run -it -v /home/brian/gitlab/briancaffey.com/backend/:/code briancaffey
-.com:latest /bin/bash
-```
+You can specify environment variables for docker-compose by adding an `.env` file to the root of the project based on `.env.template`.
 
 ## CloudFormation Commands
 

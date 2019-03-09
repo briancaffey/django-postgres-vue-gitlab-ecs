@@ -1,6 +1,5 @@
-AWSTemplateFormatVersion: 2010-09-09
 Description: >
-  This template deploys a single node Elasticache cluster that runs Redis
+  This template deploys a single node ElastiCache cluster that runs Redis
 
 Parameters:
   VPC:
@@ -16,34 +15,34 @@ Parameters:
     Type: AWS::EC2::SecurityGroup::Id
 
 Resources:
-  ElasticacheSecurityGroup:
+  ElastiCacheSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Elasticache Security Group
+      GroupDescription: ElastiCache Security Group
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 6379
           ToPort: 6379
 
-  ElasticacheSubnetGroup:
+  ElastiCacheSubnetGroup:
     Type: AWS::ElastiCache::SubnetGroup
     Properties:
-      CacheSubnetGroupName: ElasticacheRedis Subnet Group
-      Description: Elasticache Subnet Group
+      CacheSubnetGroupName: ElastiCacheRedis Subnet Group
+      Description: ElastiCache Subnet Group
       SubnetIds: !Split [',', !Ref PrivateSubnets]
 
   ElastiCacheCluster:
     Type: AWS::ElastiCache::CacheCluster
     Properties:
       Engine: redis
-      ClusterName: Elasticache Redis Cluster
+      ClusterName: ElastiCache Redis Cluster
       NumCacheNodes: 1
-      CacheSubnetGroupName: !Ref ElasticacheSubnetGroup
+      CacheSubnetGroupName: !Ref ElastiCacheSubnetGroup
       VpcSecurityGroupIds:
-        - !GetAtt ElasticacheSecurityGroup.GroupId
+        - !GetAtt ElastiCacheSecurityGroup.GroupId
 
 Outputs:
-  ElastiCacheEndpoint:
-    Description: Endpoint for Elasticache Cluster
+  RedisEndpoint:
+    Description: Endpoint for ElastiCache Cluster
     Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Address
