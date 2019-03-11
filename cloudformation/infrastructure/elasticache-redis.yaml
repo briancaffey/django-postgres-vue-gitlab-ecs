@@ -44,4 +44,4 @@ Resources:
 Outputs:
   RedisEndpoint:
     Description: Endpoint for ElastiCache Cluster
-    Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Address
+    Value: !Join ['', 'redis://', !GetAtt ElastiCacheCluster.RedisEndpoint.Address, ':6379']

@@ -4,7 +4,7 @@ stages:
   - deploy
   - infrastructure
 
-build-backend:
+.build-backend:
   stage: build
   image: docker:stable
   services:
@@ -86,7 +86,7 @@ build-backend:
     - aws s3 sync dist/ s3://briancaffey.com/ --delete
     - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
 
-.cloudformation:
+cloudformation:
   image: python:3.6
   stage: infrastructure
   only:
@@ -100,7 +100,7 @@ build-backend:
     - aws cloudformation update-stack --stack-name briancaffey --template-url https://s3.amazonaws.com/briancaffey.com-cloudformation/master.yaml --capabilities=CAPABILITY_NAMED_IAM
     - echo "Finished"
 
-deploy-service:
+.deploy-service:
   image: python:3.6
   stage: deploy
   only:
