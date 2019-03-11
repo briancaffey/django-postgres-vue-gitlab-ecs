@@ -78,6 +78,46 @@ Resources:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
 
+  CeleryService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref Cluster
+      Role: !Ref ServiceRole
+      DesiredCount: !Ref DesiredCount
+      TaskDefinition: !Ref CeleryTaskDefinition
+
+  CeleryTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: celery
+      ContainerDefinitions:
+        - Name: celery
+          Essential: true
+          Image: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend:latest
+          Memory: 128
+          Command:
+            - "celery worker --app=backend.celery_app:app --loglevel=info"
+          Environment:
+            - Name: RDS_DB_NAME
+              Value: postgres
+            - Name: RDS_USERNAME
+              Value: postgres
+            - Name: RDS_PASSWORD
+              Value: postgres
+            - Name: RDS_HOSTNAME
+              Value: !Ref DBEndpoint
+            - Name: RDS_PORT
+              Value: 5432
+            - Name: CELERY_BROKER_URL
+              Value: !Ref RedisEndpoint
+            - Name: CELERY_RESULT_BACKEND
+              Value: !Ref RedisEndpoint
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref CloudWatchLogsGroup
+              awslogs-region: !Ref AWS::Region
+
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
