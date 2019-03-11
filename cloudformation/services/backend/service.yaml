@@ -95,7 +95,12 @@ Resources:
           Image: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend:latest
           Memory: 128
           Command:
-            - "celery worker --app=backend.celery_app:app --loglevel=info"
+            - 'celery'
+            - 'worker'
+            - '-A'
+            - 'backend.celery_app:app'
+            - '-l'
+            - 'info'
           Environment:
             - Name: RDS_DB_NAME
               Value: postgres
