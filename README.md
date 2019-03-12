@@ -61,3 +61,17 @@ https://github.com/aws-samples/ecs-refarch-cloudformation/issues/62
 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-as-launchconfig.html#cfn-as-launchconfig-keyname
 
 Also, we need to update a security group rule to allow SSH connections on port 22.
+
+
+## TODO
+
+- Tear down the stack (click the button that says delete stack)
+- Make sure that we have documented the changes to make in our template
+
+- static site, ALB certificate, ECR Repo, Comment out the container definition until our stack is up and we have pushed the image to the ECR repo.
+
+
+
+## Questions
+
+Is it true that you can use either HostedZoneName or HostedZoneId but not both?

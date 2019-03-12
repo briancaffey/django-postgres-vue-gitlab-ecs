@@ -8,11 +8,32 @@ Description: >
   It then deploys a highly available ECS cluster using an AutoScaling Group, with
   ECS hosts distributed across multiple Availability Zones.
 
-  Finally, it deploys a pair of example ECS services from containers published in
-  Amazon EC2 Container Registry (Amazon ECR).
+  Finally, it deploys a Django application and a celery worker from containers
+  published in Amazon EC2 Container Registry (Amazon ECR).
 
-  Last Modified: 5th Match 2019
-  Author: Paul Maddox <pmaddox@amazon.com>
+  It also deploys a static site with S3 and CloudFront.
+
+  Last Modified: 11th March 2019
+  Author: Brian Caffey <briancaffey2010@gmail.com>
+
+Parameters:
+  # AppUrl:
+  #   Type: "String"
+  #   Description: "The URL for our app (e.g. mydomain.com)"
+  #   AllowedPattern: "[a-z0-9._-]+"
+
+  # HostedZoneId:
+  #   Type: AWS::Route53::HostedZone::Id
+  #   Description: "The hosted zone ID to add the Route 53 recordset to."
+
+  # SSLCertificateArn:
+  #   Type: "String"
+  #   Description: "ARN pointing to an SSL cert to use for this app URL."
+  #   AllowedPattern: "arn:aws:acm:.*"
+  #   ConstraintDescription: "Please supply a valid ARN to a certificate."
+  GitSHA:
+    Type: "String"
+    Description: "This is a test parameter used to see how to pass parameters from GitLab"
 
 Resources:
   VPC:
@@ -96,7 +117,17 @@ Resources:
         Cluster: !GetAtt ECS.Outputs.Cluster
         ECSAutoScalingGroupName: !GetAtt ECS.Outputs.ECSAutoScalingGroupName
 
+  # StaticSite:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/infrastructure/static-site.yaml
+
+
 Outputs:
   ProductServiceUrl:
     Description: The URL endpoint for the product service
     Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "api", "hello-world"]]
+
+  TestParameterValue:
+    Description: The value of the test parameter (the shortened Git SHA) of the commit.
+    Value: !Ref GitSHA

@@ -86,6 +86,21 @@ stages:
     - aws s3 sync dist/ s3://briancaffey.com/ --delete
     - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
 
+
+.create-stack:
+  image: python3.6
+  stage: infrastructure
+  before_script:
+    - pip install awscli
+  script:
+    - aws s3 sync cloudformation/ s3://briancaffey.com-cloudformation/ --delete
+    - |
+      aws cloudformation create-stack --stack-name briancaffey \
+        --parameters \
+        ParameterKey=AppUrl,ParameterValue=briancaffey.com \
+        ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
+        ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn
+
 cloudformation:
   image: python:3.6
   stage: infrastructure
@@ -96,8 +111,14 @@ cloudformation:
     - aws iam get-user
   script:
     - aws s3 sync cloudformation/ s3://briancaffey.com-cloudformation/
-    - aws cloudformation update-stack --stack-name briancaffey --template-url https://s3.amazonaws.com/briancaffey.com-cloudformation/master.yaml --capabilities=CAPABILITY_NAMED_IAM
-    - echo "Finished"
+    - |
+      aws cloudformation update-stack \
+        --stack-name briancaffey \
+        --template-url https://s3.amazonaws.com/briancaffey.com-cloudformation/master.yaml \
+        --capabilities=CAPABILITY_NAMED_IAM \
+        --parameters ParameterName=GitSHA,ParameterName=$CI_COMMIT_SHORT_SHA
+  after_script:
+    - echo "Finished updating stack"
 
 .deploy-service:
   image: python:3.6
