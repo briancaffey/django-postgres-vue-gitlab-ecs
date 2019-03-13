@@ -105,6 +105,8 @@ create-stack:
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn
+        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA
+
 
 .update-stack:
   image: python:3.6
