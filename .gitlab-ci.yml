@@ -87,10 +87,50 @@ stages:
     - aws s3 sync dist/ s3://briancaffey.com/ --delete
     - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
 
+build-frontend-staging:
+  image: node:latest
+  stage: build
+  only:
+    - master
+  variables:
+    VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
+    VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
+    VUE_APP_API_BASE_URL: https://backend.briancaffey.com
+  artifacts:
+    paths:
+      - frontend/dist/
+  before_script:
+    - cd frontend
+    - npm install --progress=false
+  script:
+    - npm run build
+    - echo "Build Complete"
+
+deploy-frontend-staging:
+  image: python:3.6
+  stage: deploy
+  only:
+    - master
+  dependencies:
+    - build-frontend
+  before_script:
+    - cd frontend
+    - pip install awscli
+    - aws iam get-user
+  environment:
+    name: jamescaffey
+    url: https://jamescaffey.com
+  script:
+    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/ s3://jamescaffey.com/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/index.htmls3://jamescaffey.com/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://jamescaffey.com/
+    # - aws s3 sync dist/ s3://briancaffey.com/ --delete
+    # - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
+
 # this job should be run once to create the entire stack
 # prevent this job from running once this job by prepending a `.` to the job name
 # and uncomment the `update-stack` job
-create-stack:
+.create-stack:
   image: python:3.6
   stage: cloudformation
   before_script:
@@ -107,7 +147,6 @@ create-stack:
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA
-
 
 .update-stack:
   image: python:3.6
