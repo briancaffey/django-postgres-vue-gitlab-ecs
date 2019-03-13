@@ -68,6 +68,7 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Ref SSLCertificateArn
           SslSupportMethod: "sni-only"
+
   DNSRecord:
     Type: "AWS::Route53::RecordSet"
     DependsOn: CFDistribution
