@@ -121,7 +121,7 @@ Resources:
   StaticSite:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/briancaffey.com-cloudformation/infrastructure/static-site.yaml
+      TemplateURL: https://s3.amazonaws.com/jamescaffey.com-cloudformation/infrastructure/static-site.yaml
       Parameters:
         AppUrl: !Ref AppUrl
         HostedZoneId: !Ref HostedZoneId
