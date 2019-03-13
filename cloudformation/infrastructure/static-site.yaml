@@ -43,7 +43,7 @@ Resources:
       DistributionConfig:
         Aliases:
         - !Ref AppUrl
-        - !Sub "*.{AppUrl}"
+        - !Sub "*.${AppUrl}"
         DefaultRootObject: "index.html"
         DefaultCacheBehavior:
           TargetOriginId: !Sub "S3-${StaticSiteBucket}"
@@ -76,5 +76,16 @@ Resources:
         HostedZoneId: !Ref HostedZoneId
         DNSName: !GetAtt CFDistribution.DomainName
       Name: !Sub "${AppUrl}."
+      Type: "A"
+      HostedZoneId: !Ref HostedZoneId
+
+  WildCardDNSRecord:
+    Type: "AWS::Route53::RecordSet"
+    DependsOn: CFDistribution
+    Properties:
+      AliasTarget:
+        HostedZoneId: !Ref HostedZoneId
+        DNSName: !GetAtt CFDistribution.DomainName
+      Name: !Sub "*.${AppUrl}."
       Type: "A"
       HostedZoneId: !Ref HostedZoneId
