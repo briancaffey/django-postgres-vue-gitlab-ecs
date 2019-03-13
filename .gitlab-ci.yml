@@ -157,7 +157,7 @@ update-stack-staging:
     - pip install awscli
     - aws iam get-user
   script:
-    - aws s3 sync cloudformation/ s3://briancaffey.com-cloudformation/
+    - aws s3 sync cloudformation/ s3://jamescaffey.com-cloudformation/
     - |
       aws cloudformation update-stack \
         --stack-name jamescaffey \
