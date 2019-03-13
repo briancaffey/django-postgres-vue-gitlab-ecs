@@ -1,0 +1,80 @@
+Description: >
+  This template deploys a static site using S3, CloudFront and Route53.
+
+Parameters:
+  AppUrl:
+    Type: "String"
+    Description: "The URL for our app (e.g. mydomain.com)"
+    AllowedPattern: "[a-z0-9._-]+"
+
+  HostedZoneId:
+    Type: AWS::Route53::HostedZone::Id
+    Description: "The hosted zone ID to add the Route 53 recordset to."
+
+  SSLCertificateArn:
+    Type: "String"
+    Description: "ARN pointing to an SSL cert to use for this app URL."
+    AllowedPattern: "arn:aws:acm:.*"
+    ConstraintDescription: "Please supply a valid ARN to a certificate."
+
+Resources:
+  StaticSiteBucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: "Retain"
+    Properties:
+      BucketName: !Ref AppUrl
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+        ErrorDocument: "index.html"
+  StaticSiteBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref StaticSiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: "Allow"
+          Principal: "*"
+          Action: "s3:GetObject"
+          Resource: !Sub "${StaticSiteBucket.Arn}/*"
+  CFDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - !Ref AppUrl
+        - !Sub "*.{AppUrl}"
+        DefaultRootObject: "index.html"
+        DefaultCacheBehavior:
+          TargetOriginId: !Sub "S3-${StaticSiteBucket}"
+          ViewerProtocolPolicy: "redirect-to-https"
+          ForwardedValues:
+            QueryString: false
+        CustomErrorResponses:
+        - ErrorCachingMinTTL: 0
+          ErrorCode: 403
+          ResponseCode: 200
+          ResponsePagePath: "/index.html"
+        - ErrorCachingMinTTL: 0
+          ErrorCode: 404
+          ResponseCode: 200
+          ResponsePagePath: "/index.html"
+        Enabled: true
+        Origins:
+        - DomainName: !GetAtt StaticSiteBucket.DomainName
+          Id: !Sub "S3-${StaticSiteBucket}"
+          S3OriginConfig:
+            OriginAccessIdentity: ""
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SSLCertificateArn
+          SslSupportMethod: "sni-only"
+  DNSRecord:
+    Type: "AWS::Route53::RecordSet"
+    DependsOn: CFDistribution
+    Properties:
+      AliasTarget:
+        HostedZoneId: !Ref HostedZoneId
+        DNSName: !GetAtt CFDistribution.DomainName
+      Name: !Sub "${AppUrl}."
+      Type: "A"
+      HostedZoneId: !Ref HostedZoneId
