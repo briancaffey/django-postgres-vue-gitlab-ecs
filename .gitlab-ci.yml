@@ -112,7 +112,7 @@ deploy-frontend-staging:
   only:
     - master
   dependencies:
-    - build-frontend
+    - build-frontend-staging
   before_script:
     - cd frontend
     - pip install awscli
