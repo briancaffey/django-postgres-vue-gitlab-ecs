@@ -97,7 +97,10 @@ create-stack:
   script:
     - aws s3 sync cloudformation/ s3://jamescaffey.com-cloudformation/ --delete
     - |
-      aws cloudformation create-stack --stack-name jamescaffey \
+      aws cloudformation create-stack \
+        --stack-name jamescaffey \
+        --template-url https://s3.amazonaws.com/jamescaffey.com-cloudformation/master.yaml \
+        --capabilities=CAPABILITY_NAMED_IAM \
         --parameters \
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
