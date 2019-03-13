@@ -122,7 +122,7 @@ deploy-frontend-staging:
     url: https://jamescaffey.com
   script:
     - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/ s3://jamescaffey.com/
-    - aws s3 cp --cache-control 'max-age=0' ./dist/index.htmls3://jamescaffey.com/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://jamescaffey.com/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://jamescaffey.com/
     # - aws s3 sync dist/ s3://briancaffey.com/ --delete
     # - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
