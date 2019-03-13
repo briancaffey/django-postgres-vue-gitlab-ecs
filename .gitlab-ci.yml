@@ -148,7 +148,7 @@ stages:
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA
 
-.update-stack-staging:
+update-stack-staging:
   image: python:3.6
   stage: cloudformation
   only:
