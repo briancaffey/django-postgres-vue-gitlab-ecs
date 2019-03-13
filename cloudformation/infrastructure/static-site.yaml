@@ -24,17 +24,16 @@ Resources:
     Properties:
       BucketName: !Ref AppUrl
       AccessControl: "PublicRead"
-      # WebsiteConfiguration:
-      #   IndexDocument: "index.html"
-      #   ErrorDocument: "index.html"
   StaticSiteBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
+    DependsOn: StaticSiteBucket
     Properties:
       Bucket: !Ref StaticSiteBucket
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-        - Effect: "Allow"
+        - Sid: PublicReadForGetBucketObjects
+          Effect: "Allow"
           Principal: "*"
           Action: "s3:GetObject"
           Resource: !Sub "${StaticSiteBucket.Arn}/*"
