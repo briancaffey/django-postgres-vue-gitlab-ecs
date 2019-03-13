@@ -6,7 +6,7 @@
     <p>Commit ref: {{ commit }}</p>
     <p>Using cache invalidation</p>
     <a :href="ciJobUrl">View CI Job</a>
-    <p>Now the site now has a Django backend that deploys to ECS via CloudFormation templates.</p>
+    <p>The resources for this site are now fully generated with CloudFormation.</p>
   </div>
 </template>
 
