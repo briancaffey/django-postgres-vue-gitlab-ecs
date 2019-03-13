@@ -74,7 +74,8 @@ Resources:
     DependsOn: CFDistribution
     Properties:
       AliasTarget:
-        HostedZoneId: !Ref HostedZoneId
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html
+        HostedZoneId: "Z2FDTNDATAQYW2"
         DNSName: !GetAtt CFDistribution.DomainName
       Name: !Sub "${AppUrl}."
       Type: "A"
@@ -85,7 +86,8 @@ Resources:
     DependsOn: CFDistribution
     Properties:
       AliasTarget:
-        HostedZoneId: !Ref HostedZoneId
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget.html
+        HostedZoneId: "Z2FDTNDATAQYW2"
         DNSName: !GetAtt CFDistribution.DomainName
       Name: !Sub "*.${AppUrl}."
       Type: "A"
