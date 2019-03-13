@@ -90,7 +90,7 @@ stages:
 # prevent this job from running once this job by prepending a `.` to the job name
 # and uncomment the `update-stack` job
 create-stack:
-  image: python3.6
+  image: python:3.6
   stage: cloudformation
   before_script:
     - pip install awscli
