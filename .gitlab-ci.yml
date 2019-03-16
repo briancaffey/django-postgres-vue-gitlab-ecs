@@ -168,7 +168,7 @@ update-stack-staging:
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
-        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA
+        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
         ParameterKey=ECRBackendRepositoryName,ParameterValue=briancaffey.com/backend1
   after_script:
     - echo "Finished updating stack"
