@@ -32,6 +32,10 @@ Parameters:
     AllowedPattern: "arn:aws:acm:.*"
     ConstraintDescription: "Please supply a valid ARN to a certificate."
 
+  ECRBackendRepositoryName:
+    Type: "String"
+    Description: "Name of ECR Repository for backend web server."
+
   GitSHA:
     Type: "String"
     Description: "This is a test parameter used to see how to pass parameters from GitLab"
@@ -117,6 +121,13 @@ Resources:
   #     Parameters:
   #       Cluster: !GetAtt ECS.Outputs.Cluster
   #       ECSAutoScalingGroupName: !GetAtt ECS.Outputs.ECSAutoScalingGroupName
+
+  ECRBackendRepository:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/jamescaffey.com-cloudformation/infrastructure/ecr-repository.yaml
+      Parameters:
+        ECRBackendRepositoryName: !Ref ECRBackendRepositoryName
 
   StaticSite:
     Type: AWS::CloudFormation::Stack

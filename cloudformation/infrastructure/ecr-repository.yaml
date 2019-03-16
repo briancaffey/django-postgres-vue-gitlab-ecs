@@ -1,0 +1,17 @@
+Description: >
+  This template deploys an ECR Repository that we will use when pushing our backend container images.
+
+Parameters:
+  ECRBackendRepositoryName:
+    Type: "String"
+    Description: "The name of the ECR Repository for our backend conainer."
+
+Resources:
+  ECRBackendRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref ECRBackendRepositoryName
+
+Outputs:
+  ECRBackendRepositoryURL:
+    Value: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRBackendRepositoryName}"
