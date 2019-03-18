@@ -15,9 +15,8 @@ Parameters:
     Description: Choose which subnets the Application Load Balancer should be deployed to
     Type: List<AWS::EC2::Subnet::Id>
 
-  SecurityGroup:
-    Description: Select the Security Group to apply to the Application Load Balancer
-    Type: AWS::EC2::SecurityGroup::Id
+  SSLCertificateArn:
+    Description: The SSL Certificate for the Application Load Balancer
 
 Resources:
   LoadBalancer:
@@ -26,10 +25,23 @@ Resources:
       Name: !Ref EnvironmentName
       Subnets: !Ref Subnets
       SecurityGroups:
-        - !Ref SecurityGroup
+        - !Ref LoadBalancerSecurityGroup
       Tags:
         - Key: Name
           Value: !Ref EnvironmentName
+
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupDescription: Access to the load balancer that sits in front of ECS
+      SecurityGroupIngress:
+        # Allow access from anywhere to our ECS services
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: -1
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName}-LoadBalancerSecurityGroup
 
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -38,8 +50,20 @@ Resources:
       Port: 80
       Protocol: HTTP
       DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref DefaultTargetGroup
+        - TargetGroupArn: !Ref DefaultTargetGroup
+          Type: forward
+
+  HTTPSLoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 443
+      Protocol: "HTTPS"
+      Certificates:
+        - CertificateArn: !Ref SSLCertificateArn
+      DefaultActions:
+        - TargetGroupArn: !Ref DefaultTargetGroup
+          Type: forward
 
   # We define a default target group here, as this is a mandatory Parameters
   # when creating an Application Load Balancer Listener. This is not used, instead
@@ -51,6 +75,18 @@ Resources:
       VpcId: !Ref VPC
       Port: 80
       Protocol: HTTP
+
+  LoadBalancerDNSRecordSetGroup:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Sub ${AppUrl}.
+      Comment: The record set that directs traffic to the load balancer
+      RecordSets:
+        - Name: !Sub "api.${UrlApp}."
+          Type: "A"
+          AliasTarget:
+            HostedZoneId: !GetAtt LoadBalancer.CanonicalHostedZoneNameID
+            DNSName: !GetAtt LoadBalancer.DNSName
 
 Outputs:
   LoadBalancer:
@@ -64,3 +100,7 @@ Outputs:
   Listener:
     Description: A reference to a port 80 listener
     Value: !Ref LoadBalancerListener
+
+  LoadBalancerSecurityGroup:
+    Description: The security group for the load balancer.
+    Value: !Ref LoadBalancerSecurityGroup

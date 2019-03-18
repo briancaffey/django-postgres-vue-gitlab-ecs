@@ -4,6 +4,9 @@ stages:
   - deploy
   - cloudformation
 
+variables:
+  REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
+
 .build-backend:
   stage: build
   image: docker:stable
@@ -11,8 +14,6 @@ stages:
     - docker:dind
   only:
     - master
-  variables:
-    REPOSITORY_URL: 733623710918.dkr.ecr.us-east-1.amazonaws.com/briancaffey.com/backend
   before_script:
     - cd backend
     - apk add --no-cache curl jq python py-pip
@@ -58,7 +59,6 @@ stages:
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
-    VUE_APP_API_BASE_URL: https://backend.briancaffey.com
   artifacts:
     paths:
       - frontend/dist/
@@ -81,11 +81,9 @@ stages:
     - pip install awscli
     - aws iam get-user
   script:
-    # - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./build/ $APP_BUCKET
-    # - aws s3 cp --cache-control 'max-age=0' ./build/index.html $APP_BUCKET
-    # - aws s3 cp --cache-control 'max-age=0' ./build/service-worker.js $APP_BUCKET
-    - aws s3 sync dist/ s3://briancaffey.com/ --delete
-    - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
+    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/ s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
 .build-frontend-staging:
   image: node:latest
@@ -95,7 +93,6 @@ stages:
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
-    VUE_APP_API_BASE_URL: https://backend.briancaffey.com
   artifacts:
     paths:
       - frontend/dist/
@@ -121,55 +118,49 @@ stages:
     name: jamescaffey
     url: https://jamescaffey.com
   script:
-    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/ s3://jamescaffey.com/
-    - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://jamescaffey.com/
-    - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://jamescaffey.com/
-    # - aws s3 sync dist/ s3://briancaffey.com/ --delete
-    # - aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
+    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/ s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-# this job should be run once to create the entire stack
-# prevent this job from running once this job by prepending a `.` to the job name
-# and uncomment the `update-stack` job
 .create-stack:
   image: python:3.6
   stage: cloudformation
   before_script:
     - pip install awscli
   script:
-    - aws s3 sync cloudformation/ s3://jamescaffey.com-cloudformation/ --delete
+    - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/ --delete
     - |
       aws cloudformation create-stack \
-        --stack-name jamescaffey \
-        --template-url https://s3.amazonaws.com/jamescaffey.com-cloudformation/master.yaml \
-        --capabilities=CAPABILITY_NAMED_IAM \
-        --parameters \
-        ParameterKey=AppUrl,ParameterValue=$AppUrl \
-        ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
-        ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
-        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA
-        ParameterKey=ECRBackendRepositoryName,ParameterValue=briancaffey.com/backend1
-
-update-stack-staging:
-  image: python:3.6
-  stage: cloudformation
-  only:
-    - master
-  before_script:
-    - pip install awscli
-    - aws iam get-user
-  script:
-    - aws s3 sync cloudformation/ s3://jamescaffey.com-cloudformation/
-    - |
-      aws cloudformation update-stack \
-        --stack-name jamescaffey \
-        --template-url https://s3.amazonaws.com/jamescaffey.com-cloudformation/master.yaml \
+        --stack-name ${StackName} \
+        --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
         --parameters \
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
-        ParameterKey=ECRBackendRepositoryName,ParameterValue=briancaffey.com/backend1
+        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend
+
+.update-stack-staging:
+  image: python:3.6
+  stage: cloudformation
+  only:
+    - master
+  before_script:
+    - pip install awscli
+  script:
+    - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/
+    - |
+      aws cloudformation update-stack \
+        --stack-name ${StackName} \
+        --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
+        --capabilities=CAPABILITY_NAMED_IAM \
+        --parameters \
+        ParameterKey=AppUrl,ParameterValue=$AppUrl \
+        ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
+        ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
+        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
+        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend
   after_script:
     - echo "Finished updating stack"
 
@@ -180,7 +171,6 @@ update-stack-staging:
     - master
   before_script:
     - pip install awscli
-    - aws iam get-user
   script:
     - aws ecs update-service --cluster briancaffey --service briancaffey-BackendService-18JKS9X5UFPO-Service-1WNNUD02CKVU9 --force-new-deployment
     - echo "Finished service deployment"
