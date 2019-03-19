@@ -120,7 +120,7 @@ Resources:
         DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
-        ServiceRole: !Ref ServiceRole.Outputs.ServiceRole
+        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
   CeleryService:
     Type: AWS::CloudFormation::Stack
@@ -134,7 +134,7 @@ Resources:
         DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
-        ServiceRole: !Ref ServiceRole.Outputs.ServiceRole
+        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
   # BeatService:
   #   Type: AWS::CloudFormation::Stack
