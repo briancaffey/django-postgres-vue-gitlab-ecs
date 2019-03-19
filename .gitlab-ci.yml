@@ -135,6 +135,7 @@ variables:
         --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
         --parameters \
+        ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName \
         ParameterKey=EnvironmentName,ParameterValue=staging \
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
@@ -157,6 +158,7 @@ update-stack-staging:
         --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
         --parameters \
+        ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName \
         ParameterKey=EnvironmentName,ParameterValue=staging \
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
