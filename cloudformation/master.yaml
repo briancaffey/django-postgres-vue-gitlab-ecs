@@ -71,7 +71,7 @@ Resources:
   RDSPostgres:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
@@ -80,7 +80,7 @@ Resources:
   ElastiCacheRedis:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
