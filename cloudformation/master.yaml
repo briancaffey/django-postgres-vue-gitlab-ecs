@@ -63,6 +63,7 @@ Resources:
       Parameters:
         EnvironmentName: !Ref AWS::StackName
         AppUrl: !Ref AppUrl
+        HostedZoneId: !Ref HostedZoneId
         VPC: !GetAtt VPC.Outputs.VPC
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SSLCertificateArn: !Ref SSLCertificateArn

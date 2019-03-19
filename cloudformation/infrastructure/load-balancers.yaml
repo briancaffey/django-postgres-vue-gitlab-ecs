@@ -23,6 +23,10 @@ Parameters:
     Type: String
     Description: The site's domain name (e.g. mydomain.com)
 
+  HostedZoneId:
+    Type: String
+    Description: The hosted zone ID for the registered domain
+
 Resources:
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -84,7 +88,7 @@ Resources:
   LoadBalancerDNSRecordSetGroup:
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneId: !Sub ${AppUrl}.
+      HostedZoneId: !Ref HostedZoneId
       Comment: The record set that directs traffic to the load balancer
       RecordSets:
         - Name: !Sub "api.${AppUrl}."
