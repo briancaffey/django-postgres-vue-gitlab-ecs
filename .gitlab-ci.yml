@@ -7,7 +7,7 @@ stages:
 variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
 
-build-and-release-backend:
+.build-and-release-backend:
   stage: build
   image: docker:stable
   services:
@@ -86,7 +86,7 @@ build-and-release-backend:
     - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-build-frontend-staging:
+.build-frontend-staging:
   image: node:latest
   stage: build
   only:
@@ -105,7 +105,7 @@ build-frontend-staging:
     - npm run build
     - echo "Build Complete"
 
-deploy-frontend-staging:
+.deploy-frontend-staging:
   image: python:3.6
   stage: deploy
   only:

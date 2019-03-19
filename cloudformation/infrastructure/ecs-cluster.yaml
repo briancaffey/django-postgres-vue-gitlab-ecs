@@ -196,7 +196,7 @@ Resources:
 
 Outputs:
 
-  ClusterName:
+  ECSCluster:
     Description: The name of the ECS cluster
     Value: !Ref 'ECSCluster'
     Export:

@@ -109,7 +109,7 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
+        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
@@ -122,7 +122,7 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
+        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint

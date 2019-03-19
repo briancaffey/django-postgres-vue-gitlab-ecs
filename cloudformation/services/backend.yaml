@@ -1,12 +1,12 @@
 Description: >
-  This is an example of a long running ECS service that serves a JSON API of products.
+  This service runs the Django webserver.
 
 Parameters:
   VPC:
     Description: The VPC that the ECS cluster is deployed to
     Type: AWS::EC2::VPC::Id
 
-  Cluster:
+  ECSCluster:
     Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
@@ -40,7 +40,7 @@ Resources:
     Type: AWS::ECS::Service
     DependsOn: ListenerRule
     Properties:
-      Cluster: !Ref Cluster
+      Cluster: !Ref ECSCluster
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
@@ -107,3 +107,9 @@ Resources:
       Actions:
         - TargetGroupArn: !Ref BackendTargetGroup
           Type: forward
+
+  BackendCloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref AWS::StackName
+      RetentionInDays: 365
