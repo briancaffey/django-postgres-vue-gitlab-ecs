@@ -111,7 +111,7 @@ Resources:
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
-          Principle:
+          Principal:
             Service: [application-autoscaling.amazonaws.com]
           Action: ['sts:AssumeRole']
       Path: /
