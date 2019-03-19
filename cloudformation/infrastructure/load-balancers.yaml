@@ -85,17 +85,19 @@ Resources:
       Port: 80
       Protocol: HTTP
 
-  LoadBalancerDNSRecordSetGroup:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneId: !Ref HostedZoneId
-      Comment: The record set that directs traffic to the load balancer
-      RecordSets:
-        - Name: !Sub "api.${AppUrl}."
-          Type: "A"
-          AliasTarget:
-            HostedZoneId: "Z368ELLRRE2KJ0"
-            DNSName: !GetAtt LoadBalancer.DNSName
+# [Tried to create an alias that targets jamescaffey-594249452.us-east-1.elb.amazonaws.com., type A in zone Z368ELLRRE2KJ0, but the alias target name does not lie within the target zone]
+
+  # LoadBalancerDNSRecordSetGroup:
+  #   Type: AWS::Route53::RecordSetGroup
+  #   Properties:
+  #     HostedZoneId: !Ref HostedZoneId
+  #     Comment: The record set that directs traffic to the load balancer
+  #     RecordSets:
+  #       - Name: !Sub "api.${AppUrl}."
+  #         Type: "A"
+  #         AliasTarget:
+  #           HostedZoneId: "Z368ELLRRE2KJ0"
+  #           DNSName: !GetAtt LoadBalancer.DNSName
 
 Outputs:
   LoadBalancer:
