@@ -1,0 +1,36 @@
+Description: >
+  This is an example of a long running ECS service that serves a JSON API of products.
+
+Parameters:
+  VPC:
+    Description: The VPC that the ECS cluster is deployed to
+    Type: AWS::EC2::VPC::Id
+
+  Cluster:
+    Description: Please provide the ECS Cluster ID that this service should run on
+    Type: String
+
+  DesiredCount:
+    Description: How many instances of this task should we run across our cluster?
+    Type: Number
+    Default: 2
+
+  Listener:
+    Description: The Application Load Balancer listener to register with
+    Type: String
+
+  DBEndpoint:
+    Description: The DB Endpoint
+    Type: String
+
+  RedisEndpoint:
+    Description: The Redis Endpoint
+    Type: String
+
+  ServiceRole:
+    Description: An IAM Role that grants the service access to register/unregister with the Application Load Balancer (ALB).
+    Type: AWS::IAM::Role
+
+  ECRBackendRepositoryURL:
+    Description: The ECR repository for the backend container
+    Type: String

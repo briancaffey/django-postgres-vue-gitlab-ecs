@@ -7,7 +7,7 @@ stages:
 variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
 
-.build-backend:
+build-and-release-backend:
   stage: build
   image: docker:stable
   services:
@@ -59,6 +59,7 @@ variables:
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
+    VUE_APP_API_BASE_URL: "https://api.${AppUrl}"
   artifacts:
     paths:
       - frontend/dist/
@@ -85,7 +86,7 @@ variables:
     - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-.build-frontend-staging:
+build-frontend-staging:
   image: node:latest
   stage: build
   only:
@@ -93,6 +94,7 @@ variables:
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
+    VUE_APP_API_BASE_URL: "https://api.${AppUrl}"
   artifacts:
     paths:
       - frontend/dist/
@@ -103,7 +105,7 @@ variables:
     - npm run build
     - echo "Build Complete"
 
-.deploy-frontend-staging:
+deploy-frontend-staging:
   image: python:3.6
   stage: deploy
   only:

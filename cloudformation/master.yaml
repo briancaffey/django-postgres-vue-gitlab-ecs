@@ -49,6 +49,7 @@ Parameters:
     Description: "This is a test parameter used to see how to pass parameters from GitLab"
 
 Resources:
+
   VPC:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -102,18 +103,57 @@ Resources:
         SSHKeyName: !Ref SSHKeyName
         LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
 
-  # BackendService:
+  BackendService:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        Cluster: !GetAtt ECS.Outputs.Cluster
+        DesiredCount: 1
+        Listener: !GetAtt ALB.Outputs.Listener
+        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+
+  CeleryService:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        Cluster: !GetAtt ECS.Outputs.Cluster
+        DesiredCount: 1
+        Listener: !GetAtt ALB.Outputs.Listener
+        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+
+  # BeatService:
   #   Type: AWS::CloudFormation::Stack
   #   Properties:
-  #     TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend/service.yaml
+  #     TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
   #     Parameters:
   #       VPC: !GetAtt VPC.Outputs.VPC
   #       Cluster: !GetAtt ECS.Outputs.Cluster
   #       DesiredCount: 1
   #       Listener: !GetAtt ALB.Outputs.Listener
-  #       Path: /api/hello-world
   #       DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
   #       RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+  #       ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+
+  # FlowerService:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
+  #     Parameters:
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       Cluster: !GetAtt ECS.Outputs.Cluster
+  #       DesiredCount: 1
+  #       Listener: !GetAtt ALB.Outputs.Listener
+  #       DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+  #       RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+  #       ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
 
   # LifecycleHook:
   #   Type: AWS::CloudFormation::Stack
