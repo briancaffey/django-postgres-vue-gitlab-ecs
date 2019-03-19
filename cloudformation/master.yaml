@@ -99,7 +99,7 @@ Resources:
         DesiredCapacity: '1'
         ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
         SSHKeyName: !Ref SSHKeyName
-        LoadBalancerSecurityGroup: ALB.Outputs.LoadBalancerSecurityGroup
+        LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
 
   # BackendService:
   #   Type: AWS::CloudFormation::Stack
