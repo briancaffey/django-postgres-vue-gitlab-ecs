@@ -56,17 +56,17 @@ Resources:
       Parameters:
         EnvironmentName: !Ref AWS::StackName
 
-  # ALB:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/load-balancers.yaml
-  #     Parameters:
-  #       EnvironmentName: !Ref AWS::StackName
-  #       AppUrl: !Ref AppUrl
-  #       HostedZoneId: !Ref HostedZoneId
-  #       VPC: !GetAtt VPC.Outputs.VPC
-  #       Subnets: !GetAtt VPC.Outputs.PublicSubnets
-  #       SSLCertificateArn: !Ref SSLCertificateArn
+  ALB:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/load-balancers.yaml
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        AppUrl: !Ref AppUrl
+        HostedZoneId: !Ref HostedZoneId
+        VPC: !GetAtt VPC.Outputs.VPC
+        Subnets: !GetAtt VPC.Outputs.PublicSubnets
+        SSLCertificateArn: !Ref SSLCertificateArn
 
   # RDSPostgres:
   #   Type: AWS::CloudFormation::Stack
