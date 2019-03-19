@@ -103,6 +103,11 @@ Resources:
         SSHKeyName: !Ref SSHKeyName
         LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
 
+  ServiceRole:
+    Type: AWS::IAM::ROLE
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/service-role.yaml
+
   BackendService:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -115,6 +120,7 @@ Resources:
         DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+        ServiceRole: !Ref ServiceRole.Outputs.ServiceRole
 
   CeleryService:
     Type: AWS::CloudFormation::Stack
@@ -128,6 +134,7 @@ Resources:
         DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+        ServiceRole: !Ref ServiceRole.Outputs.ServiceRole
 
   # BeatService:
   #   Type: AWS::CloudFormation::Stack
