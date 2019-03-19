@@ -66,7 +66,6 @@ Resources:
         VPC: !GetAtt VPC.Outputs.VPC
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SSLCertificateArn: !Ref SSLCertificateArn
-        # SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
   # RDSPostgres:
   #   Type: AWS::CloudFormation::Stack
@@ -140,9 +139,6 @@ Resources:
         SSLCertificateArn: !Ref SSLCertificateArn
 
 Outputs:
-  # ProductServiceUrl:
-  #   Description: The URL endpoint for the product service
-  #   Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "api", "hello-world"]]
 
   TestParameterValue:
     Description: The value of the test parameter (the shortened Git SHA) of the commit.

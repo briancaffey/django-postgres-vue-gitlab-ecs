@@ -135,13 +135,14 @@ variables:
         --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
         --parameters \
+        ParameterKey=EnvironmentName=staging \
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
         ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend
 
-.update-stack-staging:
+update-stack-staging:
   image: python:3.6
   stage: cloudformation
   only:
@@ -156,6 +157,7 @@ variables:
         --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
         --parameters \
+        ParameterKey=EnvironmentName=staging \
         ParameterKey=AppUrl,ParameterValue=$AppUrl \
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
