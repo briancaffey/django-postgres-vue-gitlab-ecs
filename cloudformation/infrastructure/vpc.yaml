@@ -133,7 +133,7 @@ Outputs:
     Description: Public subnet one
     Value: !Ref 'PublicSubnetOne'
     Export:
-      Name: !Sub ${EnvironmentName}:PublicSubnetOne
+      Name: !Sub ${EnvironmentName}:PrivateSubnetOne
 
   PrivateSubnetTwo:
     Description: Private subnet two
