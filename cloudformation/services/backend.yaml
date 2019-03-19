@@ -56,7 +56,7 @@ Resources:
       ContainerDefinitions:
         - Name: backend
           Essential: true
-          Image: !Sub ${ECRBackendRepositoryURL}:/latest
+          Image: !Sub ${ECRBackendRepositoryURL}:latest
           Memory: 128
           Environment:
             - Name: RDS_DB_NAME

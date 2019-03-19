@@ -51,7 +51,7 @@ Resources:
       ContainerDefinitions:
         - Name: celery
           Essential: true
-          Image: !Sub ${ECRBackendRepositoryURL}:/latest
+          Image: !Sub ${ECRBackendRepositoryURL}:latest
           Memory: 128
           Command:
             - 'celery'
