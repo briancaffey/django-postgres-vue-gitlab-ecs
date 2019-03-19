@@ -4,6 +4,7 @@ Description: >
 Parameters:
 
   EnvironmentName:
+    Type: String
     Description: An environemnt name to namespace cluster resources (e.g. qa, staging, production)
 
   InstanceType:
@@ -21,12 +22,15 @@ Parameters:
     Type: AWS::EC2::VPC::Id
 
   LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
     Description: Security group for the load balancer
 
   PublicSubnetOne:
+    Type: AWS::EC2::Subnet::Id
     Description: PublicSubnetOne of our VPC
 
   PublicSubnetTwo:
+    Type: AWS::EC2::Subnet::Id
     Description: PublicSubnetTwo of our VPC
 
   MaxSize:

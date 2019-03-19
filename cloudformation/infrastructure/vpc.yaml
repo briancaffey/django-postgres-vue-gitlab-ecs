@@ -4,6 +4,7 @@ Description: >
 Parameters:
 
   EnvironmentName:
+    Type: String
     Description: An environemnt name to namespace resources (e.g. qa, staging, production)
 
 Mappings:
@@ -57,7 +58,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [0, !GetAZs ""]
-      CidrBlock: !Ref PrivateSubnet1CIDR
+      CidrBlock: !FindInMap ['SubnetConfig', 'PrivateOne', 'CIDR']
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
@@ -68,7 +69,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !Ref PrivateSubnet2CIDR
+      CidrBlock: !FindInMap ['SubnetConfig', 'PrivateTwo', 'CIDR']
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name

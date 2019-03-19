@@ -16,7 +16,12 @@ Parameters:
     Type: List<AWS::EC2::Subnet::Id>
 
   SSLCertificateArn:
+    Type: String
     Description: The SSL Certificate for the Application Load Balancer
+
+  AppUrl:
+    Type: String
+    Description: The site's domain name (e.g. mydomain.com)
 
 Resources:
   LoadBalancer:
@@ -82,10 +87,10 @@ Resources:
       HostedZoneId: !Sub ${AppUrl}.
       Comment: The record set that directs traffic to the load balancer
       RecordSets:
-        - Name: !Sub "api.${UrlApp}."
+        - Name: !Sub "api.${AppUrl}."
           Type: "A"
           AliasTarget:
-            HostedZoneId: !GetAtt LoadBalancer.CanonicalHostedZoneNameID
+            HostedZoneId: "Z368ELLRRE2KJ0"
             DNSName: !GetAtt LoadBalancer.DNSName
 
 Outputs:
