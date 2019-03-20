@@ -113,3 +113,62 @@ Resources:
     Properties:
       LogGroupName: !Ref AWS::StackName
       RetentionInDays: 365
+
+  FlowerService:
+    Type: AWS::ECS::Service
+    DependsOn: FlowerListenerRule
+    Properties:
+      Cluster: !Ref ECSCluster
+      Role: !Ref ServiceRole
+      DesiredCount: !Ref DesiredCount
+      TaskDefinition: !Ref FlowerTaskDefinition
+      LoadBalancers:
+        - ContainerName: "flower"
+          ContainerPort: 5555
+          TargetGroupArn: !Ref FlowerTargetGroup
+
+  FlowerTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: backend
+      ContainerDefinitions:
+        - Name: backend
+          Essential: true
+          Image: mher/flower
+          Memory: 128
+          Command:
+            - 'flower'
+            - '--url_prefix=flower'
+          Environment:
+            - Name: CELERY_BROKER_URL
+              Value: !Ref RedisEndpoint
+          PortMappings:
+            - ContainerPort: 5555
+
+  FlowerTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId: !Ref VPC
+      Port: 80
+      Protocol: HTTP
+      Matcher:
+        HttpCode: 200-299
+      HealthCheckIntervalSeconds: 300
+      HealthCheckPath: /flower
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+
+  FlowerListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref Listener
+      Priority: 1
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - "/flower"
+      Actions:
+        - TargetGroupArn: !Ref FlowerTargetGroup
+          Type: forward
+
