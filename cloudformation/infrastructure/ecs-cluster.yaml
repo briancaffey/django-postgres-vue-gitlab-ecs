@@ -81,11 +81,12 @@ Resources:
       MinSize: '1'
       MaxSize: !Ref 'MaxSize'
       DesiredCapacity: !Ref 'DesiredCapacity'
-      MinSuccessfulInstancesPercent: 50
     CreationPolicy:
       ResourceSignal:
         Timeout: PT15M
     UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MinSuccessfulInstancesPercent: 50
       AutoScalingReplacingUpdate:
         WillReplace: 'true'
 
