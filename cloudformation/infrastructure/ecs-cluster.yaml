@@ -87,8 +87,10 @@ Resources:
     UpdatePolicy:
       AutoScalingRollingUpdate:
         MinSuccessfulInstancesPercent: 50
-      AutoScalingReplacingUpdate:
-        WillReplace: 'true'
+        WaitOnResourceSignals: 'true'
+        PauseTime: "PT3M"
+      # AutoScalingReplacingUpdate:
+      #   WillReplace: 'true'
 
   ContainerInstances:
     Type: AWS::AutoScaling::LaunchConfiguration
