@@ -86,7 +86,7 @@ Resources:
         Timeout: PT15M
     UpdatePolicy:
       AutoScalingRollingUpdate:
-        MinSuccessfulInstancesPercent: 50
+        MinSuccessfulInstancesPercent: 0
         WaitOnResourceSignals: 'true'
         PauseTime: "PT3M"
       # AutoScalingReplacingUpdate:
