@@ -130,9 +130,9 @@ Resources:
   FlowerTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: backend
+      Family: flower
       ContainerDefinitions:
-        - Name: backend
+        - Name: flower
           Essential: true
           Image: mher/flower
           Memory: 128
