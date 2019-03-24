@@ -61,7 +61,7 @@ Resources:
   ContainerInstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Acces to the ECS hosts that run containers
+      GroupDescription: Access to the ECS hosts that run containers.
       VpcId: !Ref 'VPC'
       SecurityGroupIngress:
         - SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
