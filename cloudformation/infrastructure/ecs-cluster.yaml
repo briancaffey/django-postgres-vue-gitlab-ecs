@@ -103,7 +103,7 @@ Resources:
       ImageId: 'ami-aff65ad2'
       SecurityGroups: [!Ref 'ContainerInstanceSecurityGroup']
       InstanceType: !Ref 'InstanceType'
-      IamInstanceProfile: !Ref 'EC2InstanceProfile'
+      IamInstanceProfile: !Ref 'ECSInstanceProfile'
       KeyName: !Ref SSHKeyName
       UserData:
         "Fn::Base64": !Sub |
@@ -152,6 +152,77 @@ Resources:
                 files:
                   - /etc/cfn/cfn-hup.conf
                   - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+
+  ECSRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: !Sub ${EnvironmentName}-ECSRole-${AWS::Region}
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Action": "sts:AssumeRole",
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "ec2.amazonaws.com"
+                }
+            }]
+        }
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      Policies:
+        - PolicyName: ecs-service
+          PolicyDocument: |
+            {
+                "Statement": [{
+                    "Effect": "Allow",
+                    "Action": [
+                        "ecs:CreateCluster",
+                        "ecs:DeregisterContainerInstance",
+                        "ecs:DiscoverPollEndpoint",
+                        "ecs:Poll",
+                        "ecs:RegisterContainerInstance",
+                        "ecs:StartTelemetrySession",
+                        "ecs:Submit*",
+                        "ecr:BatchCheckLayerAvailability",
+                        "ecr:BatchGetImage",
+                        "ecr:GetDownloadUrlForLayer",
+                        "ecr:GetAuthorizationToken"
+                    ],
+                    "Resource": "*"
+                }]
+            }
+
+  ECSInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref ECSRole
+
+  AutoScalingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [application-autoscaling.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: service-autoscaling
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+              - 'application-autoscaling:*'
+              - 'cloudwatch:DescribeAlarms'
+              - 'cloudwatch:PutMetricAlarm'
+              - 'ecs:DescribeServices'
+              - 'ecs:UpdateService'
+            Resource: '*'
 
 
   ECSCloudWatchParameter:
@@ -239,107 +310,6 @@ Resources:
             }
           }
         }
-
-
-  ECSRole:
-    Type: AWS::IAM::Role
-    Properties:
-      Path: /
-      RoleName: !Sub ${EnvironmentName}-ECSRole-${AWS::Region}
-      AssumeRolePolicyDocument: |
-        {
-            "Statement": [{
-                "Action": "sts:AssumeRole",
-                "Effect": "Allow",
-                "Principal": {
-                    "Service": "ec2.amazonaws.com"
-                }
-            }]
-        }
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
-        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
-      Policies:
-        - PolicyName: ecs-service
-          PolicyDocument: |
-            {
-                "Statement": [{
-                    "Effect": "Allow",
-                    "Action": [
-                        "ecs:CreateCluster",
-                        "ecs:DeregisterContainerInstance",
-                        "ecs:DiscoverPollEndpoint",
-                        "ecs:Poll",
-                        "ecs:RegisterContainerInstance",
-                        "ecs:StartTelemetrySession",
-                        "ecs:Submit*",
-                        "ecr:BatchCheckLayerAvailability",
-                        "ecr:BatchGetImage",
-                        "ecr:GetDownloadUrlForLayer",
-                        "ecr:GetAuthorizationToken"
-                    ],
-                    "Resource": "*"
-                }]
-            }
-
-  EC2InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Path: /
-      Roles: [!Ref 'EC2Role']
-
-  AutoScalingRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service: [application-autoscaling.amazonaws.com]
-          Action: ['sts:AssumeRole']
-      Path: /
-      Policies:
-      - PolicyName: service-autoscaling
-        PolicyDocument:
-          Statement:
-          - Effect: Allow
-            Action:
-              - 'application-autoscaling:*'
-              - 'cloudwatch:DescribeAlarms'
-              - 'cloudwatch:PutMetricAlarm'
-              - 'ecs:DescribeServices'
-              - 'ecs:UpdateService'
-            Resource: '*'
-
-  EC2Role:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service: [ec2.amazonaws.com]
-          Action: ['sts:AssumeRole']
-      Path: /
-      Policies:
-      - PolicyName: ecs-service
-        PolicyDocument:
-          Statement:
-          - Effect: Allow
-            Action:
-              - 'ecs:CreateCluster'
-              - 'ecs:DeregisterContainerInstance'
-              - 'ecs:DiscoverPollEndpoint'
-              - 'ecs:Poll'
-              - 'ecs:RegisterContainerInstance'
-              - 'ecs:StartTelemetrySession'
-              - 'ecs:Submit*'
-              - 'logs:CreateLogStream'
-              - 'lgos:PutLogEvents'
-              - 'ecr:GetAuthorizationToken'
-              - 'ecr:BatchGetImage'
-              - 'ecr:GetDownloadUrlForLayer'
-            Resource: '*'
 
 Outputs:
 
