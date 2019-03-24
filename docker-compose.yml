@@ -9,6 +9,10 @@ services:
       - main
     volumes:
       - pg-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${RDS_PASSWORD}
+      - POSTGRES_USER=${RDS_USERNAME}
+      - POSTGRES_DB=${RDS_DB_NAME}
 
   redis:
     image: redis:alpine
@@ -48,6 +52,11 @@ services:
       - main
     environment:
       - DEBUG=True
+      - RDS_PASSWORD=${RDS_PASSWORD}
+      - RDS_USERNAME=${RDS_USERNAME}
+      - RDS_DB_NAME=${RDS_DB_NAME}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
     depends_on:
       - db
 
@@ -83,6 +92,9 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=True
+      - RDS_PASSWORD=${RDS_PASSWORD}
+      - RDS_USERNAME=${RDS_USERNAME}
+      - RDS_DB_NAME=${RDS_DB_NAME}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
 
@@ -100,6 +112,9 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
+      - RDS_PASSWORD=${RDS_PASSWORD}
+      - RDS_USERNAME=${RDS_USERNAME}
+      - RDS_DB_NAME=${RDS_DB_NAME}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
 
@@ -108,7 +123,7 @@ services:
     container_name: flower
     command: flower --url_prefix=flower
     environment:
-      - CELERY_BROKER_URL=redis://redis:6379
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - FLOWER_PORT=5555
     ports:
       - 5555:5555

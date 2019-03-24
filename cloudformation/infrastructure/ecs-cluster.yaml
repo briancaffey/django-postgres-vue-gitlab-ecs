@@ -85,12 +85,8 @@ Resources:
       ResourceSignal:
         Timeout: PT15M
     UpdatePolicy:
-      AutoScalingRollingUpdate:
-        MinSuccessfulInstancesPercent: 0
-        WaitOnResourceSignals: 'true'
-        PauseTime: "PT3M"
-      # AutoScalingReplacingUpdate:
-      #   WillReplace: 'true'
+      AutoScalingReplacingUpdate:
+        WillReplace: 'true'
 
   ContainerInstances:
     Type: AWS::AutoScaling::LaunchConfiguration

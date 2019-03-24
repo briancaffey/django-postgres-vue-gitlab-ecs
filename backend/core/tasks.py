@@ -16,3 +16,11 @@ class BaseTask(celery.Task):
 def debug_task(self):
     time.sleep(10)
     print("Task is done")
+
+
+@periodic_task(
+    run_every=(crontab(minute='*/1')),
+    name="debug_periodic_task",
+    ignore_result=True)
+def debug_periodic_task():
+    print("Periodic task complete")

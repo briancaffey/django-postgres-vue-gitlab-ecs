@@ -1,3 +1,4 @@
 .env
 .vscode
 notes/
+node_modules/

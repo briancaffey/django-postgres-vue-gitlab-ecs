@@ -69,39 +69,39 @@ Resources:
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SSLCertificateArn: !Ref SSLCertificateArn
 
-  RDSPostgres:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
-      Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
-        SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
+  # RDSPostgres:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
+  #     Parameters:
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
+  #       SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
 
-  ElastiCacheRedis:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
-      Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
-        SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
+  # ElastiCacheRedis:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
+  #     Parameters:
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
+  #       SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
 
-  ECS:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecs-cluster.yaml
-      Parameters:
-        EnvironmentName: !Ref AWS::StackName
-        InstanceType: t2.micro
-        VPC: !GetAtt VPC.Outputs.VPC
-        PublicSubnetOne: !GetAtt VPC.Outputs.PublicSubnetOne
-        PublicSubnetTwo: !GetAtt VPC.Outputs.PublicSubnetTwo
-        MaxSize: '2'
-        DesiredCapacity: '1'
-        ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
-        SSHKeyName: !Ref SSHKeyName
-        LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
+  # ECS:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecs-cluster.yaml
+  #     Parameters:
+  #       EnvironmentName: !Ref AWS::StackName
+  #       InstanceType: t2.micro
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       PublicSubnetOne: !GetAtt VPC.Outputs.PublicSubnetOne
+  #       PublicSubnetTwo: !GetAtt VPC.Outputs.PublicSubnetTwo
+  #       MaxSize: '2'
+  #       DesiredCapacity: '1'
+  #       ECSAMI: /aws/service/ecs/optimized-ami/amazon-linux/recommended/image_id
+  #       SSHKeyName: !Ref SSHKeyName
+  #       LoadBalancerSecurityGroup: !GetAtt ALB.Outputs.LoadBalancerSecurityGroup
 
   ServiceRole:
     Type: AWS::CloudFormation::Stack
@@ -143,14 +143,14 @@ Resources:
       Parameters:
         ECRBackendRepositoryName: !Ref ECRBackendRepositoryName
 
-  StaticSite:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
-      Parameters:
-        AppUrl: !Ref AppUrl
-        HostedZoneId: !Ref HostedZoneId
-        SSLCertificateArn: !Ref SSLCertificateArn
+  # StaticSite:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
+  #     Parameters:
+  #       AppUrl: !Ref AppUrl
+  #       HostedZoneId: !Ref HostedZoneId
+  #       SSLCertificateArn: !Ref SSLCertificateArn
 
 Outputs:
 
