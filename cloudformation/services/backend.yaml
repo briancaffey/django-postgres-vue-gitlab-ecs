@@ -145,6 +145,17 @@ Resources:
               Value: 5555
           PortMappings:
             - ContainerPort: 5555
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref FlowerCloudWatchLogsGroup
+              awslogs-region: !Ref AWS::Region
+
+  FlowerCloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref AWS::StackName
+      RetentionInDays: 365
 
   FlowerTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
