@@ -25,7 +25,7 @@ Parameters:
 
   ServiceRole:
     Description: An IAM Role that grants the service access to register/unregister with the Application Load Balancer (ALB).
-    Type: AWS::IAM::Role
+    Type: String
 
   ECRBackendRepositoryURL:
     Description: The ECR repository for the backend container
