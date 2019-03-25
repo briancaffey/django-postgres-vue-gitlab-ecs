@@ -15,10 +15,6 @@ Parameters:
     Type: Number
     Default: 1
 
-  Listener:
-    Description: The Application Load Balancer listener to register with
-    Type: String
-
   DBEndpoint:
     Description: The DB Endpoint
     Type: String
