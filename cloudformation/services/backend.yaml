@@ -103,8 +103,7 @@ Resources:
       Conditions:
         - Field: path-pattern
           Values:
-            - "/api*"
-            - "/admin*"
+            - "*"
       Actions:
         - TargetGroupArn: !Ref BackendTargetGroup
           Type: forward
