@@ -146,7 +146,6 @@ Resources:
               Value: 5555
           PortMappings:
             - ContainerPort: 5555
-            - HostPort: 5556
           LogConfiguration:
             LogDriver: awslogs
             Options:
