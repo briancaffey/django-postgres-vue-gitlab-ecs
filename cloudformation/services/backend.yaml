@@ -137,6 +137,7 @@ Resources:
           Image: mher/flower
           Memory: 128
           Command:
+            - '--port=5555'
             - '--url_prefix=flower'
           Environment:
             - Name: CELERY_BROKER_URL
@@ -145,6 +146,7 @@ Resources:
               Value: 5555
           PortMappings:
             - ContainerPort: 5555
+            - HostPort: 5555
           LogConfiguration:
             LogDriver: awslogs
             Options:
