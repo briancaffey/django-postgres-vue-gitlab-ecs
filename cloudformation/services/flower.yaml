@@ -52,13 +52,8 @@ Resources:
           Image: mher/flower
           Memory: 128
           Command:
-            - '--port=5555'
+            - !Sub "--broker=${RedisEndpoint}"
             - '--url_prefix=flower'
-          Environment:
-            - Name: CELERY_BROKER_URL
-              Value: !Ref RedisEndpoint
-            - Name: FLOWER_PORT
-              Value: 5555
           PortMappings:
             - ContainerPort: 5555
           LogConfiguration:

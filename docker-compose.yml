@@ -119,20 +119,42 @@ services:
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
 
   flower:
-    image: mher/flower
+    build: ./backend
     container_name: flower
-    command: --url_prefix=flower
-    environment:
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-      - FLOWER_PORT=5555
-    ports:
-      - 5555:5555
-    networks:
-      - main
+    command: celery flower -A backend.celery_app:app -l info --url_prefix=flower
+    volumes:
+      - ./backend:/code
     depends_on:
+      - db
       - celery
       - redis
-      - beat
+    networks:
+      - main
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - RDS_PASSWORD=${RDS_PASSWORD}
+      - RDS_USERNAME=${RDS_USERNAME}
+      - RDS_DB_NAME=${RDS_DB_NAME}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+
+
+  # flower:
+  #   image: mher/flower
+  #   container_name: flower
+  #   command: --url_prefix=flower
+  #   environment:
+  #     - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+  #     - FLOWER_PORT=5555
+  #   ports:
+  #     - 5555:5555
+  #   networks:
+  #     - main
+  #   depends_on:
+  #     - celery
+  #     - redis
+  #     - beat
 
 volumes:
   pg-data:
