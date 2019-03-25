@@ -137,7 +137,6 @@ Resources:
           Image: mher/flower
           Memory: 128
           Command:
-            - 'flower'
             - '--url_prefix=flower'
           Environment:
             - Name: CELERY_BROKER_URL
