@@ -154,7 +154,7 @@ Resources:
   FlowerCloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Join ['-', ['flower', !Ref AWS::StackName]]
+      LogGroupName: !Join ['-', ['flower', !Sub "${AWS::StackName}"]]
       RetentionInDays: 365
 
   FlowerTargetGroup:
