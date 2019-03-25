@@ -7,7 +7,7 @@ stages:
 variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
 
-build-and-release-backend:
+.build-and-release-backend:
   stage: build
   image: docker:stable
   services:

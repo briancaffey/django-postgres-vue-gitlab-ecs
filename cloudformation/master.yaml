@@ -135,18 +135,18 @@ Resources:
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
-  BeatService:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
-      Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
-        DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
-        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
-        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
-        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+  # BeatService:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
+  #     Parameters:
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+  #       DesiredCount: 1
+  #       DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+  #       RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+  #       ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+  #       ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
   ECRBackendRepository:
     Type: AWS::CloudFormation::Stack
