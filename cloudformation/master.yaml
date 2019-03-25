@@ -161,6 +161,7 @@ Resources:
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+        Listener: !GetAtt ALB.Outputs.Listener
         DesiredCount: 1
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
