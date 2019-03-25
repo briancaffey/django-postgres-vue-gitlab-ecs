@@ -166,8 +166,8 @@ Resources:
       Protocol: HTTP
       Matcher:
         HttpCode: 200-299
-      HealthCheckIntervalSeconds: 300
-      HealthCheckPath: /flower/
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /flower/dashboard/
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
