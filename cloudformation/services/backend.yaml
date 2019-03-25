@@ -167,8 +167,7 @@ Resources:
       Conditions:
         - Field: path-pattern
           Values:
-            - "/flower"
+            - "/flower*"
       Actions:
         - TargetGroupArn: !Ref FlowerTargetGroup
           Type: forward
-
