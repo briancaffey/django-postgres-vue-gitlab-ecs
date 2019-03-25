@@ -69,23 +69,23 @@ Resources:
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SSLCertificateArn: !Ref SSLCertificateArn
 
-  # RDSPostgres:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
-  #     Parameters:
-  #       VPC: !GetAtt VPC.Outputs.VPC
-  #       PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
-  #       SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
+  RDSPostgres:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
+        SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
 
-  # ElastiCacheRedis:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
-  #     Parameters:
-  #       VPC: !GetAtt VPC.Outputs.VPC
-  #       PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
-  #       SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
+  ElastiCacheRedis:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
+        SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
 
   ECS:
     Type: AWS::CloudFormation::Stack
