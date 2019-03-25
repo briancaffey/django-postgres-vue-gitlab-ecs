@@ -12,7 +12,7 @@ Description: >
 
   It also deploys a static site with S3 and CloudFront.
 
-  Last Modified: 20th March 2019
+  Last Modified: 24th March 2019
   Author: Brian Caffey
 
 Parameters:
