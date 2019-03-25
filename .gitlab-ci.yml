@@ -154,23 +154,23 @@ update-stack-staging:
     - master
   before_script:
     - pip install awscli
-  script:
     - ./cloudformation/tests/validate-templates.sh
-    # - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/
-    # - |
-    #   aws cloudformation update-stack \
-    #     --stack-name ${StackName} \
-    #     --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
-    #     --capabilities=CAPABILITY_NAMED_IAM \
-    #     --parameters \
-    #     ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName \
-    #     ParameterKey=EnvironmentName,ParameterValue=staging \
-    #     ParameterKey=AppUrl,ParameterValue=$AppUrl \
-    #     ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
-    #     ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
-    #     ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
-    #     ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
-    #     ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn}
+    - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/
+  script:
+    - |
+      aws cloudformation update-stack \
+        --stack-name ${StackName} \
+        --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
+        --capabilities=CAPABILITY_NAMED_IAM \
+        --parameters \
+        ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName \
+        ParameterKey=EnvironmentName,ParameterValue=staging \
+        ParameterKey=AppUrl,ParameterValue=$AppUrl \
+        ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
+        ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
+        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
+        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
+        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn}
   after_script:
     - echo "Finished updating stack"
 
