@@ -124,7 +124,7 @@ variables:
     - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-.create-stack:
+create-stack:
   image: python:3.6
   stage: cloudformation
   before_script:
@@ -145,7 +145,7 @@ variables:
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
         ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend
 
-update-stack-staging:
+.update-stack-staging:
   image: python:3.6
   stage: cloudformation
   only:
