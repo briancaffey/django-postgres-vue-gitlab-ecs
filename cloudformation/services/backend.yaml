@@ -142,6 +142,8 @@ Resources:
           Environment:
             - Name: CELERY_BROKER_URL
               Value: !Ref RedisEndpoint
+            - Name: FLOWER_PORT
+              Value: 5555
           PortMappings:
             - ContainerPort: 5555
 
@@ -167,7 +169,7 @@ Resources:
       Conditions:
         - Field: path-pattern
           Values:
-            - "/flower*"
+            - "/flower/*"
       Actions:
         - TargetGroupArn: !Ref FlowerTargetGroup
           Type: forward
