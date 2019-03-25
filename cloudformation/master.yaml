@@ -36,6 +36,12 @@ Parameters:
     AllowedPattern: "arn:aws:acm:.*"
     ConstraintDescription: "Please supply a valid ARN to a certificate."
 
+  WildcardSSLCertificateArn:
+    Type: "String"
+    Description: "ARN pointing to a wildcard SSL cert to use for this app URL."
+    AllowedPattern: "arn:aws:acm:.*"
+    ConstraintDescription: "Please supply a valid ARN to a wildcard certificate."
+
   ECRBackendRepositoryName:
     Type: "String"
     Description: "Name of ECR Repository for backend web server."
@@ -67,7 +73,7 @@ Resources:
         HostedZoneId: !Ref HostedZoneId
         VPC: !GetAtt VPC.Outputs.VPC
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
-        SSLCertificateArn: !Ref SSLCertificateArn
+        WildcardSSLCertificateArn: !Ref WildcardSSLCertificateArn
 
   RDSPostgres:
     Type: AWS::CloudFormation::Stack
@@ -147,6 +153,17 @@ Resources:
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+
+  # FlowerService:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
+  #     Parameters:
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+  #       DesiredCount: 1
+  #       RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+  #       ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
   ECRBackendRepository:
     Type: AWS::CloudFormation::Stack

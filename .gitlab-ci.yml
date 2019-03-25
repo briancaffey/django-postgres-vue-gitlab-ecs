@@ -143,7 +143,9 @@ variables:
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
-        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend
+        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
+        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn}
+
 
 update-stack-staging:
   image: python:3.6
@@ -166,7 +168,8 @@ update-stack-staging:
         ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
-        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend
+        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
+        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn}
   after_script:
     - echo "Finished updating stack"
 

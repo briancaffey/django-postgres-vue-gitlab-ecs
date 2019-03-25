@@ -15,7 +15,7 @@ Parameters:
     Description: Choose which subnets the Application Load Balancer should be deployed to
     Type: List<AWS::EC2::Subnet::Id>
 
-  SSLCertificateArn:
+  WildcardSSLCertificateArn:
     Type: String
     Description: The SSL Certificate for the Application Load Balancer
 
@@ -69,7 +69,7 @@ Resources:
       Port: 443
       Protocol: "HTTPS"
       Certificates:
-        - CertificateArn: !Ref SSLCertificateArn
+        - CertificateArn: !Ref WildcardSSLCertificateArn
       DefaultActions:
         - TargetGroupArn: !Ref DefaultTargetGroup
           Type: forward
