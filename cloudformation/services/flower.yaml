@@ -52,10 +52,30 @@ Resources:
           Image: mher/flower
           Memory: 128
           Command:
-            - !Sub "--broker=${RedisEndpoint}"
+            - 'celery'
+            - 'flower'
+            - '-A'
+            - 'backend.celery_app:app'
+            - '-l'
+            - 'info'
             - '--url_prefix=flower'
           PortMappings:
             - ContainerPort: 5555
+          Environment:
+            - Name: RDS_DB_NAME
+              Value: postgres
+            - Name: RDS_USERNAME
+              Value: postgres
+            - Name: RDS_PASSWORD
+              Value: postgres
+            - Name: RDS_HOSTNAME
+              Value: !Ref DBEndpoint
+            - Name: RDS_PORT
+              Value: 5432
+            - Name: CELERY_BROKER_URL
+              Value: !Ref RedisEndpoint
+            - Name: CELERY_RESULT_BACKEND
+              Value: !Ref RedisEndpoint
           LogConfiguration:
             LogDriver: awslogs
             Options:
