@@ -56,10 +56,10 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       LoadBalancerArn: !Ref LoadBalancer
-      Port: 443
+      Port: 80
       Protocol: HTTPS
-      Certificates:
-        - CertificateArn: !Ref WildcardSSLCertificateArn
+      # Certificates:
+      #   - CertificateArn: !Ref WildcardSSLCertificateArn
       DefaultActions:
         - TargetGroupArn: !Ref DefaultTargetGroup
           Type: forward
