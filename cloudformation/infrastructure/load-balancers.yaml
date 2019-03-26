@@ -44,13 +44,31 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       GroupDescription: Access to the load balancer that sits in front of ECS
-      SecurityGroupIngress:
-        # Allow access from anywhere to our ECS services
-        - CidrIp: 0.0.0.0/0
-          IpProtocol: -1
+      # SecurityGroupIngress:
+      #   # Allow access from anywhere to our ECS services
+      #   - CidrIp: 0.0.0.0/0
+      #     IpProtocol: -1
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-LoadBalancerSecurityGroup
+
+  ALBSecurityGroupInHttpWorld:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref LoadBalancerSecurityGroup
+      IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      CidrIp: '0.0.0.0/0'
+
+  ALBSecurityGroupInHttpsWorld:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref LoadBalancerSecurityGroup
+      IpProtocol: tcp
+      FromPort: 443
+      ToPort: 443
+      CidrIp: '0.0.0.0/0'
 
   LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
