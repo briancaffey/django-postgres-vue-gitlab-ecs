@@ -19,6 +19,10 @@ Parameters:
     Description: The Application Load Balancer listener to register with
     Type: String
 
+  DBEndpoint:
+    Description: The DB Endpoint
+    Type: String
+
   RedisEndpoint:
     Description: The Redis Endpoint
     Type: String
