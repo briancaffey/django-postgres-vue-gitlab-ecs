@@ -58,23 +58,21 @@ Resources:
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
       Protocol: HTTP
-      # Certificates:
-      #   - CertificateArn: !Ref WildcardSSLCertificateArn
       DefaultActions:
         - TargetGroupArn: !Ref DefaultTargetGroup
           Type: forward
 
-  # HTTPSLoadBalancerListener:
-  #   Type: AWS::ElasticLoadBalancingV2::Listener
-  #   Properties:
-  #     LoadBalancerArn: !Ref LoadBalancer
-  #     Port: 443
-  #     Protocol: "HTTPS"
-  #     Certificates:
-  #       - CertificateArn: !Ref WildcardSSLCertificateArn
-  #     DefaultActions:
-  #       - TargetGroupArn: !Ref DefaultTargetGroup
-  #         Type: forward
+  HTTPSLoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 443
+      Protocol: "HTTPS"
+      Certificates:
+        - CertificateArn: !Ref WildcardSSLCertificateArn
+      DefaultActions:
+        - TargetGroupArn: !Ref DefaultTargetGroup
+          Type: forward
 
   # We define a default target group here, as this is a mandatory Parameters
   # when creating an Application Load Balancer Listener. This is not used, instead
