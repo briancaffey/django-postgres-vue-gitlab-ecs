@@ -121,7 +121,7 @@ services:
   flower:
     build: ./backend
     container_name: flower
-    command: celery flower -A backend.celery_app:app -l info --url_prefix=flower
+    command: flower --url_prefix=flower 
     volumes:
       - ./backend:/code
     depends_on:
@@ -130,6 +130,8 @@ services:
       - redis
     networks:
       - main
+    ports:
+      - "5555:5555"
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}

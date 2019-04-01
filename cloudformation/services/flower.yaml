@@ -31,6 +31,10 @@ Parameters:
     Description: An IAM Role that grants the service access to register/unregister with the Application Load Balancer (ALB).
     Type: String
 
+  AppUrl:
+    Description: AppUrl 
+    Type: String
+
 Resources:
 
   FlowerService:
@@ -53,16 +57,13 @@ Resources:
       ContainerDefinitions:
         - Name: flower
           Essential: true
-          Image: mher/flower
+          Image: !Sub ${ECRBackendRepositoryURL}:latest
           Memory: 128
           Command:
             - 'celery'
-            - 'flower'
             - '-A'
             - 'backend.celery_app:app'
-            - '-l'
-            - 'info'
-            - '--url_prefix=flower'
+            - 'flower'
           PortMappings:
             - ContainerPort: 5555
           Environment:
@@ -101,7 +102,7 @@ Resources:
       Matcher:
         HttpCode: 200-299
       HealthCheckIntervalSeconds: 30
-      HealthCheckPath: /flower/dashboard/
+      HealthCheckPath: /
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
@@ -112,9 +113,9 @@ Resources:
       ListenerArn: !Ref Listener
       Priority: 1
       Conditions:
-        - Field: path-pattern
+        - Field: host-header
           Values:
-            - "/flower/*"
+            - !Sub "flower.${AppUrl}"
       Actions:
         - TargetGroupArn: !Ref FlowerTargetGroup
           Type: forward

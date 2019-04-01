@@ -51,7 +51,7 @@ variables:
       - tests/e2e/screenshots/
     expire_in: 7 days
 
-build-frontend:
+.build-frontend:
   image: node:latest
   stage: build
   only:
@@ -70,7 +70,7 @@ build-frontend:
     - npm run build
     - echo "Build Complete"
 
-deploy-frontend:
+.deploy-frontend:
   image: python:3.6
   stage: deploy
   only:
@@ -147,7 +147,7 @@ deploy-frontend:
         ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn}
 
 
-.update-stack-staging:
+update-stack-staging:
   image: python:3.6
   stage: cloudformation
   only:

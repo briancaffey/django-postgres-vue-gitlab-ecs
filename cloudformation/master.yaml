@@ -154,17 +154,19 @@ Resources:
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
-  # FlowerService:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
-  #     Parameters:
-  #       VPC: !GetAtt VPC.Outputs.VPC
-  #       ECSCluster: !GetAtt ECS.Outputs.ECSCluster
-  #       Listener: !GetAtt ALB.Outputs.Listener
-  #       DesiredCount: 1
-  #       RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
-  #       ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+  FlowerService:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC
+        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+        Listener: !GetAtt ALB.Outputs.Listener
+        DesiredCount: 1
+        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+        AppUrl: !Ref AppUrl
+        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
   ECRBackendRepository:
     Type: AWS::CloudFormation::Stack
@@ -173,14 +175,14 @@ Resources:
       Parameters:
         ECRBackendRepositoryName: !Ref ECRBackendRepositoryName
 
-  # StaticSite:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
-  #     Parameters:
-  #       AppUrl: !Ref AppUrl
-  #       HostedZoneId: !Ref HostedZoneId
-  #       SSLCertificateArn: !Ref SSLCertificateArn
+  StaticSite:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
+      Parameters:
+        AppUrl: !Ref AppUrl
+        HostedZoneId: !Ref HostedZoneId
+        SSLCertificateArn: !Ref SSLCertificateArn
 
 Outputs:
 
