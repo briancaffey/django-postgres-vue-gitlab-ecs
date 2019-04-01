@@ -35,6 +35,10 @@ Parameters:
     Description: AppUrl 
     Type: String
 
+  ECRBackendRepositoryURL:
+    Description: The ECR repository for the backend container
+    Type: String
+
 Resources:
 
   FlowerService:
