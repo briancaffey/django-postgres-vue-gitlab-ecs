@@ -175,14 +175,14 @@ Resources:
       Parameters:
         ECRBackendRepositoryName: !Ref ECRBackendRepositoryName
 
-  StaticSite:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
-      Parameters:
-        AppUrl: !Ref AppUrl
-        HostedZoneId: !Ref HostedZoneId
-        SSLCertificateArn: !Ref SSLCertificateArn
+  # StaticSite:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
+  #     Parameters:
+  #       AppUrl: !Ref AppUrl
+  #       HostedZoneId: !Ref HostedZoneId
+  #       SSLCertificateArn: !Ref SSLCertificateArn
 
 Outputs:
 

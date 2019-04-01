@@ -115,6 +115,18 @@ Resources:
             HostedZoneId: "Z35SXDOTRQ7X7K"
             DNSName: !GetAtt LoadBalancer.DNSName
 
+  FlowerDNSRecordSetGroup:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Comment: The record set that directs traffic to the load balancer for flower
+      RecordSets:
+        - Name: !Sub "flower.${AppUrl}."
+          Type: "A"
+          AliasTarget:
+            HostedZoneId: "Z35SXDOTRQ7X7K"
+            DNSName: !GetAtt LoadBalancer.DNSName
+
 Outputs:
   LoadBalancer:
     Description: A reference to the Application Load Balancer
