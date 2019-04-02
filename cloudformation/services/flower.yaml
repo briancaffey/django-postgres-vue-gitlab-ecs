@@ -32,7 +32,7 @@ Parameters:
     Type: String
 
   AppUrl:
-    Description: AppUrl 
+    Description: AppUrl
     Type: String
 
   ECRBackendRepositoryURL:
