@@ -117,9 +117,9 @@ Resources:
       ListenerArn: !Ref Listener
       Priority: 1
       Conditions:
-        - Field: host-header
+        - Field: path-pattern
           Values:
-            - !Sub "flower.${AppUrl}"
+            - !Sub "flower/*"
       Actions:
         - TargetGroupArn: !Ref FlowerTargetGroup
           Type: forward
