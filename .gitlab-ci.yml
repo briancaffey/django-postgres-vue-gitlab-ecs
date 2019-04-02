@@ -144,8 +144,11 @@ variables:
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
         ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
-        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn}
-
+        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn} \
+        ParameterKey=FlowerUsername,ParameterValue=${FlowerUsername} \
+        ParameterKey=FlowerPassword,ParameterValue=${FlowerPassword}
+  after_script:
+    - echo "Finished creating stack"
 
 update-stack-staging:
   image: python:3.6
@@ -170,7 +173,9 @@ update-stack-staging:
         ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
         ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
         ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
-        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn}
+        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn} \
+        ParameterKey=FlowerUsername,ParameterValue=${FlowerUsername} \
+        ParameterKey=FlowerPassword,ParameterValue=${FlowerPassword}
   after_script:
     - echo "Finished updating stack"
 

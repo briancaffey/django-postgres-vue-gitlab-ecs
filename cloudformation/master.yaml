@@ -54,6 +54,14 @@ Parameters:
     Type: "String"
     Description: "This is a test parameter used to see how to pass parameters from GitLab"
 
+  FlowerUsername:
+    Description: "Username for flower monitoring service authentication"
+    Type: String
+
+  FlowerPassword:
+    Description: "Password for flower monitoring service authentication"
+    Type: String
+
 Resources:
 
   VPC:
@@ -168,6 +176,9 @@ Resources:
         AppUrl: !Ref AppUrl
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        FlowerUsername: !Ref FlowerUsername
+        FlowerPassword: !Ref FlowerPassword
+
 
   ECRBackendRepository:
     Type: AWS::CloudFormation::Stack
