@@ -119,7 +119,7 @@ Resources:
       Conditions:
         - Field: path-pattern
           Values:
-            - !Sub "flower/*"
+            - !Sub "/flower/*"
       Actions:
         - TargetGroupArn: !Ref FlowerTargetGroup
           Type: forward
