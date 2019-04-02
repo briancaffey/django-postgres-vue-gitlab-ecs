@@ -66,7 +66,6 @@ Resources:
           Command:
             - 'flower'
             - !Sub "--broker=${RedisEndpoint}"
-            - 'url_prefix=flower'
           PortMappings:
             - ContainerPort: 5555
           Environment:
@@ -116,9 +115,9 @@ Resources:
       ListenerArn: !Ref Listener
       Priority: 1
       Conditions:
-        - Field: path-pattern
+        - Field: host-header
           Values:
-            - !Sub "/flower/*"
+            - !Sub "flower.${AppUrl}"
       Actions:
         - TargetGroupArn: !Ref FlowerTargetGroup
           Type: forward
