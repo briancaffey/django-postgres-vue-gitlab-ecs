@@ -65,9 +65,9 @@ Resources:
           Memory: 128
           Command:
             - 'celery'
+            - 'flower'
             - '-A'
             - 'backend.celery_app:app'
-            - 'flower'
           PortMappings:
             - ContainerPort: 5555
           Environment:
