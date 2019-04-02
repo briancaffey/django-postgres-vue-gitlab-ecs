@@ -64,10 +64,11 @@ Resources:
           Image: !Sub ${ECRBackendRepositoryURL}:latest
           Memory: 128
           Command:
-            - 'celery'
+            # - 'celery'
             - 'flower'
             - '-A'
             - 'backend.celery_app:app'
+            - !Sub "--broker=${RedisEndpoint}"
           PortMappings:
             - ContainerPort: 5555
           Environment:
