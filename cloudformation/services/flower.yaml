@@ -61,14 +61,12 @@ Resources:
       ContainerDefinitions:
         - Name: flower
           Essential: true
-          Image: !Sub ${ECRBackendRepositoryURL}:latest
+          Image: mher/flower
           Memory: 128
           Command:
-            # - 'celery'
             - 'flower'
-            - '-A'
-            - 'backend.celery_app:app'
             - !Sub "--broker=${RedisEndpoint}"
+            - 'url_prefix=flower'
           PortMappings:
             - ContainerPort: 5555
           Environment:
