@@ -1,0 +1,27 @@
+Description: >
+  This template deploys S3 buckets for serving Django static files.
+
+Parameters:
+  AppUrl:
+    Type: "String"
+    Description: "The URL for our app (e.g. mydomain.com)"
+    AllowedPattern: "[a-z0-9._-]+"
+
+Resources:
+  AssetsBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub ${AppUrl}-assets
+
+  AssetsBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref AssetsBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Sid: PublicReadForGetBucketObjects
+          Effect: "Allow"
+          Principal: "*"
+          Action: "s3:GetObject"
+          Resource: !Sub "${AssetsBucket.Arn}/static/*"

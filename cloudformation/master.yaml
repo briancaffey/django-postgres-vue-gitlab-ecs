@@ -187,6 +187,14 @@ Resources:
       Parameters:
         ECRBackendRepositoryName: !Ref ECRBackendRepositoryName
 
+
+  DjangoAssets:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/django-assets.yaml
+      Parameters:
+        AppUrl: !Ref AppUrl
+
   # StaticSite:
   #   Type: AWS::CloudFormation::Stack
   #   Properties:
