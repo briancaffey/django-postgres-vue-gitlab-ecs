@@ -70,15 +70,15 @@ Resources:
       ToPort: 443
       CidrIp: '0.0.0.0/0'
 
-  LoadBalancerListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      LoadBalancerArn: !Ref LoadBalancer
-      Port: 80
-      Protocol: HTTP
-      DefaultActions:
-        - TargetGroupArn: !Ref DefaultTargetGroup
-          Type: forward
+  # LoadBalancerListener:
+  #   Type: AWS::ElasticLoadBalancingV2::Listener
+  #   Properties:
+  #     LoadBalancerArn: !Ref LoadBalancer
+  #     Port: 80
+  #     Protocol: HTTP
+  #     DefaultActions:
+  #       - TargetGroupArn: !Ref DefaultTargetGroup
+  #         Type: forward
 
   PublicLoadBalancerHttpRedirectListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
