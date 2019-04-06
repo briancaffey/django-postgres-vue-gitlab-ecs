@@ -138,7 +138,7 @@ Outputs:
 
   Listener:
     Description: A reference to a port 80 listener
-    Value: !Ref LoadBalancerListener
+    Value: !Ref HTTPSLoadBalancerListener
 
   LoadBalancerSecurityGroup:
     Description: The security group for the load balancer.

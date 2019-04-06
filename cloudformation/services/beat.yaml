@@ -2,6 +2,12 @@ Description: >
   This is an example of a long running ECS service that serves a JSON API of products.
 
 Parameters:
+
+  AppUrl:
+    Type: "String"
+    Description: "The URL for our app (e.g. mydomain.com)"
+    AllowedPattern: "[a-z0-9._-]+"
+
   VPC:
     Description: The VPC that the ECS cluster is deployed to
     Type: AWS::EC2::VPC::Id
@@ -58,6 +64,10 @@ Resources:
             - '-l'
             - 'info'
           Environment:
+            - Name: APP_URL
+              Value: !Ref AppUrl
+            - Name: DEBUG
+              Value: 'False'
             - Name: RDS_DB_NAME
               Value: postgres
             - Name: RDS_USERNAME

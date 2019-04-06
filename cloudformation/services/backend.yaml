@@ -2,6 +2,12 @@ Description: >
   This service runs the Django webserver.
 
 Parameters:
+
+  AppUrl:
+    Type: "String"
+    Description: "The URL for our app (e.g. mydomain.com)"
+    AllowedPattern: "[a-z0-9._-]+"
+
   VPC:
     Description: The VPC that the ECS cluster is deployed to
     Type: AWS::EC2::VPC::Id
@@ -35,6 +41,8 @@ Parameters:
     Description: The ECR repository for the backend container
     Type: String
 
+
+
 Resources:
   BackendService:
     Type: AWS::ECS::Service
@@ -59,6 +67,10 @@ Resources:
           Image: !Sub ${ECRBackendRepositoryURL}:latest
           Memory: 128
           Environment:
+            - Name: APP_URL
+              Value: !Ref AppUrl
+            - Name: DEBUG
+              Value: 'False'
             - Name: RDS_DB_NAME
               Value: postgres
             - Name: RDS_USERNAME
