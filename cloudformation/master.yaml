@@ -158,6 +158,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
+        DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
         AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
@@ -175,6 +176,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
+        DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
         AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
@@ -191,6 +193,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
+        DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
         AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
