@@ -7,7 +7,7 @@ stages:
 variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
 
-build-and-release-backend:
+.build-and-release-backend:
   stage: build
   image: docker:stable
   services:
@@ -124,7 +124,7 @@ build-and-release-backend:
     - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-create-stack:
+.create-stack:
   image: python:3.6
   stage: cloudformation
   before_script:
@@ -153,7 +153,7 @@ create-stack:
   after_script:
     - echo "Finished creating stack"
 
-.update-stack-staging:
+update-stack-staging:
   image: python:3.6
   stage: cloudformation
   only:
@@ -180,8 +180,8 @@ create-stack:
         ParameterKey=FlowerUsername,ParameterValue=${FlowerUsername} \
         ParameterKey=FlowerPassword,ParameterValue=${FlowerPassword} \
         ParameterKey=DjangoSecretKey,ParameterValue=${DjangoSecretKey} \
-        ParameterKey=AWSAccessKeyId,ParameterValue=${AWSAccessKeyId} \
-        ParameterKey=AWSSecretAccessKey,ParameterValue=${AWSSecretAccessKey}
+        ParameterKey=AWS_ACCESS_KEY_ID,ParameterValue=${AWS_ACCESS_KEY_ID} \
+        ParameterKey=AWS_SECRET_ACCESS_KEY,ParameterValue=${AWS_SECRET_ACCESS_KEY}
   after_script:
     - echo "Finished updating stack"
 
