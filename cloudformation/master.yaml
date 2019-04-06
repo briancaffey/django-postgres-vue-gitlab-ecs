@@ -64,12 +64,12 @@ Parameters:
     Type: String
     NoEcho: true
 
-  AWS_ACCESS_KEY_ID:
+  AWSAccessKeyId:
     Description: "AWS ACCESS KEY ID"
     Type: String
     NoEcho: true
 
-  AWS_SECRET_ACCESS_KEY:
+  AWSSecretAccessKey:
     Description: "AWS SECRET ACCESS KEY"
     Type: String
     NoEcho: true
@@ -158,8 +158,8 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
-        AWS_ACCESS_KEY_ID: !Ref AWS_ACCESS_KEY_ID
-        AWS_SECRET_ACCESS_KEY: !Ref AWS_SECRET_ACCESS_KEY
+        AWSAccessKeyId: !Ref AWSAccessKeyId
+        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
@@ -175,8 +175,8 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
-        AWS_ACCESS_KEY_ID: !Ref AWS_ACCESS_KEY_ID
-        AWS_SECRET_ACCESS_KEY: !Ref AWS_SECRET_ACCESS_KEY
+        AWSAccessKeyId: !Ref AWSAccessKeyId
+        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
@@ -191,8 +191,8 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
-        AWS_ACCESS_KEY_ID: !Ref AWS_ACCESS_KEY_ID
-        AWS_SECRET_ACCESS_KEY: !Ref AWS_SECRET_ACCESS_KEY
+        AWSAccessKeyId: !Ref AWSAccessKeyId
+        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster

@@ -148,8 +148,8 @@ variables:
         ParameterKey=FlowerUsername,ParameterValue=${FlowerUsername} \
         ParameterKey=FlowerPassword,ParameterValue=${FlowerPassword} \
         ParameterKey=DjangoSecretKey,ParameterValue=${DjangoSecretKey} \
-        ParameterKey=AWS_ACCESS_KEY_ID,ParameterValue=${AWS_ACCESS_KEY_ID} \
-        ParameterKey=AWS_SECRET_ACCESS_KEY,ParameterValue=${AWS_SECRET_ACCESS_KEY}
+        ParameterKey=AWSAccessKeyId,ParameterValue=${AWSAccessKeyId} \
+        ParameterKey=AWSSecretAccessKey,ParameterValue=${AWSSecretAccessKey}
   after_script:
     - echo "Finished creating stack"
 
@@ -180,8 +180,8 @@ update-stack-staging:
         ParameterKey=FlowerUsername,ParameterValue=${FlowerUsername} \
         ParameterKey=FlowerPassword,ParameterValue=${FlowerPassword} \
         ParameterKey=DjangoSecretKey,ParameterValue=${DjangoSecretKey} \
-        ParameterKey=AWS_ACCESS_KEY_ID,ParameterValue=${AWS_ACCESS_KEY_ID} \
-        ParameterKey=AWS_SECRET_ACCESS_KEY,ParameterValue=${AWS_SECRET_ACCESS_KEY}
+        ParameterKey=AWSAccessKeyId,ParameterValue=${AWSAccessKeyId} \
+        ParameterKey=AWSSecretAccessKey,ParameterValue=${AWSSecretAccessKey}
   after_script:
     - echo "Finished updating stack"
 
