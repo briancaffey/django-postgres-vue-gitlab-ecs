@@ -80,21 +80,21 @@ Resources:
   #       - TargetGroupArn: !Ref DefaultTargetGroup
   #         Type: forward
 
-  # PublicLoadBalancerHttpRedirectListener:
-  #   Type: AWS::ElasticLoadBalancingV2::Listener
-  #   Properties:
-  #     DefaultActions:
-  #       - RedirectConfig:
-  #           Host: "#{host}"
-  #           Path: "/#{path}"
-  #           Port: 443
-  #           Protocol: "HTTPS"
-  #           Query: "#{query}"
-  #           StatusCode: HTTP_301
-  #         Type: redirect
-  #     LoadBalancerArn: !Ref 'LoadBalancer'
-  #     Port: 80
-  #     Protocol: HTTP
+  PublicLoadBalancerHttpRedirectListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - RedirectConfig:
+            Host: "#{host}"
+            Path: "/#{path}"
+            Port: 443
+            Protocol: "HTTPS"
+            Query: "#{query}"
+            StatusCode: HTTP_301
+          Type: redirect
+      LoadBalancerArn: !Ref 'LoadBalancer'
+      Port: 80
+      Protocol: HTTP
 
   HTTPSLoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
