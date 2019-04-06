@@ -205,22 +205,22 @@ Resources:
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
-  FlowerService:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
-      Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
-        Listener: !GetAtt ALB.Outputs.Listener
-        DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
-        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
-        AppUrl: !Ref AppUrl
-        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
-        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
-        FlowerUsername: !Ref FlowerUsername
-        FlowerPassword: !Ref FlowerPassword
+  # FlowerService:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
+  #     Parameters:
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+  #       Listener: !GetAtt ALB.Outputs.Listener
+  #       DesiredCount: 1
+  #       DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+  #       ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+  #       AppUrl: !Ref AppUrl
+  #       RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+  #       ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+  #       FlowerUsername: !Ref FlowerUsername
+  #       FlowerPassword: !Ref FlowerPassword
 
   # StaticSite:
   #   Type: AWS::CloudFormation::Stack
