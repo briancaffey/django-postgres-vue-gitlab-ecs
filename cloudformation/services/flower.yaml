@@ -94,7 +94,8 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       Port: 80
-      Protocol: HTTP
+      Protocol: TCP
+      HealthCheckProtocol: TCP
 
   FlowerListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
