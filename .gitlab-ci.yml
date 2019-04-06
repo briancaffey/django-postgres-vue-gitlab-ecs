@@ -124,7 +124,7 @@ variables:
     - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-.create-stack:
+create-stack:
   image: python:3.6
   stage: cloudformation
   before_script:
@@ -150,7 +150,7 @@ variables:
   after_script:
     - echo "Finished creating stack"
 
-update-stack-staging:
+.update-stack-staging:
   image: python:3.6
   stage: cloudformation
   only:
