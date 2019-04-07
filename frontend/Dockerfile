@@ -1,4 +1,4 @@
-FROM node:10.14.2-jessie
+FROM node:8
 
 # make the 'app' folder the current working directory
 WORKDIR /app/

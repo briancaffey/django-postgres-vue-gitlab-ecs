@@ -22,6 +22,18 @@ services:
     networks:
       - main
 
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+    - REDIS_HOST=redis
+    ports:
+    - "8081:8081"
+    networks:
+      - main
+
   nginx:
     container_name: nginx
     build:
@@ -118,45 +130,22 @@ services:
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
 
+
   flower:
-    build: ./backend
+    image: mher/flower
     container_name: flower
-    command: flower --url_prefix=flower 
-    volumes:
-      - ./backend:/code
-    depends_on:
-      - db
-      - celery
-      - redis
+    command: --url_prefix=flower
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - FLOWER_PORT=5555
+    ports:
+      - 5555:5555
     networks:
       - main
-    ports:
-      - "5555:5555"
-    environment:
-      - SECRET_KEY=${SECRET_KEY}
-      - DEBUG=${DEBUG}
-      - RDS_PASSWORD=${RDS_PASSWORD}
-      - RDS_USERNAME=${RDS_USERNAME}
-      - RDS_DB_NAME=${RDS_DB_NAME}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-
-
-  # flower:
-  #   image: mher/flower
-  #   container_name: flower
-  #   command: --url_prefix=flower
-  #   environment:
-  #     - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-  #     - FLOWER_PORT=5555
-  #   ports:
-  #     - 5555:5555
-  #   networks:
-  #     - main
-  #   depends_on:
-  #     - celery
-  #     - redis
-  #     - beat
+    depends_on:
+      - celery
+      - redis
+      - beat
 
 volumes:
   pg-data:

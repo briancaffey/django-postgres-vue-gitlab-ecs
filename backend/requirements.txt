@@ -4,4 +4,5 @@ gunicorn==19.8
 django-cors-headers==2.5.0
 celery==4.2.1
 redis==3.2.0
-flower==0.8.4
+jupyter==1.0.0
+pandas==0.24.2
