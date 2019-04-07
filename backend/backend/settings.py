@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'django_extensions',
 
     'core',
 
@@ -155,3 +156,10 @@ else:
     AWS_STATIC_LOCATION = 'static'
     STATICFILES_STORAGE = 'backend.storage_backends.StaticStorage'
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"
+
+
+NOTEBOOK_ARGUMENTS = [
+    '--ip', '0.0.0.0',
+    '--allow-root',
+    '--no-browser',
+]

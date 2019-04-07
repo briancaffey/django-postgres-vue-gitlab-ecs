@@ -8,6 +8,15 @@ Open `http://localhost` in your browser
 
 You can specify environment variables for docker-compose by adding an `.env` file to the root of the project based on `.env.template`.
 
+### Access Django Shell in Jupyter Notebook
+
+```
+docker exec -it backend bash
+# cd notebooks/
+# ../manage.py shell_plus --notebook
+```
+
+
 ## CloudFormation Commands
 
 ### sync templates to S3 bucket

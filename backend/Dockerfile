@@ -4,6 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN mkdir /code
 WORKDIR /code
 ADD requirements.txt /code/
+ADD notebooks/jupyter_notebook_config.py /root/.jupyter/
 RUN pip install -r requirements.txt
 ADD . /code/
 EXPOSE 8000
