@@ -10,12 +10,19 @@ You can specify environment variables for docker-compose by adding an `.env` fil
 
 ### Access Django Shell in Jupyter Notebook
 
+With all containers running, run the following commands:
+
 ```
 docker exec -it backend bash
 # cd notebooks/
 # ../manage.py shell_plus --notebook
 ```
 
+or use this single command:
+
+```
+docker exec -it backend bash -c 'cd notebooks && ../manage.py shell_plus --notebook'
+```
 
 ## CloudFormation Commands
 

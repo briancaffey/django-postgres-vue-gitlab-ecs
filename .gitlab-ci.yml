@@ -127,6 +127,8 @@ deploy-frontend:
 .create-stack:
   image: python:3.6
   stage: cloudformation
+  variables:
+    EnvironmentName: "staging"
   before_script:
     - pip install awscli
   script:
@@ -156,32 +158,26 @@ deploy-frontend:
 .update-stack-staging:
   image: python:3.6
   stage: cloudformation
+  variables:
+    EnvironmentName: "staging"
+    ECRBackendRepositoryName: "${AppUrl}/backend"
   only:
     - master
   before_script:
     - pip install awscli
     - ./cloudformation/tests/validate-templates.sh
+    - ./cloudformation/scipts/generate_secret.py
     - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/
   script:
+    - pwd
+    - ls
+    - ls cloudformation/scripts/ -al
     - |
       aws cloudformation update-stack \
         --stack-name ${StackName} \
         --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
-        --parameters \
-        ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName \
-        ParameterKey=EnvironmentName,ParameterValue=staging \
-        ParameterKey=AppUrl,ParameterValue=$AppUrl \
-        ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
-        ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
-        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
-        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
-        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn} \
-        ParameterKey=FlowerUsername,ParameterValue=${FlowerUsername} \
-        ParameterKey=FlowerPassword,ParameterValue=${FlowerPassword} \
-        ParameterKey=DjangoSecretKey,ParameterValue=${DjangoSecretKey} \
-        ParameterKey=AWSAccessKeyId,ParameterValue=${AWSAccessKeyId} \
-        ParameterKey=AWSSecretAccessKey,ParameterValue=${AWSSecretAccessKey}
+        --parameters file://./cloudformation/scripts/parameters.json
   after_script:
     - echo "Finished updating stack"
 
