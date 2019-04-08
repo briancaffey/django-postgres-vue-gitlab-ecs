@@ -166,7 +166,7 @@ update-stack-staging:
   before_script:
     - pip install awscli
     - ./cloudformation/tests/validate-templates.sh
-    - ./cloudformation/scipts/generate_secret.py
+    - ./cloudformation/scripts/generate_secrets.py
     - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/
   script:
     - pwd
