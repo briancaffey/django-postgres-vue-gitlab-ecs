@@ -6,6 +6,10 @@ stages:
 
 variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
+  ECRBackendRepositoryName: ${AppUrl}/backend
+  GitSHA: $CI_COMMIT_SHORT_SHA
+  AWSAccessKeyId: $AWS_ACCESS_KEY_ID
+  AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
 .build-and-release-backend:
   stage: build
@@ -117,41 +121,30 @@ variables:
     - pip install awscli
     - aws iam get-user
   environment:
-    name: jamescaffey
-    url: https://jamescaffey.com
+    name: ${StackName}
+    url: https://${AppUrl}
   script:
     - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/ s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-.create-stack:
+.create-stack-staging:
   image: python:3.6
   stage: cloudformation
   variables:
-    EnvironmentName: "staging"
+    EnvironmentName: staging
   before_script:
     - pip install awscli
-  script:
+    - ./cloudformation/tests/validate-templates.sh
+    - ./cloudformation/scripts/generate_secrets.py
     - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/ --delete
+  script:
     - |
       aws cloudformation create-stack \
         --stack-name ${StackName} \
         --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
-        --parameters \
-        ParameterKey=SSHKeyName,ParameterValue=$SSHKeyName \
-        ParameterKey=EnvironmentName,ParameterValue=staging \
-        ParameterKey=AppUrl,ParameterValue=$AppUrl \
-        ParameterKey=HostedZoneId,ParameterValue=$HostedZoneId \
-        ParameterKey=SSLCertificateArn,ParameterValue=$SSLCertificateArn \
-        ParameterKey=GitSHA,ParameterValue=$CI_COMMIT_SHORT_SHA \
-        ParameterKey=ECRBackendRepositoryName,ParameterValue=${AppUrl}/backend \
-        ParameterKey=WildcardSSLCertificateArn,ParameterValue=${WildcardSSLCertificateArn} \
-        ParameterKey=FlowerUsername,ParameterValue=${FlowerUsername} \
-        ParameterKey=FlowerPassword,ParameterValue=${FlowerPassword} \
-        ParameterKey=DjangoSecretKey,ParameterValue=${DjangoSecretKey} \
-        ParameterKey=AWSAccessKeyId,ParameterValue=${AWSAccessKeyId} \
-        ParameterKey=AWSSecretAccessKey,ParameterValue=${AWSSecretAccessKey}
+        --parameters file://./parameters.json
   after_script:
     - echo "Finished creating stack"
 
@@ -160,12 +153,6 @@ update-stack-staging:
   stage: cloudformation
   variables:
     EnvironmentName: staging
-    ECRBackendRepositoryName: ${AppUrl}/backend
-    GitSHA: $CI_COMMIT_SHORT_SHA
-    AWSAccessKeyId: $AWS_ACCESS_KEY_ID
-    AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
-
-
   only:
     - master
   before_script:
@@ -174,9 +161,6 @@ update-stack-staging:
     - ./cloudformation/scripts/generate_secrets.py
     - aws s3 sync cloudformation/ s3://${AppUrl}-cloudformation/
   script:
-    - pwd
-    - ls
-    - ls cloudformation/scripts/ -al
     - |
       aws cloudformation update-stack \
         --stack-name ${StackName} \
@@ -185,14 +169,3 @@ update-stack-staging:
         --parameters file://./parameters.json
   after_script:
     - echo "Finished updating stack"
-
-.deploy-service:
-  image: python:3.6
-  stage: deploy
-  only:
-    - master
-  before_script:
-    - pip install awscli
-  script:
-    - aws ecs update-service --cluster briancaffey --service briancaffey-BackendService-18JKS9X5UFPO-Service-1WNNUD02CKVU9 --force-new-deployment
-    - echo "Finished service deployment"
