@@ -177,7 +177,7 @@ update-stack-staging:
         --stack-name ${StackName} \
         --template-url https://s3.amazonaws.com/${AppUrl}-cloudformation/master.yaml \
         --capabilities=CAPABILITY_NAMED_IAM \
-        --parameters file://./cloudformation/scripts/parameters.json
+        --parameters file://./parameters.json
   after_script:
     - echo "Finished updating stack"
 
