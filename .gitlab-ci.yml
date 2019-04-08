@@ -159,8 +159,13 @@ update-stack-staging:
   image: python:3.6
   stage: cloudformation
   variables:
-    EnvironmentName: "staging"
-    ECRBackendRepositoryName: "${AppUrl}/backend"
+    EnvironmentName: staging
+    ECRBackendRepositoryName: ${AppUrl}/backend
+    GitSHA: $CI_COMMIT_SHORT_SHA
+    AWSAccessKeyId: $AWS_ACCESS_KEY_ID
+    AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
+
+
   only:
     - master
   before_script:
