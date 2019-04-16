@@ -1,3 +1,8 @@
+## Architecture
+
+![png](/draw.png)
+
+
 ## Local Development
 
 ```
