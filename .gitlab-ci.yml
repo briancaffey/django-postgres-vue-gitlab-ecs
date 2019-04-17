@@ -11,7 +11,7 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-build-and-release-backend:
+.build-and-release-backend:
   stage: build
   image: docker:stable
   services:
