@@ -7,11 +7,15 @@ Parameters:
     Description: "The URL for our app (e.g. mydomain.com)"
     AllowedPattern: "[a-z0-9._-]+"
 
+  StackName:
+    Type: String
+    Description: The name of the stack
+
 Resources:
   AssetsBucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Sub ${AppUrl}-assets
+      BucketName: !Sub ${StackName}-assets
 
   AssetsBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
