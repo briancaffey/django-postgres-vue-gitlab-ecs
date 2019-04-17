@@ -7,6 +7,7 @@ import subprocess
 secrets = []
 
 variables = [
+    'StackName',
     'SSHKeyName',
     'EnvironmentName',
     'AppUrl',
