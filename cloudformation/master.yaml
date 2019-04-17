@@ -153,7 +153,7 @@ Resources:
       Parameters:
         AppUrl: !Ref AppUrl
 
-  BackendService:
+  BackendService1:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
@@ -171,7 +171,7 @@ Resources:
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
-  CeleryService:
+  CeleryService1:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
@@ -188,7 +188,7 @@ Resources:
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
-  BeatService:
+  BeatService1:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
