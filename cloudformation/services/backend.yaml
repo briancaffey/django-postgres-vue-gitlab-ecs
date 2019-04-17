@@ -87,7 +87,7 @@ Resources:
             - Name: APP_URL
               Value: !Ref AppUrl
             - Name: DEBUG
-              Value: 'False'
+              Value: ''
             - Name: RDS_DB_NAME
               Value: postgres
             - Name: RDS_USERNAME
