@@ -77,6 +77,8 @@ Resources:
           Essential: true
           Image: !Sub ${ECRBackendRepositoryURL}:latest
           Memory: 128
+          Command:
+            - '/start_prod.sh'
           Environment:
             - Name: AWS_ACCESS_KEY_ID
               Value: !Ref AWSAccessKeyId

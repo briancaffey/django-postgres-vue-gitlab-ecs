@@ -67,7 +67,7 @@ Resources:
         - Name: celery
           Essential: true
           Image: !Sub ${ECRBackendRepositoryURL}:latest
-          Memory: 128
+          MemoryReservation: 128
           Command:
             - 'celery'
             - 'worker'
