@@ -53,8 +53,10 @@ services:
 
   backend:
     container_name: backend
-    build: ./backend
-    command: /code/start_dev.sh
+    build:
+      context: ./backend
+      dockerfile: scripts/dev/Dockerfile
+    command: /start_dev.sh
     volumes:
       - ./backend:/code
       - django-static:/code/static
@@ -92,7 +94,9 @@ services:
       - VUE_APP_API_BASE_URL=http://localhost
 
   celery:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: scripts/dev/Dockerfile
     container_name: celery
     command: bash -c 'python3 manage.py watch_celery'
     volumes:
@@ -112,9 +116,11 @@ services:
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
 
   beat:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: scripts/dev/Dockerfile
     container_name: beat
-    command: bash -c 'python3 manage.py watch_celery_beat'
+    command: /start_beat.sh
     volumes:
       - ./backend:/code
     depends_on:

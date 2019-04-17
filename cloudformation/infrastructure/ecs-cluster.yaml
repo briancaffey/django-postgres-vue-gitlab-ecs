@@ -105,6 +105,7 @@ Resources:
       InstanceType: !Ref 'InstanceType'
       IamInstanceProfile: !Ref 'ECSInstanceProfile'
       KeyName: !Ref SSHKeyName
+      SpotPrice: '0.0038'
       UserData:
         "Fn::Base64": !Sub |
           #!/bin/bash
