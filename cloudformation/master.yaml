@@ -150,7 +150,7 @@ Resources:
       Parameters:
         ECRBackendRepositoryName: !Ref ECRBackendRepositoryName
 
-  DjangoAssets:
+  DjangoS3Storage:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/django-assets.yaml
@@ -158,7 +158,7 @@ Resources:
         AppUrl: !Ref AppUrl
         StackName: !Ref StackName
 
-  BackendService5:
+  BackendService6:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
@@ -175,6 +175,7 @@ Resources:
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        StackName: !Ref StackName
 
   CeleryService4:
     Type: AWS::CloudFormation::Stack
