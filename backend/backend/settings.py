@@ -163,6 +163,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+AWS_STATIC_LOCATION = 'static'
+
 if DEBUG:
     STATIC_URL = '/static/'
 
@@ -170,15 +172,16 @@ if DEBUG:
 else:
     # AWS S3 settings
     AWS_DEFAULT_ACL = None
-    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+    AWS_ACCESS_KEY_ID = \
+        os.environ.get('AWS_ACCESS_KEY_ID', 'aws-access-key-id')
+    AWS_SECRET_ACCESS_KEY = \
+        os.environ.get('AWS_SECRET_ACCESS_KEY', 'aws-secret-access-key')
     AWS_STORAGE_BUCKET_NAME = f"{os.environ['STACK_NAME']}-assets"
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
 
-    AWS_STATIC_LOCATION = 'static'
     STATICFILES_STORAGE = 'backend.storage_backends.StaticStorage'
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"
 
