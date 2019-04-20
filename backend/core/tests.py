@@ -1,3 +1,7 @@
 from django.test import TestCase # noqa
 
-# Create your tests here.
+
+class SampleTest(TestCase):
+
+    def test_sample(self):
+        assert 1 == 1
