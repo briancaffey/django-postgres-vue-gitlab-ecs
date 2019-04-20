@@ -163,6 +163,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
+        GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
         AWSSecretAccessKey: !Ref AWSSecretAccessKey
@@ -182,6 +183,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
+        GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
         AWSSecretAccessKey: !Ref AWSSecretAccessKey
@@ -199,6 +201,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
+        GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
         AWSSecretAccessKey: !Ref AWSSecretAccessKey
@@ -228,7 +231,7 @@ Resources:
         FlowerUsername: !Ref FlowerUsername
         FlowerPassword: !Ref FlowerPassword
 
-  StaticSite:
+  FrontendResources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
