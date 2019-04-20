@@ -24,8 +24,8 @@ build-and-release-backend:
     - pip install awscli
     - $(aws ecr get-login --no-include-email --region us-east-1)
   script:
-    - docker build -t $REPOSITORY_URL:latest -f scripts/prod/Dockerfile .
-    - docker push $REPOSITORY_URL:latest
+    - docker build -t $REPOSITORY_URL:${GitSHA} -f scripts/prod/Dockerfile .
+    - docker push $REPOSITORY_URL:${GitSHA}
 
 pytest:
   image: python:3.7

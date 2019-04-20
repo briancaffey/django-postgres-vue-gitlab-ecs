@@ -71,7 +71,7 @@ Resources:
       ContainerDefinitions:
         - Name: beat
           Essential: true
-          Image: !Sub ${ECRBackendRepositoryURL}:latest
+          Image: !Sub ${ECRBackendRepositoryURL}:${GitSHA}
           Memory: 128
           Command:
             - 'celery'
