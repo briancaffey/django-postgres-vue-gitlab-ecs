@@ -29,7 +29,7 @@ build-and-release-backend:
 
 pytest:
   image: python:3.7
-  stage: lint_test_coverage
+  stage: test
   services:
     - postgres:latest
     - redis:latest
