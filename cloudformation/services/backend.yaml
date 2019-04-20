@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  GitSHA:
+    Type: String
+    Description: The Git SHA
+
   StackName:
     Type: String
     Description: The name of the stack
@@ -84,6 +88,8 @@ Resources:
           Command:
             - '/start_prod.sh'
           Environment:
+            - Name: GIT_SHA
+              Value: !Ref GitSHA
             - Name: AWS_ACCESS_KEY_ID
               Value: !Ref AWSAccessKeyId
             - Name: AWS_SECRET_ACCESS_KEY

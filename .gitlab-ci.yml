@@ -11,7 +11,7 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-.build-and-release-backend:
+build-and-release-backend:
   stage: build
   image: docker:stable
   services:
@@ -111,7 +111,7 @@ pytest:
     - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
-.build-frontend-staging:
+build-frontend-staging:
   image: node:latest
   stage: build
   only:
@@ -130,7 +130,7 @@ pytest:
     - npm run build
     - echo "Build Complete"
 
-.deploy-frontend-staging:
+deploy-frontend-staging:
   image: python:3.7
   stage: deploy
   only:

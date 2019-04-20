@@ -1,10 +1,17 @@
+import os
+
 from django.http import JsonResponse
 
 from core.tasks import debug_task
 
 
 def hello_world(request):
-    response = JsonResponse({'message': 'Hello, World!'})
+    response = JsonResponse(
+        {
+            'message': 'Hello, World!',
+            'git_sha': os.environ.get('GIT_SHA', '<git sha>')
+        }
+    )
     return response
 
 

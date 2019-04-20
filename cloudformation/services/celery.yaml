@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  GitSHA:
+    Type: String
+    Description: The Git SHA
+
   AppUrl:
     Type: "String"
     Description: "The URL for our app (e.g. mydomain.com)"
@@ -76,6 +80,8 @@ Resources:
             - '-l'
             - 'info'
           Environment:
+            - Name: GIT_SHA
+              Value: !Ref GitSHA
             - Name: AWS_ACCESS_KEY_ID
               Value: !Ref AWSAccessKeyId
             - Name: AWS_SECRET_ACCESS_KEY
