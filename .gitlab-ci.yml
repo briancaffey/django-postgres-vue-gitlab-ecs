@@ -27,6 +27,25 @@ variables:
     - docker build -t $REPOSITORY_URL:latest -f scripts/prod/Dockerfile .
     - docker push $REPOSITORY_URL:latest
 
+pytest:
+  image: python:3.7
+  stage: lint_test_coverage
+  services:
+    - postgres:latest
+    - redis:latest
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
+    DJANGO_SETTINGS_MODULE: "backend.settings-gitlab-ci"
+    SECRET_KEY: "secret"
+    DEBUG: ""
+  script:
+    - cd backend
+    - pip install -r requirements/base.txt
+    - pip install -r requirements/test.txt
+    - flake8
+    - pytest --cov
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+
 .unit:
   image: node:latest
   stage: test
@@ -76,7 +95,7 @@ variables:
     - echo "Build Complete"
 
 .deploy-frontend:
-  image: python:3.6
+  image: python:3.7
   stage: deploy
   only:
     - master
@@ -111,7 +130,7 @@ variables:
     - echo "Build Complete"
 
 .deploy-frontend-staging:
-  image: python:3.6
+  image: python:3.7
   stage: deploy
   only:
     - master
@@ -130,7 +149,7 @@ variables:
     - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
 
 .create-stack-staging:
-  image: python:3.6
+  image: python:3.7
   stage: cloudformation
   variables:
     EnvironmentName: staging
@@ -150,7 +169,7 @@ variables:
     - echo "Finished creating stack"
 
 update-stack-staging:
-  image: python:3.6
+  image: python:3.7
   stage: cloudformation
   variables:
     EnvironmentName: staging
