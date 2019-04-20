@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 urlpatterns = [
@@ -16,5 +17,10 @@ urlpatterns = [
         'debug-task/',
         views.debug_task_view,
         name="debug-task"
+    ),
+    path(
+        'verify-domain/',
+        views.verify_domain,
+        name="verify-domain"
     )
 ]

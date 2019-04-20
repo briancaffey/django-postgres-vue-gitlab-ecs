@@ -1,4 +1,5 @@
 import os
+
 from celery import Celery
 
 os.environ.setdefault(
@@ -7,6 +8,7 @@ os.environ.setdefault(
 )
 
 from django.conf import settings # noqa | needs to be after os env
+
 
 app = Celery('backend')
 app.config_from_object(

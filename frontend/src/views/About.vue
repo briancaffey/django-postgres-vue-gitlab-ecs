@@ -1,9 +1,8 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>This is an about page!</h1>
     <p>Updates coming soon...</p>
-    <p>Message from the backend: {{ message }}</p>
-    <p>No longer using CloudFront invalidations. Using cache control policies instead.</p>
+    <p>Message from the backend API: {{ message }}</p>
   </div>
 </template>
 
@@ -22,7 +21,6 @@
       fetchMessage: function(){
         apiCall.get('/api/hello-world').then(
           (resp) => {
-            console.log(resp.data.message);
             this.message = resp.data.message;
           }
         )

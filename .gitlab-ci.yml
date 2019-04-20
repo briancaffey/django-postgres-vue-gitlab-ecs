@@ -64,6 +64,7 @@ variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
     VUE_APP_API_BASE_URL: "https://api.${AppUrl}"
+    VUE_APP_BASE_URL: "https://${AppUrl}"
   artifacts:
     paths:
       - frontend/dist/

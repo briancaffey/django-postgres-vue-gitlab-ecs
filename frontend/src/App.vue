@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div v-if="!loading" id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
@@ -7,6 +7,30 @@
     <router-view/>
   </div>
 </template>
+
+<script>
+import apiCall from '@/utils/api';
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      loading: true
+    }
+  },
+  beforeCreate() {
+    const subdomain = window.location.host.split('.')[0];
+    axios.get('/api/verify-domain/').then(() => {
+      this.loading = false
+    }).catch((err) => {
+      const redirect_url = process.env.NODE_ENV === 'production'
+        ? process.env.VUE_APP_BASE_URL
+        : 'http://localhost';
+      window.location.replace(redirect_url);
+    })
+  }
+}
+</script>
 
 <style lang="scss">
 #app {

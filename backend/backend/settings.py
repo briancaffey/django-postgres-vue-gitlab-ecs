@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
 
 DEBUG_APPS = [
     'django_extensions',
+    'debug_toolbar'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.SubdomainMiddleware',
 ]
 
 if DEBUG:
@@ -70,6 +72,15 @@ if DEBUG:
     MIDDLEWARE = [
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ] + MIDDLEWARE
+
+
+def show_toolbar(request):
+    return True
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+}
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -121,16 +132,16 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', # noqa
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', # noqa
     },
 ]
 

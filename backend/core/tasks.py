@@ -1,7 +1,6 @@
 import time
 
 import celery
-
 from celery.decorators import periodic_task
 from celery.task import task
 from celery.task.schedules import crontab
