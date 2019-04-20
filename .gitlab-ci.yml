@@ -37,6 +37,7 @@ pytest:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
     DJANGO_SETTINGS_MODULE: "backend.settings-gitlab-ci"
     SECRET_KEY: "secret"
+    STACK_NAME: 'my-stack'
     DEBUG: ""
   script:
     - cd backend
