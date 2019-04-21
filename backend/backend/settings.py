@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ['DEBUG'])
+DEBUG = bool(os.environ.get('DEBUG', False))
 
 ALLOWED_HOSTS = ['*']
 
@@ -176,7 +176,7 @@ else:
         os.environ.get('AWS_ACCESS_KEY_ID', 'aws-access-key-id')
     AWS_SECRET_ACCESS_KEY = \
         os.environ.get('AWS_SECRET_ACCESS_KEY', 'aws-secret-access-key')
-    AWS_STORAGE_BUCKET_NAME = f"{os.environ['STACK_NAME']}-assets"
+    AWS_STORAGE_BUCKET_NAME = f"{os.environ.get('STACK_NAME', '')}-assets"
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
@@ -186,8 +186,9 @@ else:
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"
 
 
-NOTEBOOK_ARGUMENTS = [
-    '--ip', '0.0.0.0',
-    '--allow-root',
-    '--no-browser',
-]
+if DEBUG:
+    NOTEBOOK_ARGUMENTS = [
+        '--ip', '0.0.0.0',
+        '--allow-root',
+        '--no-browser',
+    ]
