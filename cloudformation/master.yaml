@@ -163,10 +163,10 @@ Resources:
 
   BackendService6:
     Type: AWS::CloudFormation::Stack
+    Condition: RunServices
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
-        Condition: RunServices
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
@@ -184,10 +184,10 @@ Resources:
 
   CeleryService4:
     Type: AWS::CloudFormation::Stack
+    Condition: RunServices
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
-        Condition: RunServices
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
@@ -203,10 +203,10 @@ Resources:
 
   BeatService4:
     Type: AWS::CloudFormation::Stack
+    Condition: RunServices
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
-        Condition: RunServices
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
@@ -222,10 +222,10 @@ Resources:
 
   FlowerService:
     Type: AWS::CloudFormation::Stack
+    Condition: RunServices
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
       Parameters:
-        Condition: RunServices
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         Listener: !GetAtt ALB.Outputs.Listener
