@@ -4,7 +4,6 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
-from . import views
 
 urlpatterns = [
     re_path(
