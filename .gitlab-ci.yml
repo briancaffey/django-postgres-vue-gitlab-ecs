@@ -145,8 +145,6 @@ variables:
     - echo "Deploy frontend complete"
 
 Create stack:
-  tags:
-    - a1
   image: python:3.7
   stage: cloudformation
   variables:
