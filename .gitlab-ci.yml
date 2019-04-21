@@ -31,7 +31,6 @@ variables:
   after_script:
     - echo "Build backend complete"
 
-
 .Release backend:
   stage: release
   image: docker:stable
@@ -50,7 +49,7 @@ variables:
   after_script:
     - echo "Release backend complete"
 
-Pytest:
+.Pytest:
   image: python:3.7
   stage: test
   services:
@@ -72,7 +71,7 @@ Pytest:
     - echo "Pytest tests complete"
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
-Jest:
+.Jest:
   image: node:latest
   stage: test
   before_script:
@@ -145,7 +144,7 @@ Jest:
   after_script:
     - echo "Deploy frontend complete"
 
-.Create stack:
+Create stack:
   image: python:3.7
   stage: cloudformation
   variables:
