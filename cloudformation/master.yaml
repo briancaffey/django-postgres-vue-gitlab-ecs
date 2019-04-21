@@ -83,6 +83,9 @@ Parameters:
     Type: String
     NoEcho: true
 
+Conditions:
+  RunServices: false
+
 Resources:
 
   VPC:
@@ -163,6 +166,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
+        Condition: RunServices
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
@@ -183,6 +187,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
+        Condition: RunServices
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
@@ -201,6 +206,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
+        Condition: RunServices
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AWSAccessKeyId: !Ref AWSAccessKeyId
@@ -219,6 +225,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
       Parameters:
+        Condition: RunServices
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         Listener: !GetAtt ALB.Outputs.Listener
