@@ -85,7 +85,7 @@ Jest:
     - echo "Jest tests complete"
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
-Cypress:
+.Cypress:
   image: cypress/base:10
   stage: test
   variables:
