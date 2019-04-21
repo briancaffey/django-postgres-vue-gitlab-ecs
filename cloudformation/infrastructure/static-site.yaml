@@ -20,7 +20,7 @@ Parameters:
 Resources:
   StaticSiteBucket:
     Type: "AWS::S3::Bucket"
-    DeletionPolicy: "Retain"
+    DeletionPolicy: Delete
     Properties:
       BucketName: !Ref AppUrl
       AccessControl: "PublicRead"
