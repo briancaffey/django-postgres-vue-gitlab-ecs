@@ -189,3 +189,4 @@ Create stack:
         --parameters file://./parameters.json
   after_script:
     - echo "Update stack complete"
+
