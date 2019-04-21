@@ -41,6 +41,7 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
+    'accounts',
     'core',
 ]
 
@@ -126,6 +127,9 @@ CELERY_RESULT_BACKEND = \
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

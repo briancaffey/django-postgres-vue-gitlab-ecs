@@ -11,5 +11,8 @@ class SubdomainMiddleware:
         """
         Attach the subdomain to the request
         """
-        request.subdomain = request.META.get('HTTP_HOST').split('.')[0]
+        if 'HTTP_HOST' in request.META:
+            request.subdomain = request.META.get('HTTP_HOST').split('.')[0]
+        else:
+            request.subomain = 'test'
         return request
