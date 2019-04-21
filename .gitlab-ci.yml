@@ -32,7 +32,7 @@ variables:
     - echo "Build backend complete"
 
 
-Release backend:
+.Release backend:
   stage: release
   image: docker:stable
   services:
@@ -50,7 +50,7 @@ Release backend:
   after_script:
     - echo "Release backend complete"
 
-.Pytest:
+Pytest:
   image: python:3.7
   stage: test
   services:
@@ -72,7 +72,7 @@ Release backend:
     - echo "Pytest tests complete"
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
-.Jest:
+Jest:
   image: node:latest
   stage: test
   before_script:
@@ -85,7 +85,7 @@ Release backend:
     - echo "Jest tests complete"
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
-.Cypress:
+Cypress:
   image: cypress/base:10
   stage: test
   before_script:
@@ -163,7 +163,7 @@ Release backend:
   after_script:
     - echo "Create stack complete"
 
-Update stack:
+.Update stack:
   image: python:3.7
   stage: cloudformation
   variables:
