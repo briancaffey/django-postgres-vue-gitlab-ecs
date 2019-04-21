@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import apiCall from '@/utils/api';
 import axios from 'axios';
 
 export default {
@@ -19,10 +18,10 @@ export default {
     }
   },
   beforeCreate() {
-    const subdomain = window.location.host.split('.')[0];
+    // const subdomain = window.location.host.split('.')[0];
     axios.get('/api/verify-domain/').then(() => {
       this.loading = false
-    }).catch((err) => {
+    }).catch(() => {
       const redirect_url = process.env.NODE_ENV === 'production'
         ? process.env.VUE_APP_BASE_URL
         : 'http://localhost';
