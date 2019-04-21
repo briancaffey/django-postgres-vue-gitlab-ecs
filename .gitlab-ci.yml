@@ -132,7 +132,7 @@ Deploy frontend:
   only:
     - master
   dependencies:
-    - build-frontend
+    - "Build frontend"
   before_script:
     - cd frontend
     - pip install awscli
