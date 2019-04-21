@@ -29,8 +29,6 @@ variables:
     - docker build -t $CI_REGISTRY_IMAGE:latest -f scripts/prod/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE:latest
 
-    # - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
-
 release backend:
   stage: release
   image: docker:stable
