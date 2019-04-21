@@ -10,14 +10,12 @@ class Command(BaseCommand):
         if not User.objects.all():
             print("Creating default user")
             User.objects.create_superuser(
-                'admin',
-                'admin@company.com',
-                'password'
+                email='admin@company.com',
+                password='password'
             )
             print(
                 """
                 Default user created:
-                username: 'admin'
                 email: 'admin@company.com'
                 password: 'password'
                 """)
