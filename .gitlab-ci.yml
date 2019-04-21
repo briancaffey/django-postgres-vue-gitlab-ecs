@@ -88,6 +88,8 @@ Jest:
 Cypress:
   image: cypress/base:10
   stage: test
+  variables:
+    VUE_APP_BASE_URL: http://localhost:8080
   before_script:
     - cd frontend
     - npm install --progress=false
