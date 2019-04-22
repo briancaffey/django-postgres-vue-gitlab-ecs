@@ -2,7 +2,9 @@
   <div v-if="!loading" id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
+      <a v-if="isAuthenticated" href="#logout" @click="logout">Logout</a>
     </div>
     <router-view/>
   </div>
@@ -10,6 +12,10 @@
 
 <script>
 import axios from 'axios';
+import { USER_REQUEST } from '@/store/actions/user';
+import { AUTH_REFRESH } from '@/store/actions/auth';
+import { AUTH_LOGOUT } from '@/store/actions/auth'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -27,6 +33,25 @@ export default {
         : 'http://localhost';
       window.location.replace(redirect_url);
     })
+  },
+  created: function () {
+    if (this.$store.getters.isAuthenticated) {
+      this.$store.dispatch(USER_REQUEST);
+      // refresh the token every 4 minutes while the user is logged in
+      setInterval(() => { this.$store.dispatch(AUTH_REFRESH); }, 1000 * 60 * 4);
+    }
+  },
+  methods: {
+    logout: function () {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {
+        this.$router.push('/login')
+      });
+      location.reload();
+    },
+
+  },
+  computed: {
+    ...mapGetters(['getProfile', 'isAuthenticated', 'isProfileLoaded']),
   }
 }
 </script>
