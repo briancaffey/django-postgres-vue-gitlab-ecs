@@ -176,7 +176,7 @@ Resources:
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
-        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
@@ -196,7 +196,7 @@ Resources:
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
@@ -215,7 +215,7 @@ Resources:
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
@@ -230,7 +230,7 @@ Resources:
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         Listener: !GetAtt ALB.Outputs.Listener
         DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         AppUrl: !Ref AppUrl
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
