@@ -41,10 +41,12 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
+    'accounts',
     'core',
 ]
 
 THIRD_PARTY_APPS = [
+    'rest_framework',
     'corsheaders',
 ]
 
@@ -117,6 +119,23 @@ DATABASES = {
     }
 }
 
+
+# REST FRAMEWORK
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
 # Celery Configuration
 
 CELERY_BROKER_URL = \
@@ -126,6 +145,9 @@ CELERY_RESULT_BACKEND = \
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

@@ -12,43 +12,6 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-Build backend:
-  stage: build
-  image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
-  only:
-    - master
-  before_script:
-    - cd backend
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - docker build -t $CI_REGISTRY_IMAGE:latest -f scripts/prod/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE:latest
-  after_script:
-    - echo "Build backend complete"
-
-Release backend:
-  stage: release
-  image: docker:stable
-  services:
-    - docker:dind
-  before_script:
-    - cd backend
-    - apk add --no-cache curl jq python py-pip
-    - pip install awscli
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $REPOSITORY_URL:${GitSHA} -f scripts/prod/Dockerfile .
-    - $(aws ecr get-login --no-include-email --region us-east-1)
-    - docker push $REPOSITORY_URL:${GitSHA}
-  after_script:
-    - echo "Release backend complete"
-
 Pytest:
   image: python:3.7
   stage: test
@@ -126,6 +89,45 @@ Build frontend:
   after_script:
     - echo "Build Complete"
 
+Build backend:
+  stage: build
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  only:
+    - master
+  before_script:
+    - cd backend
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:latest -f scripts/prod/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE:latest
+  after_script:
+    - echo "Build backend complete"
+
+Release backend:
+  stage: release
+  image: docker:stable
+  only:
+    - master
+  services:
+    - docker:dind
+  before_script:
+    - cd backend
+    - apk add --no-cache curl jq python py-pip
+    - pip install awscli
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest -t $REPOSITORY_URL:${GitSHA} -f scripts/prod/Dockerfile .
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+    - docker push $REPOSITORY_URL:${GitSHA}
+  after_script:
+    - echo "Release backend complete"
+
 Deploy frontend:
   image: python:3.7
   stage: deploy
@@ -147,6 +149,8 @@ Deploy frontend:
 .Create stack:
   image: python:3.7
   stage: cloudformation
+  only:
+    - master
   variables:
     EnvironmentName: staging
   before_script:
@@ -167,6 +171,8 @@ Deploy frontend:
 Update stack:
   image: python:3.7
   stage: cloudformation
+  only:
+    - master
   variables:
     EnvironmentName: staging
   only:
