@@ -1,9 +1,11 @@
 /* eslint-disable promise/param-names, no-unused-vars */
+import Vue from 'vue'
 import { AUTH_REQUEST, AUTH_ERROR, AUTH_SUCCESS, AUTH_LOGOUT, AUTH_REFRESH } from '../actions/auth';
 import { USER_REQUEST } from '../actions/user';
 import apiCall from '../../utils/api';
+import * as Cookies from 'js-cookie'
 
-const state = { token: localStorage.getItem('user-token') || '', status: '', hasLoadedOnce: false };
+const state = { token: Cookies.get('user-token') || '', status: '', hasLoadedOnce: false };
 
 const getters = {
   getToken: s => s.token,
@@ -19,29 +21,30 @@ const actions = {
       user,
     )
       .then((resp) => {
-        localStorage.setItem('user-token', resp.data.access);
-        localStorage.setItem('refresh-token', resp.data.refresh);
+        Cookies.set('user-token', resp.data.access);
+        Cookies.set('refresh-token', resp.data.refresh);
         commit(AUTH_SUCCESS, resp);
         dispatch(USER_REQUEST);
         resolve(resp);
       })
       .catch((err) => {
         commit(AUTH_ERROR, err);
-        localStorage.removeItem('user-token');
+        Cookies.remove('user-token');
         reject(err);
       });
   }),
   [AUTH_LOGOUT]: ({ commit, dispatch }) => new Promise((resolve, reject) => {
     commit(AUTH_LOGOUT);
-    localStorage.removeItem('user-token');
+    Cookies.remove('user-token');
+    Cookies.remove('refresh-token');
     resolve();
   }),
   [AUTH_REFRESH]: ({ commit, dispatch }) => new Promise((resolve, reject) => {
     apiCall.post(
       '/api/auth/refresh_token/',
-      { refresh: localStorage.getItem('refresh-token') },
+      { refresh: Cookies.get('refresh-token') },
     ).then((resp) => {
-      localStorage.setItem('user-token', resp.data.access);
+      Cookies.set('user-token', resp.data.access);
       commit(AUTH_SUCCESS, resp);
     });
   }),
