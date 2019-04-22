@@ -84,8 +84,7 @@ Parameters:
     NoEcho: true
 
 Conditions:
-  RunServices: !Equals [ 1, 2 ]
-  UseRDS: !Equals [ 1, 2 ]
+  RunServices: !Equals [ 1, 1 ]
 
 Resources:
 
@@ -108,11 +107,10 @@ Resources:
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         WildcardSSLCertificateArn: !Ref WildcardSSLCertificateArn
 
-  RDSPostgres:
+  RDSPostgresDB:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
-      Condition: UseRDS
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
@@ -163,7 +161,7 @@ Resources:
         AppUrl: !Ref AppUrl
         StackName: !Ref StackName
 
-  BackendService6:
+  BackendService7:
     Type: AWS::CloudFormation::Stack
     Condition: RunServices
     Properties:
@@ -184,7 +182,7 @@ Resources:
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
         StackName: !Ref StackName
 
-  CeleryService4:
+  CeleryService5:
     Type: AWS::CloudFormation::Stack
     Condition: RunServices
     Properties:
@@ -203,7 +201,7 @@ Resources:
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
-  BeatService4:
+  BeatService5:
     Type: AWS::CloudFormation::Stack
     Condition: RunServices
     Properties:
@@ -222,7 +220,7 @@ Resources:
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
-  FlowerService:
+  FlowerService1:
     Type: AWS::CloudFormation::Stack
     Condition: RunServices
     Properties:
