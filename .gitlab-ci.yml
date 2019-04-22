@@ -175,8 +175,6 @@ Update stack:
     - master
   variables:
     EnvironmentName: staging
-  only:
-    - master
   before_script:
     - pip install awscli
     - ./cloudformation/tests/validate-templates.sh
