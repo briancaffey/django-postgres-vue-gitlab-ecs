@@ -2,9 +2,9 @@
   <div class="about">
     <h1>This is an about page!</h1>
     <p>Updates coming soon...</p>
-    <p>Message from the backend API: {{ message }}</p>
+    <p>Message from the backend API: {{ message | capitalize }}</p>
     <p>The commit SHA of the backend container: {{ gitSHA }}</p>
-    <p>The commit SHA of the frontend site: {{ commit}}</p>
+    <p>The commit SHA of the frontend site: {{ commit }}</p>
 
   </div>
 </template>
