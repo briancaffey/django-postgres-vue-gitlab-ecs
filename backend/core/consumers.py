@@ -1,5 +1,6 @@
-from channels.generic.websocket import WebsocketConsumer
 import json
+
+from channels.generic.websocket import WebsocketConsumer
 
 
 class ChatConsumer(WebsocketConsumer):
