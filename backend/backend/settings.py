@@ -32,6 +32,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 
 DJANGO_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,6 +120,15 @@ DATABASES = {
     }
 }
 
+ASGI_APPLICATION = 'backend.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
 
 # REST FRAMEWORK
 
