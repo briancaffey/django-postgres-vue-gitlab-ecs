@@ -41,6 +41,12 @@ const router = new Router({
       component: () => import('@/views/Login.vue'),
       beforeEnter: ifNotAuthenticated,
     },
+    {
+      path: '/sockets',
+      name: 'Sockets',
+      component: () => import('@/views/Sockets.vue'),
+      beforeEnter: ifAuthenticated,
+    },
   ]
 })
 

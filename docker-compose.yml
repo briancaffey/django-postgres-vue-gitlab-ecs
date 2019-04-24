@@ -122,6 +122,8 @@ services:
       context: ./backend
       dockerfile: scripts/dev/Dockerfile
     entrypoint: /start_asgi.sh
+    volumes:
+      - ./backend:/code
     links:
       - db
       - redis
