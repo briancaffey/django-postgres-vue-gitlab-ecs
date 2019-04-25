@@ -4,6 +4,8 @@
     Sockets
     </h1>
     {{ isConnected }}
+    <input placeholder="type message" v-model="message">
+    <button @click="sendMessage">Click me</button>
   </div>
 </template>
 
@@ -11,15 +13,18 @@
   export default {
     data() {
       return {
+        message: '',
         isConnected: false,
       }
     },
-    sockets: {
-      connect: function () {
-        this.isConnected = true;
-        console.log('socket connected')
-      },
+    methods: {
+      sendMessage(message){
+        console.log("clicking")
+        this.$socket.send(JSON.stringify({"message":this.message}))
+      }
     },
+    created() {
+    }
     // methods: {
     //   pingServer() {
     //     this.$socket.emit('', 'my message');

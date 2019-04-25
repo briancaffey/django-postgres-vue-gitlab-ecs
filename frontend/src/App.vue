@@ -4,8 +4,8 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
-      <router-link to="/sockets">Sockets</router-link>
-      <a v-if="isAuthenticated" href="#logout" @click="logout">Logout</a>
+      <span v-if="isAuthenticated"><router-link to="/sockets">Sockets</router-link> | </span>
+      <span><a v-if="isAuthenticated" href="#logout" @click="logout">Logout</a></span>
     </div>
     <router-view/>
   </div>
