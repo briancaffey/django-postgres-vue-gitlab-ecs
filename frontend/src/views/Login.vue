@@ -51,6 +51,7 @@ export default {
     width: 300px;
     padding: 10px;
     margin:auto;
+
   }
   .signin {
     -webkit-appearance: none;
@@ -61,5 +62,8 @@ export default {
     outline: none !important;
     box-shadow: none !important;
     border-radius: 3px;
+    padding: 3px;
+    outline: none;
+    border: 1px solid #dddddd;
   }
 </style>
