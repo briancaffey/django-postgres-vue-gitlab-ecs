@@ -121,12 +121,14 @@ services:
     build:
       context: ./backend
       dockerfile: scripts/dev/Dockerfile
-    entrypoint: /start_asgi.sh
+    command: /start_asgi.sh
     links:
       - db
       - redis
     networks:
       - main
+    ports:
+      - "9000:9000"
     expose:
       - 9000
     environment:
