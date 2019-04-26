@@ -42,10 +42,17 @@ const router = new Router({
       beforeEnter: ifNotAuthenticated,
     },
     {
-      path: '/sockets',
-      name: 'Sockets',
-      component: () => import('@/views/Sockets.vue'),
-      beforeEnter: ifAuthenticated,
+      path: '/chat',
+      name: 'Chat',
+      component: () => import('@/views/Chat.vue'),
+      children: [
+        {
+          path: '/chat/:room',
+          name: 'Room',
+          component: () => import('@/views/Room.vue'),
+          beforeEnter: ifAuthenticated,
+        },
+      ]
     },
   ]
 })

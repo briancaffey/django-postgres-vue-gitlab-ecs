@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>
-    Chat Room
+    {{ roomName }}
     </h1>
     <div ref="chat-area" class="chat-area">
       <div v-for="(m, i) in messages" :key="i">
@@ -19,13 +19,16 @@
 </template>
 
 <script>
+  import Vue from 'vue';
   import uuid from 'uuid';
   export default {
     data() {
       return {
         message: '',
         messages: [],
-        sender: ''
+        sender: '',
+        connection: null,
+        roomName: ''
       }
     },
     methods: {
@@ -37,24 +40,35 @@
         this.message = '';
         this.$socket.send(JSON.stringify(
           {
-            "message":outboundMessage,
-            "sender":this.sender,
+            "message": outboundMessage,
+            "sender": this.sender,
           })
         );
         this.$refs.message.focus();
       },
       scrollToBottom() {
         const messageDisplay = this.$refs["chat-area"];
-        setTimeout(() => {messageDisplay.scrollTop = messageDisplay.scrollHeight;}, 1)
+        setTimeout(() => {
+            messageDisplay.scrollTop = messageDisplay.scrollHeight;
+          }, 1
+        );
       }
     },
     created() {
+      this.roomName = this.$route.params.room;
+      this.connection = new Vue();
+      this.connection.$connect(
+        `ws://localhost/ws/chat/${this.roomName}/`
+      );
       this.sender = uuid();
       this.$options.sockets.onmessage = (data) => {
         const message = JSON.parse(data.data);
         this.messages.push(message);
         this.scrollToBottom();
       }
+    },
+    destroyed(){
+      this.connection.$disconnect();
     }
   }
 </script>
@@ -100,6 +114,5 @@ input {
 .otherMessage {
   text-align: left;
   color:white;
-
 }
 </style>
