@@ -14,6 +14,7 @@
     "js-cookie": "^2.2.0",
     "register-service-worker": "^1.5.2",
     "socket.io-client": "^2.2.0",
+    "uuid": "^3.3.2",
     "vue": "^2.5.22",
     "vue-native-websocket": "^2.0.13",
     "vue-router": "^3.0.1",

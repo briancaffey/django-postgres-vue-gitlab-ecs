@@ -1,12 +1,17 @@
 <template>
   <div>
     <h1>
-    WebSocket Chat Room
+    Chat Room
     </h1>
     <div ref="chat-area" class="chat-area">
-      <p v-for="(m, i) in messages" :key="i">
-        {{ m }}
-      </p>
+      <div v-for="(m, i) in messages" :key="i">
+        <div class="userMessageWrapper"  v-if="userIsSender(m['sender'])">
+          <span class="userMessage">{{ m.message }}</span>
+        </div>
+        <div class="otherMessageWrapper" v-else>
+          <span class="otherMessage">{{ m.message }}</span>
+        </div>
+      </div>
     </div>
     <input ref="message" placeholder="type your message..." v-model="message">
     <button @click="sendMessage(message)">Send</button>
@@ -14,30 +19,40 @@
 </template>
 
 <script>
+  import uuid from 'uuid';
   export default {
     data() {
       return {
         message: '',
-        messages: []
+        messages: [],
+        sender: ''
       }
     },
     methods: {
+      userIsSender(sender){
+        return this.sender === sender
+      },
       sendMessage(message){
         var outboundMessage = message;
         this.message = '';
-        this.$socket.send(JSON.stringify({"message":outboundMessage}));
+        this.$socket.send(JSON.stringify(
+          {
+            "message":outboundMessage,
+            "sender":this.sender,
+          })
+        );
         this.$refs.message.focus();
       },
       scrollToBottom() {
         const messageDisplay = this.$refs["chat-area"];
-        console.log(messageDisplay.scrollHeight);
         setTimeout(() => {messageDisplay.scrollTop = messageDisplay.scrollHeight;}, 1)
       }
     },
     created() {
+      this.sender = uuid();
       this.$options.sockets.onmessage = (data) => {
         const message = JSON.parse(data.data);
-        this.messages.push(message['message']);
+        this.messages.push(message);
         this.scrollToBottom();
       }
     }
@@ -56,10 +71,35 @@
   max-width: 50px;
 }
 input {
+  margin-top: 5px;
   margin-right: 5px;
   border-radius: 3px;
   padding: 3px;
   outline: none;
   border: 1px solid #dddddd;
+}
+.userMessageWrapper {
+  margin-bottom: 4px;
+  text-align: right;
+  background-color: #2c3e50;
+  border-radius: 3px;
+  padding: 5px;
+}
+.otherMessageWrapper {
+  margin-bottom: 4px;
+  text-align: left;
+  background-color: #42b983;
+  border-radius: 3px;
+  padding: 5px;
+}
+.userMessage {
+  text-align: left;
+  color:white;
+
+}
+.otherMessage {
+  text-align: left;
+  color:white;
+
 }
 </style>
