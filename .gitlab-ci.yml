@@ -35,7 +35,7 @@ Pytest:
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
 Jest:
-  image: node:latest
+  image: node:8
   stage: test
   before_script:
     - cd frontend
