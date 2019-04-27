@@ -199,7 +199,7 @@ Resources:
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
-        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
