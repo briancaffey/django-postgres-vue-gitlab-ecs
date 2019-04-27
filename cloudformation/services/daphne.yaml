@@ -1,5 +1,5 @@
 Description: >
-  This service runs the Django webserver.
+  This service runs the Daphne server.
 
 Parameters:
 
@@ -63,7 +63,7 @@ Parameters:
     NoEcho: true
 
 Resources:
-  BackendService:
+  DaphneService:
     Type: AWS::ECS::Service
     DependsOn: ListenerRule
     Properties:
@@ -72,21 +72,26 @@ Resources:
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
-        - ContainerName: "backend"
-          ContainerPort: 8000
-          TargetGroupArn: !Ref BackendTargetGroup
+        - ContainerName: "daphne"
+          ContainerPort: 9000
+          TargetGroupArn: !Ref DaphneTargetGroup
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: backend
+      Family: daphne
       ContainerDefinitions:
-        - Name: backend
+        - Name: daphne
           Essential: true
           Image: !Sub ${ECRBackendRepositoryURL}:${GitSHA}
           MemoryReservation: 128
           Command:
-            - '/start_prod.sh'
+            - "daphne"
+            - "backend.asgi:application"
+            - "--bind"
+            - "0.0.0.0"
+            - "--port"
+            - "9000"
           Environment:
             - Name: GIT_SHA
               Value: !Ref GitSHA
@@ -117,14 +122,14 @@ Resources:
             - Name: STACK_NAME
               Value: !Ref StackName
           PortMappings:
-            - ContainerPort: 8000
+            - ContainerPort: 9000
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: !Ref BackendCloudWatchLogsGroup
+              awslogs-group: !Ref DaphneCloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
 
-  BackendTargetGroup:
+  DaphneTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       VpcId: !Ref VPC
@@ -142,16 +147,16 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       ListenerArn: !Ref Listener
-      Priority: 3
+      Priority: 2
       Conditions:
         - Field: path-pattern
           Values:
-            - "*"
+            - "/ws/*"
       Actions:
-        - TargetGroupArn: !Ref BackendTargetGroup
+        - TargetGroupArn: !Ref DaphneTargetGroup
           Type: forward
 
-  BackendCloudWatchLogsGroup:
+  DaphneCloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref AWS::StackName

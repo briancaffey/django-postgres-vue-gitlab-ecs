@@ -184,6 +184,27 @@ Resources:
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
         StackName: !Ref StackName
 
+  DaphneService:
+    Type: AWS::CloudFormation::Stack
+    Condition: RunServices
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/daphne.yaml
+      Parameters:
+        GitSHA: !Ref GitSHA
+        DjangoSecretKey: !Ref DjangoSecretKey
+        AWSAccessKeyId: !Ref AWSAccessKeyId
+        AWSSecretAccessKey: !Ref AWSSecretAccessKey
+        AppUrl: !Ref AppUrl
+        VPC: !GetAtt VPC.Outputs.VPC
+        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+        DesiredCount: 1
+        Listener: !GetAtt ALB.Outputs.Listener
+        DBEndpoint: !GetAtt RDSPostgres.Outputs.DBEndpoint
+        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        StackName: !Ref StackName
+
   CeleryService4:
     Type: AWS::CloudFormation::Stack
     Condition: RunServices
@@ -251,6 +272,55 @@ Resources:
 
 Outputs:
 
-  TestParameterValue:
-    Description: The value of the test parameter (the shortened Git SHA) of the commit.
+  StackName:
+    Description: The name of the stack
+    Export:
+      Name: StackName
+
+  EnvironmentName:
+    Description: An environemnt name to namespace resources (e.g. qa, staging, production)
+    Value: !Ref EnvironmentName
+    Export:
+      Name: EnvironmentName
+
+  AppUrl:
+    Description: "The URL for our app (e.g. mydomain.com)"
+    Value: !Ref AppUrl
+    Export:
+      Name: AppUrl
+
+  HostedZoneId:
+    Description: "The hosted zone ID to add the Route 53 recordset to."
+    Value: !Ref HostedZoneId
+    Export:
+      Name: HostedZoneId
+
+  SSLCertificateArn:
+    Description: "ARN pointing to an SSL cert to use for this app URL."
+    Value: !Ref SSLCertificateArn
+    Export:
+      Name: SSLCertificateArn
+
+  WildcardSSLCertificateArn:
+    Description: "ARN pointing to a wildcard SSL cert to use for this app URL."
+    Value: !Ref WildcardSSLCertificateArn
+    Export:
+      Name: WildcardSSLCertificateArn
+
+  ECRBackendRepositoryName:
+    Description: "Name of ECR Repository for backend web server."
+    Value: !Ref ECRBackendRepositoryName
+    Export:
+      Name: ECRBackendRepositoryName
+
+  SSHKeyName:
+    Description: The name of the key-pair used for SSH access to ECS hosts
+    Value: !Ref SSHKeyName
+    Export:
+      Name: SSHKeyName
+
+  GitSHA:
+    Description: "This is a test parameter used to see how to pass parameters from GitLab"
     Value: !Ref GitSHA
+    Export:
+      Name: GitSHA
