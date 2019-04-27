@@ -34,8 +34,8 @@ variables:
     - echo "Pytest tests complete"
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
-.Jest:
-  image: node:latest
+Jest:
+  image: node:8
   stage: test
   before_script:
     - cd frontend
@@ -68,8 +68,8 @@ variables:
       - tests/e2e/screenshots/
     expire_in: 7 days
 
-.Build frontend:
-  image: node:latest
+Build frontend:
+  image: node:8
   stage: build
   only:
     - master

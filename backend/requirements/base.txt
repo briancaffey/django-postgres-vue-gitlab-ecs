@@ -2,6 +2,11 @@ boto3==1.9.130
 
 celery==4.3.0
 
+channels==2.2.0
+channels-redis==2.4.0
+
+daphne==2.3.0
+
 Django==2.2
 django-cors-headers==2.5.2
 django-filter==2.1.0

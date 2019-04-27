@@ -45,6 +45,7 @@ services:
       - backend
       - frontend
       - flower
+      - asgiserver
     volumes:
       - ./nginx/dev/dev.conf:/etc/nginx/nginx.conf:ro
       - django-static:/usr/src/app/static
@@ -106,6 +107,32 @@ services:
       - redis
     networks:
       - main
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=True
+      - RDS_PASSWORD=${RDS_PASSWORD}
+      - RDS_USERNAME=${RDS_USERNAME}
+      - RDS_DB_NAME=${RDS_DB_NAME}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+
+  asgiserver:
+    container_name: asgiserver
+    build:
+      context: ./backend
+      dockerfile: scripts/dev/Dockerfile
+    entrypoint: /start_asgi.sh
+    volumes:
+      - ./backend:/code
+    links:
+      - db
+      - redis
+    networks:
+      - main
+    ports:
+      - "9000:9000"
+    expose:
+      - 9000
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=True

@@ -4,9 +4,14 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
-      <a v-if="isAuthenticated" href="#logout" @click="logout">Logout</a>
+      <span v-if="isAuthenticated"><router-link to="/chat">Chat</router-link> | </span>
+      <span><a v-if="isAuthenticated" href="#logout" @click="logout">Logout</a></span>
     </div>
-    <router-view/>
+        <transition
+          name="fade"
+          mode="out-in">
+          <router-view :key="$route.path"/>
+        </transition>
   </div>
 </template>
 
@@ -57,6 +62,19 @@ export default {
 </script>
 
 <style lang="scss">
+  .fade-enter-active,
+  .fade-leave-active {
+    transition-duration: 0.15s;
+    transition-property: opacity;
+    transition-timing-function: ease;
+  }
+
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0
+  }
+
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -65,7 +83,7 @@ export default {
   color: #2c3e50;
 }
 #nav {
-  padding: 30px;
+  padding: 15px;
   a {
     font-weight: bold;
     color: #2c3e50;
