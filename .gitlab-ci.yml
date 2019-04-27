@@ -69,7 +69,7 @@ Jest:
     expire_in: 7 days
 
 Build frontend:
-  image: node:latest
+  image: node:8
   stage: build
   only:
     - master
@@ -171,8 +171,8 @@ Deploy frontend:
 Update stack:
   image: python:3.7
   stage: cloudformation
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     EnvironmentName: staging
   before_script:
