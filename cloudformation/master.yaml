@@ -110,9 +110,9 @@ Resources:
 
   RDSPostgres:
     Type: AWS::CloudFormation::Stack
+    Condition: UseRDS
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
-      Condition: UseRDS
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
