@@ -71,8 +71,8 @@ Jest:
 Build frontend:
   image: node:8
   stage: build
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
@@ -97,8 +97,8 @@ Build backend:
     DOCKER_DRIVER: overlay2
   services:
     - docker:dind
-  only:
-    - master
+  # only:
+  #   - master
   before_script:
     - cd backend
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -111,8 +111,8 @@ Build backend:
 Release backend:
   stage: release
   image: docker:stable
-  only:
-    - master
+  # only:
+  #   - master
   services:
     - docker:dind
   before_script:
@@ -131,8 +131,8 @@ Release backend:
 Deploy frontend:
   image: python:3.7
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   dependencies:
     - "Build frontend"
   before_script:
