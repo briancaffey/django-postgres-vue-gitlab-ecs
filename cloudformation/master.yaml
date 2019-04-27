@@ -274,6 +274,7 @@ Outputs:
 
   StackName:
     Description: The name of the stack
+    Value: !Ref StackName
     Export:
       Name: StackName
 
