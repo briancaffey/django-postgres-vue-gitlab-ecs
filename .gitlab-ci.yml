@@ -12,7 +12,7 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-.Pytest:
+Pytest:
   image: python:3.7
   stage: test
   services:
@@ -89,7 +89,7 @@ Build frontend:
   after_script:
     - echo "Build Complete"
 
-.Build backend:
+Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -128,7 +128,7 @@ Release backend:
   after_script:
     - echo "Release backend complete"
 
-.Deploy frontend:
+Deploy frontend:
   image: python:3.7
   stage: deploy
   only:
