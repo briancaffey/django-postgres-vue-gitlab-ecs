@@ -67,6 +67,7 @@ services:
     networks:
       - main
     environment:
+      - SECRET_KEY=${SECRET_KEY}
       - DEBUG=True
       - RDS_PASSWORD=${RDS_PASSWORD}
       - RDS_USERNAME=${RDS_USERNAME}
