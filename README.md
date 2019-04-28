@@ -1,6 +1,6 @@
 ## Architecture
 
-![png](/draw.png)
+![png](/architecture.png)
 
 ## Local Development
 
