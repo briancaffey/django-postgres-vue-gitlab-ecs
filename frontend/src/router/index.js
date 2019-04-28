@@ -32,7 +32,6 @@ const router = new Router({
     {
       path: '/about',
       name: 'about',
-      beforeEnter: ifAuthenticated,
       component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue')
     },
     {
@@ -50,7 +49,6 @@ const router = new Router({
           path: '/chat/:room',
           name: 'Room',
           component: () => import('@/views/Room.vue'),
-          beforeEnter: ifAuthenticated,
         },
       ]
     },

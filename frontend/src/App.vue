@@ -3,8 +3,8 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
+      <span><router-link to="/chat">Chat</router-link> | </span>
       <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
-      <span v-if="isAuthenticated"><router-link to="/chat">Chat</router-link> | </span>
       <span><a v-if="isAuthenticated" href="#logout" @click="logout">Logout</a></span>
     </div>
         <transition

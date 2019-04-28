@@ -6,9 +6,13 @@
     <div ref="chat-area" class="chat-area">
       <div v-for="(m, i) in messages" :key="i">
         <div class="userMessageWrapper"  v-if="userIsSender(m['sender'])">
+          <div v-if="m['user']" class="user-name"><small>{{ m['user'] }}</small></div>
+          <div v-else class="user-name"><small>guest</small></div>
           <span class="userMessage">{{ m.message }}</span>
         </div>
         <div class="otherMessageWrapper" v-else>
+          <div v-if="m['user']" class="user-name"><small>{{ m['user'] }}</small></div>
+          <div v-else class="user-name"><small>guest</small></div>
           <span class="otherMessage">{{ m.message }}</span>
         </div>
       </div>
@@ -114,5 +118,10 @@ input {
 .otherMessage {
   text-align: left;
   color:white;
+}
+
+.user-name {
+  color: white;
+  font-size: .5em;
 }
 </style>

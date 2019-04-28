@@ -26,6 +26,11 @@ class CoreConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
+        user = self.scope.get('user', '')
+        if not user.id:
+            user = None
+        else:
+            user = user.email
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         sender = text_data_json['sender']
@@ -36,7 +41,8 @@ class CoreConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
-                'sender': sender
+                'sender': sender,
+                'user': user,
             }
         )
 
@@ -44,9 +50,11 @@ class CoreConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         sender = event['sender']
+        user = event['user']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
-            'sender': sender
+            'sender': sender,
+            'user': user,
         }))
