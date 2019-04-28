@@ -27,12 +27,8 @@ class CoreConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        print(text_data_json)
-        print(dir(text_data_json))
         message = text_data_json['message']
         sender = text_data_json['sender']
-        print(f"user is {sender}")
-        print(f"message is {message}")
 
         # Send message to room group
         await self.channel_layer.group_send(

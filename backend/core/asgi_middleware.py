@@ -1,7 +1,5 @@
 import jwt
-
 from channels.auth import AuthMiddlewareStack, CookieMiddleware
-from rest_framework.authtoken.models import Token
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
@@ -33,4 +31,6 @@ class TokenAuthMiddleware:
                 scope['user'] = AnonymousUser()
         return self.inner(scope)
 
-TokenAuthMiddlewareStack = lambda inner: CookieMiddleware(TokenAuthMiddleware(AuthMiddlewareStack(inner))) # noqa
+TokenAuthMiddlewareStack = lambda inner: CookieMiddleware( # noqa
+    TokenAuthMiddleware(AuthMiddlewareStack(inner))
+)
