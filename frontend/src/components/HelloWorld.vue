@@ -1,10 +1,10 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>This is a static site that is served with a CloudFront distribution in front of an S3 bucket.</p>
-    <p>The site is updated through a <a href="https://gitlab.com/briancaffey/briancaffey.com">GitLab CI/CD pipeline</a>.</p>
-    <a :href="ciJobUrl">View CI Job</a>
-    <p>The resources for this site are now fully generated with CloudFormation.</p>
+    <p>This site demonstrates how to use JWT authentication with websockets.</p>
+    <p>The backend uses Django and Django Channels.</p>
+    <p>The frontend uses <a href="https://github.com/nathantsoi/vue-native-websocket">vue-native-websocket</a>.</p>
+    <p>Source code for this site can be found in my <a href="https://gitlab.com/briancaffey/briancaffey.com">GitLab repo</a>.</p>
   </div>
 </template>
 
@@ -13,12 +13,6 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
-  },
-  data(){
-    return {
-      commit: process.env.VUE_APP_CI_COMMIT_SHORT_SHA,
-      ciJobUrl: process.env.VUE_APP_CI_JOB_URL
-    }
   }
 }
 </script>
