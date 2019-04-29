@@ -9,7 +9,6 @@
 
 <script>
   import Vue from 'vue';
-  import faker from 'faker';
   import {
     CHAT_GET_OR_CREATE_ROOM,
     CHAT_GET_MESSAGE
@@ -54,7 +53,6 @@
       this.connection.$connect(
         `ws://localhost/ws/chat/${this.roomName}/`
       );
-      const _this = this
       this.$options.sockets.onmessage = (data) => {
         const message = JSON.parse(data.data);
         this.$store.commit(
