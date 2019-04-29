@@ -47,11 +47,12 @@
       },
     },
     created() {
+      const protocol = process.env.VUE_APP_WS_PROTOCOL;
+      const host = process.env.VUE_APP_BASE_HOST;
       this.roomName = this.$route.params.room;
-
       this.connection = new Vue();
       this.connection.$connect(
-        `ws://localhost/ws/chat/${this.roomName}/`
+        `${protocol}${host}/ws/chat/${this.roomName}/`
       );
       this.$options.sockets.onmessage = (data) => {
         const message = JSON.parse(data.data);

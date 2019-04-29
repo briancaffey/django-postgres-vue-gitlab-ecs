@@ -6,7 +6,10 @@ import './registerServiceWorker'
 import filters from './filters';
 import VueNativeSock from 'vue-native-websocket'
 
-Vue.use(VueNativeSock, 'ws://localhost/ws/chat/name/', {
+const protocol = process.env.VUE_APP_WS_PROTOCOL;
+const host = process.env.VUE_APP_BASE_HOST;
+
+Vue.use(VueNativeSock, `${protocol}${host}/ws/chat/_/`, {
   connectManually: true,
   format: 'json'
 });
