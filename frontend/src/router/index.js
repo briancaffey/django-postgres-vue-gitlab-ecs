@@ -54,7 +54,7 @@ const router = new Router({
         {
           path: '/chat/:room',
           name: 'Room',
-          component: () => import('@/views/Room.vue'),
+          component: () => import('@/views/RoomVuex.vue'),
         },
       ]
     },
