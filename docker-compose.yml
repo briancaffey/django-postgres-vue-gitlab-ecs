@@ -93,6 +93,8 @@ services:
       - db
     environment:
       - NODE_ENV=development
+      - VUE_APP_WS_PROTOCOL=ws://
+      - VUE_APP_BASE_HOST=localhost
       - VUE_APP_API_BASE_URL=http://localhost
 
   celery:
