@@ -22,5 +22,11 @@ urlpatterns = [
         'verify-domain/',
         views.verify_domain,
         name="verify-domain"
-    )
+    ),
+    path(
+        'debug/send-test-email/',
+        views.send_test_email,
+        name="verify-domain"
+    ),
+
 ]

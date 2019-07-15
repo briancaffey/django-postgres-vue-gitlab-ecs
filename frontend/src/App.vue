@@ -1,18 +1,13 @@
 <template>
-  <div v-if="!loading" id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <span><router-link to="/chat">Chat</router-link> | </span>
-      <span v-if="isAuthenticated"><router-link to="/profile">Profile</router-link> | </span>
-      <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
-      <span><a v-if="isAuthenticated" href="#logout" @click="logout">Logout</a></span>
+  <div id="app">
+    <div class="nav">
+      <navigation />
     </div>
-        <transition
-          name="fade"
-          mode="out-in">
-          <router-view :key="$route.path"/>
-        </transition>
+    <transition
+      name="fade"
+      mode="out-in">
+      <router-view :key="$route.path"/>
+    </transition>
   </div>
 </template>
 
@@ -20,44 +15,18 @@
 import axios from 'axios';
 import { USER_REQUEST } from '@/store/actions/user';
 import { AUTH_REFRESH } from '@/store/actions/auth';
-import { AUTH_LOGOUT } from '@/store/actions/auth'
-import { mapGetters } from 'vuex'
+import Navigation from '@/views/Navigation.vue';
 
 export default {
-  data() {
-    return {
-      loading: true
-    }
-  },
-  beforeCreate() {
-    // const subdomain = window.location.host.split('.')[0];
-    axios.get('/api/verify-domain/').then(() => {
-      this.loading = false
-    }).catch(() => {
-      const redirect_url = process.env.NODE_ENV === 'production'
-        ? process.env.VUE_APP_BASE_URL
-        : 'http://localhost';
-      window.location.replace(redirect_url);
-    })
-  },
+
+  components: { Navigation },
+
   created: function () {
     if (this.$store.getters.isAuthenticated) {
       this.$store.dispatch(USER_REQUEST);
       // refresh the token every 4 minutes while the user is logged in
       setInterval(() => { this.$store.dispatch(AUTH_REFRESH); }, 1000 * 60 * 4);
     }
-  },
-  methods: {
-    logout: function () {
-      this.$store.dispatch(AUTH_LOGOUT).then(() => {
-        this.$router.push('/login')
-      });
-      location.reload();
-    },
-
-  },
-  computed: {
-    ...mapGetters(['getProfile', 'isAuthenticated', 'isProfileLoaded']),
   }
 }
 </script>
@@ -83,7 +52,8 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-#nav {
+
+.nav {
   padding: 15px;
   a {
     font-weight: bold;

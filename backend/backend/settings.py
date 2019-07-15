@@ -164,6 +164,12 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 
+# Email
+
+EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'mailhog')
+EMAIL_PORT = os.environ.get('DJANGO_EMAIL_PORT', '1025')
+
+
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Password validation

@@ -2,7 +2,7 @@ import os
 
 from django.http import JsonResponse
 
-from core.tasks import debug_task
+from core.tasks import debug_task, send_test_email_task
 
 
 def hello_world(request):
@@ -43,3 +43,8 @@ def verify_domain(request):
             },
             status=404
         )
+
+
+def send_test_email(request):
+    send_test_email_task.delay()
+    return JsonResponse({"message": "Success"})

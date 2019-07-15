@@ -41,6 +41,12 @@ const router = new Router({
       beforeEnter: ifNotAuthenticated,
     },
     {
+      path: '/services',
+      name: 'services',
+      component: () => import('@/views/Services.vue'),
+      beforeEnter: ifAuthenticated
+    },
+    {
       path: '/profile',
       name: 'Profile',
       component: () => import('@/views/Profile.vue'),

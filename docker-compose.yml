@@ -7,6 +7,8 @@ services:
     image: postgres
     networks:
       - main
+    ports:
+      - "5433:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
@@ -89,6 +91,8 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=True
+      - DJANGO_EMAIL_HOST=${DJANGO_EMAIL_HOST}
+      - DJANGO_EMAIL_PORT=${DJANGO_EMAIL_PORT}
       - RDS_PASSWORD=${RDS_PASSWORD}
       - RDS_USERNAME=${RDS_USERNAME}
       - RDS_DB_NAME=${RDS_DB_NAME}
@@ -152,6 +156,8 @@ services:
     ports:
       - 1025:1025
       - 8025:8025
+    networks:
+      - main
 
 volumes:
   pg-data:
