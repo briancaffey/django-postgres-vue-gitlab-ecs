@@ -84,7 +84,7 @@ Parameters:
     NoEcho: true
 
 Conditions:
-  RunServices: !Equals [ 1, 1 ]
+  RunServices: !Equals [ 1, 0 ]
   UseRDS: !Equals [ 1, 1 ]
 
 Resources:
