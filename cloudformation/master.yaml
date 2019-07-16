@@ -84,8 +84,11 @@ Parameters:
     NoEcho: true
 
 Conditions:
-  RunServices: !Equals [ 1, 1 ]
-  UseRDS: !Equals [ 1, 1 ]
+  RunServices: !Equals [ 1, 0 ]
+  UseRDS: !Equals [ 1, 0 ]
+  UseALB: !Equals [ 1, 0 ]
+  UseECS: !Equals [ 1, 0 ]
+  UseElastiCache: !Equals [ 1, 0 ]
 
 Resources:
 
@@ -98,6 +101,7 @@ Resources:
 
   ALB:
     Type: AWS::CloudFormation::Stack
+    Condition: UseALB
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/load-balancers.yaml
       Parameters:
@@ -120,6 +124,7 @@ Resources:
 
   ElastiCacheRedis:
     Type: AWS::CloudFormation::Stack
+    Condition: UseElastiCache
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
       Parameters:
@@ -129,6 +134,7 @@ Resources:
 
   ECS:
     Type: AWS::CloudFormation::Stack
+    Condition: UseECS
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecs-cluster.yaml
       Parameters:
