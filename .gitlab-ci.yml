@@ -80,6 +80,7 @@ Build frontend:
     VUE_APP_BASE_URL: "https://${AppUrl}"
     VUE_APP_WS_PROTOCOL: wss://
     VUE_APP_BASE_HOST: api.${AppUrl}
+    VUE_APP_SITE_DOMAIN: ${AppUrl}
   artifacts:
     paths:
       - frontend/dist/

@@ -4,8 +4,8 @@
 
     <a href="/admin">Django Admin</a> |
     <a :href=flowerUrl>Flower</a>
-    <span v-if="!production"> |<a href="http://localhost:8025">Mailhog</a></span>
-    <span v-if="!production"> |<a href="http://localhost:8081">Redis Commander</a></span>
+    <span v-if="!production"> | <a href="http://localhost:8025">Mailhog</a></span>
+    <span v-if="!production"> | <a href="http://localhost:8081">Redis Commander</a></span>
 
     <h1>Debugging</h1>
 
@@ -15,24 +15,30 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  import apiCall from '@/utils/api';
   export default {
     data() {
       return {
-        production: env.process.NODE_ENV === 'production',
+        production: process.env.NODE_ENV === 'production',
+      }
+    },
+    computed: {
+      flowerUrl() {
+        return this.production
+        ? `https://flower.${process.env.VUE_APP_SITE_DOMAIN}`
+        : `http://localhost/flower`;
       }
     },
     methods: {
       sendTestEmail() {
-        axios.get('/api/debug/send-test-email/').then(
+        apiCall.get('/api/debug/send-test-email/').then(
           () => {
-            if (env.process.NODE_ENV !== 'production') {
+            if (process.env.NODE_ENV !== 'production') {
               window.open('http://localhost:8025', '_blank');
             }
           }
         ).catch(
-          (err) => {
-            console.log("error sending test email");
+          () => {
             this.$router.push('/');
           }
         )

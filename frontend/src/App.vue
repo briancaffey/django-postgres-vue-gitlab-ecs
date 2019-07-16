@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { USER_REQUEST } from '@/store/actions/user';
 import { AUTH_REFRESH } from '@/store/actions/auth';
 import Navigation from '@/views/Navigation.vue';
