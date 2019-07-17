@@ -24,10 +24,11 @@ variables:
     SECRET_KEY: "secret"
     STACK_NAME: 'my-stack'
     DEBUG: ""
-  script:
+  before_script:
     - cd backend
-    - pip install -r requirements/base.txt
     - pip install -r requirements/test.txt
+    - pip install -r requirements/base.txt
+  script:
     - flake8
     - pytest --cov
   after_script:
