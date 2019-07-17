@@ -137,7 +137,7 @@ services:
   flower:
     image: mher/flower
     container_name: flower
-    command: --url_prefix=flower
+    command: --url_prefix=flower --inspect_timeout=20000
     environment:
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - FLOWER_PORT=5555
