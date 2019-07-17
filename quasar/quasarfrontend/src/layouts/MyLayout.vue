@@ -13,7 +13,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          Verbose Equals True | Quasar Framework
+          Verbose Equals True
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
