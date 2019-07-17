@@ -27,7 +27,7 @@ class CoreConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         user = self.scope.get('user', '')
-        if not user.id:
+        if user.is_anonymous:
             user = None
         else:
             user = user.email
