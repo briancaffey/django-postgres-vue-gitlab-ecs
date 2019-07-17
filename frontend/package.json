@@ -1,5 +1,5 @@
 {
-  "name": "briancaffey.com",
+  "name": "django-postgres-vue-gitlab-ecs",
   "version": "0.1.0",
   "private": true,
   "scripts": {

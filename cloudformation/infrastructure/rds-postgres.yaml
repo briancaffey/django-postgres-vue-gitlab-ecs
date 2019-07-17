@@ -19,7 +19,7 @@ Resources:
   DatabaseSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      GroupDescription: 'briancaffey-DBSG'
+      GroupDescription: 'RDS-DBSG'
       VpcId: !Ref VPC
       SecurityGroupIngress:
         - IpProtocol: tcp

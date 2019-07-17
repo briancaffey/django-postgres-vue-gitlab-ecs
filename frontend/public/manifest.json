@@ -1,6 +1,6 @@
 {
-  "name": "briancaffey.com",
-  "short_name": "briancaffey.com",
+  "name": "django-postgres-vue-gitlab-ecs",
+  "short_name": "django-postgres-vue-gitlab-ecs",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

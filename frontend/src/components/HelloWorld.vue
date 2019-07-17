@@ -3,8 +3,7 @@
     <h1>{{ msg }}</h1>
     <p>This site demonstrates how to use JWT authentication with websockets.</p>
     <p>The backend uses Django and Django Channels.</p>
-    <p>The frontend uses <a href="https://github.com/nathantsoi/vue-native-websocket">vue-native-websocket</a>.</p>
-    <p>Source code for this site can be found in my <a href="https://gitlab.com/briancaffey/briancaffey.com">GitLab repo</a>.</p>
+    <p>Source code for this site can be in<a href="https://gitlab.com/verbose-equals-true">this GitLab Group</a>.</p>
   </div>
 </template>
 
