@@ -1,4 +1,4 @@
-# briancaffey.com
+# Verbose Equals True
 
 ## Project setup
 ```
