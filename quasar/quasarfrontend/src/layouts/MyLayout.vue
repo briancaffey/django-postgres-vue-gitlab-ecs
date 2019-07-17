@@ -20,7 +20,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-2">
+    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-5">
       <q-list>
         <q-item-label header>Menu</q-item-label>
 
