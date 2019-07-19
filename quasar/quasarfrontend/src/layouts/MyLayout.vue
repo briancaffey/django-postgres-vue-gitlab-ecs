@@ -7,7 +7,10 @@
         </q-btn>
 
         <q-toolbar-title>Verbose Equals True</q-toolbar-title>
-
+        <q-toggle
+          color="black"
+          v-model="darkMode"
+        />
         <q-btn
           :ripple="false"
           color="white"
@@ -46,6 +49,7 @@ export default {
   components: { LeftMenuLink, LoginModal },
   data() {
     return {
+      darkMode: false,
       leftDrawerOpen: this.$q.platform.is.desktop
     };
   },

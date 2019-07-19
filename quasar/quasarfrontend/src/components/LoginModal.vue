@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-dialog @hide="hideLoginMenu" v-model="visible">
-      <q-card style="min-width: 400px">
+      <q-card style=" max-width: 95%; min-width: 320px;">
         <q-card-section>
           <div class="text-h6">Login</div>
         </q-card-section>
