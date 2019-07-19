@@ -26,7 +26,6 @@
 
         <left-menu-link label="Home" to="/" icon="home" caption="Start Here" />
         <left-menu-link label="About" to="/about" icon="info" caption="About this site" />
-
       </q-list>
     </q-drawer>
 
@@ -55,7 +54,6 @@ export default {
   }
 };
 </script>
-
 <style>
 .fade-enter-active,
 .fade-leave-active {
