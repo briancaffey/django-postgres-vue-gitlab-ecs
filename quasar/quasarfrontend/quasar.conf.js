@@ -42,14 +42,10 @@ module.exports = function(ctx) {
         "QItemLabel"
       ],
 
-      directives: [
-        "Ripple"
-      ],
+      directives: ["Ripple"],
 
       // Quasar plugins
-      plugins: [
-        "Notify"
-      ]
+      plugins: ["Notify", "Cookies"]
     },
 
     supportIE: false,
@@ -61,7 +57,7 @@ module.exports = function(ctx) {
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         cfg.module.rules.push({
           enforce: "pre",
           test: /\.(js|vue)$/,
@@ -70,7 +66,7 @@ module.exports = function(ctx) {
           options: {
             formatter: require("eslint").CLIEngine.getFormatter("stylish")
           }
-        })
+        });
       }
     },
 
@@ -81,7 +77,7 @@ module.exports = function(ctx) {
     },
 
     // animations: "all", // --- includes all animations
-    animations: [],
+    animations: "all", //[],
 
     ssr: {
       pwa: false
@@ -136,29 +132,26 @@ module.exports = function(ctx) {
     electron: {
       // bundler: "builder", // or "packager"
 
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
       },
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
         // OS X / Mac App Store
         // appBundleId: "",
         // appCategoryType: "",
         // osxSign: "",
         // protocol: "myapp://path",
-
         // Windows only
         // win32metadata: { ... }
       },
 
       builder: {
         // https://www.electron.build/configuration/configuration
-
         // appId: "quasarfrontend"
       }
     }
-  }
-}
+  };
+};
