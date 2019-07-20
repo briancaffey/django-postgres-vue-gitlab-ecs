@@ -42,19 +42,21 @@ export default {
       this.$store.commit("toggleLoginMenu");
     },
     login() {
-      const vm = this
+      const vm = this;
       this.$store
         .dispatch("AUTH_REQUEST", {
           email: this.email,
           password: this.password
         })
         .then(() => {
+          if (vm.$store.getters.getNextLink) {
+            vm.$router.push(vm.$store.getters.getNextLink);
+          }
           const refreshFrequency =
             process.env.NODE_ENV === "development" ? 0.1 : 4;
           setInterval(() => {
             vm.$store.dispatch("AUTH_REFRESH");
           }, 1000 * 60 * refreshFrequency);
-          console.log("Logged in...");
         });
       this.email = "";
       this.password = "";

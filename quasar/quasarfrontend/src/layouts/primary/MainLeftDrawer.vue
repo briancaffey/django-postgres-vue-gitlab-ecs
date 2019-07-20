@@ -9,10 +9,17 @@
         <left-menu-link
           label="Protected"
           to="/protected"
-          icon="warning"
+          icon="lock"
           caption="This page is private"
         ></left-menu-link>
         <left-menu-link label="To-Do" to="/to-do" icon="check" caption="Site To-Do List" />
+        <left-menu-link
+          v-if="$store.getters.isAuthenticated"
+          label="Services"
+          to="/services"
+          icon="insert_chart_outlined"
+          caption="Monitoring, admin, metadata"
+        />
       </q-list>
     </q-drawer>
   </div>
@@ -30,7 +37,9 @@ export default {
   },
   methods: {
     hideDrawer() {
-      this.$store.state.ui.leftDrawerOpen = false;
+      this.$store.commit("toggleLeftDrawer", {
+        leftDrawerOpen: false
+      });
     },
     toggleLeftDrawer() {
       this.$store.commit("toggleLeftDrawer");

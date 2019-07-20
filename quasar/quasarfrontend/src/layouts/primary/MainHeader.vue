@@ -6,7 +6,6 @@
       </q-btn>
 
       <q-toolbar-title>Verbose Equals True</q-toolbar-title>
-      {{ $store.getters.loginModalVisible }}
       <q-btn
         :ripple="false"
         color="white"

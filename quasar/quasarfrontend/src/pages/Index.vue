@@ -8,6 +8,7 @@
 
 <script>
 export default {
-  name: "PageIndex"
+  name: "PageIndex",
+  mounted() {}
 };
 </script>

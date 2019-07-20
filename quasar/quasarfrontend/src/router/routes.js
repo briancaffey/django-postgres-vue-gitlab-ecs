@@ -1,4 +1,5 @@
 import store from "../store";
+import router from "../router";
 
 // for pages that should not be available to logged in users,
 // such as "Recover password" or a dedicated "Login" page
@@ -16,8 +17,11 @@ const ifAuthenticated = (to, from, next) => {
     next();
     return;
   }
-  next("/");
-  store.commit("toggleLoginMenu")
+
+  store.commit("setNextLink", { nextLink: to.fullPath });
+  store.commit("toggleLoginMenu");
+  router.push("/");
+  return;
 };
 
 const routes = [
@@ -41,6 +45,10 @@ const routes = [
       {
         path: "to-do",
         component: () => import("pages/ToDo.vue")
+      },
+      {
+        path: "services",
+        component: () => import("pages/Services/index.vue")
       }
     ]
   }
