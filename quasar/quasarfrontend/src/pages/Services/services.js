@@ -2,37 +2,37 @@ const services = [
   {
     icon: "local_florist",
     name: "Flower",
-    style: "",
     href: "http://localhost/flower",
-    type: "a"
+    type: "a",
+    target: "_blank"
   },
   {
     icon: "verified_user",
     name: "Django",
-    style: "",
     href: "http://localhost/admin",
-    type: "a"
+    type: "a",
+    target: "_blank"
   },
   {
     icon: "email",
     name: "Mailhog",
-    style: "",
     href: "http://localhost:8025",
-    type: "a"
+    type: "a",
+    target: "_blank"
   },
   {
     icon: "storage",
     name: "Redis Commander",
-    style: "color: #000; background-color: white;",
     href: "http://localhost:8081",
-    type: "a"
+    type: "a",
+    target: "_blank"
   },
   {
     icon: "code",
     name: "GitLab",
-    style: "",
     href: "https://gitlab.com/verbose-equals-true",
-    type: "a"
+    type: "a",
+    target: "_blank"
   }
 ]
 

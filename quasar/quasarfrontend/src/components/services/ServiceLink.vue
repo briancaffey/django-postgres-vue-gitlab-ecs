@@ -1,5 +1,5 @@
 <template>
-  <q-btn :to="link" :icon="icon" :type="type" :target="target" :href="href">{{ name }}</q-btn>
+  <q-btn :icon="icon" :type="type" :target="target" :href="href">{{ name }}</q-btn>
 </template>
 
 <script>
@@ -23,7 +23,7 @@ export default {
     },
     type: {
       type: String,
-      default: "button"
+      default: "a"
     }
   }
 };
