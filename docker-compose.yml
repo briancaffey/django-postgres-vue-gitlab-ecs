@@ -90,10 +90,10 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - VUE_APP_DOCKER_COMPOSE_HOST_IP=${LOCAL_IP_ADDRESS}
-    # restart: "no"
+    restart: "no"
     command: /start_dev.sh
-    # stdin_open: true
-    # tty: true
+    stdin_open: true
+    tty: true
 
   backend: &backend
     container_name: backend
