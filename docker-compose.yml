@@ -82,6 +82,7 @@ services:
       - main
     ports:
       - "8080:8080"
+      - "4000:4000"
     volumes:
       - ./quasar:/app/:rw
     depends_on:
@@ -89,6 +90,10 @@ services:
       - db
     environment:
       - CHOKIDAR_USEPOLLING=true
+    restart: "no"
+    command: sh
+    stdin_open: true
+    tty: true
 
   backend: &backend
     container_name: backend

@@ -1,5 +1,7 @@
 <template>
-  <q-page class="flex flex-center"></q-page>
+  <base-page>
+    <main-carousel></main-carousel>
+  </base-page>
 </template>
 
 <style></style>

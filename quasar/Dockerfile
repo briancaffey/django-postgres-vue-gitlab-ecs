@@ -12,4 +12,4 @@ EXPOSE 8080
 
 WORKDIR /app/quasarfrontend
 
-CMD quasar dev
+CMD /bin/sh

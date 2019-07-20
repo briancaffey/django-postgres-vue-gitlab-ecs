@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  created() {
+    // const isDesktop = this.$q.platform.is.desktop;
+  }
 };
 </script>
 
