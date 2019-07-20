@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# https://docs.npmjs.com/cli/cache
-npm cache verify
+yarn
 
-# install project dependencies
-npm install
-
-# run the development server
-npm run serve
+quasar dev

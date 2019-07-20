@@ -11,8 +11,18 @@
         color="white"
         text-color="primary"
         label="Login"
+        v-if="!$store.getters.isAuthenticated"
         no-caps
         @click="$store.commit('toggleLoginMenu')"
+      />
+      <q-btn
+        :ripple="false"
+        color="white"
+        text-color="primary"
+        label="Logout"
+        v-if="$store.getters.isAuthenticated"
+        no-caps
+        @click="logout"
       />
       <login-modal />
     </q-toolbar>
@@ -25,6 +35,10 @@ import LoginModal from "components/LoginModal.vue";
 export default {
   components: { LoginModal },
   methods: {
+    logout() {
+      this.$store.dispatch("AUTH_LOGOUT").then(() => this.$router.push('/'));
+      this.$router.go();
+    },
     toggleLeftDrawer() {
       this.$store.commit('toggleLeftDrawer')
     }

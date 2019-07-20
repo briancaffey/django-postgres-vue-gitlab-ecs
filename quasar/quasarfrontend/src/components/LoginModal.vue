@@ -7,7 +7,7 @@
         </q-card-section>
         <q-form @submit="login">
           <q-card-section>
-            <q-input v-model="username" type="text" label="Email" autofocus />
+            <q-input v-model="email" type="text" label="Email" autofocus />
             <q-input type="password" v-model="password" label="Password" />
           </q-card-section>
 
@@ -25,8 +25,8 @@
 export default {
   data() {
     return {
-      username: "",
-      password: ""
+      email: process.env.NODE_ENV === "production" ? "" : "admin@company.com",
+      password: process.env.NODE_ENV === "production" ? "" : "password"
     };
   },
   computed: {
@@ -42,7 +42,11 @@ export default {
       this.$store.commit("toggleLoginMenu");
     },
     login() {
-      this.username = "";
+      this.$store.dispatch("AUTH_REQUEST", {
+        email: this.email,
+        password: this.password
+      });
+      this.email = "";
       this.password = "";
     }
   }

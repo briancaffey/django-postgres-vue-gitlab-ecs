@@ -12,4 +12,6 @@ EXPOSE 8080
 
 WORKDIR /app/quasarfrontend
 
-CMD /bin/sh
+RUN yarn
+
+CMD quasar dev

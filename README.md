@@ -4,6 +4,8 @@
 
 ## Local Development
 
+First, copy `.env.template` to a new file in the project's root directory called `.env`. This file will be read by `docker-compose` in the next step. Adjust any of the values in this file if needed, or add new variables for any secret information you need to pass to docker-compose (or to docker containers).
+
 ```
 docker-compose up --build
 ```

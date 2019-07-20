@@ -4,7 +4,9 @@
     <q-list bordered padding>
       <q-item>
         <q-item-section>
-          <q-checkbox v-for="(t, i) in todos" v-model="t.complete" :key="i">{{ t.title }}</q-checkbox>
+          <q-checkbox v-for="(t, i) in todos" v-model="t.complete" :key="i">
+            {{ t.title }}
+          </q-checkbox>
         </q-item-section>
       </q-item>
     </q-list>
@@ -24,18 +26,8 @@ export default {
       darkMode: false,
       todos
     };
-  },
-  computed: {
-    toDoItems: {
-      get(id) {
-        console.log(id);
-        return true;
-      },
-      set() {}
-    }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
