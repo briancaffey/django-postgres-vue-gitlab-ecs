@@ -1,3 +1,25 @@
+import store from "../store";
+
+// for pages that should not be available to logged in users,
+// such as "Recover password" or a dedicated "Login" page
+
+// const ifNotAuthenticated = (to, from, next) => {
+//   if (!store.getters.isAuthenticated) {
+//     next();
+//     return;
+//   }
+//   next("/");
+// };
+
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters.isAuthenticated) {
+    next();
+    return;
+  }
+  next("/");
+  store.commit("toggleLoginMenu")
+};
+
 const routes = [
   {
     path: "/",
@@ -13,6 +35,7 @@ const routes = [
       },
       {
         path: "protected",
+        beforeEnter: ifAuthenticated,
         component: () => import("pages/Protected.vue")
       },
       {
