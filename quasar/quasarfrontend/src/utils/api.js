@@ -1,11 +1,6 @@
 import axios from "axios";
 import store from "../store";
 import router from "../router";
-import os from "os";
-
-if (process.env.NODE_ENV !== "production") {
-  const networkInterfaces = os.networkInterfaces();
-}
 
 /* eslint no-unused-vars: ["error", { "args": "none" }] */
 const apiCall = axios.create({
