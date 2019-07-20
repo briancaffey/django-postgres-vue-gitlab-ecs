@@ -13,14 +13,18 @@ const todos = [
   },
   {
     title: "Complete authentication",
-    complete: false
+    complete: true
   },
   {
     title: "Add Carousel to Home Page",
+    complete: true
+  },
+  {
+    title: "Show the menu if on desktop",
     complete: false
   },
   {
-    title: "Show the menun if on desktop",
+    title: "Add pgadmin4 to services",
     complete: false
   }
 ];

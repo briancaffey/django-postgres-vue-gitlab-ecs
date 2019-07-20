@@ -23,10 +23,17 @@ const services = [
   {
     icon: "storage",
     name: "Redis Commander",
-    style: "",
+    style: "color: #000; background-color: white;",
     href: "http://localhost:8081",
     type: "a"
   },
+  {
+    icon: "code",
+    name: "GitLab",
+    style: "",
+    href: "https://gitlab.com/verbose-equals-true",
+    type: "a"
+  }
 ]
 
 export default services;

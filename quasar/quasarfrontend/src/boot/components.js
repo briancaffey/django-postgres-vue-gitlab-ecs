@@ -4,7 +4,6 @@ import LeftMenuLink from "components/LeftMenuLink.vue";
 import MainHeader from "layouts/primary/MainHeader.vue";
 import MainLeftDrawer from "layouts/primary/MainLeftDrawer.vue";
 import MainCarousel from "components/MainCarousel.vue";
-import ServiceLink from "components/services/ServiceLink.vue";
 
 // leave the export, even if you don't use it
 export default async ({ Vue }) => {
@@ -14,5 +13,4 @@ export default async ({ Vue }) => {
   Vue.component("MainHeader", MainHeader);
   Vue.component("MainLeftDrawer", MainLeftDrawer);
   Vue.component("MainCarousel", MainCarousel);
-  Vue.component("ServiceLink", ServiceLink);
 };

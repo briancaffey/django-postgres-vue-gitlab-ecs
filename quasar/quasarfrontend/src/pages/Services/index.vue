@@ -1,16 +1,8 @@
 <template>
   <base-page>
     <h4>Services</h4>
-    <div class="q-gutter-md">
-      <service-link
-        v-for="(s, i) in services"
-        :key="i"
-        :icon="s.icon"
-        :name="s.name"
-        :link="s.link"
-        :type="s.type"
-        :href="s.href"
-      />
+    <div class="q-pa-md q-gutter-sm">
+      <q-btn v-for="(s, i) in services" :key="i" color="primary" :icon="s.icon" :label="s.name" />
     </div>
   </base-page>
 </template>
