@@ -69,11 +69,11 @@ variables:
       - tests/e2e/screenshots/
     expire_in: 7 days
 
-.Build frontend:
+Build frontend:
   image: node:8
   stage: build
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
@@ -86,10 +86,10 @@ variables:
     paths:
       - quasar/dist/spa
   before_script:
-    - cd frontend
+    - cd quasar
     - npm install --progress=false
   script:
-    - npm run build
+    - quasar build -m pwa
   after_script:
     - echo "Build Complete"
 
@@ -172,7 +172,7 @@ variables:
   after_script:
     - echo "Create stack complete"
 
-Update stack:
+.Update stack:
   image: python:3.7
   stage: cloudformation
   only:
