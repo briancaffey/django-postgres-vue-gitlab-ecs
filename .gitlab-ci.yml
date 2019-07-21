@@ -72,8 +72,8 @@ variables:
 Build frontend:
   image: node:8
   stage: build
-  # only:
-  #   - master
+  only:
+    - master
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
@@ -136,8 +136,8 @@ Build frontend:
 Deploy frontend:
   image: python:3.7
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   dependencies:
     - "Build frontend"
   before_script:
@@ -173,7 +173,7 @@ Deploy frontend:
   after_script:
     - echo "Create stack complete"
 
-.Update stack:
+Update stack:
   image: python:3.7
   stage: cloudformation
   only:
