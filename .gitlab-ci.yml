@@ -84,7 +84,7 @@ Build frontend:
     VUE_APP_SITE_DOMAIN: ${AppUrl}
   artifacts:
     paths:
-      - quasar/dist/spa
+      - quasar/dist/pwa
   before_script:
     - npm install -g @quasar/cli
     - cd quasar
