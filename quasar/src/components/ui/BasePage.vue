@@ -12,11 +12,10 @@
 export default {
   methods: {
     getStyle() {
-      return {color: 'white'}
+      return { color: "white" };
     }
-  },
+  }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

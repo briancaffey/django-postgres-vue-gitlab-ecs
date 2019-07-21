@@ -28,7 +28,7 @@ const documentationLinks = [
     href: "https://docs.aws.amazon.com/ecs/index.html",
     type: "a",
     target: "_blank"
-  },
-]
+  }
+];
 
 export default documentationLinks;

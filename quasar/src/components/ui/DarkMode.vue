@@ -1,5 +1,5 @@
 <template>
-    <q-toggle v-model="dark" color="black" />
+  <q-toggle v-model="dark" color="black" />
 </template>
 
 <script>
@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       darkMode: true
-    }
+    };
   },
   computed: {
     dark: {
@@ -15,12 +15,11 @@ export default {
         return this.$store.getters.isDarkMode;
       },
       set() {
-        this.$store.commit('toggleDarkMode');
+        this.$store.commit("toggleDarkMode");
       }
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -1,5 +1,7 @@
 <template>
-  <q-btn :icon="icon" :type="type" :target="target" :href="href">{{ name }}</q-btn>
+  <q-btn :icon="icon" :type="type" :target="target" :href="href">
+    {{ name }}
+  </q-btn>
 </template>
 
 <script>
@@ -29,5 +31,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

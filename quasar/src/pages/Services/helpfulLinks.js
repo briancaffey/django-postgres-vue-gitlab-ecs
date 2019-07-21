@@ -17,6 +17,6 @@ const documentationLinks = [
     type: "a",
     target: "_blank"
   }
-]
+];
 
 export default documentationLinks;

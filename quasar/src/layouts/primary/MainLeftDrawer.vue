@@ -1,18 +1,36 @@
 <template>
   <div>
-    <q-drawer @hide="hideDrawer" v-model="leftDrawerOpen" content-class="bg-grey-5">
+    <q-drawer
+      @hide="hideDrawer"
+      v-model="leftDrawerOpen"
+      content-class="bg-grey-5"
+    >
       <q-list>
         <q-item-label header>Menu</q-item-label>
 
         <left-menu-link label="Home" to="/" icon="home" caption="Start Here" />
-        <left-menu-link label="About" to="/about" icon="info" caption="About this site" />
+
+        <left-menu-link
+          label="About"
+          to="/about"
+          icon="info"
+          caption="About this site"
+        />
+
         <left-menu-link
           label="Protected"
           to="/protected"
           icon="lock"
           caption="This page is private"
-        ></left-menu-link>
-        <left-menu-link label="To-Do" to="/to-do" icon="check" caption="Site To-Do List" />
+        />
+
+        <left-menu-link
+          label="To-Do"
+          to="/to-do"
+          icon="check"
+          caption="Site To-Do List"
+        />
+
         <left-menu-link
           v-if="$store.getters.isAuthenticated"
           label="Services"
@@ -48,5 +66,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

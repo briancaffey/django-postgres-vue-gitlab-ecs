@@ -36,15 +36,14 @@ export default {
   components: { LoginModal },
   methods: {
     logout() {
-      this.$store.dispatch("AUTH_LOGOUT").then(() => this.$router.push('/'));
+      this.$store.dispatch("AUTH_LOGOUT").then(() => this.$router.push("/"));
       this.$router.go();
     },
     toggleLeftDrawer() {
-      this.$store.commit('toggleLeftDrawer')
+      this.$store.commit("toggleLeftDrawer");
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

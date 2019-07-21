@@ -34,6 +34,6 @@ const services = [
     type: "a",
     target: "_blank"
   }
-]
+];
 
 export default services;
