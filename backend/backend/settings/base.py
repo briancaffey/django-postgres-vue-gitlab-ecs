@@ -15,7 +15,9 @@ import os
 from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -57,11 +59,6 @@ THIRD_PARTY_APPS = [
     'corsheaders',
 ]
 
-DEBUG_APPS = [
-    'django_extensions',
-    'debug_toolbar'
-]
-
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
@@ -75,21 +72,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.SubdomainMiddleware',
 ]
-
-if DEBUG:
-    INSTALLED_APPS += DEBUG_APPS
-    MIDDLEWARE = [
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    ] + MIDDLEWARE
-
-
-def show_toolbar(request):
-    return True
-
-
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
-}
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -170,12 +152,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 
-# Email
-
-EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'mailhog')
-EMAIL_PORT = os.environ.get('DJANGO_EMAIL_PORT', '1025')
-
-
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Password validation
@@ -214,32 +190,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+AWS_DEFAULT_ACL = None
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'key_id')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', 'key')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'bucketname')
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
+
 AWS_STATIC_LOCATION = 'static'
-
-if DEBUG:
-    STATIC_URL = '/static/'
-
-    STATIC_ROOT = '/static/'
-else:
-    # AWS S3 settings
-    AWS_DEFAULT_ACL = None
-    AWS_ACCESS_KEY_ID = \
-        os.environ.get('AWS_ACCESS_KEY_ID', 'aws-access-key-id')
-    AWS_SECRET_ACCESS_KEY = \
-        os.environ.get('AWS_SECRET_ACCESS_KEY', 'aws-secret-access-key')
-    AWS_STORAGE_BUCKET_NAME = f"{os.environ.get('STACK_NAME', '')}-assets"
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
-
-    STATICFILES_STORAGE = 'backend.storage_backends.StaticStorage'
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"
+PRIVATE_FILE_STORAGE = 'backend.storage_backends.PrivateMediaStorage'
 
 
-if DEBUG:
-    NOTEBOOK_ARGUMENTS = [
-        '--ip', '0.0.0.0',
-        '--allow-root',
-        '--no-browser',
-    ]
+# Email
+
+EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST', 'mailhog')
+EMAIL_PORT = os.environ.get('DJANGO_EMAIL_PORT', '1025')

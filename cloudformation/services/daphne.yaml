@@ -121,6 +121,8 @@ Resources:
               Value: !Ref RedisEndpoint
             - Name: STACK_NAME
               Value: !Ref StackName
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: 'backend.settings.production'
           PortMappings:
             - ContainerPort: 9000
           LogConfiguration:

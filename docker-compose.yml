@@ -54,26 +54,6 @@ services:
     networks:
       - main
 
-  # frontend:
-  #   container_name: frontend
-  #   build:
-  #     context: ./frontend
-  #   volumes:
-  #     - ./frontend:/app/
-  #     - '/app/node_modules'
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - main
-  #   depends_on:
-  #     - backend
-  #     - db
-  #   environment:
-  #     - NODE_ENV=development
-  #     - VUE_APP_WS_PROTOCOL=ws://
-  #     - VUE_APP_BASE_HOST=localhost
-  #     - VUE_APP_API_BASE_URL=http://localhost
-
   frontend:
     container_name: frontend
     build:
@@ -116,6 +96,7 @@ services:
       - RDS_DB_NAME=${RDS_DB_NAME}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - DJANGO_SETTINGS_MODULE=backend.settings.development
     depends_on:
       - db
 
