@@ -133,11 +133,11 @@ Build frontend:
   after_script:
     - echo "Release backend complete"
 
-.Deploy frontend:
+Deploy frontend:
   image: python:3.7
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   dependencies:
     - "Build frontend"
   before_script:
@@ -145,9 +145,9 @@ Build frontend:
     - pip install awscli
     - aws iam get-user
   script:
-    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/spa/ s3://${AppUrl}/
-    - aws s3 cp --cache-control 'max-age=0' ./dist/spa/index.html s3://${AppUrl}/
-    - aws s3 cp --cache-control 'max-age=0' ./dist/spa/service-worker.js s3://${AppUrl}/
+    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/pwa/ s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/pwa/index.html s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/pwa/service-worker.js s3://${AppUrl}/
   after_script:
     - echo "Deploy frontend complete"
 
