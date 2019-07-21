@@ -86,6 +86,7 @@ Build frontend:
     paths:
       - quasar/dist/spa
   before_script:
+    - npm install -g @quasar/cli
     - cd quasar
     - npm install --progress=false
   script:
