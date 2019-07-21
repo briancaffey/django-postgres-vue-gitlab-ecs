@@ -1,5 +1,5 @@
 #!/bin/bash
 
-yarn
+npm install
 
 quasar dev

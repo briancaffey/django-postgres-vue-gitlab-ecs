@@ -8,8 +8,6 @@ RUN npm install -g @quasar/cli && \
     npm install -g @vue/cli && \
     npm install -g @vue/cli-init
 
-EXPOSE 8080
+COPY start_dev.sh .
 
-WORKDIR /app/quasarfrontend
-
-CMD quasar dev
+CMD ["/app/start_dev.sh"]
