@@ -5,12 +5,11 @@ DEBUG_APPS = [
     'debug_toolbar'
 ]
 
-
-INSTALLED_APPS += DEBUG_APPS
+INSTALLED_APPS += DEBUG_APPS  # noqa
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-] + MIDDLEWARE
+] + MIDDLEWARE  # noqa
 
 
 def show_toolbar(request):
@@ -21,9 +20,7 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': show_toolbar,
 }
 
-log_level = "INFO"
-if DEBUG:
-    log_level = "DEBUG"
+log_level = "DEBUG"
 
 LOGGING = {
     'version': 1,
@@ -36,11 +33,11 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),  # noqa
         },
         'portal': {
             'handlers': ['console'],
-            'level': os.getenv('PORTAL_LOG_LEVEL', log_level),
+            'level': os.getenv('PORTAL_LOG_LEVEL', log_level),  # noqa
         },
     },
 }
