@@ -84,7 +84,7 @@ variables:
     VUE_APP_SITE_DOMAIN: ${AppUrl}
   artifacts:
     paths:
-      - frontend/dist/
+      - quasar/dist/spa
   before_script:
     - cd frontend
     - npm install --progress=false
@@ -140,13 +140,13 @@ variables:
   dependencies:
     - "Build frontend"
   before_script:
-    - cd frontend
+    - cd quasar
     - pip install awscli
     - aws iam get-user
   script:
-    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/ s3://${AppUrl}/
-    - aws s3 cp --cache-control 'max-age=0' ./dist/index.html s3://${AppUrl}/
-    - aws s3 cp --cache-control 'max-age=0' ./dist/service-worker.js s3://${AppUrl}/
+    - aws s3 sync --delete --exclude index.html --exclude service-worker.js ./dist/spa/ s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/spa/index.html s3://${AppUrl}/
+    - aws s3 cp --cache-control 'max-age=0' ./dist/spa/service-worker.js s3://${AppUrl}/
   after_script:
     - echo "Deploy frontend complete"
 
