@@ -39,7 +39,7 @@
           caption="Monitoring, admin, metadata"
         />
       <q-expansion-item
-        content-inset-level=".5"
+        :content-inset-level=".5"
         v-if="$store.getters.isAuthenticated"
         expand-separator
         icon="perm_identity"

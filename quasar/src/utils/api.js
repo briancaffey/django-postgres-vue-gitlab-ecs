@@ -4,9 +4,7 @@ import router from "../router";
 
 /* eslint no-unused-vars: ["error", { "args": "none" }] */
 const apiCall = axios.create({
-  baseURL:
-    process.env.VUE_APP_API_BASE_URL ||
-    process.env.VUE_APP_DOCKER_COMPOSE_HOST_IP
+  baseURL: `http://${process.env.LOCAL_IP}`
 });
 
 apiCall.interceptors.request.use(

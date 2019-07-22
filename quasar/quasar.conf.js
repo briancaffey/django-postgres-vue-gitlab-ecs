@@ -5,7 +5,7 @@ module.exports = function(ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
-    boot: ["i18n", "axios", "components"],
+    boot: ["i18n", "axios", "components", "websockets"],
     css: ["app.styl"],
 
     extras: [
@@ -48,9 +48,18 @@ module.exports = function(ctx) {
       plugins: ["Notify", "Cookies"]
     },
 
+    // env: {
+    // },
     supportIE: false,
 
     build: {
+      env: ctx.dev
+        ? {
+            LOCAL_IP: `"${process.env.VUE_APP_DOCKER_COMPOSE_HOST_IP}"`
+          }
+        : {
+            LOCAL_IP: `"${process.env.VUE_APP_DOCKER_COMPOSE_HOST_IP}"`
+          },
       scopeHoisting: true,
       vueRouterMode: "history",
       // vueCompiler: true,
