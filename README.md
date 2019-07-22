@@ -37,3 +37,4 @@ docker exec -it backend bash -c 'cd notebooks && ../manage.py shell_plus --noteb
 - Redeploy django app to check settings files
 - Add GitLab pages site for Group project
 - Decide how to build the documentation site (quasar, vuepress?)
+- Add Cypress testing using simple setup with gitlab-ci.yml and services from private registry
