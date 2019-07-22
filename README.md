@@ -29,3 +29,11 @@ or use this single command:
 ```
 docker exec -it backend bash -c 'cd notebooks && ../manage.py shell_plus --notebook'
 ```
+
+# ToDo
+
+- Add diagram of local development
+- Put django apps in apps folder
+- Redeploy django app to check settings files
+- Add GitLab pages site for Group project
+- Decide how to build the documentation site (quasar, vuepress?)
