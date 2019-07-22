@@ -48,6 +48,22 @@ Jest:
     - echo "Jest tests complete"
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
+e2e:
+  image: cypress/base:10
+  stage: test
+  variables:
+    VUE_APP_BASE_URL: http://localhost:8080
+  script:
+    - $(npm bin)/cypress run
+  after_script:
+    - echo "Cypress tests complete"
+  artifacts:
+    paths:
+      - tests/e2e/videos/
+      - tests/e2e/screenshots/
+    expire_in: 7 days
+
+
 .Cypress:
   image: cypress/base:10
   stage: test
