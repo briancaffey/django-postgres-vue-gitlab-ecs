@@ -38,6 +38,21 @@
           icon="insert_chart_outlined"
           caption="Monitoring, admin, metadata"
         />
+      <q-expansion-item
+        content-inset-level=".5"
+        v-if="$store.getters.isAuthenticated"
+        expand-separator
+        icon="perm_identity"
+        label="Examples"
+        caption="REST, Websockets, "
+      >
+        <left-menu-link
+          label="Services"
+          to="/examples/websockets"
+          icon="offline_bolt"
+          caption="How to use websockets"
+        />
+      </q-expansion-item>
       </q-list>
     </q-drawer>
   </div>

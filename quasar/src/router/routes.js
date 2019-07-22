@@ -49,6 +49,16 @@ const routes = [
       {
         path: "services",
         component: () => import("pages/Services/index.vue")
+      },
+      {
+        path: "examples/",
+        component: () => import("pages/Examples/index.vue"),
+        children: [
+          {
+            path: "websockets",
+            component: () => import("pages/Examples/Websockets.vue")
+          }
+        ]
       }
     ]
   }
