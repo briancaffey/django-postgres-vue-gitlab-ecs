@@ -7,5 +7,5 @@ COPY requirements/base.txt requirements/dev.txt requirements/test.txt /code/requ
 RUN pip install -r requirements/base.txt \
         && pip install -r requirements/dev.txt \
         && pip install -r requirements/test.txt
-COPY scripts/dev/start_dev.sh scripts/dev/start_beat.sh scripts/dev/start_asgi.sh /
+COPY scripts/dev/start_dev.sh scripts/dev/start_ci.sh scripts/dev/start_beat.sh scripts/dev/start_asgi.sh /
 ADD . /code/
