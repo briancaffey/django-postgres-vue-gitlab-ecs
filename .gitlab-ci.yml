@@ -52,6 +52,8 @@ e2e:
   image: cypress/base:8
   stage: test
   variables:
+    SECRET_KEY: 'secret'
+    DEBUG: ''
     DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
   services:
 
