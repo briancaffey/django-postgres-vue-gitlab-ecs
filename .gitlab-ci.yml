@@ -49,7 +49,7 @@ Jest:
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
 e2e:
-  image: cypress/base:10
+  image: cypress/base:8
   stage: test
   script:
     - ls -al
