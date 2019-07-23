@@ -51,7 +51,21 @@ Jest:
 e2e:
   image: cypress/base:10
   stage: test
+  variables:
+    DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
+  services:
+
+    # - name: http://localhost:5000/nginxci:latest # multi-stage build
+    #   alias: nginx
+    - name: http://localhost:5000/backend:latest
+      alias: backend
+    - name: postgres
+      alias: postgres
+    - name: redis
+      alias: redis
   before_script:
+    - echo $VAR1
+    - echo $VAR2
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
