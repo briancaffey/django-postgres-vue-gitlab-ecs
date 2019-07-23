@@ -54,6 +54,7 @@ e2e:
   variables:
     VUE_APP_BASE_URL: http://localhost:8080
   script:
+    - npm install --progress=false
     - $(npm bin)/cypress run
   after_script:
     - echo "Cypress tests complete"
