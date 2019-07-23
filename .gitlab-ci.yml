@@ -57,8 +57,9 @@ e2e:
 
     # - name: http://localhost:5000/nginxci:latest # multi-stage build
     #   alias: nginx
-    - name: localhost:5000/backend:latest
+    - name: http://localhost:5000/backend:latest
       alias: backend
+      command: ["/start_dev.sh"]
     - name: postgres
       alias: postgres
     - name: redis
