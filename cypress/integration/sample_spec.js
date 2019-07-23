@@ -1,5 +1,5 @@
-describe('Visit homepage', function() {
-  it('Visits google', function() {
-    cy.visit('https://google.com')
+describe('Visit test endpoint', function() {
+  it('Visits test endpoint', function() {
+    cy.visit('http://backend/api/hello-world')
   })
 })
