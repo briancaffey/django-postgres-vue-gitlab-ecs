@@ -55,6 +55,7 @@ e2e:
     SECRET_KEY: 'secret'
     DEBUG: ''
     DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
+    CELERY_TASK_ALWAYS_EAGER: 'True'
   services:
 
     # - name: http://localhost:5000/nginxci:latest # multi-stage build
@@ -63,12 +64,8 @@ e2e:
       alias: backend
       command: ["/start_ci.sh"]
     - name: postgres
-      alias: postgres
     - name: redis
-      alias: redis
   before_script:
-    - echo $VAR1
-    - echo $VAR2
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
