@@ -51,10 +51,11 @@ Jest:
 e2e:
   image: cypress/base:8
   stage: test
+  before_script:
+    - npm install --save-dev cypress
+    - $(npm bin)/cypress verify
   script:
-    - ls -al
-    - pwd
-    - npx cypress open
+    - $(npm bin)/cypress run
   after_script:
     - echo "Cypress tests complete"
   artifacts:
