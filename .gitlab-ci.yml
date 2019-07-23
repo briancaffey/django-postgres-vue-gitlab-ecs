@@ -54,7 +54,7 @@ e2e:
   script:
     - ls -al
     - pwd
-    - $(npm bin)/cypress run
+    - npx cypress open
   after_script:
     - echo "Cypress tests complete"
   artifacts:
