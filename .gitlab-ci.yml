@@ -66,10 +66,12 @@ e2e:
     - name: postgres
     - name: redis
   before_script:
-    - cat /etc/hosts
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
+    - cat /etc/hosts
+    - curl http://backend:8000/api/hello-world
+    - curl http://nginx/
     - $(npm bin)/cypress run
   after_script:
     - echo "Cypress tests complete"
