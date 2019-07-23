@@ -61,7 +61,7 @@ e2e:
     #   alias: nginx
     - name: localhost:5000/backend:latest
       alias: backend
-      command: ["/start_dev.sh"]
+      command: ["/start_ci.sh"]
     - name: postgres
       alias: postgres
     - name: redis
