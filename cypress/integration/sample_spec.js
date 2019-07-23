@@ -1,7 +1,8 @@
 describe('Visit test endpoint', function() {
   it('Visits test endpoint', function() {
-    const resp = cy.request('http://nginxci/api/hello-world').its('body');
-    console.log("response from debug api:");
-    console.log(resp);
+    cy.log("visiting nginx host");
+    const resp = cy.visit('http://nginxci/').its('body');
+    cy.log("response from debug api:");
+    cy.log(resp);
   })
 });
