@@ -11,17 +11,11 @@
 export default {
   created() {
     this.$connect(
-      `ws://${process.env.LOCAL_IP}/ws/ping-pong/`, { format: "json" });
+      `ws://${process.env.API_HOST}/ws/ping-pong/`, { format: "json" });
     const vm = this;
-    this.$socket.onmessage = data => {
-      console.log(data);
+    this.$socket.onmessage = () => {
       vm.$q.notify("PONG");
     };
-  },
-  data() {
-    return {
-      ip: process.env.LOCAL_IP
-    }
   },
   methods: {
     sendPing() {

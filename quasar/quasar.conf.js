@@ -55,12 +55,14 @@ module.exports = function(ctx) {
     build: {
       env: ctx.dev
         ? {
-            LOCAL_IP: `"${process.env.VUE_APP_DOCKER_COMPOSE_HOST_IP}"`,
+            API_HOST: `"${process.env.LOCAL_IP_ADDRESS}"`,
+            API_URL: `"http://${process.env.LOCAL_IP_ADDRESS}"`,
             WS_PROTOCOL: "ws://"
           }
         : {
-            LOCAL_IP: `"${process.env.VUE_APP_DOCKER_COMPOSE_HOST_IP}"`,
-            WS_PROTOCOL: "wss://"
+            API_HOST: "backend",
+            API_URL: "http://backend:8000",
+            WS_PROTOCOL: "ws://"
           },
       scopeHoisting: true,
       vueRouterMode: "history",

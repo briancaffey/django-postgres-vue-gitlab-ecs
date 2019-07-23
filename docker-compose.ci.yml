@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    networks:
+      - main
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  backend: &backend
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: scripts/dev/Dockerfile
+    command: /start_ci.sh
+    networks:
+      - main
+    volumes:
+      - ./backend:/code
+      - django-static:/code/static
+    depends_on:
+      - postgres
+    environment:
+      - SECRET_KEY='secret'
+      - DEBUG=True
+      - DJANGO_SETTINGS_MODULE=backend.settings.gitlab-ci
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: nginx/ci/Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - main
+    volumes:
+      # - ./nginx/ci/ci.conf:/etc/nginx/nginx.conf:ro
+      - django-static:/usr/src/app/static
+    depends_on:
+      - backend
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - redis-data:/data
+    networks:
+      - main
+
+  celery:
+    <<: *backend
+    container_name: celery
+    command: bash -c 'celery worker --app=backend.celery_app:app --loglevel=info'
+
+
+  beat:
+    <<: *backend
+    container_name: beat
+    command: bash -c 'celery beat --app=backend.celery_app:app --loglevel=info'
+
+volumes:
+  django-static:
+  portainer-data:
+  pg-data:
+  redis-data:
+
+networks:
+  main:
+    driver: bridge

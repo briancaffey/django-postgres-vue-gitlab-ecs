@@ -11,10 +11,14 @@ INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS # noqa
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ci',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'postgres',
         'PORT': '5432',
     },
 }
+
+STATIC_URL = '/static/'
+
+STATIC_ROOT = '/static/'

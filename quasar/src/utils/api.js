@@ -4,7 +4,7 @@ import router from "../router";
 
 /* eslint no-unused-vars: ["error", { "args": "none" }] */
 const apiCall = axios.create({
-  baseURL: `http://${process.env.LOCAL_IP}`
+  baseURL: "http://backend:8000"
 });
 
 apiCall.interceptors.request.use(

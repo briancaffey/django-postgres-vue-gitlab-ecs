@@ -69,7 +69,7 @@ services:
       - db
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - VUE_APP_DOCKER_COMPOSE_HOST_IP=${LOCAL_IP_ADDRESS}
+      - LOCAL_IP_ADDRESS=${LOCAL_IP_ADDRESS}
     restart: "no"
 
   backend: &backend

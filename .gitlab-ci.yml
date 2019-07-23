@@ -48,6 +48,7 @@ Jest:
     - echo "Jest tests complete"
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
+# https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#available-settings-for-services
 e2e:
   image: cypress/base:8
   stage: test
@@ -57,9 +58,8 @@ e2e:
     DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
     CELERY_TASK_ALWAYS_EAGER: 'True'
   services:
-
-    # - name: http://localhost:5000/nginxci:latest # multi-stage build
-    #   alias: nginx
+    - name: localhost:5000/nginxci:latest # multi-stage build
+      alias: nginx
     - name: localhost:5000/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
