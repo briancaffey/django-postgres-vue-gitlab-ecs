@@ -52,6 +52,8 @@ e2e:
   image: cypress/base:10
   stage: test
   script:
+    - ls -al
+    - pwd
     - $(npm bin)/cypress run
   after_script:
     - echo "Cypress tests complete"
