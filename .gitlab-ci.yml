@@ -49,17 +49,17 @@ Jest:
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
 # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#available-settings-for-services
-e2e:
+e2e: &e2e
   image: cypress/base:8
   stage: test
   variables:
+    # variables passed as env vars to *all services*
     SECRET_KEY: 'secret'
     DEBUG: ''
     DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
     CELERY_TASK_ALWAYS_EAGER: 'True'
-    FRONTEND_URL: 'http://nginx'
   services:
-    - name: nginx # multi-stage build
+    - name: localhost:5000/frontend:latest
       alias: nginx
     - name: localhost:5000/backend:latest
       alias: backend
@@ -67,19 +67,9 @@ e2e:
     - name: postgres
     - name: redis
   before_script:
-    - apt-get install httping
-    - echo "waiting for nginx..."
-    - |
-      while ! httping -qc1 http://nginx ; do
-        echo "waiting for nginx"
-        sleep 1
-      done
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
-    - cat /etc/hosts
-    - curl http://backend:8000/api/hello-world
-    - curl http://nginx/
     - $(npm bin)/cypress run --config baseUrl=http://nginx
   after_script:
     - echo "Cypress tests complete"
@@ -89,6 +79,18 @@ e2e:
       - tests/e2e/screenshots/
     expire_in: 7 days
 
+# for testing/debugging with gitlab-runner locally
+e2e-local:
+  <<: *e2e
+  services:
+    - name: localhost:5000/frontend:latest
+      alias: nginx
+    - name: localhost:5000/backend:latest
+      alias: backend
+      command: ["/start_ci.sh"]
+    - name: postgres
+    - name: redis
+  artifacts: {}
 
 .Cypress:
   image: cypress/base:10
