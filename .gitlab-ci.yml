@@ -60,7 +60,7 @@ e2e: &e2e
     CELERY_TASK_ALWAYS_EAGER: 'True'
   services:
     - name: localhost:5000/frontend:latest
-      alias: nginx
+      alias: frontend
     - name: localhost:5000/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
@@ -70,7 +70,7 @@ e2e: &e2e
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
-    - $(npm bin)/cypress run --config baseUrl=http://nginx
+    - $(npm bin)/cypress run --config baseUrl=http://frontend
   after_script:
     - echo "Cypress tests complete"
   artifacts:
