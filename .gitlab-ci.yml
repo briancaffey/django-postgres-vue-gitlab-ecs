@@ -70,7 +70,7 @@ e2e: &e2e
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
-    - $(npm bin)/cypress run --config baseUrl=http://frontend
+    - $(npm bin)/cypress run # --config baseUrl=http://frontend
   after_script:
     - echo "Cypress tests complete"
   artifacts:
