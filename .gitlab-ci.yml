@@ -48,7 +48,6 @@ Jest:
     - echo "Jest tests complete"
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
-# https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#available-settings-for-services
 e2e: &e2e
   image: cypress/base:8
   stage: test
