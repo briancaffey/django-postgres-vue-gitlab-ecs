@@ -51,17 +51,6 @@ services:
     networks:
       - main
 
-  celery:
-    <<: *backend
-    container_name: celery
-    command: bash -c 'celery worker --app=backend.celery_app:app --loglevel=info'
-
-
-  beat:
-    <<: *backend
-    container_name: beat
-    command: bash -c 'celery beat --app=backend.celery_app:app --loglevel=info'
-
 volumes:
   django-static:
   portainer-data:
