@@ -66,6 +66,13 @@ e2e:
     - name: postgres
     - name: redis
   before_script:
+    - apt-get install httping
+    - echo "waiting for nginx..."
+    - |
+      while ! httping -qc1 http://nginx ; do
+        echo "waiting for nginx"
+        sleep 1
+      done
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
