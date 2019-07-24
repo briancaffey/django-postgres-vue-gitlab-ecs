@@ -57,6 +57,7 @@ e2e:
     DEBUG: ''
     DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
     CELERY_TASK_ALWAYS_EAGER: 'True'
+    FRONTEND_URL: 'http://nginx'
   services:
     - name: nginx # multi-stage build
       alias: nginx
@@ -79,7 +80,7 @@ e2e:
     - cat /etc/hosts
     - curl http://backend:8000/api/hello-world
     - curl http://nginx/
-    - $(npm bin)/cypress run
+    - $(npm bin)/cypress run --config baseUrl=http://nginx
   after_script:
     - echo "Cypress tests complete"
   artifacts:
