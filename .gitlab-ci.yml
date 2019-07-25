@@ -106,10 +106,10 @@ e2e: &e2e
     CELERY_TASK_ALWAYS_EAGER: 'True'
   services:
     - name: postgres
-    - name: redis
     - name: $CI_REGISTRY_IMAGE/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
+    - name: redis
     - name: $CI_REGISTRY_IMAGE/frontend:latest
       alias: frontend
   before_script:
