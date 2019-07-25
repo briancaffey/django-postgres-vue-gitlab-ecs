@@ -3,8 +3,10 @@ import store from "../store";
 import router from "../router";
 
 /* eslint no-unused-vars: ["error", { "args": "none" }] */
+
+// TODO: Change API_URL to BASE_URL and prepare for production env
 const apiCall = axios.create({
-  baseURL: "http://backend:8000"
+  baseURL: process.env.API_URL || "http://localhost"
 });
 
 apiCall.interceptors.request.use(

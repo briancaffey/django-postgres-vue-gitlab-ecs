@@ -52,6 +52,7 @@ module.exports = function(ctx) {
     // },
     supportIE: false,
 
+    // TODO: add additional context for ci, production
     build: {
       env: ctx.dev
         ? {
@@ -61,7 +62,7 @@ module.exports = function(ctx) {
           }
         : {
             API_HOST: "backend",
-            API_URL: "http://backend:8000",
+            API_URL: "http://frontend", // nginx proxy passes to backend
             WS_PROTOCOL: "ws://"
           },
       scopeHoisting: true,

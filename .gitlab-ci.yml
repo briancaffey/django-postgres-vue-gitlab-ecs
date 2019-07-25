@@ -58,11 +58,18 @@ Build nginx for e2e:
   services:
     - docker:dind
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - |
+      docker login \
+        -u $CI_REGISTRY_USER \
+        -p $CI_REGISTRY_PASSWORD \
+        $CI_REGISTRY
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/frontend:latest -f nginx/ci/Dockerfile .
+    - |
+      docker build \
+        --build-arg BASE_URL=http://backend:8000 \
+        -t $CI_REGISTRY_IMAGE/frontend:latest \
+        -f nginx/ci/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
-
 
 Build backend:
   stage: build
@@ -74,9 +81,16 @@ Build backend:
     - docker:dind
   before_script:
     - cd backend
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - |
+      docker login \
+        -u $CI_REGISTRY_USER \
+        -p $CI_REGISTRY_PASSWORD \
+        $CI_REGISTRY
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/backend:latest -f scripts/prod/Dockerfile .
+    - |
+      docker build \
+        -t $CI_REGISTRY_IMAGE/backend:latest \
+        -f scripts/prod/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/backend:latest
   after_script:
     - echo "Build backend complete"
@@ -107,8 +121,8 @@ e2e: &e2e
     - echo "Cypress tests complete"
   artifacts:
     paths:
-      - tests/e2e/videos/
-      - tests/e2e/screenshots/
+      - cypress/videos/
+      # - tests/e2e/screenshots/
     expire_in: 7 days
 
 # for testing/debugging with gitlab-runner locally
