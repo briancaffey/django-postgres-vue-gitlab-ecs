@@ -107,11 +107,11 @@ e2e: &e2e
   services:
     - name: postgres
     - name: redis
-    - name: $CI_REGISTRY_IMAGE/frontend:latest
-      alias: frontend
     - name: $CI_REGISTRY_IMAGE/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
+    - name: $CI_REGISTRY_IMAGE/frontend:latest
+      alias: frontend
   before_script:
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
@@ -129,13 +129,13 @@ e2e: &e2e
 .e2e-local:
   <<: *e2e
   services:
-    - name: localhost:5000/frontend:latest
-      alias: frontend
+    - name: postgres
+    - name: redis
     - name: localhost:5000/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
-    - name: postgres
-    - name: redis
+    - name: localhost:5000/frontend:latest
+      alias: frontend
   artifacts: {}
 
 Build Quasar PWA Assets:
