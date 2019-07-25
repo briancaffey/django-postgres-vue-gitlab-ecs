@@ -91,27 +91,6 @@ e2e-local:
     - name: redis
   artifacts: {}
 
-.Cypress:
-  image: cypress/base:10
-  stage: test
-  variables:
-    VUE_APP_BASE_URL: http://localhost:8080
-  before_script:
-    - cd frontend
-    - npm install --progress=false
-  script:
-    - apt install httping
-    - npm run serve &
-    - while ! httping -qc1 http://localhost:8080/login ; do sleep 1 ; done
-    - $(npm bin)/cypress run
-  after_script:
-    - echo "Cypress tests complete"
-  artifacts:
-    paths:
-      - tests/e2e/videos/
-      - tests/e2e/screenshots/
-    expire_in: 7 days
-
 Build frontend:
   image: node:8
   stage: build
