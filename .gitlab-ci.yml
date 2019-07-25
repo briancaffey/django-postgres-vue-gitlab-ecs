@@ -91,18 +91,18 @@ e2e: &e2e
     DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
     CELERY_TASK_ALWAYS_EAGER: 'True'
   services:
+    - name: postgres
+    - name: redis
     - name: $CI_REGISTRY_IMAGE/frontend:latest
       alias: frontend
     - name: $CI_REGISTRY_IMAGE/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
-    - name: postgres
-    - name: redis
   before_script:
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
   script:
-    - $(npm bin)/cypress run # --config baseUrl=http://frontend
+    - $(npm bin)/cypress run --config baseUrl=http://frontend
   after_script:
     - echo "Cypress tests complete"
   artifacts:
