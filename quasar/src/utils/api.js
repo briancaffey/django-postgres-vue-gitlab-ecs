@@ -6,7 +6,7 @@ import router from "../router";
 
 // TODO: Change API_URL to BASE_URL and prepare for production env
 const apiCall = axios.create({
-  baseURL: "http://localhost"
+  baseURL: process.env.API_URL
 });
 
 apiCall.interceptors.request.use(
