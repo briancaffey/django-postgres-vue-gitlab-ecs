@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - integration
   - release
   - deploy
   - cloudformation
@@ -12,7 +13,17 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-Pytest:
+
+Get GitLab Registry Credentials:
+  image: alpine
+  stage: test
+  script:
+    - echo "CI_REGISTRY_USER"
+    - echo $CI_REGISTRY_USER
+    - echo "CI_REGISTRY_PASSWORD"
+    - echo $CI_REGISTRY_PASSWORD
+
+.Pytest:
   image: python:3.7
   stage: test
   services:
@@ -35,7 +46,7 @@ Pytest:
     - echo "Pytest tests complete"
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
-Jest:
+.Jest:
   image: node:8
   stage: test
   before_script:
@@ -48,9 +59,45 @@ Jest:
     - echo "Jest tests complete"
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
+Build nginx for e2e:
+  stage: build
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  only:
+    - master
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/frontend:latest -f nginx/ci/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/frontend:latest
+
+
+Build backend:
+  stage: build
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  only:
+    - master
+  before_script:
+    - cd backend
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/backend:latest -f scripts/prod/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/backend:latest
+  after_script:
+    - echo "Build backend complete"
+
 e2e: &e2e
   image: cypress/base:8
-  stage: test
+  stage: integration
   variables:
     # variables passed as env vars to *all services*
     SECRET_KEY: 'secret'
@@ -58,9 +105,9 @@ e2e: &e2e
     DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
     CELERY_TASK_ALWAYS_EAGER: 'True'
   services:
-    - name: localhost:5000/frontend:latest
+    - name: $CI_REGISTRY_IMAGE/frontend:latest
       alias: frontend
-    - name: localhost:5000/backend:latest
+    - name: $CI_REGISTRY_IMAGE/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
     - name: postgres
@@ -91,7 +138,7 @@ e2e-local:
     - name: redis
   artifacts: {}
 
-Build frontend:
+Build Quasar PWA Assets:
   image: node:8
   stage: build
   only:
@@ -116,24 +163,6 @@ Build frontend:
   after_script:
     - echo "Build Complete"
 
-Build backend:
-  stage: build
-  image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
-  only:
-    - master
-  before_script:
-    - cd backend
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - docker build -t $CI_REGISTRY_IMAGE:latest -f scripts/prod/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE:latest
-  after_script:
-    - echo "Build backend complete"
 
 Release backend:
   stage: release
@@ -155,13 +184,13 @@ Release backend:
   after_script:
     - echo "Release backend complete"
 
-Deploy frontend:
+Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
   only:
     - master
   dependencies:
-    - "Build frontend"
+    - "Build Quasar PWA Assets"
   before_script:
     - cd quasar
     - pip install awscli
