@@ -5,5 +5,5 @@ RUN mkdir /code
 WORKDIR /code
 COPY requirements/base.txt /code/requirements/
 RUN pip install -r requirements/base.txt
-COPY scripts/prod/start_prod.sh /
+COPY scripts/prod/start_prod.sh scripts/prod/start_ci.sh /
 ADD . /code/
