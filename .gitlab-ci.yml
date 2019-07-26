@@ -126,7 +126,7 @@ e2e: &e2e
     expire_in: 7 days
 
 # for testing/debugging with gitlab-runner locally
-.e2e-local:
+e2e-local:
   <<: *e2e
   services:
     - name: postgres
