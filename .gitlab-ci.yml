@@ -130,10 +130,10 @@ e2e-local:
   <<: *e2e
   services:
     - name: postgres
-    - name: redis
     - name: localhost:5000/backend:latest
       alias: backend
       command: ["/start_ci.sh"]
+    - name: redis
     - name: localhost:5000/frontend:latest
       alias: frontend
   artifacts: {}
