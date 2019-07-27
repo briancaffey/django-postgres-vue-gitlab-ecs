@@ -107,14 +107,7 @@ e2e cypress tests with docker-compose:
     - pip install docker-compose~=1.23.0
 
   script:
-    - echo "Testing"
-    - docker-compose -f docker-compose.ci.yml up -d --build
-    - sleep 20
-    - echo "Services are up and ready"
-    - docker-compose -f docker-compose.ci.yml -f cypress.yml up -d --build
-    - sleep 60
-    - exit 0
-    # - docker-compose down
+    - /integration-tests.sh
 
   artifacts:
     paths:
