@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+
+  cypress:
+    image: "cypress/included:3.2.0"
+    container_name: cypress
+    networks:
+      - main
+    depends_on:
+      - nginx
+    environment:
+      - CYPRESS_baseUrl=http://nginx
+    working_dir: /e2e
+    volumes:
+      - ./:/e2e

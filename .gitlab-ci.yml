@@ -95,7 +95,7 @@ variables:
   after_script:
     - echo "Build backend complete"
 
-integration:
+e2e cypress tests with docker-compose:
   image: docker:stable
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -103,12 +103,6 @@ integration:
   services:
     - docker:dind
   before_script:
-    # install compose
-    - apk add --update nodejs nodejs-npm
-    - node -v
-    - apk add --update xvfb
-    - npm install --save-dev cypress
-    - $(npm bin)/cypress verify
     - apk add --update py-pip
     - pip install docker-compose~=1.23.0
 
@@ -116,7 +110,7 @@ integration:
     - echo "Testing"
     - docker-compose -f docker-compose.ci.yml up -d --build
     - echo "Services are up and ready"
-    - sleep 60
+    - sleep 20
     - docker-compose down
 
 .e2e: &e2e
