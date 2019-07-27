@@ -104,6 +104,10 @@ integration:
     - docker:dind
   before_script:
     # install compose
+    - apk add --update nodejs nodejs-npm
+    - node -v
+    - npm install --save-dev cypress
+    - $(npm bin)/cypress verify
     - apk add --update py-pip
     - pip install docker-compose~=1.23.0
 
@@ -111,6 +115,7 @@ integration:
     - echo "Testing"
     - docker-compose -f docker-compose.ci.yml up -d --build
     - echo "Services are up and ready"
+    - sleep 60
     - docker-compose down
 
 .e2e: &e2e
