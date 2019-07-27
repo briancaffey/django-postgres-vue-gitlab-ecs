@@ -31,13 +31,9 @@ services:
   asgiserver:
     <<: *backend
     container_name: asgiserver
-    build:
-      context: ./backend
-      dockerfile: scripts/prod/Dockerfile
     entrypoint: /start_asgi.sh
     volumes:
       - ./backend:/code
-    ports: []
 
   nginx:
     container_name: nginx
