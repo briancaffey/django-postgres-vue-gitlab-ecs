@@ -20,7 +20,6 @@ Cypress.Commands.add('login', () => {
   })
   .its('body')
   .then((body) => {
-    console.log(body);
     cy.setCookie('user-token', body['access']);
     cy.setCookie('refresh-token', body['refresh']);
   });

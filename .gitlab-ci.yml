@@ -96,6 +96,7 @@ variables:
     - echo "Build backend complete"
 
 e2e cypress tests with docker-compose:
+  stage: integration
   image: docker:stable
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -105,14 +106,14 @@ e2e cypress tests with docker-compose:
   before_script:
     - apk add --update py-pip
     - pip install docker-compose~=1.23.0
-
   script:
     - /integration-tests.sh
-
+  after_script:
+    - echo "Integration tests passed."
   artifacts:
     paths:
       - cypress/videos/
-      # - tests/e2e/screenshots/
+      - tests/screenshots/
     expire_in: 7 days
 
 .e2e: &e2e
