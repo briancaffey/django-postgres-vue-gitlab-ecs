@@ -104,7 +104,8 @@ integration:
     - docker:dind
   before_script:
     # install compose
-    - apk add --update py-pip && pip install docker-compose
+    - apk add --update py-pip
+    - pip install docker-compose~=1.23.0
 
   script:
     - echo "Testing"
