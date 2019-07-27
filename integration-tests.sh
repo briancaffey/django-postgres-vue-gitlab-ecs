@@ -9,7 +9,7 @@ sleep 20
 echo "Services are up and ready"
 
 echo "Seeding database with user"
-docker-compose exec backend python manage.py create_default_user
+docker-compose -f docker-compose.ci.yml exec backend python manage.py create_default_user
 
 docker-compose -f cypress.yml up --exit-code-from cypress --build
 
