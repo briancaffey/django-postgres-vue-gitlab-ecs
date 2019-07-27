@@ -95,7 +95,20 @@ Build backend:
   after_script:
     - echo "Build backend complete"
 
-e2e: &e2e
+integration:
+  image: docker:latest
+  services:
+    - dind
+  before_script:
+    # install compose
+    - apk add curl
+    - curl -L https://github.com/docker/compose/releases/download/1.24.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    - chmod +x /usr/local/bin/docker-compose
+  script:
+    - echo "Testing"
+    - docker-compose -f docker-compose.ci.yml up -d --build
+
+.e2e: &e2e
   image: cypress/base:8
   stage: integration
   variables:
@@ -126,7 +139,7 @@ e2e: &e2e
     expire_in: 7 days
 
 # for testing/debugging with gitlab-runner locally
-e2e-local:
+.e2e-local:
   <<: *e2e
   services:
     - name: postgres
