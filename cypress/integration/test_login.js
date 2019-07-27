@@ -1,8 +1,7 @@
 describe('Test Login', function() {
   it('Finds the text of the homepage', function() {
     cy.visit("/");
+    cy.get("#login").click();
+    cy.get("#login-btn").click()
   });
-  it('Can query api through nginx proxy pass', function() {
-    cy.request("/api/");
-  })
 });

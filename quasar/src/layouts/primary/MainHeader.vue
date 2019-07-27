@@ -7,6 +7,7 @@
 
       <q-toolbar-title>Verbose Equals True</q-toolbar-title>
       <q-btn
+        id="login"
         :ripple="false"
         color="white"
         text-color="primary"
@@ -16,6 +17,7 @@
         @click="$store.commit('toggleLoginMenu')"
       />
       <q-btn
+        id="logout"
         :ripple="false"
         color="white"
         text-color="primary"
