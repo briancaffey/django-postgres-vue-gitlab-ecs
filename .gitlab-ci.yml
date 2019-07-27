@@ -106,6 +106,7 @@ integration:
     # install compose
     - apk add --update nodejs nodejs-npm
     - node -v
+    - apk add --update xvfb
     - npm install --save-dev cypress
     - $(npm bin)/cypress verify
     - apk add --update py-pip
