@@ -13,7 +13,7 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-Pytest:
+.Pytest:
   image: python:3.7
   stage: test
   services:
@@ -36,7 +36,7 @@ Pytest:
     - echo "Pytest tests complete"
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
-Jest:
+.Jest:
   image: node:8
   stage: test
   before_script:
@@ -49,7 +49,7 @@ Jest:
     - echo "Jest tests complete"
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
 
-Build nginx for e2e:
+.Build nginx for e2e:
   stage: build
   image: docker:stable
   variables:
@@ -71,7 +71,7 @@ Build nginx for e2e:
         -f nginx/ci/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
 
-Build backend:
+.Build backend:
   stage: build
   image: docker:stable
   variables:
