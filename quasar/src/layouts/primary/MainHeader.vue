@@ -1,7 +1,7 @@
 <template>
   <q-header>
     <q-toolbar>
-      <q-btn flat dense round @click="toggleLeftDrawer" aria-label="Menu">
+      <q-btn id="toggleLeftDrawer" flat dense round @click="toggleLeftDrawer" aria-label="Menu">
         <q-icon name="menu" />
       </q-btn>
 

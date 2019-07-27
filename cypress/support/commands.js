@@ -9,8 +9,24 @@
 // ***********************************************
 //
 //
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
+Cypress.Commands.add('login', () => {
+  cy.request({
+    url: '/api/auth/obtain_token/',
+    method: 'POST',
+    body: {
+      email: "admin@company.com",
+      password: "password"
+    },
+  })
+  .its('body')
+  .then((body) => {
+    console.log(body);
+    cy.setCookie('user-token', body['access']);
+    cy.setCookie('refresh-token', body['refresh']);
+  });
+})
+
+
 //
 //
 // -- This is a child command --
