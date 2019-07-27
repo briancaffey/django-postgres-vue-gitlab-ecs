@@ -112,8 +112,15 @@ e2e cypress tests with docker-compose:
     - sleep 20
     - echo "Services are up and ready"
     - docker-compose -f docker-compose.ci.yml -f cypress.yml up -d --build
-    - sleep 20
-    - docker-compose down
+    - sleep 60
+    - exit 0
+    # - docker-compose down
+
+  artifacts:
+    paths:
+      - cypress/videos/
+      # - tests/e2e/screenshots/
+    expire_in: 7 days
 
 .e2e: &e2e
   image: cypress/base:8
