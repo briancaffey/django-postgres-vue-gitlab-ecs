@@ -52,10 +52,12 @@ const routes = [
       },
       {
         path: "examples/",
+        beforeEnter: ifAuthenticated,
         component: () => import("pages/Examples/index.vue"),
         children: [
           {
             path: "websockets",
+            beforeEnter: ifAuthenticated,
             component: () => import("pages/Examples/Websockets.vue")
           }
         ]

@@ -3,7 +3,7 @@
     <h4>Websockets example</h4>
     <h6>Ping Pong</h6>
 
-    <q-btn @click="sendPing">Send Ping</q-btn>
+    <q-btn id="ping" @click="sendPing">Send Ping</q-btn>
   </div>
 </template>
 
@@ -14,7 +14,10 @@ export default {
       `ws://${process.env.API_HOST}/ws/ping-pong/`, { format: "json" });
     const vm = this;
     this.$socket.onmessage = () => {
-      vm.$q.notify("PONG");
+      vm.$q.notify({
+        message: "PONG",
+        classes: "pong"
+      });
     };
   },
   methods: {
