@@ -107,7 +107,7 @@ e2e cypress tests with docker-compose:
     - apk add --update py-pip
     - pip install docker-compose~=1.23.0
   script:
-    - /integration-tests.sh
+    - ./integration-tests.sh
   after_script:
     - echo "Integration tests passed."
   artifacts:
