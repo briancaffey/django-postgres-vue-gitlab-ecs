@@ -14,7 +14,7 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: scripts/dev/Dockerfile
+      dockerfile: scripts/prod/Dockerfile
     command: /start_ci.sh
     networks:
       - main
