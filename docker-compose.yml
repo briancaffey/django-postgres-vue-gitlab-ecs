@@ -61,7 +61,7 @@ services:
     networks:
       - main
     ports:
-      - "8080:8080"
+      - "8089:8080"
     volumes:
       - ./quasar:/app/:rw
     depends_on:
