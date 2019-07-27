@@ -96,9 +96,12 @@ Build backend:
     - echo "Build backend complete"
 
 integration:
-  image: docker:latest
+  image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
   services:
-    - dind
+    - docker:dind
   before_script:
     # install compose
     - apk add curl
