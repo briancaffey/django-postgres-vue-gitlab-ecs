@@ -56,14 +56,12 @@ module.exports = function(ctx) {
     build: {
       env: ctx.dev
         ? {
-            API_HOST: `"${process.env.LOCAL_IP_ADDRESS}"`,
             API_URL: `"http://${process.env.LOCAL_IP_ADDRESS}"`,
-            WS_PROTOCOL: "ws://"
+            WS_PING_PONG: `"ws://${process.env.LOCAL_IP_ADDRESS}"`
           }
         : {
-            API_HOST: '"nginx"',
             API_URL: '"http://nginx"', // nginx proxy passes to backend
-            WS_PROTOCOL: "ws://"
+            WS_PING_PONG: '"ws://nginx"'
           },
       scopeHoisting: true,
       vueRouterMode: "history",
