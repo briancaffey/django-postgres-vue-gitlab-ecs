@@ -4,7 +4,7 @@ import router from '../router';
 
 /* eslint no-unused-vars: ["error", { "args": "none" }] */
 const apiCall = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL,
+  baseURL: process.env.API_URL,
 });
 
 apiCall.interceptors.request.use(
