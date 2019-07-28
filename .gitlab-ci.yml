@@ -145,7 +145,7 @@ e2e cypress tests with docker-compose:
   artifacts:
     paths:
       - cypress/videos/
-      # - tests/e2e/screenshots/
+      - cypress/screenshots/
     expire_in: 7 days
 
 # for testing/debugging with gitlab-runner locally

@@ -5,7 +5,7 @@ describe('Test Login', function() {
     cy.get("#ping").click();
     cy.get("#ping").click();
     cy.get("#ping").click();
-    cy.wait(200);
-    cy.get('.pong').should('have.length', 3)
+    cy.wait(1000);
+    cy.get('.pong').should('have.length', 3);
   });
 });
