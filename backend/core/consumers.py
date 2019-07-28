@@ -28,6 +28,7 @@ class CoreConsumer(AsyncWebsocketConsumer):
 
     # Receive message from WebSocket
     async def receive(self, text_data):
+        print("received message")
         user = self.scope.get('user', '')
         if user.is_anonymous:
             user = None
@@ -36,7 +37,6 @@ class CoreConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         sender = text_data_json['sender']
-
         # Send message to room group
         await self.channel_layer.group_send(
             self.ping_pong_group,
@@ -53,7 +53,7 @@ class CoreConsumer(AsyncWebsocketConsumer):
         message = event['message']
         sender = event['sender']
         user = event['user']
-
+        print("sending ws response")
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
