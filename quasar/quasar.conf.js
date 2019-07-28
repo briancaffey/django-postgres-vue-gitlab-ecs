@@ -60,7 +60,7 @@ module.exports = function(ctx) {
             WS_PING_PONG: `"ws://${process.env.LOCAL_IP_ADDRESS}"`
           }
         : {
-            API_URL: '"http://nginx"', // nginx proxy passes to backend
+            API_URL: '"http://nginx/ws/ping-pong/"', // nginx proxy passes to backend
             WS_PING_PONG: '"ws://nginx"'
           },
       scopeHoisting: true,
