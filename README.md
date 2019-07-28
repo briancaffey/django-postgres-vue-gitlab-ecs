@@ -30,13 +30,17 @@ or use this single command:
 docker exec -it backend bash -c 'cd notebooks && ../manage.py shell_plus --notebook'
 ```
 
+# Current Issues
+
+Currently Cypress tests are passing locally, but they are failing in GitLab CI.
+
 # ToDo
 
+- Fix Cypress testing in GitLab CI
 - Add diagram of local development
 - Put django apps in apps folder
 - Redeploy django app to check settings files
 - Add GitLab pages site for Group project
 - Decide how to build the documentation site (quasar, vuepress?)
-- Add Cypress testing using simple setup with gitlab-ci.yml and services from private registry
 - Add file upload examples with Django REST Framework
 - Setup password reset
