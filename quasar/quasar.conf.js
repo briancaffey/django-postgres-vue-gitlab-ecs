@@ -61,8 +61,8 @@ module.exports = function(ctx) {
             WS_PROTOCOL: "ws://"
           }
         : {
-            API_HOST: "backend",
-            API_URL: '"http://0.0.0.0"', // nginx proxy passes to backend
+            API_HOST: '"nginx"',
+            API_URL: '"http://nginx"', // nginx proxy passes to backend
             WS_PROTOCOL: "ws://"
           },
       scopeHoisting: true,
