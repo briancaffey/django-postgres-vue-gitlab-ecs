@@ -32,7 +32,39 @@ docker exec -it backend bash -c 'cd notebooks && ../manage.py shell_plus --noteb
 
 # Current Issues
 
-Currently Cypress tests are passing locally, but they are failing in GitLab CI.
+Currently Cypress tests are passing locally, but some of the test are failing in GitLab CI.
+
+To run Cypress locally you can either run Cypress directly on your computer against the containerized application (for active development), or you can run Cypress in a container against the containerized application (this should be the same environment in GitLab CI using docker-compose with dind).
+
+To setup Cypress locally, run:
+
+```
+npm install cypress --save
+```
+
+Then open Cypress with:
+
+```
+$(npm bin)/cypress open
+```
+
+Run cypress tests locally by running the following commands. First build the application stack and cypress container:
+
+```
+docker-compose -f docker-compose.ci.yml -f cypress.yml build
+```
+
+Then start the application:
+
+```
+docker-compose -f docker-compose.ci.yml up -d
+```
+
+Then run cypress tests:
+
+```
+docker-compose -f docker-compose.ci.yml -f cypress.yml up
+```
 
 # ToDo
 

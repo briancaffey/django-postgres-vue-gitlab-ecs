@@ -11,7 +11,7 @@
 export default {
   created() {
     this.$connect(
-      "ws://nginx/ws/ping-pong/", { format: "json" });
+      `ws://${process.env.API_HOST}/ws/ping-pong/`, { format: "json" });
     const vm = this;
     this.$socket.onmessage = () => {
       vm.$q.notify({
