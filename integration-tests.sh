@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -e
+set -e
 
 echo "Starting services"
 docker-compose -f docker-compose.ci.yml up -d --build

@@ -9,8 +9,8 @@ services:
       - main
     depends_on:
       - nginx
-    # environment:
-    #   - CYPRESS_baseUrl=http://nginx
+    environment:
+      - CYPRESS_baseUrl=http://nginx
     working_dir: /e2e
     volumes:
       - ./:/e2e
