@@ -17,13 +17,13 @@ class DebugRedis(viewsets.ViewSet):
         value = r.get("cached_value")
 
         if value:
-            print("cached value is:")
             print(value)
             count = value
         return JsonResponse({"count": count})
 
     def post(self, request):
         new_count = int(request.data["count"])
+        print("setting value to cache:")
         print(new_count)
         r.set("cached_value", new_count)
         new_count = r.get("cached_value")
