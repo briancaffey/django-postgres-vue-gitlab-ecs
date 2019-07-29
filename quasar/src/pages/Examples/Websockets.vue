@@ -1,7 +1,7 @@
 <template>
   <div>
     <h4>Websockets example</h4>
-    <h6>Ping Pong</h6>
+    <h6>Ping Pong: {{ wsUrl }}</h6>
 
     <q-btn id="ping" @click="sendPing">Send Ping</q-btn>
   </div>
@@ -9,9 +9,14 @@
 
 <script>
 export default {
+  data() {
+    return {
+      wsUrl: process.env.WS_PING_PONG
+    }
+  },
   created() {
     this.$connect(
-      "ws://nginx/ws/ping-pong/", { format: "json" });
+      this.wsUrl, { format: "json" });
     const vm = this;
     this.$socket.onmessage = () => {
       vm.$q.notify({
