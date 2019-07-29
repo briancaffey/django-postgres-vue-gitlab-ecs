@@ -1,7 +1,5 @@
 <template>
-  <base-page>
     <router-view></router-view>
-  </base-page>
 </template>
 
 <script>

@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <base-page>
     <h4>Websockets example</h4>
     <h6>Ping Pong: {{ wsUrl }}</h6>
-
     <q-btn id="ping" @click="sendPing">Send Ping</q-btn>
-  </div>
+  </base-page>
 </template>
 
 <script>

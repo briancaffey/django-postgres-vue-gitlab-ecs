@@ -59,6 +59,11 @@ const routes = [
             path: "websockets",
             beforeEnter: ifAuthenticated,
             component: () => import("pages/Examples/Websockets.vue")
+          },
+          {
+            path: "redis",
+            beforeEnter: ifAuthenticated,
+            component: () => import("pages/Examples/Redis.vue")
           }
         ]
       }

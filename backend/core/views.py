@@ -1,8 +1,34 @@
 import os
 
+from django.conf import settings
 from django.http import JsonResponse
+from rest_framework import viewsets
 
 from core.tasks import debug_task, send_test_email_task
+
+r = settings.REDIS
+
+
+class DebugRedis(viewsets.ViewSet):
+
+    def get(self, request):
+        count = None
+
+        value = r.get("cached_value")
+        if value:
+            count = value
+        return JsonResponse({"count": count})
+
+    def post(self, request):
+        new_count = int(request.data["count"])
+        print(new_count)
+        r.set("cached_value", new_count)
+        new_count = r.get("cached_value")
+        return JsonResponse({"count": new_count})
+
+    def delete(self, request):
+        r.delete("cached_value")
+        return JsonResponse({"count": r.get("cached_value")})
 
 
 def hello_world(request):

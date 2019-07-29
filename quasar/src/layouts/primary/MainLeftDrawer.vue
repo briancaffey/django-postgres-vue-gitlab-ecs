@@ -53,6 +53,21 @@
           caption="How to use websockets"
         />
       </q-expansion-item>
+      <q-expansion-item
+        :content-inset-level=".5"
+        v-if="$store.getters.isAuthenticated"
+        expand-separator
+        icon="check_circle"
+        label="Tests"
+        caption="Debug Tests"
+      >
+        <left-menu-link
+          label="Redis"
+          to="/examples/redis"
+          icon="offline_bolt"
+          caption="Test redis connection"
+        />
+      </q-expansion-item>
       </q-list>
     </q-drawer>
   </div>

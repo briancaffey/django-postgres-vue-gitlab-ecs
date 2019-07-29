@@ -28,5 +28,14 @@ urlpatterns = [
         views.send_test_email,
         name="verify-domain"
     ),
+    path(
+        'debug/redis/',
+        views.DebugRedis.as_view({
+            "get": "get",
+            "post": "post",
+            "delete": "delete"
+        }),
+        name="debug-redis"
+    ),
 
 ]

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+import redis
+
 from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -124,6 +126,13 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+REDIS = redis.Redis(
+    host=ELASTICACHE_REDIS_HOST_NAME,
+    port=6379,
+    db=3,
+    charset="utf-8",
+    decode_responses=True)
 
 # REST FRAMEWORK
 
