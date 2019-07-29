@@ -7,6 +7,7 @@ describe('Test redis connection', function() {
 
     cy.get("#input").type(8);
     cy.get("#set").click();
+    cy.wait(500);
     cy.get(".redis-debug").find("#val")
       .then(($identifier) => {
         const value = $identifier.text();
