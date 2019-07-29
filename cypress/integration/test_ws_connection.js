@@ -3,9 +3,6 @@ describe('Test Login', function() {
     cy.login();
     cy.visit("/examples/websockets")
     cy.get("#ping").click();
-    cy.get("#ping").click();
-    cy.get("#ping").click();
-    cy.wait(1000);
-    cy.get('.pong').should('have.length', 3);
+    cy.get('.pong').should('have.length', 1);
   });
 });
