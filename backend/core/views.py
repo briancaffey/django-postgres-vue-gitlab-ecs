@@ -15,7 +15,10 @@ class DebugRedis(viewsets.ViewSet):
         count = None
 
         value = r.get("cached_value")
+
         if value:
+            print("cached value is:")
+            print(value)
             count = value
         return JsonResponse({"count": count})
 
@@ -24,6 +27,8 @@ class DebugRedis(viewsets.ViewSet):
         print(new_count)
         r.set("cached_value", new_count)
         new_count = r.get("cached_value")
+        print("value from cache is...")
+        print(new_count)
         return JsonResponse({"count": new_count})
 
     def delete(self, request):
