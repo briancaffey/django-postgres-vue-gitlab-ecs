@@ -13,7 +13,7 @@ export default {
       this.$store.dispatch("USER_REQUEST");
       // refresh the token every 4 minutes while the user is logged in in production
       // refresh every six seconds in development to ensure user stays logged in
-      const refreshFrequency = process.env.NODE_ENV === "development" ? 0.1 : 4;
+      const refreshFrequency = process.env.NODE_ENV === "development" ? 2 : 4;
       setInterval(() => {
         this.$store.dispatch("AUTH_REFRESH");
       }, 1000 * 60 * refreshFrequency);

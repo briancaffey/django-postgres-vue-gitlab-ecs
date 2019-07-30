@@ -3,6 +3,15 @@
     <h4>Websockets example</h4>
     <h6>Ping Pong: {{ wsUrl }}</h6>
     <q-btn id="ping" @click="sendPing">Send Ping</q-btn>
+
+    <q-chip
+      color="teal"
+      text-color="white"
+      class="pong"
+      v-for="(pong, i) in pongs"
+      :key="i"
+      >PONG</q-chip
+    >
   </base-page>
 </template>
 
@@ -10,18 +19,14 @@
 export default {
   data() {
     return {
-      wsUrl: process.env.WS_PING_PONG
-    }
+      wsUrl: process.env.WS_PING_PONG,
+      pongs: []
+    };
   },
   created() {
-    this.$connect(
-      this.wsUrl, { format: "json" });
-    const vm = this;
+    this.$connect(this.wsUrl, { format: "json" });
     this.$socket.onmessage = () => {
-      vm.$q.notify({
-        message: "PONG",
-        classes: "pong"
-      });
+      this.pongs.push("PONG");
     };
   },
   methods: {
@@ -36,7 +41,7 @@ export default {
   },
   destroyed() {
     this.$disconnect();
-  },
+  }
 };
 </script>
 
