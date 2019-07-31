@@ -137,6 +137,7 @@ e2e cypress tests with docker-compose:
       alias: frontend
   before_script:
     - npm install --save-dev cypress
+    - npm install --save-dev cypress-log-to-output
     - $(npm bin)/cypress verify
   script:
     - $(npm bin)/cypress run --config baseUrl=http://frontend
