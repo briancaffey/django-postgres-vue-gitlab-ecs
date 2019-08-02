@@ -29,7 +29,7 @@ urlpatterns = [
         name='user-profile'
     ),
 
-    ### Social Auth Callbacks ###
+    # Social Auth Callbacks
 
     path(
         'social/<backend>/',

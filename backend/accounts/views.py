@@ -1,23 +1,18 @@
-import os
-
-from .serializers import UserSerializer
-
 from django.conf import settings
-
-from rest_framework import serializers
-from rest_framework import status
-from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
+from requests.exceptions import HTTPError
+from rest_framework import permissions, serializers, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-
-from requests.exceptions import HTTPError
-
 from social_django.utils import psa
 
+from .serializers import UserSerializer
+from .utils.social.github import get_github_access_token_from_code
+
+User = get_user_model()
 
 
 def get_tokens_for_user(user):
@@ -28,11 +23,12 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
+
 class SocialSerializer(serializers.Serializer):
     """
     Serializer which accepts an OAuth2 access token.
     """
-    access_token = serializers.CharField(
+    code = serializers.CharField(
         allow_blank=False,
         trim_whitespace=True,
     )
@@ -61,30 +57,33 @@ def exchange_token(request, backend):
     Requests must include the following field
     - `access_token`: The OAuth2 access token provided by the provider
     """
-    print('getting here..')
+
     serializer = SocialSerializer(data=request.data)
+
     if serializer.is_valid(raise_exception=True):
+
+        code = serializer.validated_data['code']
+        access_token = get_github_access_token_from_code(code)
         # set up non-field errors key
-        # http://www.django-rest-framework.org/api-guide/exceptions/#exception-handling-in-rest-framework-views
+        # http://www.django-rest-framework.org/api-guide/exceptions/
+        # #exception-handling-in-rest-framework-views
         try:
             nfe = settings.NON_FIELD_ERRORS_KEY
         except AttributeError:
             nfe = 'non_field_errors'
 
         try:
-            # this line, plus the psa decorator above, are all that's necessary to
-            # get and populate a user object for any properly enabled/configured backend
+            # this line, plus the psa decorator above, are all that's
+            # necessary to
+            # get and populate a user object for any properly
+            # enabled/configured backend
             # which python-social-auth can handle.
-            print("validated data is..")
-            print(serializer.validated_data)
-            print(os.environ.get("GITHUB_KEY", 'no-key-set'))
-            print(settings.SOCIAL_AUTH_GITHUB_KEY)
-            print(request.backend)
-            user = request.backend.do_auth(serializer.validated_data['access_token'])
-            print("gettings here...")
+            user = request.backend.do_auth(access_token)
         except HTTPError as e:
-            # An HTTPError bubbled up from the request to the social auth provider.
-            # This happens, at least in Google's case, every time you send a malformed
+            # An HTTPError bubbled up from the request to the social
+            # auth provider.
+            # This happens, at least in Google's case, every time you
+            # send a malformed
             # or incorrect access key.
             return Response(
                 {'errors': {
@@ -101,7 +100,8 @@ def exchange_token(request, backend):
                 return Response(tokens)
             else:
                 # user is not active; at some point they deleted their account,
-                # or were banned by a superuser. They can't just log in with their
+                # or were banned by a superuser. They can't just log
+                # in with their
                 # normal credentials anymore, so they can't log in with social
                 # credentials either.
                 return Response(
@@ -116,6 +116,7 @@ def exchange_token(request, backend):
                 {'errors': {nfe: "Authentication Failed"}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
 
 class Profile(APIView):
     permission_classes = (permissions.IsAuthenticated,)
