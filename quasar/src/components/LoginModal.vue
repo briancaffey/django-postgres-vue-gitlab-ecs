@@ -32,6 +32,11 @@
               v-close-popup
             />
           </q-card-actions>
+                <a  class="q-btn"
+        :href="githuboath2link"
+      >GitHub</a>
+          <br>
+
         </q-form>
       </q-card>
     </q-dialog>
@@ -39,12 +44,26 @@
 </template>
 
 <script>
+// import axios from 'axios';
+import buildURL from 'axios/lib/helpers/buildURL';
 export default {
   data() {
     return {
+      params: {
+        client_id: 'd6639d522598d6bf20f4',
+        redirect_uri: "http://localhost/auth/github/callback",
+        login: "",
+        scope: "user",
+        state: "eworifjeovivoiej",
+      },
+      githuboath2link: '',
+      githuboauth2: "https://github.com/login/oauth/authorize",
       email: process.env.NODE_ENV === "production" ? "" : "admin@company.com",
       password: process.env.NODE_ENV === "production" ? "" : "password"
     };
+  },
+  created() {
+    this.githuboath2link = buildURL(this.githuboauth2, this.params);
   },
   computed: {
     visible: {

@@ -27,6 +27,14 @@ urlpatterns = [
         'users/profile/',
         views.Profile.as_view(),
         name='user-profile'
+    ),
+
+    ### Social Auth Callbacks ###
+
+    path(
+        'social/<backend>/',
+        views.exchange_token,
+        name="social-auth"
     )
 ]
 

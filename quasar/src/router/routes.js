@@ -30,6 +30,10 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
+        path: "auth/github/callback",
+        component: () => import("pages/Auth/GitHub.vue")
+      },
+      {
         path: "",
         component: () => import("pages/Index.vue")
       },
