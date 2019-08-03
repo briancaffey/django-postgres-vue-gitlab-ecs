@@ -23,7 +23,8 @@ class TokenAuthMiddleware:
             token = jwt.decode(
                 cookies['user-token'],
                 settings.SECRET_KEY,
-                algorithms=['HS256']
+                algorithms=['HS256'],
+                options={'verify_exp': False}
             )
             user_id = token['user_id']
             try:
