@@ -65,7 +65,7 @@ module.exports = function(ctx) {
               }/ws/ping-pong/`
             ),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
-            GOOGLE_KEY: JSON.stringify(process.env.GOOGLE_KEY)
+            GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY)
           }
         : {
             API_URL: JSON.stringify(
@@ -77,7 +77,7 @@ module.exports = function(ctx) {
               }/ws/ping-pong/`
             ),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
-            GOOGLE_KEY: JSON.stringify(process.env.GOOGLE_KEY)
+            GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY)
           },
       scopeHoisting: true,
       useNotifier: false,

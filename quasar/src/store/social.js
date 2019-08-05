@@ -1,3 +1,4 @@
+import buildURL from "axios/lib/helpers/buildURL";
 import oauth from "../utils/oauth";
 
 const state = {
@@ -6,10 +7,13 @@ const state = {
 
 const getters = {
   oauthUrl: () => {
-    return provider => state.oauth[provider].sender;
-  },
-  getProfile: s => s.status,
-  getUrl: s => s.status
+    return provider => {
+      const url = state.oauth[provider].url;
+      const params = state.oauth[provider].params;
+
+      return buildURL(url, params);
+    };
+  }
 };
 
 const actions = {};

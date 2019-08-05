@@ -50,10 +50,16 @@
             <div class="text-h6">TODO</div>
             Implement Sign up with Email + Email Verification
             <q-btn
-              :href="githuboath2link"
+              :href="$store.getters.oauthUrl('github')"
               type="a"
               class="full-width q-mt-md"
               label="Sign Up with GitHub"
+            />
+            <q-btn
+              :href="$store.getters.oauthUrl('google')"
+              type="a"
+              class="full-width q-mt-md"
+              label="Sign Up with Google"
             />
           </q-tab-panel>
         </q-tab-panels>

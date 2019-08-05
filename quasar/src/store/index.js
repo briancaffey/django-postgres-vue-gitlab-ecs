@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import ui from "./ui";
 import auth from "./auth.js";
 import user from "./user.js";
+import social from "./social";
 
 // import example from './module-example'
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
   modules: {
     ui,
     auth,
-    user
+    user,
+    social
   },
 
   // enable strict mode (adds overhead!)
