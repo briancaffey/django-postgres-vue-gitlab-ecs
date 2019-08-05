@@ -64,6 +64,7 @@ module.exports = function(ctx) {
             WS_PING_PONG: `"ws://nginx/ws/ping-pong/"`
           },
       scopeHoisting: true,
+      useNotifier: false,
       vueRouterMode: "history",
       // vueCompiler: true,
       // gzip: true,
@@ -83,8 +84,13 @@ module.exports = function(ctx) {
     },
 
     devServer: {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers":
+          "Origin, X-Requested-With, Content-Type, Accept"
+      },
       // https: true,
-      // port: 8080,
+      port: 8080,
       open: true // opens browser window automatically
     },
 

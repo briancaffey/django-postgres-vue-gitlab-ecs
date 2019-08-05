@@ -7,7 +7,7 @@ const state = {
 
 const getters = {
   leftDrawerOpen: s => s.leftDrawerOpen,
-  loginModalVisible: s => s.visible,
+  authModalVisible: s => s.visible,
   getNextLink: s => s.nextLink
 };
 

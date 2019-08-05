@@ -33,16 +33,16 @@
         no-caps
         @click="logout"
       />
-      <login-modal />
+      <auth-modal />
     </q-toolbar>
   </q-header>
 </template>
 
 <script>
-import LoginModal from "components/LoginModal.vue";
+import AuthModal from "components/AuthModal.vue";
 
 export default {
-  components: { LoginModal },
+  components: { AuthModal },
   methods: {
     logout() {
       this.$store.dispatch("AUTH_LOGOUT").then(() => this.$router.push("/"));

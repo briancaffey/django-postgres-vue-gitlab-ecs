@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-dialog @hide="hideLoginMenu" v-model="visible">
+    <q-dialog @hide="hideAuthMenu" v-model="visible">
       <q-card style=" max-width: 95%; min-width: 320px;">
         <q-tabs
           v-model="tab"
@@ -76,7 +76,6 @@ export default {
         scope: "user",
         state: "eworifjeovivoiej"
       },
-      githuboath2link: "",
       githuboauth2: "https://github.com/login/oauth/authorize",
       email: process.env.NODE_ENV === "production" ? "" : "admin@company.com",
       password: process.env.NODE_ENV === "production" ? "" : "password"
@@ -88,13 +87,13 @@ export default {
   computed: {
     visible: {
       get() {
-        return this.$store.getters.loginModalVisible;
+        return this.$store.getters.authModalVisible;
       },
       set() {}
     }
   },
   methods: {
-    hideLoginMenu() {
+    hideAuthMenu() {
       this.$store.commit("toggleLoginMenu");
     },
     login() {

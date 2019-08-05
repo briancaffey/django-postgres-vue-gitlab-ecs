@@ -61,7 +61,7 @@ services:
     networks:
       - main
     ports:
-      - "8089:8080"
+      - "8080:8080"
     volumes:
       - ./quasar:/app/:rw
     depends_on:
@@ -99,6 +99,8 @@ services:
       - DJANGO_SETTINGS_MODULE=backend.settings.development
       - GITHUB_KEY=${GITHUB_KEY}
       - GITHUB_SECRET=${GITHUB_SECRET}
+      - GOOGLE_KEY=${GOOGLE_KEY}
+      - GOOGLE_SECRET=${GOOGLE_SECRET}
     depends_on:
       - db
 

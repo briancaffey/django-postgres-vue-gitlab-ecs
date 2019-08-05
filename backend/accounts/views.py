@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from social_django.utils import psa
 
 from .serializers import UserSerializer
-from .utils.social.github import get_github_access_token_from_code
+from .utils.social.oauth import get_access_token_from_code
 
 User = get_user_model()
 
@@ -26,7 +26,7 @@ def get_tokens_for_user(user):
 
 class SocialSerializer(serializers.Serializer):
     """
-    Serializer which accepts an OAuth2 access token.
+    Serializer which accepts an OAuth2 code.
     """
     code = serializers.CharField(
         allow_blank=False,
@@ -63,7 +63,7 @@ def exchange_token(request, backend):
     if serializer.is_valid(raise_exception=True):
 
         code = serializer.validated_data['code']
-        access_token = get_github_access_token_from_code(code)
+        access_token = get_access_token_from_code(backend, code)
         # set up non-field errors key
         # http://www.django-rest-framework.org/api-guide/exceptions/
         # #exception-handling-in-rest-framework-views

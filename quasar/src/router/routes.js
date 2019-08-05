@@ -34,6 +34,10 @@ const routes = [
         component: () => import("pages/Auth/GitHub.vue")
       },
       {
+        path: "auth/google/callback",
+        component: () => import("pages/Auth/Google.vue")
+      },
+      {
         path: "",
         component: () => import("pages/Index.vue")
       },
