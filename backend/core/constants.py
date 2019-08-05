@@ -4,10 +4,10 @@
 OAUTH = {
     'github': {
         'name': 'github',
-        'url':'https://github.com/login/oauth/access_token'
+        'url': 'https://github.com/login/oauth/access_token'
     },
     'google-oauth2': {
         'name': 'google-oauth2',
-        'url':'https://oauth2.googleapis.com/token'
+        'url': 'https://oauth2.googleapis.com/token'
     }
 }
