@@ -56,7 +56,7 @@
               label="Sign Up with GitHub"
             />
             <q-btn
-              :href="$store.getters.oauthUrl('google')"
+              :href="$store.getters.oauthUrl('google-oauth2')"
               type="a"
               class="full-width q-mt-md"
               label="Sign Up with Google"

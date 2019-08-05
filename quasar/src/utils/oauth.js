@@ -11,14 +11,14 @@ const oauth = {
       state: "eworifjeovivoiej"
     }
   },
-  google: {
+  "google-oauth2": {
     url: "https://accounts.google.com/o/oauth2/v2/auth",
     params: {
       client_id: process.env.GOOGLE_OAUTH2_KEY,
       response_type: "code",
       scope: "openid email",
-      redirect_uri: `${url}/auth/google/callback`,
-      state: "eworifjeovivoiej",
+      redirect_uri: `${url}/auth/google-oauth2/callback`,
+      state: "eworifjeovivoiej", // TODO: change these
       nonce: "forewijf43oirjoifj",
       login_hint: ""
     }
