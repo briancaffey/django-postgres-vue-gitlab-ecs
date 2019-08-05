@@ -69,14 +69,6 @@ export default {
   data() {
     return {
       tab: "login",
-      params: {
-        client_id: "d6639d522598d6bf20f4",
-        redirect_uri: "http://localhost/auth/github/callback",
-        login: "",
-        scope: "user",
-        state: "eworifjeovivoiej"
-      },
-      githuboauth2: "https://github.com/login/oauth/authorize",
       email: process.env.NODE_ENV === "production" ? "" : "admin@company.com",
       password: process.env.NODE_ENV === "production" ? "" : "password"
     };

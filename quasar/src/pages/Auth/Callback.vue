@@ -1,5 +1,5 @@
 <template>
-  <base-page>Logging in with GitHub...</base-page>
+  <base-page>Logging in with {{ provider }}...</base-page>
 </template>
 
 <script>
@@ -7,7 +7,7 @@ import * as Cookies from "js-cookie";
 import axios from "axios";
 export default {
   methods: {
-    githubAuth() {
+    handleOauthCallback() {
       const provider = this.$route.params.provider;
       axios
         .post(`/api/social/${provider}/`, { code: this.$route.query.code })
@@ -19,7 +19,12 @@ export default {
     }
   },
   created() {
-    this.githubAuth();
+    this.handleOauthCallback();
+  },
+  computed: {
+    provider() {
+      return this.$route.params.provider;
+    }
   }
 };
 </script>

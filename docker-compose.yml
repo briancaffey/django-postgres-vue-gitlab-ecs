@@ -69,7 +69,11 @@ services:
       - db
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - LOCAL_IP_ADDRESS=${LOCAL_IP_ADDRESS}
+      - GITHUB_KEY=${GITHUB_KEY}
+      - GOOGLE_KEY=${GOOGLE_KEY}
+      - HTTP_PROTOCOL=http
+      - WS_PROTOCOL=ws
+      - DOMAIN_NAME=${DOMAIN_NAME}
     restart: "no"
 
   backend: &backend

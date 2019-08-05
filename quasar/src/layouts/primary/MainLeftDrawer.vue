@@ -68,6 +68,12 @@
             caption="Test redis connection"
           />
         </q-expansion-item>
+        <left-menu-link
+          label="Environment Variables"
+          to="/debug/environment-variables"
+          icon="offline_bolt"
+          caption="Displays Environment Variables for Debug Purposes"
+        />
       </q-list>
     </q-drawer>
   </div>

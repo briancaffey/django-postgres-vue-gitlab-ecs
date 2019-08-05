@@ -30,12 +30,8 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "auth/github/callback",
-        component: () => import("pages/Auth/GitHub.vue")
-      },
-      {
-        path: "auth/google/callback",
-        component: () => import("pages/Auth/Google.vue")
+        path: "auth/:provider/callback",
+        component: () => import("pages/Auth/Callback.vue")
       },
       {
         path: "",
@@ -57,6 +53,10 @@ const routes = [
       {
         path: "services",
         component: () => import("pages/Services/index.vue")
+      },
+      {
+        path: "debug/environment-variables",
+        component: () => import("pages/Environment.vue")
       },
       {
         path: "examples/",

@@ -56,12 +56,28 @@ module.exports = function(ctx) {
     build: {
       env: ctx.dev
         ? {
-            API_URL: `"http://${process.env.LOCAL_IP_ADDRESS}"`,
-            WS_PING_PONG: `"ws://${process.env.LOCAL_IP_ADDRESS}/ws/ping-pong/"`
+            API_URL: JSON.stringify(
+              `${process.env.HTTP_PROTOCOL}://${process.env.DOMAIN_NAME}`
+            ),
+            WS_PING_PONG: JSON.stringify(
+              `${process.env.WS_PROTOCOL}://${
+                process.env.LOCAL_IP_ADDRESS
+              }/ws/ping-pong/`
+            ),
+            GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
+            GOOGLE_KEY: JSON.stringify(process.env.GOOGLE_KEY)
           }
         : {
-            API_URL: `"http://nginx"`,
-            WS_PING_PONG: `"ws://nginx/ws/ping-pong/"`
+            API_URL: JSON.stringify(
+              `${process.env.HTTP_PROTOCOL}://${process.env.DOMAIN_NAME}`
+            ),
+            WS_PING_PONG: JSON.stringify(
+              `${process.env.WS_PROTOCOL}://${
+                process.env.LOCAL_IP_ADDRESS
+              }/ws/ping-pong/`
+            ),
+            GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
+            GOOGLE_KEY: JSON.stringify(process.env.GOOGLE_KEY)
           },
       scopeHoisting: true,
       useNotifier: false,
