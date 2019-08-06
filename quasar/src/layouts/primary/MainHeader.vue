@@ -13,6 +13,8 @@
       </q-btn>
 
       <q-toolbar-title>Verbose Equals True</q-toolbar-title>
+
+      <q-select v-model="lang" :options="langs" />
       <q-btn
         id="login"
         :ripple="false"
@@ -42,6 +44,21 @@
 import AuthModal from "components/AuthModal.vue";
 
 export default {
+  data() {
+    return {
+      lang: this.$i18n.locale,
+      langs: [
+        {
+          label: "Chinese",
+          value: "cn-cn"
+        },
+        {
+          label: "US English",
+          value: "en-us"
+        }
+      ]
+    };
+  },
   components: { AuthModal },
   methods: {
     logout() {
@@ -50,6 +67,17 @@ export default {
     },
     toggleLeftDrawer() {
       this.$store.commit("toggleLeftDrawer");
+    }
+  },
+  created() {
+    this.$i18n.locale = "cn-cn";
+  },
+  watch: {
+    lang(lang) {
+      this.$i18n.locale = lang;
+      // import(`quasar/i18n/${lang}`).then(language => {
+      //   this.$q.lang.set(language.default)
+      // })
     }
   }
 };

@@ -4,10 +4,10 @@
 export default {
   leftDrawer: {
     home: {
-      main: "Home",
-      sub: "Start here"
+      main: "目录",
+      sub: "从此开始"
     }
   },
-  failed: "Hello",
-  success: "Action was successful"
+  failed: "你好",
+  success: "bu hao"
 };

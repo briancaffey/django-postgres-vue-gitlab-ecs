@@ -8,7 +8,12 @@
       <q-list>
         <q-item-label header>Menu</q-item-label>
 
-        <left-menu-link label="Home" to="/" icon="home" caption="Start Here" />
+        <left-menu-link
+          :label="$t('leftDrawer.home.main')"
+          to="/"
+          icon="home"
+          caption="Start Here"
+        />
 
         <left-menu-link
           label="About"
