@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "start": "http-server /app/docs/.vuepress/dist -p 8002"
+  },
+  "dependencies": {
+    "vuepress": "0.14.8"
+  }
+}

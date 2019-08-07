@@ -10,7 +10,6 @@ package-lock.json
 *.ipynb
 .ipynb_checkpoints/
 wiki/
-documentation/
 backend/.coverage.*
 backend/celerybeat.pid
 backend/celerybeat-schedule
