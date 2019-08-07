@@ -12,50 +12,50 @@
           :label="$t('leftDrawer.home.main')"
           to="/"
           icon="home"
-          caption="Start Here"
+          :caption="$t('leftDrawer.home.sub')"
         />
 
         <left-menu-link
-          label="About"
+          :label="$t('leftDrawer.about.main')"
           to="/about"
           icon="info"
-          caption="About this site"
+          :caption="$t('leftDrawer.about.sub')"
         />
 
         <left-menu-link
-          label="Protected"
+          :label="$t('leftDrawer.protected.main')"
           to="/protected"
           icon="lock"
-          caption="This page is private"
+          :caption="$t('leftDrawer.protected.sub')"
         />
 
         <left-menu-link
-          label="To-Do"
+          :label="$t('leftDrawer.toDo.main')"
           to="/to-do"
           icon="check"
-          caption="Site To-Do List"
+          :caption="$t('leftDrawer.toDo.sub')"
         />
 
         <left-menu-link
           v-if="$store.getters.isAuthenticated"
-          label="Services"
+          :label="$t('leftDrawer.services.main')"
           to="/services"
           icon="insert_chart_outlined"
-          caption="Monitoring, admin, metadata"
+          :caption="$t('leftDrawer.services.sub')"
         />
         <q-expansion-item
           :content-inset-level="0.5"
           v-if="$store.getters.isAuthenticated"
           expand-separator
           icon="perm_identity"
-          label="Examples"
-          caption="REST, Websockets, "
+          :label="$t('leftDrawer.examples.main')"
+          :caption="$t('leftDrawer.tests.sub')"
         >
           <left-menu-link
-            label="Services"
+            :label="$t('leftDrawer.examples.websockets.main')"
             to="/examples/websockets"
             icon="offline_bolt"
-            caption="How to use websockets"
+            :caption="$t('leftDrawer.examples.websockets.sub')"
           />
         </q-expansion-item>
         <q-expansion-item
@@ -63,21 +63,21 @@
           v-if="$store.getters.isAuthenticated"
           expand-separator
           icon="check_circle"
-          label="Tests"
-          caption="Debug Tests"
+          :label="$t('leftDrawer.tests.main')"
+          :caption="$t('leftDrawer.tests.main')"
         >
           <left-menu-link
-            label="Redis"
+            :label="$t('leftDrawer.tests.redis.main')"
             to="/examples/redis"
             icon="offline_bolt"
-            caption="Test redis connection"
+            :caption="$t('leftDrawer.tests.redis.sub')"
           />
         </q-expansion-item>
         <left-menu-link
-          label="Environment Variables"
+          :label="$t('leftDrawer.environment.main')"
           to="/debug/environment-variables"
           icon="offline_bolt"
-          caption="Displays Environment Variables for Debug Purposes"
+          :caption="$t('leftDrawer.environment.main')"
         />
       </q-list>
     </q-drawer>

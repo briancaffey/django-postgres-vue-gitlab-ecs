@@ -1,8 +1,6 @@
 <template>
   <base-page>
     <h4>Environment Variables</h4>
-
-    {{ $t("failed") }}
     <div v-for="(value, key) in env" :key="key">
       <q-chip>{{ key }}</q-chip
       ><q-chip text-color="white" color="teal">{{ value }}</q-chip>

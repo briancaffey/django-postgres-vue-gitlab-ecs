@@ -14,7 +14,19 @@
 
       <q-toolbar-title>Verbose Equals True</q-toolbar-title>
 
-      <q-select v-model="lang" :options="langs" />
+      <span class="lang">
+        <emoji :native="false" height="100%" :sheetSize="64" :emoji="lang.emoji" :size="28" />
+      </span>
+
+      <q-select
+        dark
+        dense
+        color="white"
+        v-model="lang"
+        :options="langs"
+      />
+
+
       <q-btn
         id="login"
         :ripple="false"
@@ -46,21 +58,32 @@ import AuthModal from "components/AuthModal.vue";
 export default {
   data() {
     return {
-      lang: this.$i18n.locale,
+      showing: false,
+      lang: {
+        label: "US English",
+        value: "en-us",
+        emoji: ":flag-us:"
+      },
       langs: [
         {
-          label: "Chinese",
-          value: "cn-cn"
+          label: "US English",
+          value: "en-us",
+          emoji: ":flag-us:"
         },
         {
-          label: "US English",
-          value: "en-us"
-        }
+          label: "Chinese",
+          value: "cn-cn",
+          emoji: ":flag-cn:"
+        },
       ]
     };
   },
   components: { AuthModal },
   methods: {
+    setLang(lang){
+      console.log(lang);
+      this.lang = lang
+    },
     logout() {
       this.$store.dispatch("AUTH_LOGOUT").then(() => this.$router.push("/"));
       this.$router.go();
@@ -70,11 +93,12 @@ export default {
     }
   },
   created() {
-    this.$i18n.locale = "cn-cn";
+    this.$i18n.locale = 'en-us';
   },
   watch: {
     lang(lang) {
-      this.$i18n.locale = lang;
+      console.log(lang);
+      this.$i18n.locale = lang.value;
       // import(`quasar/i18n/${lang}`).then(language => {
       //   this.$q.lang.set(language.default)
       // })
@@ -83,4 +107,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.lang {
+  margin-right: 20px;
+  cursor: pointer;
+}
+.q-select {
+  margin-right: 20px;
+}
+</style>
