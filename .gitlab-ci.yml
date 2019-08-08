@@ -23,7 +23,7 @@ Build Documentation:
     - ./documentation/build_documentation.sh
   artifacts:
     paths:
-      - documentation/docs/.vuepress/public
+      - public
     expire_in: 7 days
 
 .Pytest:
