@@ -21,6 +21,11 @@ Build Documentation:
     - echo "ok"
   script:
     - ./documentation/build_documentation.sh
+  after_script:
+    - echo "Documentation build complete"
+    - ls
+    - cd documentation
+    - ls
   artifacts:
     paths:
       - public
