@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # install project dependencies
-ls
-
-pwd
+cd documentation
 
 npm install
 
