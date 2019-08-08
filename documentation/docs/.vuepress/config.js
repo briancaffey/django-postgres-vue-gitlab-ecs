@@ -1,6 +1,6 @@
 module.exports = {
   title: 'Verbose Equals True',
-  base: '/docs/',
+  // base: '/docs/',
   port: 8080,
   dest: "../public",
   plugins: {
