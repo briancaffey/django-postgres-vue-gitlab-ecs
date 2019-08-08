@@ -17,19 +17,11 @@ variables:
 Build Documentation:
   image: node:latest
   stage: documentation
-  before_script:
-    - echo "ok"
   script:
     - ./documentation/build_documentation.sh
-  after_script:
-    - echo "Documentation build complete"
-    - ls
-    - cd documentation
-    - ls
   artifacts:
     paths:
       - public
-    expire_in: 7 days
 
 .Pytest:
   image: python:3.7
