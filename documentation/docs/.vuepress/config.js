@@ -2,7 +2,7 @@ module.exports = {
   title: 'Verbose Equals True',
   base: '/docs/',
   port: 8080,
-  dest: "../../../public",
+  dest: "../public",
   plugins: {
     '@vuepress/google-analytics': {
       'ga': 'UA-131443776-1',
