@@ -29,6 +29,17 @@ Open `http://localhost` in your browser.
 
 You can specify environment variables for docker-compose by adding an `.env` file to the root of the project based on `.env.template`.
 
+## VuePress Documentation
+
+This project uses VuePress for documentation. To view the documentation site locally, run the following command:
+
+```bash
+docker-compose -f compose/docs.yml up --build
+```
+
+This will make the docs available at `http://localhost:8082/docs/`. Hot-reloading through websockets is supported, so changes will show up as they are saved in your code editor.
+
+
 ### Access Django Shell in Jupyter Notebook
 
 With all containers running, run the following commands:
@@ -88,6 +99,5 @@ docker-compose -f docker-compose.ci.yml -f cypress.yml up
 - Put django apps in apps folder
 - Redeploy django app to check settings files
 - Add GitLab pages site for Group project
-- Decide how to build the documentation site (quasar, vuepress?)
 - Add file upload examples with Django REST Framework
 - Setup password reset

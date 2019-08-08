@@ -1,11 +1,4 @@
-const services = [
-  {
-    icon: "local_florist",
-    name: "Flower",
-    href: "http://localhost/flower",
-    type: "a",
-    target: "_blank"
-  },
+let services = [
   {
     icon: "verified_user",
     name: "Django",
@@ -14,16 +7,16 @@ const services = [
     target: "_blank"
   },
   {
-    icon: "email",
-    name: "Mailhog",
-    href: "http://localhost:8025",
+    icon: "local_florist",
+    name: "Flower",
+    href: "http://localhost/flower",
     type: "a",
     target: "_blank"
   },
   {
-    icon: "storage",
-    name: "Redis Commander",
-    href: "http://localhost:8081",
+    icon: "email",
+    name: "Mailhog",
+    href: "http://localhost:8025",
     type: "a",
     target: "_blank"
   },
@@ -36,4 +29,16 @@ const services = [
   }
 ];
 
+if (process.env.NODE_ENV === "development") {
+  services = [ ...services,
+    {
+      icon: "storage",
+      name: "Redis Commander",
+      href: "http://localhost:8081",
+      type: "a",
+      target: "_blank"
+    }
+  ];
+}
+console.log(JSON.stringify(services));
 export default services;

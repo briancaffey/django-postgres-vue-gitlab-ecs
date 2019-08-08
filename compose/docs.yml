@@ -2,10 +2,12 @@ version: '3.7'
 
 services:
   vuepress:
+    container_name: vuepress
     build:
       context: ../documentation
     command: ["sh", "/app/start_dev.sh"]
     ports:
-      - "8082:8082"
+      - "8082:8080"
+      - "8081:8081"
     volumes:
-      - ./documentation/docs:/app/docs
+      - ../documentation/docs:/app/docs

@@ -32,7 +32,7 @@ services:
     environment:
     - REDIS_HOST=redis
     ports:
-    - "8081:8081"
+    - "8085:8081"
     networks:
       - main
 

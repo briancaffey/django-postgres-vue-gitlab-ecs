@@ -20,7 +20,11 @@ Build Documentation:
   before_script:
     - echo "ok"
   script:
-    - ./documentation/build_docs.sh
+    - ./documentation/build_documentation.sh
+  artifacts:
+    paths:
+      - documentation/docs/.vuepress/public
+    expire_in: 7 days
 
 .Pytest:
   image: python:3.7

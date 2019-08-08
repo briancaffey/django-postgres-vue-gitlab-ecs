@@ -1,5 +1,12 @@
 const documentationLinks = [
   {
+    icon: "book",
+    name: "Documentation for this project",
+    href: "http://localhost:8082/docs/",
+    type: "a",
+    target: "_blank"
+  },
+  {
     name: "Django",
     href: "https://docs.djangoproject.com/en/2.2/",
     type: "a",
