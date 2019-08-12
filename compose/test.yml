@@ -31,7 +31,8 @@ services:
       dockerfile: backend/scripts/prod/Dockerfile
     ports:
       - "8000:8000"
-    command: /start_ci.sh
+      - "9000:9000"
+    command: /start_asgi.sh
     volumes:
       - django-static:/code/static
     networks:

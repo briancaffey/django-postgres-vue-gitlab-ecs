@@ -2,7 +2,7 @@
 FROM node:10-alpine as build-stage
 ENV HTTP_PROTOCOL http
 ENV WS_PROTOCOL ws
-ENV DOMAIN_NAME localhost:8000
+ENV DOMAIN_NAME localhost:9000
 WORKDIR /app/
 COPY quasar/package.json /app/
 RUN npm cache verify
