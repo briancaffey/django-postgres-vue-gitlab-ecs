@@ -112,6 +112,16 @@ e2e cypress tests without docker-compose:
   services:
     - postgres:latest
     - redis:latest
+  variables:
+    SECRET_KEY: 'secret'
+    DEBUG: 'True'
+    DJANGO_EMAIL_HOST: 'mail'
+    DJANGO_EMAIL_PORT: '1025'
+    DJANGO_SETTINGS_MODULE: backend.settings.gitlab-ci
+    GITHUB_KEY: 'github123'
+    GITHUB_SECRET: 'github123'
+    GOOGLE_OAUTH2_KEY: 'google123'
+    GOOGLE_OAUTH2_SECRET: 'google123'
   before_script:
     - /start_asgi.sh &
     - sleep 10
