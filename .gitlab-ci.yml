@@ -81,7 +81,7 @@ variables:
         -f nginx/ci/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
 
-.Build backend:
+Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -106,9 +106,9 @@ variables:
     - echo "Build backend complete"
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-e2e cypress tests without docker-compose:
+e2e cypress tests without docker-compose: &cypress
   stage: integration
-  image: localhost:5000/backend:latest
+  image: $CI_REGISTRY_IMAGE/backend:latest
   services:
     - postgres:latest
     - redis:latest
@@ -137,9 +137,13 @@ e2e cypress tests without docker-compose:
     - $(npm bin)/cypress run # --spec "cypress/integration/test_ws_connection.js"
   artifacts:
     paths:
-      - cypress/videos/
-      - tests/screenshots/
+      - backend/cypress/videos/
+      - backend/cypress/screenshots/
     expire_in: 7 days
+
+.e2e cypress tests no compose local:
+  <<: *cypress
+  image: localhost:5000/backend:latest
 
 .e2e cypress tests with docker-compose:
   stage: integration
@@ -164,6 +168,9 @@ e2e cypress tests without docker-compose:
       - tests/screenshots/
     expire_in: 7 days
 
+# this doesn't work because services are not available to eachother,
+# services can only be accessed from the job's container
+# https://gitlab.com/gitlab-org/gitlab-selenium-server/issues/1#note_196708019
 .e2e: &e2e
   image: cypress/base:8
   stage: integration
