@@ -7,7 +7,6 @@ module.exports = function(ctx) {
     // --> boot files are part of "main.js"
     boot: ["i18n", "axios", "components", "websockets"],
     css: ["app.styl"],
-
     extras: [
       // "ionicons-v4",
       // "mdi-v3",
@@ -73,7 +72,7 @@ module.exports = function(ctx) {
             ),
             WS_PING_PONG: JSON.stringify(
               `${process.env.WS_PROTOCOL}://${
-                process.env.LOCAL_IP_ADDRESS
+                process.env.DOMAIN_NAME
               }/ws/ping-pong/`
             ),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
@@ -82,6 +81,7 @@ module.exports = function(ctx) {
       scopeHoisting: true,
       useNotifier: false,
       vueRouterMode: "history",
+      // comments
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,

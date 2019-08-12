@@ -19,6 +19,21 @@ DATABASES = {
     },
 }
 
-STATIC_URL = '/static/'
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    # disabled to simplify testing
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.SubdomainMiddleware',
+]
+
+
+STATIC_URL = '/'
 
 STATIC_ROOT = '/static/'
