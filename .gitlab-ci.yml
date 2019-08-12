@@ -127,7 +127,6 @@ e2e cypress tests without docker-compose:
     - python backend/manage.py create_default_user
     - cp /static/index.html backend/templates/
     - /start_asgi.sh &
-    - sleep 10
   script:
     - pwd
     - ls
@@ -136,7 +135,6 @@ e2e cypress tests without docker-compose:
     - cp -r cypress/ backend/cypress
     - cd backend
     - $(npm bin)/cypress run
-    - exit 0
   artifacts:
     paths:
       - cypress/videos/
