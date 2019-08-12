@@ -130,7 +130,7 @@ e2e cypress tests without docker-compose:
     - ls
     - npm install cypress
     - cp cypress.json backend/
-    - cp cypress/ backend/cypress
+    - cp -r cypress/ backend/cypress
     - cd backend
     - $(npm bin)/cypress run
     - exit 0
