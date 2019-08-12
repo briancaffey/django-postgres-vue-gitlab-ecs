@@ -125,6 +125,7 @@ e2e cypress tests without docker-compose:
   before_script:
     - python backend/manage.py migrate
     - python backend/manage.py create_default_user
+    - cp /static/index.html backend/templates/
     - /start_asgi.sh &
     - sleep 10
   script:
