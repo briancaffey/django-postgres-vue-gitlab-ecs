@@ -134,7 +134,7 @@ e2e cypress tests without docker-compose:
     - cp cypress.json backend/
     - cp -r cypress/ backend/cypress
     - cd backend
-    - $(npm bin)/cypress run --spec "cypress/integration/test_ws_connection.js"
+    - $(npm bin)/cypress run # --spec "cypress/integration/test_ws_connection.js"
   artifacts:
     paths:
       - cypress/videos/
