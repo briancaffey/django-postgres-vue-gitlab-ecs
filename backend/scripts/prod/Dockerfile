@@ -28,14 +28,22 @@ ADD backend /code/
 
 # this stage is used for integration testing
 FROM production as gitlab-ci
-# cypress dependencies
-# RUN apt-get -qq update
-# RUN apt-get -qq install -y xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
-# add static files from build
+# update and install nodejs
 COPY --from=build-stage /app/dist/pwa/index.html /code/templates/
-# COPY --from=build-stage /app/dist/pwa /code/static
 COPY --from=build-stage /app/dist/pwa /static
-# index.html is listed here
-RUN ls /code/templates/ -al
-# also tried this, but still nothing in the templates directory when the container is started
-RUN cp /static/index.html /code/templates/index.html
+
+COPY cypress.json /code
+
+RUN mkdir /code/cypress
+COPY cypress/ /code/cypress/
+
+RUN apt-get -qq update && apt-get -y install nodejs npm
+RUN node -v
+
+# npm installs automatically
+RUN npm -v
+# cypress dependencies
+RUN apt-get -qq install -y xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+
+RUN npm install cypress
+

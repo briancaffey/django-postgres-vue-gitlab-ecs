@@ -7,7 +7,7 @@ describe('Test Login', function() {
     cy.get("#password").clear();
     cy.get("#password").type("password");
     cy.get("#login-btn").click();
-    cy.wait(1000); // wait for 1 second
+    // cy.wait(1000); // wait for 1 second
     cy.getCookie('user-token').should('exist');
   });
 });

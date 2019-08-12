@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from core.views import index_view
 
@@ -32,4 +32,7 @@ if settings.DEBUG:
     urlpatterns = urlpatterns + [
         path('', index_view, name='index'),
         path('admin/__debug__/', include(debug_toolbar.urls)),
+        # catch all rule so that we can navigate to
+        # routes in vue app other than "/"
+        re_path(r'^(?!js)(?!css)(?!statics)(?!fonts)(?!service\-worker\.js)(?!manifest\.json)(?!precache).*', index_view, name='index') # noqa
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

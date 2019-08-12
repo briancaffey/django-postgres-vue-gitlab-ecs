@@ -30,7 +30,6 @@ services:
       context: ../
       dockerfile: backend/scripts/prod/Dockerfile
     ports:
-      - "8000:8000"
       - "9000:9000"
     command: /start_asgi.sh
     volumes:
@@ -52,11 +51,6 @@ services:
       - GITHUB_SECRET=${GITHUB_SECRET}
       - GOOGLE_OAUTH2_KEY=${GOOGLE_OAUTH2_KEY}
       - GOOGLE_OAUTH2_SECRET=${GOOGLE_OAUTH2_SECRET}
-
-      # # for Quasar
-      # - HTTP_PROTOCOL=http
-      # - WS_PROTOCOL=ws
-      # - DOMAIN_NAME=${DOMAIN_NAME}
     depends_on:
       - postgres
       - redis

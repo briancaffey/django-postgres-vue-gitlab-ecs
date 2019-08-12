@@ -14,7 +14,7 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-Build Documentation:
+.Build Documentation:
   image: node:latest
   stage: documentation
   script:
@@ -104,6 +104,25 @@ Build Documentation:
     - docker push $CI_REGISTRY_IMAGE/backend:latest
   after_script:
     - echo "Build backend complete"
+
+# gitlab-runner exec docker "e2e cypress tests without docker-compose"
+e2e cypress tests without docker-compose:
+  stage: integration
+  image: localhost:5000/backend:latest
+  services:
+    - postgres:latest
+    - redis:latest
+  before_script:
+    - /start_asgi.sh &
+    - sleep 10
+  script:
+    - $(npm bin)/cypress run
+    - exit 0
+  artifacts:
+    paths:
+      - cypress/videos/
+      - tests/screenshots/
+    expire_in: 7 days
 
 .e2e cypress tests with docker-compose:
   stage: integration
