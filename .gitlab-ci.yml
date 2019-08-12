@@ -90,7 +90,6 @@ Build backend:
   services:
     - docker:dind
   before_script:
-    - cd backend
     - |
       docker login \
         -u $CI_REGISTRY_USER \
