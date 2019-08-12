@@ -116,6 +116,9 @@ e2e cypress tests without docker-compose:
     - /start_asgi.sh &
     - sleep 10
   script:
+    - pwd
+    - ls
+    - cd backend
     - $(npm bin)/cypress run
     - exit 0
   artifacts:
