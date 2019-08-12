@@ -99,7 +99,7 @@ Build backend:
     - |
       docker build \
         -t $CI_REGISTRY_IMAGE/backend:latest \
-        -f scripts/prod/Dockerfile .
+        -f backend/scripts/prod/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/backend:latest
   after_script:
     - echo "Build backend complete"
