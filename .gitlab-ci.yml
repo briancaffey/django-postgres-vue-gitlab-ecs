@@ -124,6 +124,7 @@ e2e cypress tests without docker-compose:
     GOOGLE_OAUTH2_SECRET: 'google123'
   before_script:
     - python backend/manage.py migrate
+    - python backend/manage.py create_default_user
     - /start_asgi.sh &
     - sleep 10
   script:
