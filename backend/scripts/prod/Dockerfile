@@ -39,11 +39,13 @@ COPY cypress/ /code/cypress/
 
 RUN apt-get -qq update && apt-get -y install nodejs npm
 RUN node -v
-
-# npm installs automatically
 RUN npm -v
+
 # cypress dependencies
-RUN apt-get -qq install -y xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
-
-RUN npm install cypress
-
+RUN apt-get -qq install -y xvfb \
+  && libgtk-3-dev \
+  && libnotify-dev \
+  && libgconf-2-4 \
+  && libnss3 \
+  && libxss1 \
+  && libasound2
