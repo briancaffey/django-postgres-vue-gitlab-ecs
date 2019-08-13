@@ -81,7 +81,7 @@ Build Documentation:
         -f nginx/ci/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
 
-Build backend:
+.Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -105,7 +105,7 @@ Build backend:
     - echo "Build backend complete"
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-e2e cypress tests without docker-compose: &cypress
+.e2e cypress tests without docker-compose: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:

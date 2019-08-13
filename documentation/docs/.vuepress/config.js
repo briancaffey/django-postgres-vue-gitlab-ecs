@@ -1,6 +1,6 @@
 module.exports = {
   title: 'Verbose Equals True',
-  // base: '/docs/',
+  base: '/django-postgres-vue-gitlab-ecs/',
   port: 8080,
   dest: "../public",
   plugins: {
