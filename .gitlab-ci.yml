@@ -127,19 +127,18 @@ e2e cypress tests without docker-compose: &cypress
     - cp /static/index.html backend/templates/
     - /start_asgi.sh &
   script:
-    - pwd
-    - ls
     - npm install cypress
     - cp cypress.json backend/
     - cp -r cypress/ backend/cypress
     - cd backend
-    - $(npm bin)/cypress run # --spec "cypress/integration/test_ws_connection.js"
+    - $(npm bin)/cypress run
   artifacts:
     paths:
       - backend/cypress/videos/
       - backend/cypress/screenshots/
     expire_in: 7 days
 
+# gitlab-runner exec docker "e2e cypress tests no compose local"
 .e2e cypress tests no compose local:
   <<: *cypress
   image: localhost:5000/backend:latest
