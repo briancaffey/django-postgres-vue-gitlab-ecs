@@ -139,7 +139,7 @@ e2e cypress tests without docker-compose: &cypress
     expire_in: 7 days
 
 # gitlab-runner exec docker "e2e cypress tests no compose local"
-e2e cypress tests no compose local:
+.e2e cypress tests no compose local:
   <<: *cypress
   image: localhost:5000/backend:latest
 
