@@ -14,7 +14,7 @@ variables:
   AWSAccessKeyId: $AWS_ACCESS_KEY_ID
   AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-.Build Documentation:
+Build Documentation:
   image: node:latest
   stage: documentation
   script:
