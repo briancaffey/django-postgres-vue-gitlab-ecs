@@ -81,7 +81,7 @@ Build Documentation:
         -f nginx/ci/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
 
-.Build backend:
+Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -90,7 +90,6 @@ Build Documentation:
   services:
     - docker:dind
   before_script:
-    - cd backend
     - |
       docker login \
         -u $CI_REGISTRY_USER \
@@ -100,76 +99,49 @@ Build Documentation:
     - |
       docker build \
         -t $CI_REGISTRY_IMAGE/backend:latest \
-        -f scripts/prod/Dockerfile .
+        -f backend/scripts/prod/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/backend:latest
   after_script:
     - echo "Build backend complete"
 
-.e2e cypress tests with docker-compose:
+# gitlab-runner exec docker "e2e cypress tests without docker-compose"
+e2e: &cypress
   stage: integration
-  image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
+  image: $CI_REGISTRY_IMAGE/backend:latest
   services:
-    - docker:dind
-  before_script:
-    - apk add --update py-pip
-    - pip install docker-compose~=1.23.0
-  script:
-    - ls
-    - pwd
-    - sh integration-tests.sh
-  after_script:
-    - echo "Integration tests passed."
-  artifacts:
-    paths:
-      - cypress/videos/
-      - tests/screenshots/
-    expire_in: 7 days
-
-.e2e: &e2e
-  image: cypress/base:8
-  stage: integration
+    - postgres:latest
+    - redis:latest
   variables:
-    # variables passed as env vars to *all services*
     SECRET_KEY: 'secret'
-    DEBUG: ''
-    DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
-    CELERY_TASK_ALWAYS_EAGER: 'True'
-  services:
-    - name: postgres
-    - name: $CI_REGISTRY_IMAGE/backend:latest
-      alias: backend
-      command: ["/start_ci.sh"]
-    - name: redis
-    - name: $CI_REGISTRY_IMAGE/frontend:latest
-      alias: frontend
+    DEBUG: 'True'
+    DJANGO_EMAIL_HOST: 'mail'
+    DJANGO_EMAIL_PORT: '1025'
+    DJANGO_SETTINGS_MODULE: backend.settings.gitlab-ci
+    GITHUB_KEY: 'github123'
+    GITHUB_SECRET: 'github123'
+    GOOGLE_OAUTH2_KEY: 'google123'
+    GOOGLE_OAUTH2_SECRET: 'google123'
   before_script:
-    - npm install --save-dev cypress
-    - $(npm bin)/cypress verify
+    - python backend/manage.py migrate
+    - python backend/manage.py create_default_user
+    - cp /static/index.html backend/templates/
+    - /start_asgi.sh &
   script:
-    - $(npm bin)/cypress run --config baseUrl=http://frontend
-  after_script:
-    - echo "Cypress tests complete"
+    - npm install cypress
+    - cp cypress.json backend/
+    - cp -r cypress/ backend/cypress
+    - cd backend
+    - $(npm bin)/cypress run
   artifacts:
     paths:
-      - cypress/videos/
-      - cypress/screenshots/
+      - backend/cypress/videos/
+      - backend/cypress/screenshots/
     expire_in: 7 days
 
-# for testing/debugging with gitlab-runner locally
+# use this test with gitlab-runner locally
 .e2e-local:
-  <<: *e2e
-  services:
-    - name: postgres
-    - name: localhost:5000/backend:latest
-      alias: backend
-      command: ["/start_ci.sh"]
-    - name: redis
-    - name: localhost:5000/frontend:latest
-      alias: frontend
-  artifacts: {}
+  <<: *cypress
+  image: localhost:5000/backend:latest
 
 Build Quasar PWA Assets:
   image: node:8

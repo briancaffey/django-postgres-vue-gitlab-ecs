@@ -4,7 +4,7 @@
       <h4>About this site...</h4>
       <p>
         This site is built with Django, Vue, Postgres, nginx, docker, and other
-        technologies.
+        technologies...
       </p>
     </q-page>
   </q-page-container>

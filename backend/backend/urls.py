@@ -14,11 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+
+from core.views import index_view
 
 urlpatterns = [
-    path('', include('core.urls',)),
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/', include('core.urls'))
@@ -27,6 +29,10 @@ urlpatterns = [
 
 if settings.DEBUG:
     import debug_toolbar # noqa
-    urlpatterns = [
+    urlpatterns = urlpatterns + [
+        path('', index_view, name='index'),
         path('admin/__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+        # catch all rule so that we can navigate to
+        # routes in vue app other than "/"
+        re_path(r'^(?!js)(?!css)(?!statics)(?!fonts)(?!service\-worker\.js)(?!manifest\.json)(?!precache).*', index_view, name='index') # noqa
+    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

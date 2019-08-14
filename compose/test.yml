@@ -1,0 +1,67 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    networks:
+      - main
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${RDS_PASSWORD}
+      - POSTGRES_USER=${RDS_USERNAME}
+      - POSTGRES_DB=${RDS_DB_NAME}
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+    container_name: redis
+    networks:
+      - main
+
+
+  backend: &backend
+    container_name: backend
+    build:
+      context: ../
+      dockerfile: backend/scripts/prod/Dockerfile
+    ports:
+      - "9000:9000"
+    command: /start_asgi.sh
+    volumes:
+      - django-static:/code/static
+    networks:
+      - main
+    environment:
+      - CI_PIPELINE_TRIGGERED=True
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=True
+      - DJANGO_EMAIL_HOST=${DJANGO_EMAIL_HOST}
+      - DJANGO_EMAIL_PORT=${DJANGO_EMAIL_PORT}
+      - RDS_PASSWORD=${RDS_PASSWORD}
+      - RDS_USERNAME=${RDS_USERNAME}
+      - RDS_DB_NAME=${RDS_DB_NAME}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - DJANGO_SETTINGS_MODULE=backend.settings.gitlab-ci
+      - GITHUB_KEY=${GITHUB_KEY}
+      - GITHUB_SECRET=${GITHUB_SECRET}
+      - GOOGLE_OAUTH2_KEY=${GOOGLE_OAUTH2_KEY}
+      - GOOGLE_OAUTH2_SECRET=${GOOGLE_OAUTH2_SECRET}
+    depends_on:
+      - postgres
+      - redis
+
+
+volumes:
+  pg-data:
+  django-static:
+  redis-data:
+
+networks:
+  main:
+    driver: bridge

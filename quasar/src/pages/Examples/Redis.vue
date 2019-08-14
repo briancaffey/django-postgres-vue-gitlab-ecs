@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     clearCacheValue() {
-      apiCall.delete("/api/debug/redis").then(resp => {
+      apiCall.delete("/api/debug/redis/").then(resp => {
         console.log(resp);
         console.log("getting here..");
         this.valueFromCache = null;
