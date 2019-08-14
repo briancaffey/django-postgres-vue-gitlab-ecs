@@ -91,6 +91,7 @@ services:
     networks:
       - main
     environment:
+      - CI_PIPELINE_TRIGGERED=True
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=True
       - DJANGO_EMAIL_HOST=${DJANGO_EMAIL_HOST}

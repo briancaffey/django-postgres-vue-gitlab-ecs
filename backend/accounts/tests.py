@@ -26,7 +26,7 @@ class UsersManagersTests(TestCase):
             pass
         with self.assertRaises(TypeError):
             User.objects.create_user()
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             User.objects.create_user(email='')
         with self.assertRaises(ValueError):
             User.objects.create_user(email='', password="foo")

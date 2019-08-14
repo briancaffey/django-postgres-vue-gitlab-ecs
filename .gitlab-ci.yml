@@ -105,7 +105,7 @@ Build Documentation:
     - echo "Build backend complete"
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-.e2e cypress tests without docker-compose: &cypress
+e2e: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:
@@ -138,79 +138,10 @@ Build Documentation:
       - backend/cypress/screenshots/
     expire_in: 7 days
 
-# gitlab-runner exec docker "e2e cypress tests no compose local"
-e2e cypress tests no compose local:
+# use this test with gitlab-runner locally
+e2e-local:
   <<: *cypress
   image: localhost:5000/backend:latest
-
-.e2e cypress tests with docker-compose:
-  stage: integration
-  image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
-  before_script:
-    - apk add --update py-pip
-    - pip install docker-compose~=1.23.0
-  script:
-    - ls
-    - pwd
-    - sh integration-tests.sh
-  after_script:
-    - echo "Integration tests passed."
-  artifacts:
-    paths:
-      - cypress/videos/
-      - tests/screenshots/
-    expire_in: 7 days
-
-# this doesn't work because services are not available to eachother,
-# services can only be accessed from the job's container
-# https://gitlab.com/gitlab-org/gitlab-selenium-server/issues/1#note_196708019
-.e2e: &e2e
-  image: cypress/base:8
-  stage: integration
-  variables:
-    # variables passed as env vars to *all services*
-    SECRET_KEY: 'secret'
-    DEBUG: ''
-    DJANGO_SETTINGS_MODULE: 'backend.settings.gitlab-ci'
-    CELERY_TASK_ALWAYS_EAGER: 'True'
-  services:
-    - name: postgres
-    - name: $CI_REGISTRY_IMAGE/backend:latest
-      alias: backend
-      command: ["/start_ci.sh"]
-    - name: redis
-    - name: $CI_REGISTRY_IMAGE/frontend:latest
-      alias: frontend
-  before_script:
-    - npm install --save-dev cypress
-    - $(npm bin)/cypress verify
-  script:
-    - $(npm bin)/cypress run --config baseUrl=http://frontend
-  after_script:
-    - echo "Cypress tests complete"
-  artifacts:
-    paths:
-      - cypress/videos/
-      - cypress/screenshots/
-    expire_in: 7 days
-
-# for testing/debugging with gitlab-runner locally
-.e2e-local:
-  <<: *e2e
-  services:
-    - name: postgres
-    - name: localhost:5000/backend:latest
-      alias: backend
-      command: ["/start_ci.sh"]
-    - name: redis
-    - name: localhost:5000/frontend:latest
-      alias: frontend
-  artifacts: {}
 
 Build Quasar PWA Assets:
   image: node:8
