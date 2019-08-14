@@ -175,24 +175,7 @@ Then, commit your changes in git. Gitlab runner requires that you commit changes
 gitlab-runner exec docker e2e-local
 ```
 
-
-Run cypress tests locally by running the following commands. First build the application stack and cypress container:
-
-```
-docker-compose -f docker-compose.ci.yml -f cypress.yml build
-```
-
-Then start the application:
-
-```
-docker-compose -f docker-compose.ci.yml up -d
-```
-
-Then run cypress tests:
-
-```
-docker-compose -f docker-compose.ci.yml -f cypress.yml up
-```
+Before you push your changes to GitLab, make sure that you uncomment the `e2e-local` job by adding `.` in front of it (`.e2e-local`).
 
 # ToDo
 

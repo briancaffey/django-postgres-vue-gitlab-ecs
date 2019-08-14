@@ -81,7 +81,7 @@ Build Documentation:
         -f nginx/ci/Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
 
-.Build backend:
+Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -139,7 +139,7 @@ e2e: &cypress
     expire_in: 7 days
 
 # use this test with gitlab-runner locally
-e2e-local:
+.e2e-local:
   <<: *cypress
   image: localhost:5000/backend:latest
 
