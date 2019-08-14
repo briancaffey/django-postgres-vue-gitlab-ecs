@@ -125,7 +125,11 @@ Build Documentation:
     - python backend/manage.py migrate
     - python backend/manage.py create_default_user
     - cp /static/index.html backend/templates/
-    - /start_asgi.sh &
+    - pwd
+    - ls
+    - cd backend && /start_asgi.sh &
+    - pwd
+    - ls
   script:
     - npm install cypress
     - cp cypress.json backend/
