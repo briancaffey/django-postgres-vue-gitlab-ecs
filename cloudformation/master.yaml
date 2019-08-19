@@ -86,8 +86,8 @@ Parameters:
 Conditions:
   RunServices: !Equals [ 1, 0 ]
   UseRDS: !Equals [ 1, 0 ]
-  UseALB: !Equals [ 1, 0 ]
-  UseECS: !Equals [ 1, 0 ]
+  UseALB: !Equals [ 1, 1 ]
+  UseECS: !Equals [ 1, 1 ]
   UseElastiCache: !Equals [ 1, 0 ]
 
 Resources:
