@@ -1,3 +1,10 @@
+## Documentation
+
+Documentation for this project can be found here:
+
+[https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/](https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/)
+
+
 ## Architecture
 
 ![png](/architecture.png)
