@@ -13,5 +13,3 @@ features:
   details: This project aims to be accessible to people with all levels of skill.
 footer: MIT Licensed | Copyright © 2018-present Brian Caffey
 ---
-
-Home page?
