@@ -1,4 +1,4 @@
-# Connecting our backend and frontend
+# Connecting the backend and frontend
 
 Let's get our backend talking to our frontend. We want to make API calls from our VueJS application that will return data from our Django backend.
 
