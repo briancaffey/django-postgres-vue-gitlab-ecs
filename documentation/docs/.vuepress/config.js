@@ -1,7 +1,16 @@
+const path = require("path");
+
 module.exports = {
   title: "Verbose Equals True",
   base: "/django-postgres-vue-gitlab-ecs/",
   port: 8080,
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "@assets": path.resolve(__dirname, "../assets")
+      }
+    }
+  },
   dest: "../public",
   plugins: {
     "@vuepress/google-analytics": {
