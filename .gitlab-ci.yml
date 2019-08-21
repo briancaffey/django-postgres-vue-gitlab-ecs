@@ -90,6 +90,10 @@ Build backend:
     - docker push $CI_REGISTRY_IMAGE/backend:latest
   after_script:
     - echo "Build backend complete"
+  only:
+    changes:
+      - backend/**/*
+      - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
 e2e: &cypress
@@ -125,6 +129,10 @@ e2e: &cypress
       - backend/cypress/screenshots/
     expire_in: 2 days
   retry: 2
+  only:
+    changes:
+      - backend/**/*
+      - quasar/**/*
 
 # use this test with gitlab-runner locally
 .e2e-local:
