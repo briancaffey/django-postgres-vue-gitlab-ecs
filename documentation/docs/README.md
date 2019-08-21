@@ -14,5 +14,3 @@ features:
 footer: MIT Licensed | Copyright © 2018-present Brian Caffey
 ---
 
-
-![Image](~@assets/django.jpg)
