@@ -21,6 +21,12 @@ module.exports = {
   themeConfig: {
     lastUpdated: "Last Updated: ",
     sidebar: "auto",
+    repo: process.env.CI_PROJECT_URL,
+    docsBranch: "develop",
+    repoLabel: "View on GitLab",
+    docsDir: "documentation/docs",
+    editLinks: true,
+    editLinkText: "Edit this page on GitLab",
     nav: [
       { text: "Home", link: "/" },
       {
