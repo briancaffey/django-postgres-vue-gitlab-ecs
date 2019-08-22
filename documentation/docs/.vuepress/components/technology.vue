@@ -21,5 +21,4 @@ img {
   width: 100px;
   margin-top: 20px;
 }
-
 </style>

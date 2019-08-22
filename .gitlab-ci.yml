@@ -17,8 +17,6 @@ variables:
 pages:
   image: node:latest
   stage: documentation
-  variables:
-    CI_PROJECT_URL: $CI_PROJECT_URL
   script:
     - ./documentation/build_documentation.sh
   artifacts:
