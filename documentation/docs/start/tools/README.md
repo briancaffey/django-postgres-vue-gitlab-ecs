@@ -63,3 +63,11 @@ Amazon Elastic Container Service (Amazon ECS) is a highly scalable, high-perform
 
 Docker is an open-source and free containerization platform.  Working applications and all dependencies can be packaged into docker containers, shipped and deployed across environments, machines, and host operating systems.
 
+<technology image="quasar.png" />
+
+## [Quasar](https://quasar.dev/)
+
+### Build high-performance VueJS user interfaces in record time
+
+Quasar (pronounced /ˈkweɪ.zɑɹ/) is an MIT licensed open-source Vue.js based framework, which allows the development of responsive++ websites/apps.  Quasar works on top of VueJS to provide a full-featured toolset for building responsive frontend apps.  Develop an app and simultaneously deploy it as a website, a mobile app, or an Electron app.
+
