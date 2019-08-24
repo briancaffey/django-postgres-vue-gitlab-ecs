@@ -79,3 +79,10 @@ Quasar (pronounced /ˈkweɪ.zɑɹ/) is an MIT licensed open-source Vue.js based 
 
 Channels is a project that takes Django and extends its abilities beyond HTTP - to handle WebSockets, chat protocols, IoT protocols, and more. It’s built on a Python specification called [ASGI](https://asgi.readthedocs.io/en/latest/).  Channels is an official Django Project.
 
+<technology image="celery.png" />
+
+## [Celery](http://www.celeryproject.org/)
+
+### Distributed Task Queueing for Python web applications
+
+Celery is an asynchronous task queue/job queue based on distributed message passing. It is focused on real-time operation, but supports scheduling as well.  Tasks can execute asynchronously (in the background) or synchronously (wait until ready).
