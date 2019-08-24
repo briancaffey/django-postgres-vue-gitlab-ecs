@@ -71,3 +71,11 @@ Docker is an open-source and free containerization platform.  Working applicatio
 
 Quasar (pronounced /ˈkweɪ.zɑɹ/) is an MIT licensed open-source Vue.js based framework, which allows the development of responsive++ websites/apps.  Quasar works on top of VueJS to provide a full-featured toolset for building responsive frontend apps.  Develop an app and simultaneously deploy it as a website, a mobile app, or an Electron app.
 
+<technology image="django-channels-white-bg-square.jpg" />
+
+## [Django Channels](https://github.com/django/channels/)
+
+### Developer-friendly asynchrony for Django
+
+Channels is a project that takes Django and extends its abilities beyond HTTP - to handle WebSockets, chat protocols, IoT protocols, and more. It’s built on a Python specification called [ASGI](https://asgi.readthedocs.io/en/latest/).  Channels is an official Django Project.
+
