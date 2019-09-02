@@ -15,17 +15,16 @@
       <q-toolbar-title>Verbose Equals True</q-toolbar-title>
 
       <span class="lang">
-        <emoji :native="false" height="100%" :sheetSize="64" :emoji="lang.emoji" :size="28" />
+        <emoji
+          :native="false"
+          height="100%"
+          :sheetSize="64"
+          :emoji="lang.emoji"
+          :size="28"
+        />
       </span>
 
-      <q-select
-        dark
-        dense
-        color="white"
-        v-model="lang"
-        :options="langs"
-      />
-
+      <q-select dark dense color="white" v-model="lang" :options="langs" />
 
       <q-btn
         id="login"
@@ -74,15 +73,15 @@ export default {
           label: "Chinese",
           value: "cn-cn",
           emoji: ":flag-cn:"
-        },
+        }
       ]
     };
   },
   components: { AuthModal },
   methods: {
-    setLang(lang){
+    setLang(lang) {
       console.log(lang);
-      this.lang = lang
+      this.lang = lang;
     },
     logout() {
       this.$store.dispatch("AUTH_LOGOUT").then(() => this.$router.push("/"));
@@ -93,7 +92,7 @@ export default {
     }
   },
   created() {
-    this.$i18n.locale = 'en-us';
+    this.$i18n.locale = "en-us";
   },
   watch: {
     lang(lang) {
