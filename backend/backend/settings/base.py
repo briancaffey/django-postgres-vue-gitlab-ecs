@@ -141,7 +141,7 @@ DATABASES = {
         'NAME': os.environ.get('RDS_DB_NAME', 'postgres'),
         'USER': os.environ.get('RDS_USERNAME', 'postgres'),
         'PASSWORD': os.environ.get('RDS_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('RDS_HOSTNAME', 'db'),
+        'HOST': os.environ.get('RDS_HOSTNAME', 'postgres'),
         'PORT': os.environ.get('RDS_PORT', 5432),
     }
 }

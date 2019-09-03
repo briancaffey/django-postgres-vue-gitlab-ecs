@@ -2,8 +2,8 @@ version: '3.7'
 
 services:
 
-  db:
-    container_name: db
+  postgres:
+    container_name: postgres
     image: postgres
     networks:
       - main
@@ -66,7 +66,7 @@ services:
       - ./quasar:/app/:rw
     depends_on:
       - backend
-      - db
+      - postgres
     environment:
       - CHOKIDAR_USEPOLLING=true
       - GITHUB_KEY=${GITHUB_KEY}
@@ -107,7 +107,7 @@ services:
       - GOOGLE_OAUTH2_KEY=${GOOGLE_OAUTH2_KEY}
       - GOOGLE_OAUTH2_SECRET=${GOOGLE_OAUTH2_SECRET}
     depends_on:
-      - db
+      - postgres
 
   asgiserver:
     <<: *backend
