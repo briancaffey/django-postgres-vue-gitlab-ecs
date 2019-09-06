@@ -47,7 +47,7 @@ Notice that the `DOCKER_HOST` is pointing to the minikube VM on docker's default
 With these environment variables set, let's build the Django container image with the following command:
 
 ```bash
-docker-compose build backend
+docker build -t backend:<TAG> -f backend/scripts/dev/Dockerfile backend/
 ```
 
 **`deployment.yml`**
@@ -185,3 +185,87 @@ spec:
 ::: warning storageClassName
 Clicking on the `storageClassName` gave a 404 error
 :::
+
+::: warning Authentication failure
+Message with postgres authentication failure
+:::
+
+After changing the `postgres` user password, the migrations are able to run successfully:
+
+```bash
+k exec django-784d668c8b-9gbf7 -it -- ./manage.py migrat
+e
+loading minikube settings...
+Operations to perform:
+  Apply all migrations: accounts, admin, auth, contenttypes, sessions, social_django
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying accounts.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying sessions.0001_initial... OK
+  Applying social_django.0001_initial... OK
+  Applying social_django.0002_add_related_name... OK
+  Applying social_django.0003_alter_email_max_length... OK
+  Applying social_django.0004_auto_20160423_0400... OK
+  Applying social_django.0005_auto_20160727_2333... OK
+  Applying social_django.0006_partial... OK
+  Applying social_django.0007_code_timestamp... OK
+  Applying social_django.0008_partial_timestamp... OK
+```
+
+::: warning Try this again
+Try this again with a clean version of minikube and using the Secrets resource.
+:::
+
+I initially started the postgres container with a password set by environment variable. This may have set data in the
+
+::: tip kubectl cheatsheet from kubernetes documentation
+[https://kubernetes.io/docs/reference/kubectl/cheatsheet/#viewing-finding-resources](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#viewing-finding-resources)
+:::
+
+
+Show the service in kubernetes:
+
+```
+minikube service kubernetes-django-service
+```
+
+We have two options for how to run the frontend application in Kubernetes.
+
+1) Servce the static content from Django
+2) Serve the static content from nginx and use another service.
+
+Serving the static content from Django was not working, so I'm building another deployment/service for frontend. For this to work, we need to tell Quasar about the address for the Django service. There are two ways to do this:
+
+1) DNS
+2) Environment variables
+
+
+## Use environment variables to get service IP/Host
+
+This won't be possible with out static front end site.
+
+## Use DNS for services
+
+DNS will be easier since we are building static assets outside of the context of Kubernetes and the environment variables that it injects at runtime.
+
+```
+/ # curl http://kubernetes-django-service:8000/api/
+{"message": "Root"}
+```
+
+We need to set the `DOMAIN_NAME` environment variable to `kubernetes-django-service`, and also set the port, and we should be able to access the backend from frontend AJAX calls.

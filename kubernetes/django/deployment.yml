@@ -15,7 +15,7 @@ spec:
       containers:
         - name: backend
           imagePullPolicy: IfNotPresent
-          image: backend:2
+          image: backend:12
           command: ["./manage.py", "runserver", "0.0.0.0:8000"]
           ports:
           - containerPort: 8000
@@ -39,6 +39,9 @@ spec:
               #   secretKeyRef:
               #     name: postgres-credentials
               #     key: password
+
+            - name: DEBUG
+              value: "True"
 
             - name: POSTGRES_HOST
               value: postgres-service

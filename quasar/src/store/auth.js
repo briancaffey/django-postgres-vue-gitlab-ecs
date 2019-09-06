@@ -7,7 +7,6 @@ export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_REFRESH = "AUTH_REFRESH";
 
 import apiCall from "../utils/api";
-import axios from "axios";
 import { Cookies } from "quasar";
 import { USER_REQUEST } from "./user.js";
 
@@ -27,7 +26,7 @@ const actions = {
   [AUTH_REQUEST]: ({ commit, dispatch }, user) =>
     new Promise((resolve, reject) => {
       commit(AUTH_REQUEST);
-      axios
+      apiCall
         .post("/api/auth/obtain_token/", user)
         .then(resp => {
           Cookies.set("refresh-token", resp.data.refresh);

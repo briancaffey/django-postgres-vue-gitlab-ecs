@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubernetes-frontend-service
+spec:
+  selector:
+    app: frontend-container
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort

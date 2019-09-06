@@ -1,5 +1,7 @@
 from .development import *  # noqa
 
+print("loading minikube settings...")
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
