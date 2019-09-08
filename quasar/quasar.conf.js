@@ -54,7 +54,8 @@ module.exports = function(ctx) {
         "QCheckbox",
         "QCarousel",
         "QCarouselSlide",
-        "QSelect"
+        "QSelect",
+        "QForm"
       ],
 
       directives: ["Ripple", "ClosePopup"],
