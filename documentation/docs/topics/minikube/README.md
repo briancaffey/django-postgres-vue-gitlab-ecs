@@ -268,4 +268,34 @@ DNS will be easier since we are building static assets outside of the context of
 {"message": "Root"}
 ```
 
+This works from inside of a pod, but we can't use this for our static site since `localhost` won't know how to resolve `kubernetes-django-service`. One solution for this is to get the `port:ip` of the backend service from minikube, and then use this value for the `baseUrl` in our frontend application:
+
+**minikube/Dockerfile**
+
+```Dockerfile
+# build stage
+FROM node:10-alpine as build-stage
+WORKDIR /app/
+ENV DOMAIN_NAME 192.168.99.101:30958 <-- this is the nodePort for the backend service
+ENV HTTP_PROTOCOL http
+COPY quasar/package.json /app/
+RUN npm cache verify
+RUN npm install -g @quasar/cli
+RUN npm install --progress=false
+COPY quasar /app/
+RUN quasar build -m pwa
+
+# minikube stage
+FROM nginx:1.13.12-alpine as minikube
+COPY nginx/minikube/minikube.conf /etc/nginx/nginx.conf
+COPY --from=build-stage /app/dist/pwa /dist/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
 We need to set the `DOMAIN_NAME` environment variable to `kubernetes-django-service`, and also set the port, and we should be able to access the backend from frontend AJAX calls.
+
+## Troubleshooting and Misc
+
+https://stackoverflow.com/questions/55573426/virtualbox-is-configured-with-multiple-host-only-adapters-with-the-same-ip-whe
+

@@ -1,7 +1,9 @@
 # build stage
 FROM node:10-alpine as build-stage
 WORKDIR /app/
-ENV DOMAIN_NAME 192.168.99.101:30958
+ENV DOMAIN_NAME 192.168.99.105:30958
+ENV GITHUB_KEY github123
+ENV GOOGLE_OAUTH2_KEY google123
 ENV HTTP_PROTOCOL http
 COPY quasar/package.json /app/
 RUN npm cache verify
