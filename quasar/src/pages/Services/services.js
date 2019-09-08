@@ -30,7 +30,8 @@ let services = [
 ];
 
 if (process.env.NODE_ENV === "development") {
-  services = [ ...services,
+  services = [
+    ...services,
     {
       icon: "storage",
       name: "Redis Commander",
