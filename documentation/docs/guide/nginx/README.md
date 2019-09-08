@@ -122,7 +122,7 @@ volumes:
   django-static:
 ```
 
-- Change the `build` section of the `backend` container:
+- Change the `build` section of the `nginx` container:
 
 ```yml
     build:
