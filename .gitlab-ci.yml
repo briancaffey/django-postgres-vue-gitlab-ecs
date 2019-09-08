@@ -122,7 +122,7 @@ e2e: &cypress
     - cp cypress.json backend/
     - cp -r cypress/ backend/cypress
     - cd backend
-    - $(npm bin)/cypress run
+    - $(npm bin)/cypress run --config defaultCommandTimeout=10000
   artifacts:
     paths:
       - backend/cypress/videos/
