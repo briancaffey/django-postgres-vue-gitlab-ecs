@@ -41,5 +41,4 @@ if (process.env.NODE_ENV === "development") {
     }
   ];
 }
-console.log(JSON.stringify(services));
 export default services;
