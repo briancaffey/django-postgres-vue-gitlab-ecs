@@ -2,13 +2,11 @@ import os
 
 from django.conf import settings
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
+from django.views.generic import TemplateView
 from rest_framework import viewsets
 
 from core.tasks import debug_task, send_test_email_task
-
-
-from django.views.generic import TemplateView
-from django.views.decorators.cache import never_cache
 
 # Serve Vue Application via template for GitLab CI
 index_view = never_cache(TemplateView.as_view(template_name='index.html'))
