@@ -1,0 +1,9 @@
+documentation/
+cloudformation/
+.vscode
+cypress/videos/
+gitlab-runner
+kubernetes
+node_modules
+**/node_modules
+notes

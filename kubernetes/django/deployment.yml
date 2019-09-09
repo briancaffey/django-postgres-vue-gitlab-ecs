@@ -1,0 +1,57 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-container
+  template:
+    metadata:
+      labels:
+        app: django-container
+    spec:
+      containers:
+        - name: backend
+          imagePullPolicy: IfNotPresent
+          image: backend:12
+          command: ["./manage.py", "runserver", "0.0.0.0:8000"]
+          ports:
+          - containerPort: 8000
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: 'backend.settings.minikube'
+
+            - name: SECRET_KEY
+              value: "my-secret-key"
+
+            - name: POSTGRES_USER
+              value: postgres
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: postgres-credentials
+              #     key: user
+
+            - name: POSTGRES_PASSWORD
+              value: postgres
+              # valueFrom:
+              #   secretKeyRef:
+              #     name: postgres-credentials
+              #     key: password
+
+            - name: DEBUG
+              value: "True"
+
+            - name: POSTGRES_HOST
+              value: postgres-service
+
+          volumeMounts:
+            - name: postgres-volume-mount
+              mountPath: /var/lib/busybox
+
+      volumes:
+        - name: postgres-volume-mount
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+

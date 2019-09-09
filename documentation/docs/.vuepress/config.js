@@ -56,6 +56,10 @@ module.exports = {
         ]
       },
       {
+        text: "Topics",
+        items: [{ text: "Minikube", link: "/topics/minikube/" }]
+      },
+      {
         text: "Source Code",
         link:
           "https://gitlab.com/verbose-equals-true/django-postgres-vue-gitlab-ecs"
