@@ -1,5 +1,11 @@
 <template>
-  <q-header>
+  <q-header
+    :style="
+      $store.getters.isDark
+        ? 'background:linear-gradient(45deg, purple, teal)'
+        : 'background:linear-gradient(135deg, red, orange)'
+    "
+  >
     <q-toolbar>
       <q-btn
         id="toggleLeftDrawer"
@@ -14,6 +20,7 @@
 
       <q-toolbar-title>Verbose Equals True</q-toolbar-title>
 
+      <dark-mode></dark-mode>
       <span class="lang">
         <emoji
           :native="false"
@@ -23,7 +30,6 @@
           :size="28"
         />
       </span>
-
       <q-select dark dense color="white" v-model="lang" :options="langs" />
 
       <q-btn
@@ -108,8 +114,9 @@ export default {
 
 <style scoped>
 .lang {
-  margin-right: 20px;
+  margin-right: 15px;
   cursor: pointer;
+  height: 28px;
 }
 .q-select {
   margin-right: 20px;

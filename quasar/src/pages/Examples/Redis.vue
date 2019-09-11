@@ -1,20 +1,26 @@
 <template>
   <base-page>
-    <h4>Redis Test</h4>
-    <p class="redis-debug">
+    <page-header>Redis Test</page-header>
+    <page-text class="redis-debug">
       Value:
       <span id="val">{{ valueFromCache }}</span>
-    </p>
-    <q-input
-      id="input"
-      v-model.number="valueToSet"
-      type="number"
-      filled
-      style="max-width: 200px"
-      :disabled="true"
-    />
-    <q-btn id="set" @click="setCacheValue">Set Value to Cache</q-btn>
-    <q-btn id="clear" @click="clearCacheValue">Delete Value from Cache</q-btn>
+    </page-text>
+    <div class="redis">
+      <q-input
+        :dark="$store.getters.isDark"
+        id="input"
+        v-model.number="valueToSet"
+        type="number"
+        filled
+        :disabled="true"
+      />
+      <base-btn id="set" @click.native="setCacheValue"
+        >Set Value to Cache</base-btn
+      >
+      <base-btn id="clear" @click.native="clearCacheValue"
+        >Delete Value from Cache</base-btn
+      >
+    </div>
   </base-page>
 </template>
 
@@ -60,4 +66,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.redis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+}
+</style>

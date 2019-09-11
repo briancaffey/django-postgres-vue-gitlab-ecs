@@ -1,6 +1,6 @@
 <template>
   <base-page>
-    <h4>Services</h4>
+    <page-sub-header>Services</page-sub-header>
     <div class="q-pa-md q-gutter-sm">
       <q-btn
         v-for="(s, i) in services"
@@ -13,7 +13,7 @@
         :label="s.name"
       />
     </div>
-    <h4>Documentation Links</h4>
+    <page-sub-header>Documentation Links</page-sub-header>
     <div class="q-pa-md q-gutter-sm">
       <q-btn
         v-for="(s, i) in documentationLinks"
@@ -26,7 +26,7 @@
         :label="s.name"
       />
     </div>
-    <h4>Helpful Links</h4>
+    <page-sub-header>Helpful Links</page-sub-header>
     <div class="q-pa-md q-gutter-sm">
       <q-btn
         v-for="(s, i) in helpfulLinks"

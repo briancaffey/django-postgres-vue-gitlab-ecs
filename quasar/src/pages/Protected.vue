@@ -1,7 +1,9 @@
 <template>
   <base-page>
-    <h4>Protected Content</h4>
-    <p>This page will only be available if the user is logged in.</p>
+    <page-header>Protected Content</page-header>
+    <page-text
+      >This page will only be available if the user is logged in.</page-text
+    >
   </base-page>
 </template>
 

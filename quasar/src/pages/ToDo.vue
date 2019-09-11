@@ -1,11 +1,20 @@
 <template>
   <base-page>
-    <h4>To-Do's</h4>
-    <q-list bordered padding>
+    <page-header>To-Do's</page-header>
+    <q-list bordered padding :dark="$store.getters.isDark">
       <q-item>
         <q-item-section>
-          <q-checkbox v-for="(t, i) in todos" v-model="t.complete" :key="i">
-            {{ t.title }}
+          <q-checkbox
+            :dark="$store.getters.isDark"
+            v-for="(t, i) in todos"
+            v-model="t.complete"
+            :key="i"
+          >
+            <span
+              :style="`color: ${$store.getters.isDark ? 'white' : 'black'}`"
+            >
+              {{ t.title }}</span
+            >
           </q-checkbox>
         </q-item-section>
       </q-item>
