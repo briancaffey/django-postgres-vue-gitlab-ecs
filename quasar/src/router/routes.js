@@ -37,6 +37,8 @@ const routes = [
         path: "",
         component: () => import("pages/Index.vue")
       },
+      { path: "login", component: () => import("pages/Auth/Login.vue") },
+      { path: "signup", component: () => import("pages/Auth/SignUp.vue") },
       {
         path: "about",
         component: () => import("pages/About.vue")

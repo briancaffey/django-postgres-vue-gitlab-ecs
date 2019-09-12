@@ -1,6 +1,7 @@
 <template>
   <q-drawer
     @hide="hideDrawer"
+    @show="showDrawer"
     v-model="leftDrawerOpen"
     content-class="bg-grey-5"
   >
@@ -93,6 +94,11 @@ export default {
     }
   },
   methods: {
+    showDrawer() {
+      this.$store.commit("toggleLeftDrawer", {
+        leftDrawerOpen: true
+      });
+    },
     hideDrawer() {
       this.$store.commit("toggleLeftDrawer", {
         leftDrawerOpen: false

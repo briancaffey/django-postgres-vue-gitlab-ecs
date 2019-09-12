@@ -40,7 +40,7 @@
         label="Login"
         v-if="!$store.getters.isAuthenticated"
         no-caps
-        @click="$store.commit('toggleLoginMenu')"
+        @click="$router.push('/login')"
       />
       <q-btn
         id="logout"
@@ -52,14 +52,11 @@
         no-caps
         @click="logout"
       />
-      <auth-modal />
     </q-toolbar>
   </q-header>
 </template>
 
 <script>
-import AuthModal from "components/AuthModal.vue";
-
 export default {
   data() {
     return {
@@ -83,7 +80,6 @@ export default {
       ]
     };
   },
-  components: { AuthModal },
   methods: {
     setLang(lang) {
       console.log(lang);

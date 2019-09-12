@@ -55,7 +55,9 @@ module.exports = function(ctx) {
         "QCarousel",
         "QCarouselSlide",
         "QSelect",
-        "QForm"
+        "QForm",
+        "QSpinnerGears",
+        "QInnerLoading"
       ],
 
       directives: ["Ripple", "ClosePopup"],
