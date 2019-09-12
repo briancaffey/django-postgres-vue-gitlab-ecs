@@ -6,9 +6,9 @@ export const AUTH_ERROR = "AUTH_ERROR";
 export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_REFRESH = "AUTH_REFRESH";
 
-import apiCall from "../utils/api";
+import apiCall from "../../utils/api";
 import { Cookies } from "quasar";
-import { USER_REQUEST } from "./user.js";
+import { USER_REQUEST } from "../user";
 
 const state = {
   token: Cookies.get("user-token") || "",

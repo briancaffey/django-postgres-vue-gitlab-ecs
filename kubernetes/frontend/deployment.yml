@@ -17,4 +17,4 @@ spec:
       containers:
         - name: frontend
           imagePullPolicy: IfNotPresent
-          image: frontend:6
+          image: frontend:fixed7
