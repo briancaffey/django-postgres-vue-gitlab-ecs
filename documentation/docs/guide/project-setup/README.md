@@ -54,7 +54,7 @@ Currently we only have a one file (`README.md`) and one branch (`master`). Let's
 
 ```
 git add .
-git commit -m "save readme.md
+git commit -m "save readme.md"
 git checkout -b develop master
 ```
 
@@ -118,7 +118,7 @@ Next, let's create a `requirements.txt` file. Our Dockerfile is expecting this f
 
 ```
 Django==2.1.3
-psycopg2==2.7.5
+psycopg2-binary==2.7.5
 ```
 
 ### Docker Compose
@@ -321,7 +321,7 @@ DATABASES = {
 }
 ```
 
-Next, let's replace the `command` part of the `backend` service. When this service starts, we will want to do more than simply `runserver`. We want to collect static files, make migrations, run migrations and finally run the development server. To do all of these things, we will include run a script that will do all of these things.
+Next, let's replace the `command` part of the `backend` service. When this service starts, we will want to do more than simply `runserver`. We want to collect static files, make migrations, run migrations and finally run the development server. To do all of these things, we will include and run a script that will do all of these things.
 
 The script should live in a file called `scripts` that lives in the `backend` folder in the root directory of our project.
 
@@ -468,7 +468,7 @@ class TestDatabase(TestCase):
             password='pass'
         )
         user.save()
-        user_count = Users.objects.all().count()
+        user_count = User.objects.all().count()
         self.assertEqual(user_count, 1)
 ```
 
@@ -540,7 +540,7 @@ You may choose to add this virual environment through another tool such as `pyen
 
 Let's add a `.gitignore` to keep the `.env` folder out of source control:
 
-**.gitignore**
+**./.env/.gitignore**
 
 ```
 .env
@@ -697,7 +697,7 @@ test:
     - pytest --cov
 ```
 
-In GitLab's `Settings` > `CI/CD` section, add the following to `Test Coverage Parsing`:
+In GitLab's `Settings` > `CI/CD` section (Gitlab.com > [project] > Settings > CI/CD > General pipelines > Test coverage parsing), add the following to `Test Coverage Parsing`:
 
 ```
 ^TOTAL\s+\d+\s+\d+\s+(\d+\%)$
