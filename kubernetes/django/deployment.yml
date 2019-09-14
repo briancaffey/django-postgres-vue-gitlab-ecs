@@ -15,7 +15,7 @@ spec:
       containers:
         - name: backend
           imagePullPolicy: IfNotPresent
-          image: backend:12
+          image: backend:2
           command: ["./manage.py", "runserver", "0.0.0.0:8000"]
           ports:
           - containerPort: 8000
@@ -26,25 +26,20 @@ spec:
             - name: SECRET_KEY
               value: "my-secret-key"
 
-            - name: POSTGRES_USER
+            - name: POSTGRES_NAME
               value: postgres
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: postgres-credentials
-              #     key: user
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
 
             - name: POSTGRES_PASSWORD
-              value: postgres
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: postgres-credentials
-              #     key: password
-
-            - name: DEBUG
-              value: "True"
-
-            - name: POSTGRES_HOST
-              value: postgres-service
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
 
           volumeMounts:
             - name: postgres-volume-mount

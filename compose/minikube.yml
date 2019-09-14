@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+
+  frontend:
+    image: frontend:1
+    build:
+      context: ../
+      dockerfile: nginx/minikube/Dockerfile
+      args:
+        - DOMAIN_NAME=test.dev
+        - GOOGLE_OAUTH2_KEY=google123
+        - GITHUB_KEY=github123
+        - WS_PROTOCOL=ws
+        - HTTP_PROTOCOL=http
+
+  backend:
+    image: backend:2
+    build:
+      context: ../backend/
+      dockerfile: scripts/dev/Dockerfile
+

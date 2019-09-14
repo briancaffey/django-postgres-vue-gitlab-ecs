@@ -18,21 +18,16 @@ spec:
           image: postgres:9.6.6
           env:
             - name: POSTGRES_USER
-              value: postgres
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: postgres-credentials
-              #     key: user
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
 
             - name: POSTGRES_PASSWORD
-              value: postgres
-              # valueFrom:
-              #   secretKeyRef:
-              #     name: postgres-credentials
-              #     key: password
-
-            - name: POSTGRES_NAME
-              value: kubernetes_django
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
 
           ports:
             - containerPort: 5432

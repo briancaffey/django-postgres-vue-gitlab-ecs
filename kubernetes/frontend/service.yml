@@ -6,7 +6,7 @@ spec:
   selector:
     app: frontend-container
   ports:
-  - nodePort: 30001
+  - nodePort: 30002
     protocol: TCP
     port: 80
     targetPort: 80

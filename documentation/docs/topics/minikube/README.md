@@ -231,6 +231,14 @@ Running migrations:
 Try this again with a clean version of minikube and using the Secrets resource.
 :::
 
+## Secrets
+
+Let's use base64 encoding to define a username and password for our Postgres username and password:
+
+```
+echo -n "my-string" | base64
+```
+
 I initially started the postgres container with a password set by environment variable. This may have set data in the
 
 ::: tip kubectl cheatsheet from kubernetes documentation
@@ -272,30 +280,33 @@ This works from inside of a pod, but we can't use this for our static site since
 
 **minikube/Dockerfile**
 
-```Dockerfile
-# build stage
-FROM node:10-alpine as build-stage
-WORKDIR /app/
-ENV DOMAIN_NAME 192.168.99.101:30958 <-- this is the nodePort for the backend service
-ENV HTTP_PROTOCOL http
-COPY quasar/package.json /app/
-RUN npm cache verify
-RUN npm install -g @quasar/cli
-RUN npm install --progress=false
-COPY quasar /app/
-RUN quasar build -m pwa
+Use the following command to build the frontend resources in minikube:
 
-# minikube stage
-FROM nginx:1.13.12-alpine as minikube
-COPY nginx/minikube/minikube.conf /etc/nginx/nginx.conf
-COPY --from=build-stage /app/dist/pwa /dist/
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+```
+docker-compose -f compose/minikube.yml build frontend
 ```
 
-We need to set the `DOMAIN_NAME` environment variable to `kubernetes-django-service`, and also set the port, and we should be able to access the backend from frontend AJAX calls.
+Make sure that your current shell has the correct environment variables set for the `DOCKER_HOST` by running:
+
+```
+eval $(minikube docker-env)
+```
+
+
+
+We can pass the environment variables needed during the build process with `ARG` and `ENV`.
+
+For `DOMAIN_NAME`, want to use an address that will point to the minikube Kubernetes cluster. Since the IP might change, we can set this to a named domain such as `test.dev`, and add a line to `/etc/hosts` that will point `test.dev` to the minikube IP. Then, we will need to setup a ingress to point `test.dev` to our `kubernetes-django-service` service.
+
 
 ## Troubleshooting and Misc
 
 https://stackoverflow.com/questions/55573426/virtualbox-is-configured-with-multiple-host-only-adapters-with-the-same-ip-whe
 
+
+
+## Enable Ingress Addon in Minikibe
+
+```
+minikube addons enable ingress
+```
