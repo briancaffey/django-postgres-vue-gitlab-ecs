@@ -5,15 +5,13 @@ SECRET_KEY = "my-secret-key"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('RDS_DB_NAME', 'postgres'),
-        'USER': os.environ.get('RDS_USERNAME', 'postgres'),
-        'PASSWORD': os.environ.get('RDS_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('RDS_HOSTNAME', 'postgres'),
-        'PORT': os.environ.get('RDS_PORT', 5432),
+        'NAME': os.environ.get('RDS_DB_NAME', 'postgres'), # noqa
+        'USER': os.environ.get('RDS_USERNAME', 'postgres'), # noqa
+        'PASSWORD': os.environ.get('RDS_PASSWORD', 'postgres'), # noqa
+        'HOST': os.environ.get('RDS_HOSTNAME', 'postgres'), # noqa
+        'PORT': os.environ.get('RDS_PORT', 5432), # noqa
     }
 }
-
-
 
 DEBUG_APPS = [
     'django_extensions',
@@ -69,4 +67,3 @@ NOTEBOOK_ARGUMENTS = [
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/static/'
-
