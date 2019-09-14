@@ -19,12 +19,9 @@ const mutations = {
     state.isDark = !state.isDark;
   },
   setAuthPanel: (state, payload) => {
-    console.log("change panel...");
-    console.log(payload);
     state.authPanel = payload;
   },
   toggleLoginMenu: state => {
-    console.log("firing toggleLoginMenu mutation");
     state.visible = !state.visible;
   },
   toggleLeftDrawer: (state, payload) => {
@@ -33,9 +30,6 @@ const mutations = {
       return;
     }
     state.leftDrawerOpen = !state.leftDrawerOpen;
-  },
-  setNextLink: (state, payload) => {
-    state.nextLink = payload.nextLink;
   }
 };
 

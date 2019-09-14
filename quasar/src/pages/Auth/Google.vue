@@ -6,11 +6,10 @@
 
 <script>
 import * as Cookies from "js-cookie";
-import apiCall from "../../utils/api";
 export default {
   methods: {
     googleAuth() {
-      apiCall
+      this.$axios
         .post("/api/social/google/", {
           code: this.$route.query.code
         })

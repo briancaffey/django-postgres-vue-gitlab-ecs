@@ -82,7 +82,6 @@ export default {
   },
   methods: {
     setLang(lang) {
-      console.log(lang);
       this.lang = lang;
     },
     logout() {

@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import apiCall from "../../utils/api.js";
 export default {
   data() {
     return {
@@ -42,20 +41,20 @@ export default {
   },
   methods: {
     clearCacheValue() {
-      apiCall.delete("/api/debug/redis/").then(resp => {
+      this.$axios.delete("/api/debug/redis/").then(resp => {
         console.log(resp);
         console.log("getting here..");
         this.valueFromCache = null;
       });
     },
     getCachedValue() {
-      apiCall.get("/api/debug/redis/").then(resp => {
+      this.$axios.get("/api/debug/redis/").then(resp => {
         this.valueFromCache = resp.data["count"];
       });
     },
     setCacheValue() {
       if (this.valueToSet) {
-        apiCall
+        this.$axios
           .post("/api/debug/redis/", { count: this.valueToSet })
           .then(resp => {
             this.valueFromCache = resp.data.count;

@@ -1,5 +1,5 @@
 <template>
-  <q-form @submit="login">
+  <q-form @submit.prevent="login">
     <q-input
       :color="$store.getters.isDark ? 'black' : 'primary'"
       :dark="$store.getters.isDark"

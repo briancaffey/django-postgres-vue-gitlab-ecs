@@ -4,11 +4,10 @@
 
 <script>
 import * as Cookies from "js-cookie";
-import apiCall from "../../utils/api";
 export default {
   methods: {
     githubAuth() {
-      apiCall
+      this.$axios
         .post("/api/social/github/", { code: this.$route.query.code })
         .then(resp => {
           Cookies.set("refresh-token", resp.data.refresh);

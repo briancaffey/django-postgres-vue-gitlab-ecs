@@ -6,7 +6,8 @@ export const AUTH_ERROR = "AUTH_ERROR";
 export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_REFRESH = "AUTH_REFRESH";
 
-import apiCall from "../../utils/api";
+// import axios from "axios";
+import Vue from "vue";
 import { Cookies } from "quasar";
 import { USER_REQUEST } from "../user";
 
@@ -26,7 +27,7 @@ const actions = {
   [AUTH_REQUEST]: ({ commit, dispatch }, user) =>
     new Promise((resolve, reject) => {
       commit(AUTH_REQUEST);
-      apiCall
+      Vue.prototype.$axios
         .post("/api/auth/obtain_token/", user)
         .then(resp => {
           Cookies.set("refresh-token", resp.data.refresh);
@@ -51,7 +52,7 @@ const actions = {
     }),
   [AUTH_REFRESH]: ({ commit, dispatch }) =>
     new Promise((resolve, reject) => {
-      apiCall
+      Vue.prototype.$axios
         .post("/api/auth/refresh_token/", {
           refresh: Cookies.get("refresh-token")
         })
