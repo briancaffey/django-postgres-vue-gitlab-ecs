@@ -1,18 +1,13 @@
 <template>
-  <q-toggle v-model="dark" color="black" />
+  <q-toggle v-model="dark" :color="$store.getters.isDark ? 'black' : 'white'" />
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      darkMode: true
-    };
-  },
   computed: {
     dark: {
       get() {
-        return this.$store.getters.isDarkMode;
+        return this.$store.getters.isDark;
       },
       set() {
         this.$store.commit("toggleDarkMode");

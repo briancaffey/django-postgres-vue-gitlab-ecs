@@ -1,17 +1,26 @@
 const state = {
   visible: false,
-  darkMode: false,
+  isDark: true,
   leftDrawerOpen: false,
-  nextLink: null
+  nextLink: null,
+  authPanel: "login"
 };
 
 const getters = {
   leftDrawerOpen: s => s.leftDrawerOpen,
   authModalVisible: s => s.visible,
-  getNextLink: s => s.nextLink
+  getNextLink: s => s.nextLink,
+  getAuthPanel: s => s.authPanel,
+  isDark: s => s.isDark
 };
 
 const mutations = {
+  toggleDarkMode: state => {
+    state.isDark = !state.isDark;
+  },
+  setAuthPanel: (state, payload) => {
+    state.authPanel = payload;
+  },
   toggleLoginMenu: state => {
     state.visible = !state.visible;
   },
@@ -21,9 +30,6 @@ const mutations = {
       return;
     }
     state.leftDrawerOpen = !state.leftDrawerOpen;
-  },
-  setNextLink: (state, payload) => {
-    state.nextLink = payload.nextLink;
   }
 };
 

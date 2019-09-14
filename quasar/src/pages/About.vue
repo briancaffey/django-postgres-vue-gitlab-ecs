@@ -1,11 +1,11 @@
 <template>
   <q-page-container>
     <q-page padding>
-      <h4>About this site...</h4>
-      <p>
+      <page-header>About this site...</page-header>
+      <page-text>
         This site is built with Django, Vue, Postgres, nginx, docker, and other
         technologies...
-      </p>
+      </page-text>
     </q-page>
   </q-page-container>
 </template>

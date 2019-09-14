@@ -1,5 +1,5 @@
-import store from "../store";
-import router from "../router";
+// import store from "../store";
+// import router from "../router";
 
 // for pages that should not be available to logged in users,
 // such as "Recover password" or a dedicated "Login" page
@@ -12,17 +12,17 @@ import router from "../router";
 //   next("/");
 // };
 
-const ifAuthenticated = (to, from, next) => {
-  if (store.getters.isAuthenticated) {
-    next();
-    return;
-  }
+// const ifAuthenticated = (to, from, next) => {
+//   if (store.getters.isAuthenticated) {
+//     next();
+//     return;
+//   }
 
-  store.commit("setNextLink", { nextLink: to.fullPath });
-  store.commit("toggleLoginMenu");
-  router.push("/");
-  return;
-};
+//   store.commit("setNextLink", { nextLink: to.fullPath });
+//   store.commit("toggleLoginMenu");
+//   router.push("/");
+//   return;
+// };
 
 const routes = [
   {
@@ -37,13 +37,15 @@ const routes = [
         path: "",
         component: () => import("pages/Index.vue")
       },
+      { path: "login", component: () => import("pages/Auth/Login.vue") },
+      { path: "signup", component: () => import("pages/Auth/SignUp.vue") },
       {
         path: "about",
         component: () => import("pages/About.vue")
       },
       {
         path: "protected",
-        beforeEnter: ifAuthenticated,
+        // beforeEnter: ifAuthenticated,
         component: () => import("pages/Protected.vue")
       },
       {
@@ -60,17 +62,17 @@ const routes = [
       },
       {
         path: "examples/",
-        beforeEnter: ifAuthenticated,
+        // beforeEnter: ifAuthenticated,
         component: () => import("pages/Examples/index.vue"),
         children: [
           {
             path: "websockets",
-            beforeEnter: ifAuthenticated,
+            // beforeEnter: ifAuthenticated,
             component: () => import("pages/Examples/Websockets.vue")
           },
           {
             path: "redis",
-            beforeEnter: ifAuthenticated,
+            // beforeEnter: ifAuthenticated,
             component: () => import("pages/Examples/Redis.vue")
           }
         ]

@@ -1,8 +1,8 @@
 <template>
   <base-page>
-    <h4>Websockets example</h4>
-    <h6>Ping Pong: {{ wsUrl }}</h6>
-    <q-btn id="ping" @click="sendPing">Send Ping</q-btn>
+    <page-header>Websockets example</page-header>
+    <page-sub-header>Ping Pong: {{ wsUrl }}</page-sub-header>
+    <base-btn id="ping" @click.native="sendPing">Send Ping</base-btn>
 
     <q-chip
       color="teal"

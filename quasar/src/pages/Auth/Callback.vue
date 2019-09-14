@@ -4,12 +4,11 @@
 
 <script>
 import * as Cookies from "js-cookie";
-import axios from "axios";
 export default {
   methods: {
     handleOauthCallback() {
       const provider = this.$route.params.provider;
-      axios
+      this.$axios
         .post(`/api/social/${provider}/`, { code: this.$route.query.code })
         .then(resp => {
           Cookies.set("refresh-token", resp.data.refresh);

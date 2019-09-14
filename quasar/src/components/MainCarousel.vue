@@ -11,7 +11,11 @@
       padding
       arrows
       height="300px"
-      class="bg-primary text-white shadow-1 rounded-borders"
+      :class="
+        `text-white shadow-1 rounded-borders ${
+          $store.getters.isDark ? 'carousel-dark' : 'carousel-light'
+        }`
+      "
     >
       <q-carousel-slide name="style" class="column no-wrap flex-center">
         <q-icon name="layers" size="56px" />
@@ -48,4 +52,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.carousel-light {
+  background: linear-gradient(270deg, red, orange);
+}
+.carousel-dark {
+  background: linear-gradient(270deg, purple, teal);
+}
+</style>

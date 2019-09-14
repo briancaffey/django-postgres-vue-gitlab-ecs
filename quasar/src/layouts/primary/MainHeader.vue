@@ -1,5 +1,11 @@
 <template>
-  <q-header>
+  <q-header
+    :style="
+      $store.getters.isDark
+        ? 'background:linear-gradient(45deg, purple, teal)'
+        : 'background:linear-gradient(135deg, red, orange)'
+    "
+  >
     <q-toolbar>
       <q-btn
         id="toggleLeftDrawer"
@@ -14,6 +20,7 @@
 
       <q-toolbar-title>Verbose Equals True</q-toolbar-title>
 
+      <dark-mode></dark-mode>
       <span class="lang">
         <emoji
           :native="false"
@@ -23,7 +30,6 @@
           :size="28"
         />
       </span>
-
       <q-select dark dense color="white" v-model="lang" :options="langs" />
 
       <q-btn
@@ -34,7 +40,7 @@
         label="Login"
         v-if="!$store.getters.isAuthenticated"
         no-caps
-        @click="$store.commit('toggleLoginMenu')"
+        @click="$router.push('/login')"
       />
       <q-btn
         id="logout"
@@ -46,14 +52,11 @@
         no-caps
         @click="logout"
       />
-      <auth-modal />
     </q-toolbar>
   </q-header>
 </template>
 
 <script>
-import AuthModal from "components/AuthModal.vue";
-
 export default {
   data() {
     return {
@@ -77,10 +80,8 @@ export default {
       ]
     };
   },
-  components: { AuthModal },
   methods: {
     setLang(lang) {
-      console.log(lang);
       this.lang = lang;
     },
     logout() {
@@ -108,8 +109,9 @@ export default {
 
 <style scoped>
 .lang {
-  margin-right: 20px;
+  margin-right: 15px;
   cursor: pointer;
+  height: 28px;
 }
 .q-select {
   margin-right: 20px;

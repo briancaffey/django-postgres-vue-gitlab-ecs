@@ -5,8 +5,7 @@ export const USER_SUCCESS = "USER_SUCCESS";
 export const USER_ERROR = "USER_ERROR";
 
 import Vue from "vue";
-import { AUTH_LOGOUT } from "./auth";
-import apiCall from "../utils/api";
+import { AUTH_LOGOUT } from "../auth";
 
 const state = {
   status: "",
@@ -20,7 +19,7 @@ const getters = {
 
 const actions = {
   [USER_REQUEST]: ({ dispatch, commit }) => {
-    apiCall
+    Vue.prototype.$axios
       .get("/api/users/profile/")
       .then(resp => {
         const profile = resp.data;

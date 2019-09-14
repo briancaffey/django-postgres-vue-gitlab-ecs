@@ -1,25 +1,30 @@
 <template>
   <base-page>
-    <h4>Redis Test</h4>
-    <p class="redis-debug">
+    <page-header>Redis Test</page-header>
+    <page-text class="redis-debug">
       Value:
       <span id="val">{{ valueFromCache }}</span>
-    </p>
-    <q-input
-      id="input"
-      v-model.number="valueToSet"
-      type="number"
-      filled
-      style="max-width: 200px"
-      :disabled="true"
-    />
-    <q-btn id="set" @click="setCacheValue">Set Value to Cache</q-btn>
-    <q-btn id="clear" @click="clearCacheValue">Delete Value from Cache</q-btn>
+    </page-text>
+    <div class="redis">
+      <q-input
+        :dark="$store.getters.isDark"
+        id="input"
+        v-model.number="valueToSet"
+        type="number"
+        filled
+        :disabled="true"
+      />
+      <base-btn id="set" @click.native="setCacheValue"
+        >Set Value to Cache</base-btn
+      >
+      <base-btn id="clear" @click.native="clearCacheValue"
+        >Delete Value from Cache</base-btn
+      >
+    </div>
   </base-page>
 </template>
 
 <script>
-import apiCall from "../../utils/api.js";
 export default {
   data() {
     return {
@@ -36,20 +41,20 @@ export default {
   },
   methods: {
     clearCacheValue() {
-      apiCall.delete("/api/debug/redis/").then(resp => {
+      this.$axios.delete("/api/debug/redis/").then(resp => {
         console.log(resp);
         console.log("getting here..");
         this.valueFromCache = null;
       });
     },
     getCachedValue() {
-      apiCall.get("/api/debug/redis/").then(resp => {
+      this.$axios.get("/api/debug/redis/").then(resp => {
         this.valueFromCache = resp.data["count"];
       });
     },
     setCacheValue() {
       if (this.valueToSet) {
-        apiCall
+        this.$axios
           .post("/api/debug/redis/", { count: this.valueToSet })
           .then(resp => {
             this.valueFromCache = resp.data.count;
@@ -60,4 +65,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.redis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+}
+</style>

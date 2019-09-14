@@ -1,5 +1,5 @@
 import buildURL from "axios/lib/helpers/buildURL";
-import oauth from "../utils/oauth";
+import oauth from "../../utils/oauth";
 
 const state = {
   oauth
