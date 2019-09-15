@@ -1,35 +1,23 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: django-channels
+  name: celery-beat
+  labels:
+    deployment: celery-beat
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: django-channels-container
+      pod: celery-beat
   template:
     metadata:
       labels:
-        app: django-channels-container
+        pod: celery-beat
     spec:
       containers:
-        - name: backend
-          imagePullPolicy: IfNotPresent
+        - name: celery-beat
           image: backend:14
-          command: ["daphne", "backend.asgi:application", "--bind", "0.0.0.0", "--port", "9000"]
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 9000
-          readinessProbe:
-            # an http probe
-            httpGet:
-              path: /readiness
-              port: 9000
-            initialDelaySeconds: 20
-            timeoutSeconds: 5
-          ports:
-          - containerPort: 9000
+          command: ["celery", "beat", "--app=backend.celery_app:app", "--loglevel=info"]
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: 'backend.settings.minikube'
@@ -51,4 +39,3 @@ spec:
                 secretKeyRef:
                   name: postgres-credentials
                   key: password
-

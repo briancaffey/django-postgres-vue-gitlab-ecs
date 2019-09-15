@@ -1,0 +1,28 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: flower
+  labels:
+    deployment: flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: celery-flower
+  template:
+    metadata:
+      labels:
+        pod: celery-flower
+    spec:
+      containers:
+      - name: flower
+        image: mher/flower
+        ports:
+          - containerPort: 5555
+        env:
+        - name: CELERY_BROKER_URL
+          value: redis://$(REDIS_SERVICE_HOST)/1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi

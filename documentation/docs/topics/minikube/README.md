@@ -280,6 +280,8 @@ spec:
             claimName: postgres-pvc
 ```
 
+### Service
+
 Finally, we can create a service that will allow us to access the Postgres database from pods in our Django deployment (which we will come back to next):
 
 **`kubernetes/postgres/service.yml`**
@@ -296,6 +298,66 @@ spec:
     - protocol: TCP
       port: 5432
       targetPort: 5432
+```
+
+## Redis
+
+Next, let's configure a redis server in our minikube cluster. This is similar to the [guestbook example](https://kubernetes.io/docs/tutorials/stateless-application/guestbook/) from the Kubernetes documentation, but we will only have a single-node redis cluster, not a master-slave setup.
+
+### Deployment
+
+**`kubernetes/redis/deployment.yml`**
+
+```
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    deployment: redis
+spec:
+  selector:
+    matchLabels:
+      pod: redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        pod: redis
+    spec:
+      containers:
+      - name: master
+        image: redis
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 6379
+```
+
+### Service
+
+**`kubernetes/redis/service.yml`**
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  selector:
+    pod: redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
+```
+
+Configure the redis deployment and service with the following command:
+
+```
+k apply -f kubernetes/redis/
 ```
 
 ## Django Webserver
@@ -432,6 +494,8 @@ spec:
 
 This needs to do two things: match the `django-container` label that is present in the Django deployment pod template, and specify port `8000` that our Django webserver is listening on, and that the pod has configured with `containerPort: 8000`.
 
+### Migration Job
+
 We are almost ready to apply our Django deployment and service, but before we do that we need migrate our database by running `./manage.py migrate`. The migration should be ran once, and it must run successfully. This type of task can be handled by a Kubernetes Job.
 
 **`kubernetes/django/migration.yml`**
@@ -479,26 +543,59 @@ k apply -f kubernetes/django/migration.yml
 
 Now let's inspect our pods
 
-TODO: show pods
 
 ```
 k get pods
-
+NAME                                   READY   STATUS      RESTARTS   AGE
+django-migrations-lphgb                0/1     Completed   0          9s
+postgres-deployment-57df8f899f-8fzmj   1/1     Running     0          53s
 ```
 
-TODO: show pod logs
+The Django migration file has a status of `Completed`, which should mean that the migrations have completed succesffully. Let's verify this by inspecting the pod logs:
 
 Now let's look at the Job's pod logs:
 
 ```
-k logs ....
-
+k logs django-migrations-lphgb
+loading minikube settings...
+Operations to perform:
+  Apply all migrations: accounts, admin, auth, contenttypes, sessions, social_django
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying accounts.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying sessions.0001_initial... OK
+  Applying social_django.0001_initial... OK
+  Applying social_django.0002_add_related_name... OK
+  Applying social_django.0003_alter_email_max_length... OK
+  Applying social_django.0004_auto_20160423_0400... OK
+  Applying social_django.0005_auto_20160727_2333... OK
+  Applying social_django.0006_partial... OK
+  Applying social_django.0007_code_timestamp... OK
+  Applying social_django.0008_partial_timestamp... OK
 ```
 
 We can see that our database migrations did indeed run successfully. Now we can configure the Django service and deployment with the following command:
 
 ```
 k apply -f kubernetes/django/
+deployment.apps/django created
+job.batch/django-migrations unchanged
+service/kubernetes-django-service created
 ```
 
 Visit the Django admin panel by running the following command:
@@ -509,11 +606,14 @@ minikube service kubernetes-django-service
 
 and then navigate to `/admin`, and you should see the Django admin login page. Let's create a default user. I have a management command which we can run:
 
-TODO: show k exec
-
 ```
-k exec ... -it -- ./manage.py create_default_user
+k exec django-59fc87fd6f-7slzl -it -- ./manage.py create_default_user
+loading minikube settings...
+Creating default user
 
+                Default user created:
+                email: 'admin@company.com'
+                password: 'password'
 ```
 
 You could also replace my `create_default_user` command with `createsuperuser` and create a user that way.
@@ -522,7 +622,9 @@ Login with your user to verify that everything is working properly.
 
 ## Frontend
 
-Now that the Django backend is working, let's take a look at the front end client that is built with Vue and Quasar Framework. As we did with the backend, we will build the frontend container with the `compose/minikube.py` file. Let's look at the frontend service definition in that file:
+### Building the frontend image
+
+Now that the Django backend is working, let's take a look at the front end client that is built with Vue and Quasar Framework and served with nginx. As we did with the backend, we will build the frontend container with the `compose/minikube.py` file. Let's look at the frontend service definition in that file:
 
 **`compose/minikube.yml`**
 
@@ -558,17 +660,80 @@ docker-compose -f compose/minikube.yml build frontend
 
 Notice that we set `DOMAIN_NAME` to be `minikube.local`. We will use this address to access both the frontend and backend service once we configure an Ingress for our minikube Kubernetes cluster.
 
-For `DOMAIN_NAME`, want to use an address that will point to the minikube Kubernetes cluster. Since the IP might change, we can set this to a named domain such as `test.dev`, and add a line to `/etc/hosts` that will point `test.dev` to the minikube IP. Then, we will need to setup a ingress to point `test.dev` to our `kubernetes-django-service` service.
+### Deployment
 
-## Troubleshooting and Misc
+**`kubernetes/fronend/deployment.yml`**
 
-https://stackoverflow.com/questions/55573426/virtualbox-is-configured-with-multiple-host-only-adapters-with-the-same-ip-whe
+```
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-container
+  template:
+    metadata:
+      labels:
+        app: frontend-container
+    spec:
+      containers:
+        - name: frontend
+          imagePullPolicy: IfNotPresent
+          image: frontend:1
+```
 
-## Enable Ingress Addon in Minikibe
+### Service
+
+For now let's finish by setting up a service for the frontend client:
+
+**`kubernetes/fronend/service.yml`**
+
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubernetes-frontend-service
+spec:
+  selector:
+    app: frontend-container
+  ports:
+  - nodePort: 30002
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
+```
+
+In this service the `nodePort` is set explicitly, but doesn't have to be as is the case with the Django service.
+
+Configure the frontend deployment and service with the following command:
+
+```
+k apply -f kubernetes/fronent/
+```
+
+Now let's take a look at the frontend site by visiting it in the browser. Run the following:
+
+```
+minikube service kubernetes-frontend-service
+```
+
+Or, since we know that the `nodePort` is `30002`, go to `<minikube ip>`:30002.
+
+## Ingress
+
+### Enable Ingress Addon in Minikibe
 
 ```sh
 minikube addons enable ingress
 ```
+
+### Define Ingress Resource for services
 
 With the Ingress enabled, we can add an `Ingress` resource:
 
@@ -576,7 +741,7 @@ With the Ingress enabled, we can add an `Ingress` resource:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ingress-test
+  name: minikube-ingress
 spec:
   rules:
   - host: minikube.local
@@ -600,49 +765,287 @@ spec:
           servicePort: 80
 ```
 
+Configure the Ingress resource with the following command:
+
+```
+k apply -f kubernetes/ingress.yml
+ingress.extensions/minikube-ingress created
+```
+
+### /etc/hosts
+
 Also, we need to add an entry to `/etc/hosts` so that requests to `minikube.local` will be forwarded to the `minikube ip`:
 
 ```sh
 192.168.99.106  minikube.local
 ```
 
-## Health Checks
-
-We can add readiness and liveness checks for Django backend container. Liveness will check that the container has not crashed. Readiness will check that the container is ready to accept traffic by checking that postgres and redis are ready to accept connections.
-
-Here are the checks in the `container` spec:
-
-```yml
-    livenessProbe:
-    httpGet:
-        path: /healthz
-        port: 8000
-    readinessProbe:
-
-    httpGet:
-        path: /readiness
-        port: 8000
-    initialDelaySeconds: 20
-    timeoutSeconds: 5
-```
-
-See [this article](https://www.ianlewis.org/en/kubernetes-health-checks-django) as a reference for how health checks have been implemented.
+Now you navigate to `http://minikube.local` in your browser and you should be able to login through the frontend Vue/Quasar app.
 
 ## Celery
 
-Next, let's add a deployment for Celery.
+Next, let's add a deployment for Celery. This deployment will be very similar to our Django webserver deployment, but the command will be different. Also, this deployment does not need a service since it only process background tasks; it does not handle API requests. Instead, the celery workers only watch the redis queue for jobs to perform. Here is the deployment:
 
-::: warning TODO
-Not finished
+```yml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: celery-worker
+  labels:
+    deployment: celery-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: celery-worker
+  template:
+    metadata:
+      labels:
+        pod: celery-worker
+    spec:
+      containers:
+        - name: celery-worker
+          image: backend:11
+          command: ["celery", "worker", "--app=backend.celery_app:app", "--loglevel=info"]
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: 'backend.settings.minikube'
+
+            - name: SECRET_KEY
+              value: "my-secret-key"
+
+            - name: POSTGRES_NAME
+              value: postgres
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+```
+
+We still need to configure a `readinessProbe` and `livenessProbe` for the celery worker containers, but for now let's inspect the logs to see if celery is ready start working on tasks:
+
+```
+k logs celery-worker-6d9fffdddf-gsp4r
+loading minikube settings...
+/usr/local/lib/python3.7/site-packages/celery/platforms.py:801: RuntimeWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+
+ -------------- celery@celery-worker-6d9fffdddf-gsp4r v4.3.0 (rhubarb)
+---- **** -----
+--- * ***  * -- Linux-4.15.0-x86_64-with-debian-10.1 2019-09-15 18:24:51
+-- * - **** ---
+- ** ---------- [config]
+- ** ---------- .> app:         backend:0x7fd25e93da90
+- ** ---------- .> transport:   redis://10.97.206.254:6379/1
+- ** ---------- .> results:     redis://10.97.206.254/1
+- *** --- * --- .> concurrency: 2 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** -----
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+
+
+[tasks]
+  . core.tasks.debug_task
+  . core.tasks.send_test_email_task
+  . debug_periodic_task
+
+[2019-09-15 18:24:51,686: INFO/MainProcess] Connected to redis://10.97.206.254:6379/1
+[2019-09-15 18:24:51,692: INFO/MainProcess] mingle: searching for neighbors
+[2019-09-15 18:24:52,716: INFO/MainProcess] mingle: all alone
+[2019-09-15 18:24:52,723: WARNING/MainProcess] /usr/local/lib/python3.7/site-packages/celery/fixups/django.py:202: UserWarning: Using settings.DEBUG leads to a memory leak, never use this setting in production environments!
+  warnings.warn('Using settings.DEBUG leads to a memory leak, never '
+[2019-09-15 18:24:52,723: INFO/MainProcess] celery@celery-worker-6d9fffdddf-gsp4r ready.
+```
+
+## Beat
+
+Let's look at the logs of our celery beat pod.
+
+```
+k logs celery-beat-7f4cd559bc-9jnmp
+loading minikube settings...
+celery beat v4.3.0 (rhubarb) is starting.
+Stale pidfile exists - Removing it.
+__    -    ... __   -        _
+LocalTime -> 2019-09-15 18:42:46
+Configuration ->
+    . broker -> redis://10.97.206.254:6379/1
+    . loader -> celery.loaders.app.AppLoader
+    . scheduler -> celery.beat.PersistentScheduler
+    . db -> celerybeat-schedule
+    . logfile -> [stderr]@%INFO
+    . maxinterval -> 5.00 minutes (300s)
+[2019-09-15 18:42:46,483: INFO/MainProcess] beat: Starting...
+[2019-09-15 18:42:46,495: INFO/MainProcess] Scheduler: Sending due task debug_periodic_task (debug_periodic_task)
+[2019-09-15 18:43:00,000: INFO/MainProcess] Scheduler: Sending due task debug_periodic_task (debug_periodic_task)
+[2019-09-15 18:44:00,035: INFO/MainProcess] Scheduler: Sending due task debug_periodic_task (debug_periodic_task)
+```
+
+::: warning Remember
+We never want to scale this deployment; it should always have only one replica in order to ensure that scheduled tasks only fire once. Try scaling this pod and you will see that duplicates of scheduled tasks are sent to the queue.
 :::
+
+
+We can see the results of these tasks in the logs of our celery deployment:
+
+```
+[2019-09-15 18:43:00,006: INFO/MainProcess] Received task: debug_periodic_task[f45ff2e0-dfb8-41f4-84d8-32f66e872c07]
+[2019-09-15 18:43:00,010: WARNING/ForkPoolWorker-2] Periodic task complete
+[2019-09-15 18:43:00,010: INFO/ForkPoolWorker-2] Task debug_periodic_task[f45ff2e0-dfb8-41f4-84d8-32f66e872c07] succeeded in 0.0009783900022739545s: None
+[2019-09-15 18:44:00,048: INFO/MainProcess] Received task: debug_periodic_task[69a30165-f052-4ac4-8900-67d7bce8246b]
+[2019-09-15 18:44:00,051: WARNING/ForkPoolWorker-2] Periodic task complete
+[2019-09-15 18:44:00,051: INFO/ForkPoolWorker-2] Task debug_periodic_task[69a30165-f052-4ac4-8900-67d7bce8246b] succeeded in 0.000996144997770898s: None
+```
+
+There's a better way to look at the results of our celery tasks: `flower`. Let's set this up next.
+
+
+## Flower
+
+Let's configure flower with a simple deployment and service:
+
+**`kubernetes/flower/deployment.yml`**
+
+```
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: flower
+  labels:
+    deployment: flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: celery-flower
+  template:
+    metadata:
+      labels:
+        pod: celery-flower
+    spec:
+      containers:
+      - name: flower
+        image: mher/flower
+        ports:
+          - containerPort: 5555
+        env:
+        - name: CELERY_BROKER_URL
+          value: redis://$(REDIS_SERVICE_HOST)/1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+```
+
+**`kubernetes/flower/service.yml`**
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: flower-service
+spec:
+  selector:
+    pod: celery-flower
+  ports:
+  - port: 5555
+  type: NodePort
+```
 
 ## Websockets
 
-Next, let's add a deployment for Django Channels.
+Next, let's add a deployment and service for Django Channels.
 
-::: warning TODO
-Not finished
-:::
+**`kubernetes/channels/deployment.yml`**
+
+```
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: django-channels
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-channels-container
+  template:
+    metadata:
+      labels:
+        app: django-channels-container
+    spec:
+      containers:
+        - name: backend
+          imagePullPolicy: IfNotPresent
+          image: backend:14
+          command: ["daphne", "backend.asgi:application", "--bind", "0.0.0.0", "--port", "9000"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9000
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 9000
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+          ports:
+          - containerPort: 9000
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: 'backend.settings.minikube'
+            - name: SECRET_KEY
+              value: "my-secret-key"
+            - name: POSTGRES_NAME
+              value: postgres
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+```
+
+**`kubernetes/channels/service.yml`**
+
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubernetes-django-channels-service
+spec:
+  selector:
+    app: django-channels-container
+  ports:
+  - protocol: TCP
+    port: 9000
+    targetPort: 9000
+  type: NodePort
+```
+
+Configure the Django channels deployment and service with the following command:
+
+```
+k apply -f kubernetes/channels/
+```
 
 ## Cypress tests against the minikube cluster
 
@@ -653,3 +1056,17 @@ $(npm bin)/cypress open --config baseUrl=http://minikube.local
 ```
 
 Click `Run all specs` and make sure there are no errors in the test results.
+
+## Next Steps
+
+### Helm
+
+Helm is a convenient way to package Kubernetes applications. The next topic will cover installaing and configuring Helm, and then packaging this application in a Helm chart and deploying everything to our minikube cluster with just one command.
+
+### GKE
+
+Now that everything is working locally, the next topic will cover deploying this application to a GKE cluster and implementing monitoring.
+
+### GitLab
+
+Implement CI/CD with GitLab CI and an attached Kubernetes cluster, review apps and other GitLab features.

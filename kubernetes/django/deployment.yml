@@ -15,7 +15,7 @@ spec:
       containers:
         - name: backend
           imagePullPolicy: IfNotPresent
-          image: backend:11
+          image: backend:13
           command: ["./manage.py", "runserver", "0.0.0.0:8000"]
           livenessProbe:
             httpGet:
