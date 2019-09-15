@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-test
+spec:
+  rules:
+  - host: minikube.local
+    http:
+      paths:
+      - path: /api/
+        backend:
+          serviceName: kubernetes-django-service
+          servicePort: 8000
+      - path: /admin/
+        backend:
+          serviceName: kubernetes-django-service
+          servicePort: 8000
+      - path: /static/
+        backend:
+          serviceName: kubernetes-django-service
+          servicePort: 8000
+      - path: /
+        backend:
+          serviceName: kubernetes-frontend-service
+          servicePort: 80
