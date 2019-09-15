@@ -108,32 +108,83 @@ spec:
         - name: django-backend-container
           imagePullPolicy: IfNotPresent
           image: backend:1
-          command: ["./manage.py", "runserver"]
+          command: ["./manage.py", "runserver", "0.0.0.0:8000"]
           ports:
           - containerPort: 8000
 ```
 
 ::: warning No environment variables
-**Note***: the pod template in this deployment definition does not have any environment variables. We will need to add environment variables for sensitive information such as the Postgres username and password. We will add these shortly
+**Note**: the pod template in this deployment definition does not have any environment variables. We will need to add environment variables for sensitive information such as the Postgres username and password. We will add these shortly.
 :::
 
 There is one line in the above resource definition that makes everything work with minikube and the docker images we have just built: `imagePullPolicy: IfNotPresent`. This line tells Kubernetes to pull the image (from Docker Hub, or another registry if specified) **only** if the image is not present locally. If we didn't set the `imagePullPolicy` to `IfNotPresent`, Kubernetes would try to pull the image from docker hub, which would probably fail, resulting in an `ErrImagePull`.
 
-Let's send this file to the minikube Kubernete API server with the following command:
+::: warning Don't configure the deployment yet!
 
+We would run the following command to configure this deployment.
 ```
 kubectl apply -f kubernetes/django/deployment.yml
 ```
 
-Your pod for the deployment should be starting. Inspect the pods with `k get pods`.
+We haven't created the secrets that Django needs yet for access to the Postgres database, save this file and we will come back to it after we configure Postgres in our minikube Kubernetes cluster.
+:::
 
 ## Postgres
 
-First, we create a `PersistentVolume` resource:
+Using Postgres in our minikube cluster will involve the following resources:
+
+- secrets
+- persistent volume
+- persistent volume claim
+- deployment
+- service
+
+### Secrets
+
+Secrets should be base64 encoded because they can contain either strings or raw bytes. Here's an example of how we can encode `my-secret-string` with base64 encdoding:
+
+```
+echo -n "my-secret-string" | base64
+bXktc2VjcmV0LXN0cmluZw==
+```
+
+We will use `bXktc2VjcmV0LXN0cmluZw==` in our `secrets.yml` file. We shouldn't commit any sensitive information in secrets files. base64 encdoing is not encrypted, the value can be decoded read as `my-secret-string`:
+
+```
+echo -n "bXktc2VjcmV0LXN0cmluZw==" | base64 -d
+my-secret-string
+```
+
+Choose a username and password for your Postgres database and enter both of them as base64-encoded values:
+
+**`kubernetes/postgres/secrets.yml`**
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-credentials
+type: Opaque
+data:
+  user: YnJpYW4=
+  password: cGFzc3dvcmQx
+```
+
+You can open the minikube dashboard with `minikube dashboard` and view the secret values after you send this file to the kubernetes API with:
+
+```
+k apply -f kubernetes/postgres/secrets.yml
+```
+
+### Persistent Volume
+
+Next, we need to configure a volume to persist data that will be stored in the postgres database.
+
+In minikube, since we are only using a single-node cluster, it is OK to use a `hostPath` volume:
 
 **`kubernetes/postgres/volume.yml`**
 
-```yml
+```
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -150,59 +201,347 @@ spec:
     path: /data/postgres-pv
 ```
 
-## Secrets
-
-Let's use base64 encoding to define a username and password for our Postgres username and password:
-
-```
-echo -n "my-string" | base64
-```
-
-
-
-::: tip kubectl cheatsheet from kubernetes documentation
-[https://kubernetes.io/docs/reference/kubectl/cheatsheet/#viewing-finding-resources](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#viewing-finding-resources)
+::: tip Remember
+Persistent Volumes are not namespaced in Kubernetes
 :::
 
+### Persistent Volume Claim
 
-Show the service in kubernetes:
+Next we will make a persistent volume claim that we can reference in the postgres deployment:
+
+**`kubernetes/postgres/volume_claim.yml`**
+
+```
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-pvc
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: postgres-pv
+```
+
+The `storageClassName` is arbitrary; it only needs to be the *same* value in order for the PVC to get access to the storage it needs.
+
+### Deployment
+
+Now we can create the Postgres deployment. This will use our secrets and persistent volumes:
+
+**`kubernetes/postgres/deployment.yml`**
+
+```
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-container
+  template:
+    metadata:
+      labels:
+        app: postgres-container
+        tier: backend
+    spec:
+      containers:
+        - name: postgres-container
+          image: postgres:9.6.6
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-volume-mount
+              mountPath: /var/lib/postgresql/data
+
+      volumes:
+        - name: postgres-volume-mount
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+```
+
+Finally, we can create a service that will allow us to access the Postgres database from pods in our Django deployment (which we will come back to next):
+
+**`kubernetes/postgres/service.yml`**
+
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres-container
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+```
+
+## Django Webserver
+
+### Deployment
+
+Next let's come back to the deployment that will serve requests for our Django API. As mentioned earlier, this needs to be configured with some additional environment variables. Some of these environment variables will be added explicitly, and some will be added automatically by Kubernetes for simple and easy service discovery.
+
+Here's the full deployment definition for our Django deployment:
+
+**`kubernetes/django/deployment.yml`**
+
+```
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-container
+  template:
+    metadata:
+      labels:
+        app: django-container
+    spec:
+      containers:
+        - name: backend
+          imagePullPolicy: IfNotPresent
+          image: backend:11
+          command: ["./manage.py", "runserver", "0.0.0.0:8000"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+          readinessProbe:
+            # an http probe
+            httpGet:
+              path: /readiness
+              port: 8000
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          ports:
+          - containerPort: 8000
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: 'backend.settings.minikube'
+
+            - name: SECRET_KEY
+              value: "my-secret-key"
+
+            - name: POSTGRES_NAME
+              value: postgres
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+
+    # I'm not sure that we need these volumes, but they were included in the tutorial referenced at the beginning of this guide.
+
+          volumeMounts:
+            - name: postgres-volume-mount
+              mountPath: /var/lib/busybox
+
+      volumes:
+        - name: postgres-volume-mount
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+```
+
+Let's notice the additions to our Django deployment. First, we see an array of environment variables:
+
+- `DJANGO_SETTINGS_MODULE`: this tells Django which settings module to use. It is set to `backend.settings.minikube`, which means that we are using the settings file `backend/settings/minikube.py`
+- `SECRET_KEY`: Django needs a secret key to start (this should also be configured as a secret...)
+- `POSTGRES_NAME`: we are using the default `postgres` database
+- `POSTGRES_USER` and `POSTGRES_PASSWORD`: these environment variables that we are
+
+Let's look at the `minikube.py` settings file:
+
+**`backend/settings/minikube.py`**
+
+```python
+from .development import *  # noqa
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTGRES_NAME', 'kubernetes_django'), # noqa
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'), # noqa
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'), # noqa
+        'HOST': os.environ.get('POSTGRES_SERVICE_HOST', 'postgres'), # noqa
+        'PORT': os.environ.get('POSTGRES_SERVICE_PORT', 5432), # noqa
+    }
+}
+```
+
+Notice that in the `DATABASES` section we see the Postgres name, user and password environment variables that we added to the deployment's pod template.
+
+`POSTGRES_SERVICE_HOST` and `POSTGRES_SERVICE_PORT` are added automatically. Kubernetes adds a set of environment variables for all services in the namespace that include the service IP and the service port of the service. Environment variables are one of two ways to do this type of simple service discovery.
+
+Also, take note of the addition of the `livenessProbe` and `readinessProbe` keys in the container definition of the pod template. These tell kubelet to send HTTP requests to `/healthz` and `/readiness` which are used to evaluate the health and readiness of the Django deployment, respectively. We will come back to these to see exactly how they work by sabotaging our Django deployment in different ways.
+
+See [this article](https://www.ianlewis.org/en/kubernetes-health-checks-django) as a reference for how health checks have been implemented using Django middleware.
+
+### Service
+
+Now that we have a deployment for our Django webserver, let's create a service that will allow us to reach it:
+
+**`kubernetes/django/service.yml`**
+
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: kubernetes-django-service
+spec:
+  selector:
+    app: django-container
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: NodePort
+```
+
+This needs to do two things: match the `django-container` label that is present in the Django deployment pod template, and specify port `8000` that our Django webserver is listening on, and that the pod has configured with `containerPort: 8000`.
+
+We are almost ready to apply our Django deployment and service, but before we do that we need migrate our database by running `./manage.py migrate`. The migration should be ran once, and it must run successfully. This type of task can be handled by a Kubernetes Job.
+
+**`kubernetes/django/migration.yml`**
+
+```
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-migrations
+spec:
+  template:
+    spec:
+      containers:
+        - name: django
+          image: backend:2
+          command: ['python', 'manage.py', 'migrate']
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+
+            - name: POSTGRES_NAME
+              value: postgres
+
+            - name: DJANGO_SETTINGS_MODULE
+              value: 'backend.settings.minikube'
+
+      restartPolicy: Never
+  backoffLimit: 5
+```
+
+Configure the job by running the following command:
+
+```
+k apply -f kubernetes/django/migration.yml
+```
+
+Now let's inspect our pods
+
+TODO: show pods
+
+```
+k get pods
+
+```
+
+TODO: show pod logs
+
+Now let's look at the Job's pod logs:
+
+```
+k logs ....
+
+```
+
+We can see that our database migrations did indeed run successfully. Now we can configure the Django service and deployment with the following command:
+
+```
+k apply -f kubernetes/django/
+```
+
+Visit the Django admin panel by running the following command:
 
 ```
 minikube service kubernetes-django-service
 ```
 
-We have two options for how to run the frontend application in Kubernetes.
+and then navigate to `/admin`, and you should see the Django admin login page. Let's create a default user. I have a management command which we can run:
 
-1) Servce the static content from Django
-2) Serve the static content from nginx and use another service.
-
-Serving the static content from Django was not working, so I'm building another deployment/service for frontend. For this to work, we need to tell Quasar about the address for the Django service. There are two ways to do this:
-
-1) DNS
-2) Environment variables
-
-
-## Use environment variables to get service IP/Host
-
-This won't be possible with out static front end site.
-
-## Use DNS for services
-
-DNS will be easier since we are building static assets outside of the context of Kubernetes and the environment variables that it injects at runtime.
+TODO: show k exec
 
 ```
-/ # curl http://kubernetes-django-service:8000/api/
-{"message": "Root"}
-```
-
-This works from inside of a pod, but we can't use this for our static site since `localhost` won't know how to resolve `kubernetes-django-service`. One solution for this is to get the `port:ip` of the backend service from minikube, and then use this value for the `baseUrl` in our frontend application:
-
-**minikube/Dockerfile**
-
-Use the following command to build the frontend resources in minikube:
+k exec ... -it -- ./manage.py create_default_user
 
 ```
-docker-compose -f compose/minikube.yml build frontend
+
+You could also replace my `create_default_user` command with `createsuperuser` and create a user that way.
+
+Login with your user to verify that everything is working properly.
+
+## Frontend
+
+Now that the Django backend is working, let's take a look at the front end client that is built with Vue and Quasar Framework. As we did with the backend, we will build the frontend container with the `compose/minikube.py` file. Let's look at the frontend service definition in that file:
+
+**`compose/minikube.yml`**
+
+```
+version: '3.7'
+
+services:
+
+  frontend:
+    image: frontend:1
+    build:
+      context: ../
+      dockerfile: nginx/minikube/Dockerfile
+      args:
+        - DOMAIN_NAME=minikube.local
+        - GOOGLE_OAUTH2_KEY=google123
+        - GITHUB_KEY=github123
+        - WS_PROTOCOL=ws
+        - HTTP_PROTOCOL=http
 ```
 
 Make sure that your current shell has the correct environment variables set for the `DOCKER_HOST` by running:
@@ -211,7 +550,13 @@ Make sure that your current shell has the correct environment variables set for 
 eval $(minikube docker-env)
 ```
 
-We can pass the environment variables needed during the build process with `ARG` and `ENV`.
+Build the image with the following command:
+
+```
+docker-compose -f compose/minikube.yml build frontend
+```
+
+Notice that we set `DOMAIN_NAME` to be `minikube.local`. We will use this address to access both the frontend and backend service once we configure an Ingress for our minikube Kubernetes cluster.
 
 For `DOMAIN_NAME`, want to use an address that will point to the minikube Kubernetes cluster. Since the IP might change, we can set this to a named domain such as `test.dev`, and add a line to `/etc/hosts` that will point `test.dev` to the minikube IP. Then, we will need to setup a ingress to point `test.dev` to our `kubernetes-django-service` service.
 

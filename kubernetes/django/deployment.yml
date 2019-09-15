@@ -26,7 +26,7 @@ spec:
             httpGet:
               path: /readiness
               port: 8000
-            initialDelaySeconds: 20
+            initialDelaySeconds: 10
             timeoutSeconds: 5
           ports:
           - containerPort: 8000
