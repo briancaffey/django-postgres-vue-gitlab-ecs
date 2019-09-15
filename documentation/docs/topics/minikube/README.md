@@ -1,10 +1,18 @@
 # Minikube
 
-Minikube is a tool for running a single-node kubernetes cluster inside of a virtual machine. It is a popular tool for developing Kubernetes applications locally.
+Minikube is a tool for running a single-node Kubernetes cluster inside of a virtual machine. It is a popular tool for developing Kubernetes applications locally.
 
 This topic will cover using `minikube` to set up the project Kubernetes locally.
 
-I'll be following [this guide](https://medium.com/@markgituma/kubernetes-local-to-production-with-django-1-introduction-d73adc9ce4b4) to get started.
+::: tip Goal
+By the end of this guide, you will be able to:
+
+1. Navigate to `http://minikube.local` in your browser and interact with the application running in **minikube** in the same way that you would with the application running using **docker-compose** for local development.
+
+1. Run **Cypress** tests against the application running in **minikube** to verify that everything is working correctly.
+:::
+
+I'll be following [this great guide](https://medium.com/@markgituma/kubernetes-local-to-production-with-django-1-introduction-d73adc9ce4b4) to get started, making changes and additions where necessary.
 
 ## Getting started
 
@@ -24,13 +32,30 @@ I'll be using the following alias to use `kubectl`:
 alias k='kubectl'
 ```
 
-## Build the Django server Deployment
+## Building Images
 
-We need to build our `backend` image. In order for minikube to be able to use the image, we can set our docker client to point to the minikube docker host. To do this, run the following command:
+We will need to build two images from our code:
+
+1. The `backend` image that will run the Django server, Django Channels, Celery and Beat
+1. The `frontend` image that will contains nginx for serving our Quasar frontend application.
+
+Both of these images will need environment variables. We will use `docker-compose` to easily manage the building and environment variable management. Read [this article](https://vsupalov.com/docker-arg-env-variable-guide/) for more information. You don't absolutely have to user docker-compose to build the images, but it should keep things straightforward and easy to understand.
+
+Remember that that the docker CLI, like `kubectl`, send requests to a REST API. When we run `minikube start`, this configures `kubectl` to send commands to the Kubernetes API server that is running inside of the minikube virtual machine. Similarly, we need to tell our docker CLI that we want to send API calls that the docker CLI command makes to the docker daemon running in the minikube VM, **not** the docker daemon on our local machine (even though the files from which we build our images are on our local machine and not on the minikube VM's file system). We can configure our docker CLI to point to the minikube VM with the following command:
 
 ```
 eval $(minikube docker-env)
 ```
+
+Now run `docker ps` and you will see many different containers that Kubernetes uses internally.
+
+To point the docker CLI back at your local docker daemon, run:
+
+```
+eval $(minikube docker-env -u)
+```
+
+Let's look at what the command is doing:
 
 `$(minikube docker-env)` results in the following output:
 
@@ -42,15 +67,25 @@ export DOCKER_CERT_PATH="/home/brian/.minikube/certs"
 # eval $(minikube docker-env)
 ```
 
-Notice that the `DOCKER_HOST` is pointing to the minikube VM on docker's default port `2376`.
+Notice that the `DOCKER_HOST` is pointing to the minikube VM on docker's default port `2376`. `eval` executes these commands, setting the environment variables in the *current shell* by using `export`. If you switch to another shell, you will need to rerun this command if you want to run docker commands against minikube's docker daemon.
 
 With these environment variables set, let's build the Django container image with the following command:
 
-```bash
-docker build -t backend:<TAG> -f backend/scripts/dev/Dockerfile backend/
+```sh
+docker-compose -f compose/minikube.yml build backend
 ```
 
-**`deployment.yml`**
+Here's the `backend` service defined in `compose/minikube.yml`:
+
+```yml
+  backend:
+    image: backend:1
+    build:
+      context: ../backend/
+      dockerfile: scripts/dev/Dockerfile
+```
+
+**`kubernetes/django/deployment.yml`**
 
 ```yml
 apiVersion: apps/v1
@@ -71,93 +106,26 @@ spec:
     spec:
       containers:
         - name: django-backend-container
-          image: localhost:5000/backend
+          imagePullPolicy: IfNotPresent
+          image: backend:1
           command: ["./manage.py", "runserver"]
           ports:
           - containerPort: 8000
 ```
 
-Let's send this file to Kubernete API server with the following command:
+::: warning No environment variables
+**Note***: the pod template in this deployment definition does not have any environment variables. We will need to add environment variables for sensitive information such as the Postgres username and password. We will add these shortly
+:::
+
+There is one line in the above resource definition that makes everything work with minikube and the docker images we have just built: `imagePullPolicy: IfNotPresent`. This line tells Kubernetes to pull the image (from Docker Hub, or another registry if specified) **only** if the image is not present locally. If we didn't set the `imagePullPolicy` to `IfNotPresent`, Kubernetes would try to pull the image from docker hub, which would probably fail, resulting in an `ErrImagePull`.
+
+Let's send this file to the minikube Kubernete API server with the following command:
 
 ```
 kubectl apply -f kubernetes/django/deployment.yml
 ```
 
-Your pod for the deployment should be starting. Inspect the pods with `k get pods`. If there is an error with container startup, you might see something like this:
-
-```
-k get pods
-NAME                             READY   STATUS   RESTARTS   AGE
-django-backend-dd798db99-hkv2p   0/1     Error    0          3s
-```
-
-If this is the case, inspect the logs of the container with the following command:
-
-I have intentionally cause the container to fail by not providing a `SECRET_KEY` environment variable (this is something that Django needs in order to start).
-
-Let's inspect the container logs to confirm this:
-
-```bash
-k logs django-backend-dd798db99-hkv2p
-Traceback (most recent call last):
-  File "./manage.py", line 16, in <module>
-    execute_from_command_line(sys.argv)
-  File "/usr/local/lib/python3.7/site-packages/django/core/management/__init__.py", line 381, in execute_from_command_line
-    utility.execute()
-  File "/usr/local/lib/python3.7/site-packages/django/core/management/__init__.py", line 375, in execute
-    self.fetch_command(subcommand).run_from_argv(self.argv)
-  File "/usr/local/lib/python3.7/site-packages/django/core/management/base.py", line 323, in run_from_argv
-    self.execute(*args, **cmd_options)
-  File "/usr/local/lib/python3.7/site-packages/django/core/management/commands/runserver.py", line 60, in execute
-    super().execute(*args, **options)
-  File "/usr/local/lib/python3.7/site-packages/django/core/management/base.py", line 364, in execute
-    output = self.handle(*args, **options)
-  File "/usr/local/lib/python3.7/site-packages/django/core/management/commands/runserver.py", line 67, in handle
-    if not settings.DEBUG and not settings.ALLOWED_HOSTS:
-  File "/usr/local/lib/python3.7/site-packages/django/conf/__init__.py", line 79, in __getattr__
-    self._setup(name)
-  File "/usr/local/lib/python3.7/site-packages/django/conf/__init__.py", line 66, in _setup
-    self._wrapped = Settings(settings_module)
-  File "/usr/local/lib/python3.7/site-packages/django/conf/__init__.py", line 176, in __init__
-    raise ImproperlyConfigured("The SECRET_KEY setting must not be empty.")
-django.core.exceptions.ImproperlyConfigured: The SECRET_KEY setting must not be empty.
-```
-
-We could either provide a fallback value in the Django settings (which would require rebuilding the image), or we could add an environment variable to the container definition in the Pod `spec` in `deployment.yml`:
-
-```yml
-    spec:
-      containers:
-        - name: backend
-          imagePullPolicy: IfNotPresent
-          image: backend:latest
-          command: ["./manage.py", "runserver"]
-          ports:
-          - containerPort: 8000
-          env:
-          - name: SECRET_KEY
-            value: "my-secret-key"
-```
-
-This should work, but we will still see errors in logs because we Django will attempt to establish a connection with the Postgres database which we will be setting up next.
-
-We can hit our public facing `hello-world` endpoint which should serve as a nice health check for the Django container.
-
-Let's test this endpoint with `curl`. We haven't set up a Kubernetes `Service` yet, so we will have to curl the Django application from within the cluster. We can do this with:
-
-```
-k exec django-backend-757b5944d8-htssm -- curl -s http://172.17.0.5/api/hello-world/
-```
-
-This gives us:
-
-```
-command terminated with exit code 7
-```
-
-Our container has started, but the database connection has prevented the Django process from starting. In our Pod logs, we can see that no request have been received and the Django application is not listening on `0.0.0.0:8000`.
-
-Let's come back to this once we have set up our Postgres database.
+Your pod for the deployment should be starting. Inspect the pods with `k get pods`.
 
 ## Postgres
 
@@ -182,55 +150,6 @@ spec:
     path: /data/postgres-pv
 ```
 
-::: warning storageClassName
-Clicking on the `storageClassName` gave a 404 error
-:::
-
-::: warning Authentication failure
-Message with postgres authentication failure
-:::
-
-After changing the `postgres` user password, the migrations are able to run successfully:
-
-```bash
-k exec django-784d668c8b-9gbf7 -it -- ./manage.py migrat
-e
-loading minikube settings...
-Operations to perform:
-  Apply all migrations: accounts, admin, auth, contenttypes, sessions, social_django
-Running migrations:
-  Applying contenttypes.0001_initial... OK
-  Applying contenttypes.0002_remove_content_type_name... OK
-  Applying auth.0001_initial... OK
-  Applying auth.0002_alter_permission_name_max_length... OK
-  Applying auth.0003_alter_user_email_max_length... OK
-  Applying auth.0004_alter_user_username_opts... OK
-  Applying auth.0005_alter_user_last_login_null... OK
-  Applying auth.0006_require_contenttypes_0002... OK
-  Applying auth.0007_alter_validators_add_error_messages... OK
-  Applying auth.0008_alter_user_username_max_length... OK
-  Applying auth.0009_alter_user_last_name_max_length... OK
-  Applying auth.0010_alter_group_name_max_length... OK
-  Applying auth.0011_update_proxy_permissions... OK
-  Applying accounts.0001_initial... OK
-  Applying admin.0001_initial... OK
-  Applying admin.0002_logentry_remove_auto_add... OK
-  Applying admin.0003_logentry_add_action_flag_choices... OK
-  Applying sessions.0001_initial... OK
-  Applying social_django.0001_initial... OK
-  Applying social_django.0002_add_related_name... OK
-  Applying social_django.0003_alter_email_max_length... OK
-  Applying social_django.0004_auto_20160423_0400... OK
-  Applying social_django.0005_auto_20160727_2333... OK
-  Applying social_django.0006_partial... OK
-  Applying social_django.0007_code_timestamp... OK
-  Applying social_django.0008_partial_timestamp... OK
-```
-
-::: warning Try this again
-Try this again with a clean version of minikube and using the Secrets resource.
-:::
-
 ## Secrets
 
 Let's use base64 encoding to define a username and password for our Postgres username and password:
@@ -239,7 +158,7 @@ Let's use base64 encoding to define a username and password for our Postgres use
 echo -n "my-string" | base64
 ```
 
-I initially started the postgres container with a password set by environment variable. This may have set data in the
+
 
 ::: tip kubectl cheatsheet from kubernetes documentation
 [https://kubernetes.io/docs/reference/kubectl/cheatsheet/#viewing-finding-resources](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#viewing-finding-resources)
@@ -292,25 +211,100 @@ Make sure that your current shell has the correct environment variables set for 
 eval $(minikube docker-env)
 ```
 
-
-
 We can pass the environment variables needed during the build process with `ARG` and `ENV`.
 
 For `DOMAIN_NAME`, want to use an address that will point to the minikube Kubernetes cluster. Since the IP might change, we can set this to a named domain such as `test.dev`, and add a line to `/etc/hosts` that will point `test.dev` to the minikube IP. Then, we will need to setup a ingress to point `test.dev` to our `kubernetes-django-service` service.
-
 
 ## Troubleshooting and Misc
 
 https://stackoverflow.com/questions/55573426/virtualbox-is-configured-with-multiple-host-only-adapters-with-the-same-ip-whe
 
-
-
 ## Enable Ingress Addon in Minikibe
 
-```
+```sh
 minikube addons enable ingress
 ```
 
+With the Ingress enabled, we can add an `Ingress` resource:
 
-## Healthchecks
+```yml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-test
+spec:
+  rules:
+  - host: minikube.local
+    http:
+      paths:
+      - path: /api/
+        backend:
+          serviceName: kubernetes-django-service
+          servicePort: 8000
+      - path: /admin/
+        backend:
+          serviceName: kubernetes-django-service
+          servicePort: 8000
+      - path: /static/
+        backend:
+          serviceName: kubernetes-django-service
+          servicePort: 8000
+      - path: /
+        backend:
+          serviceName: kubernetes-frontend-service
+          servicePort: 80
+```
 
+Also, we need to add an entry to `/etc/hosts` so that requests to `minikube.local` will be forwarded to the `minikube ip`:
+
+```sh
+192.168.99.106  minikube.local
+```
+
+## Health Checks
+
+We can add readiness and liveness checks for Django backend container. Liveness will check that the container has not crashed. Readiness will check that the container is ready to accept traffic by checking that postgres and redis are ready to accept connections.
+
+Here are the checks in the `container` spec:
+
+```yml
+    livenessProbe:
+    httpGet:
+        path: /healthz
+        port: 8000
+    readinessProbe:
+
+    httpGet:
+        path: /readiness
+        port: 8000
+    initialDelaySeconds: 20
+    timeoutSeconds: 5
+```
+
+See [this article](https://www.ianlewis.org/en/kubernetes-health-checks-django) as a reference for how health checks have been implemented.
+
+## Celery
+
+Next, let's add a deployment for Celery.
+
+::: warning TODO
+Not finished
+:::
+
+## Websockets
+
+Next, let's add a deployment for Django Channels.
+
+::: warning TODO
+Not finished
+:::
+
+## Cypress tests against the minikube cluster
+
+Now that we have implemented all parts of our application in minikube, let's run our tests against the cluster. Run the following command to open Cypress:
+
+```
+$(npm bin)/cypress open --config baseUrl=http://minikube.local
+```
+
+Click `Run all specs` and make sure there are no errors in the test results.
