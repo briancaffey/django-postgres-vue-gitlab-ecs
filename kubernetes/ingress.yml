@@ -19,6 +19,10 @@ spec:
         backend:
           serviceName: kubernetes-django-service
           servicePort: 8000
+      - path: /ws/
+        backend:
+          serviceName: kubernetes-django-channels-service
+          servicePort: 9000
       - path: /
         backend:
           serviceName: kubernetes-frontend-service

@@ -1,35 +1,35 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: django
+  name: django-channels
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: django-container
+      app: django-channels-container
   template:
     metadata:
       labels:
-        app: django-container
+        app: django-channels-container
     spec:
       containers:
         - name: backend
           imagePullPolicy: IfNotPresent
           image: backend:11
-          command: ["./manage.py", "runserver", "0.0.0.0:8000"]
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8000
-          readinessProbe:
-            # an http probe
-            httpGet:
-              path: /readiness
-              port: 8000
-            initialDelaySeconds: 20
-            timeoutSeconds: 5
+          command: ["daphne", "backend.asgi:application", "--bind", "0.0.0.0", "--port", "9000"]
+          # livenessProbe:
+          #   httpGet:
+          #     path: /healthz
+          #     port: 9000
+          # readinessProbe:
+          #   # an http probe
+          #   httpGet:
+          #     path: /readiness
+          #     port: 9000
+          #   initialDelaySeconds: 20
+          #   timeoutSeconds: 5
           ports:
-          - containerPort: 8000
+          - containerPort: 9000
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: 'backend.settings.minikube'
@@ -52,12 +52,12 @@ spec:
                   name: postgres-credentials
                   key: password
 
-          volumeMounts:
-            - name: postgres-volume-mount
-              mountPath: /var/lib/busybox
+      #     volumeMounts:
+      #       - name: postgres-volume-mount
+      #         mountPath: /var/lib/busybox
 
-      volumes:
-        - name: postgres-volume-mount
-          persistentVolumeClaim:
-            claimName: postgres-pvc
+      # volumes:
+      #   - name: postgres-volume-mount
+      #     persistentVolumeClaim:
+      #       claimName: postgres-pvc
 

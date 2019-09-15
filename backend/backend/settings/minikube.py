@@ -12,3 +12,26 @@ DATABASES = {
         'PORT': os.environ.get('POSTGRES_SERVICE_PORT', 5432), # noqa
     }
 }
+
+# Django Channels
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [
+                (
+                    os.environ.get("REDIS_SERVICE_HOST"), # noqa
+                    6379
+                )
+            ],
+        },
+    },
+}
+
+# Celery Configuration
+
+CELERY_BROKER_URL = \
+    f"redis://{os.environ.get('REDIS_SERVICE_HOST')}/6379" # noqa
+CELERY_RESULT_BACKEND = \
+    f"redis://{os.environ.get('REDIS_SERVICE_HOST')}/6379" # noqa
