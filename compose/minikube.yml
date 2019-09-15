@@ -15,7 +15,7 @@ services:
         - HTTP_PROTOCOL=http
 
   backend:
-    image: backend:2
+    image: backend:8
     build:
       context: ../backend/
       dockerfile: scripts/dev/Dockerfile

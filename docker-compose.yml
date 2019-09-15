@@ -106,6 +106,7 @@ services:
       - GITHUB_SECRET=${GITHUB_SECRET}
       - GOOGLE_OAUTH2_KEY=${GOOGLE_OAUTH2_KEY}
       - GOOGLE_OAUTH2_SECRET=${GOOGLE_OAUTH2_SECRET}
+      - REDIS_SERVICE_HOST=redis
     depends_on:
       - postgres
 

@@ -99,7 +99,6 @@ SOCIAL_AUTH_PIPELINE = (
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
@@ -108,7 +107,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.SubdomainMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'

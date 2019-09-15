@@ -21,6 +21,7 @@ DEBUG_APPS = [
 INSTALLED_APPS += DEBUG_APPS  # noqa
 
 MIDDLEWARE = [
+    'core.middleware.healthchecks.HealthCheckMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ] + MIDDLEWARE  # noqa
 

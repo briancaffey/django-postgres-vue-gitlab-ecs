@@ -310,3 +310,7 @@ https://stackoverflow.com/questions/55573426/virtualbox-is-configured-with-multi
 ```
 minikube addons enable ingress
 ```
+
+
+## Healthchecks
+

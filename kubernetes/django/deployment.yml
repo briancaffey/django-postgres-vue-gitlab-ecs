@@ -15,8 +15,19 @@ spec:
       containers:
         - name: backend
           imagePullPolicy: IfNotPresent
-          image: backend:2
+          image: backend:8
           command: ["./manage.py", "runserver", "0.0.0.0:8000"]
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+          readinessProbe:
+            # an http probe
+            httpGet:
+              path: /readiness
+              port: 8000
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
           ports:
           - containerPort: 8000
           env:
