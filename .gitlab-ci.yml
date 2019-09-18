@@ -210,7 +210,7 @@ Sync Quasar PWA Assets:
         ./dist/pwa/ s3://${AppUrl}/
     - |
       aws s3 cp \
-        --cache-control 'max-age=0'
+        --cache-control 'max-age=0' \
         ./dist/pwa/index.html s3://${AppUrl}/
     - |
       aws s3 cp \
