@@ -11,10 +11,8 @@ variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
-  AWSAccessKeyId: $AWS_ACCESS_KEY_ID
-  AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
-pages:
+.pages:
   image: node:latest
   stage: documentation
   script:
@@ -96,7 +94,7 @@ Build backend:
       - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-e2e: &cypress
+.e2e: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:
@@ -142,8 +140,8 @@ e2e: &cypress
 Build Quasar PWA Assets:
   image: node:8
   stage: build
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
@@ -167,8 +165,8 @@ Build Quasar PWA Assets:
 Release backend:
   stage: release
   image: docker:stable
-  only:
-    - master
+  # only:
+  #   - master
   services:
     - docker:dind
   before_script:
@@ -191,13 +189,13 @@ Release backend:
     - $(aws ecr get-login --no-include-email --region us-east-1)
     - docker push $REPOSITORY_URL:${GitSHA}
   after_script:
-    - echo "The production image has been released from the GitLab to ECR"
+    - echo "The production image has been released from GitLab to ECR"
 
 Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   dependencies:
     - "Build Quasar PWA Assets"
   before_script:
@@ -247,8 +245,8 @@ Sync Quasar PWA Assets:
 Update stack:
   image: python:3.7
   stage: cloudformation
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     EnvironmentName: staging
   before_script:
