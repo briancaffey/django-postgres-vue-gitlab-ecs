@@ -49,14 +49,6 @@ Parameters:
     Description: The ECR repository for the backend container
     Type: String
 
-  AWSAccessKeyId:
-    Description: "AWS ACCESS KEY ID"
-    Type: String
-
-  AWSSecretAccessKey:
-    Description: "AWS SECRET ACCESS KEY"
-    Type: String
-
   DjangoSecretKey:
     Description: The Secret Key for backend, celery and beat containers
     Type: String
@@ -95,10 +87,6 @@ Resources:
           Environment:
             - Name: GIT_SHA
               Value: !Ref GitSHA
-            - Name: AWS_ACCESS_KEY_ID
-              Value: !Ref AWSAccessKeyId
-            - Name: AWS_SECRET_ACCESS_KEY
-              Value: !Ref AWSSecretAccessKey
             - Name: SECRET_KEY
               Value: !Ref DjangoSecretKey
             - Name: APP_URL

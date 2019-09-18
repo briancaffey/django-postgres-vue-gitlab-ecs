@@ -68,16 +68,6 @@ Parameters:
     Type: String
     NoEcho: true
 
-  AWSAccessKeyId:
-    Description: "AWS ACCESS KEY ID"
-    Type: String
-    NoEcho: true
-
-  AWSSecretAccessKey:
-    Description: "AWS SECRET ACCESS KEY"
-    Type: String
-    NoEcho: true
-
   DjangoSecretKey:
     Description: The Secret Key for backend, celery and beat containers
     Type: String
@@ -85,10 +75,10 @@ Parameters:
 
 Conditions:
   RunServices: !Equals [ 1, 0 ]
-  UseRDS: !Equals [ 1, 0 ]
-  UseALB: !Equals [ 1, 0 ]
-  UseECS: !Equals [ 1, 0 ]
-  UseElastiCache: !Equals [ 1, 0 ]
+  UseRDS: !Equals [ 1, 1 ]
+  UseALB: !Equals [ 1, 1 ]
+  UseECS: !Equals [ 1, 1 ]
+  UseElastiCache: !Equals [ 1, 1 ]
 
 Resources:
 
@@ -177,8 +167,6 @@ Resources:
       Parameters:
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
@@ -198,8 +186,6 @@ Resources:
       Parameters:
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
@@ -219,8 +205,6 @@ Resources:
       Parameters:
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
@@ -238,8 +222,6 @@ Resources:
       Parameters:
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
         VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
