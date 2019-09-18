@@ -65,8 +65,8 @@ NOTEBOOK_ARGUMENTS = [
     '--no-browser',
 ]
 
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'key_id')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', 'key')
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'key_id')  # noqa
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', 'key')  # noqa
 
 STATIC_URL = '/static/'
 
