@@ -12,7 +12,7 @@ variables:
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
-pages:
+.pages:
   image: node:latest
   stage: documentation
   script:
@@ -24,7 +24,7 @@ pages:
     changes:
       - documentation/**/*
 
-Pytest:
+.Pytest:
   image: python:3.7
   stage: test
   services:
@@ -50,7 +50,7 @@ Pytest:
     changes:
       - backend/**/*
 
-Jest:
+.Jest:
   image: node:8
   stage: test
   before_script:
@@ -66,7 +66,7 @@ Jest:
     changes:
       - quasar/**/*
 
-Build backend:
+.Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -94,7 +94,7 @@ Build backend:
       - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-e2e: &cypress
+.e2e: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:
@@ -143,13 +143,11 @@ Build Quasar PWA Assets:
   only:
     - master
   variables:
-    VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
-    VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
-    VUE_APP_API_BASE_URL: "https://api.${AppUrl}"
-    VUE_APP_BASE_URL: "https://${AppUrl}"
-    VUE_APP_WS_PROTOCOL: wss://
-    VUE_APP_BASE_HOST: api.${AppUrl}
-    VUE_APP_SITE_DOMAIN: ${AppUrl}
+    DOMAIN_NAME: "api.${AppUrl}"
+    GOOGLE_OAUTH2_KEY: google123
+    GITHUB_KEY: github123
+    WS_PROTOCOL: wss
+    HTTP_PROTOCOL: https
   artifacts:
     paths:
       - quasar/dist/pwa
@@ -162,7 +160,7 @@ Build Quasar PWA Assets:
   after_script:
     - echo "Build Complete"
 
-Release backend:
+.Release backend:
   stage: release
   image: docker:stable
   only:
@@ -241,7 +239,7 @@ Sync Quasar PWA Assets:
   after_script:
     - echo "Create stack complete"
 
-Update stack:
+.Update stack:
   image: python:3.7
   stage: cloudformation
   only:
