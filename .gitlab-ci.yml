@@ -170,7 +170,6 @@ Release backend:
   services:
     - docker:dind
   before_script:
-    - cd backend
     - apk add --no-cache curl jq python py-pip
     - pip install awscli
   script:
