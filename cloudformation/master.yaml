@@ -74,11 +74,19 @@ Parameters:
     NoEcho: true
 
 Conditions:
+<<<<<<< HEAD
   RunServices: !Equals [ 1, 1 ]
   UseRDS: !Equals [ 1, 1 ]
   UseALB: !Equals [ 1, 1 ]
   UseECS: !Equals [ 1, 1 ]
   UseElastiCache: !Equals [ 1, 1 ]
+=======
+  RunServices: !Equals [ 1, 0 ]
+  UseRDS: !Equals [ 1, 0 ]
+  UseALB: !Equals [ 1, 1 ]
+  UseECS: !Equals [ 1, 1 ]
+  UseElastiCache: !Equals [ 1, 0 ]
+>>>>>>> 50ea1734893bda60e5f159a29fe3b2006f4c1753
 
 Resources:
 
