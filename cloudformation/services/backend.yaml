@@ -145,4 +145,4 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref AWS::StackName
-      RetentionInDays: 15
+      RetentionInDays: 7
