@@ -12,7 +12,7 @@ variables:
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
-.pages:
+pages:
   image: node:latest
   stage: documentation
   script:
@@ -24,7 +24,7 @@ variables:
     changes:
       - documentation/**/*
 
-.Pytest:
+Pytest:
   image: python:3.7
   stage: test
   services:
@@ -50,7 +50,7 @@ variables:
     changes:
       - backend/**/*
 
-.Jest:
+Jest:
   image: node:8
   stage: test
   before_script:
@@ -66,7 +66,7 @@ variables:
     changes:
       - quasar/**/*
 
-.Build backend:
+Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -94,7 +94,7 @@ variables:
       - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-.e2e: &cypress
+e2e: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:
@@ -140,8 +140,8 @@ variables:
 Build Quasar PWA Assets:
   image: node:8
   stage: build
-  # only:
-  #   - master
+  only:
+    - master
   variables:
     VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
     VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
@@ -165,8 +165,8 @@ Build Quasar PWA Assets:
 Release backend:
   stage: release
   image: docker:stable
-  # only:
-  #   - master
+  only:
+    - master
   services:
     - docker:dind
   before_script:
@@ -193,8 +193,8 @@ Release backend:
 Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   dependencies:
     - "Build Quasar PWA Assets"
   before_script:
@@ -244,8 +244,8 @@ Sync Quasar PWA Assets:
 Update stack:
   image: python:3.7
   stage: cloudformation
-  # only:
-  #   - master
+  only:
+    - master
   variables:
     EnvironmentName: staging
   before_script:

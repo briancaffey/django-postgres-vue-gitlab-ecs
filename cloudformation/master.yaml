@@ -12,7 +12,7 @@ Description: >
 
   It also deploys a static site with S3 and CloudFront.
 
-  Last Modified: 24th March 2019
+  Last Modified: 18th September 2019
   Author: Brian Caffey
 
 Parameters:
@@ -74,7 +74,7 @@ Parameters:
     NoEcho: true
 
 Conditions:
-  RunServices: !Equals [ 1, 0 ]
+  RunServices: !Equals [ 1, 1 ]
   UseRDS: !Equals [ 1, 1 ]
   UseALB: !Equals [ 1, 1 ]
   UseECS: !Equals [ 1, 1 ]
