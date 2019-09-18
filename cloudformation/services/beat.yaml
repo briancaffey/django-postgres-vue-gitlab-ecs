@@ -97,7 +97,7 @@ Resources:
               Value: !Ref RedisEndpoint
             - Name: DJANGO_SETTINGS_MODULE
               Value: 'backend.settings.production'
-              LogConfiguration:
+          LogConfiguration:
             LogDriver: awslogs
             Options:
               awslogs-group: !Ref BeatCloudWatchLogsGroup
@@ -107,4 +107,4 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref AWS::StackName
-      RetentionInDays: 365
+      RetentionInDays: 15
