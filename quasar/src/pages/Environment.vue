@@ -1,10 +1,16 @@
 <template>
   <base-page>
     <page-header>Environment Variables</page-header>
-    <div v-for="(value, key) in env" :key="key">
-      <q-chip>{{ key }}</q-chip
-      ><q-chip text-color="white" color="teal">{{ value }}</q-chip>
-    </div>
+    <q-table
+      compact
+      :hide-bottom="true"
+      :dark="$store.getters.isDark"
+      dense
+      row-key="name"
+      :data="env"
+      :pagination.sync="pagination"
+      :columns="columns"
+    />
   </base-page>
 </template>
 
@@ -12,7 +18,29 @@
 export default {
   data() {
     return {
-      env: process.env
+      pagination: {
+        rowsPerPage: 0
+      },
+      columns: [
+        {
+          name: "key",
+          align: "left",
+          label: "Environment Variable",
+          field: "key"
+        },
+        {
+          name: "value",
+          align: "left",
+          label: "Value",
+          field: "value"
+        }
+      ],
+      env: Object.keys(process.env).map(x => {
+        return {
+          key: x,
+          value: process.env[x]
+        };
+      })
     };
   }
 };
