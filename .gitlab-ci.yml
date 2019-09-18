@@ -184,7 +184,7 @@ Release backend:
         --cache-from $CI_REGISTRY_IMAGE/backend:latest \
         --target production \
         --tag $REPOSITORY_URL:${GitSHA} \
-        --file scripts/prod/Dockerfile .
+        --file backend/scripts/prod/Dockerfile .
     - $(aws ecr get-login --no-include-email --region us-east-1)
     - docker push $REPOSITORY_URL:${GitSHA}
   after_script:
