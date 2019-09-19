@@ -66,7 +66,7 @@ variables:
     changes:
       - quasar/**/*
 
-.Build backend:
+Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -137,7 +137,7 @@ variables:
   <<: *cypress
   image: localhost:5000/backend:latest
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:8
   stage: build
   only:
@@ -160,7 +160,7 @@ Build Quasar PWA Assets:
   after_script:
     - echo "Build Complete"
 
-.Release backend:
+Release backend:
   stage: release
   image: docker:stable
   only:
@@ -188,7 +188,7 @@ Build Quasar PWA Assets:
   after_script:
     - echo "The production image has been released from GitLab to ECR"
 
-Sync Quasar PWA Assets:
+.Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
   only:
@@ -239,7 +239,7 @@ Sync Quasar PWA Assets:
   after_script:
     - echo "Create stack complete"
 
-.Update stack:
+Update stack:
   image: python:3.7
   stage: cloudformation
   only:
