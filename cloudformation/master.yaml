@@ -214,6 +214,7 @@ Resources:
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        StackName: !Ref StackName
 
   BeatService5:
     Type: AWS::CloudFormation::Stack
@@ -231,6 +232,7 @@ Resources:
         RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        StackName: !Ref StackName
 
   FlowerService1:
     Type: AWS::CloudFormation::Stack

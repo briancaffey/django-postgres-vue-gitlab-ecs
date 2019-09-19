@@ -102,6 +102,8 @@ Resources:
               Value: !Ref RedisEndpoint
             - Name: CELERY_RESULT_BACKEND
               Value: !Ref RedisEndpoint
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value: !Sub "${StackName}-assets"
             - Name: STACK_NAME
               Value: !Ref StackName
             - Name: DJANGO_SETTINGS_MODULE
