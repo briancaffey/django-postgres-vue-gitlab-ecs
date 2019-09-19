@@ -128,8 +128,8 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecs-cluster.yaml
       Parameters:
-        AppUrl: !Ref AppUrl
         EnvironmentName: !Ref AWS::StackName
+        StackName: !Ref StackName
         InstanceType: t2.micro
         VPC: !GetAtt VPC.Outputs.VPC
         PublicSubnetOne: !GetAtt VPC.Outputs.PublicSubnetOne

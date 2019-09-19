@@ -3,10 +3,9 @@ Description: >
 
 Parameters:
 
-  AppUrl:
-    Type: "String"
-    Description: "The URL for our app (e.g. mydomain.com)"
-    AllowedPattern: "[a-z0-9._-]+"
+  StackName:
+    Type: String
+    Description: The name of the stack
 
   EnvironmentName:
     Type: String
@@ -195,8 +194,8 @@ Resources:
                             "s3:PutObjectAcl"
                         ],
                         "Resource": [
-                            "arn:aws:s3:::${AppUrl}-assets/*",
-                            "arn:aws:s3:::${AppUrl}-assets"
+                            "arn:aws:s3:::${StackName}-assets/*",
+                            "arn:aws:s3:::${StackName}-assets"
                         ]
                     }
                 ]
