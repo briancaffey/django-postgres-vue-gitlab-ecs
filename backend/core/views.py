@@ -45,7 +45,7 @@ def hello_world(request):
     response = JsonResponse(
         {
             'message': 'Hello, World!',
-            'git_sha': os.environ.get('GIT_SHA', '<git sha>')
+            'git_sha': os.environ.get('GIT_SHA', '<git SHA>')
         }
     )
     return response
