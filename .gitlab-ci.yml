@@ -66,7 +66,7 @@ variables:
     changes:
       - quasar/**/*
 
-Build backend:
+.Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -163,8 +163,8 @@ Build backend:
 Release backend:
   stage: release
   image: docker:stable
-  only:
-    - master
+  # only:
+  #   - master
   services:
     - docker:dind
   before_script:

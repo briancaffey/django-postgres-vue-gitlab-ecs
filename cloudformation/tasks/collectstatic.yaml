@@ -1,0 +1,110 @@
+Description: >
+  This service runs collectstatic.
+
+Parameters:
+  GitSHA:
+    Type: String
+    Description: The Git SHA
+
+  StackName:
+    Type: String
+    Description: The name of the stack
+
+  AppUrl:
+    Type: "String"
+    Description: "The URL for our app (e.g. mydomain.com)"
+    AllowedPattern: "[a-z0-9._-]+"
+
+  VPC:
+    Description: The VPC that the ECS cluster is deployed to
+    Type: AWS::EC2::VPC::Id
+
+  ECSCluster:
+    Description: Please provide the ECS Cluster ID that this service should run on
+    Type: String
+
+  DesiredCount:
+    Description: How many instances of this task should we run across our cluster?
+    Type: Number
+    Default: 2
+
+  Listener:
+    Description: The Application Load Balancer listener to register with
+    Type: String
+
+  DBEndpoint:
+    Description: The DB Endpoint
+    Type: String
+
+  RedisEndpoint:
+    Description: The Redis Endpoint
+    Type: String
+
+  ServiceRole:
+    Description: An IAM Role that grants the service access to register/unregister with the Application Load Balancer (ALB).
+    Type: String
+
+  ECRBackendRepositoryURL:
+    Description: The ECR repository for the backend container
+    Type: String
+
+  DjangoSecretKey:
+    Description: The Secret Key for backend, celery and beat containers
+    Type: String
+    NoEcho: true
+
+Resources:
+  CollectstaticTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: collectstatic
+      ContainerDefinitions:
+        - Name: collectstatic
+          Essential: true
+          Image: !Sub ${ECRBackendRepositoryURL}:${GitSHA}
+          MemoryReservation: 128
+          Command:
+            - python3
+            - manage.py
+            - collectstatic
+            - --no-input
+          Environment:
+            - Name: GIT_SHA
+              Value: !Ref GitSHA
+            - Name: SECRET_KEY
+              Value: !Ref DjangoSecretKey
+            - Name: APP_URL
+              Value: !Ref AppUrl
+            - Name: DEBUG
+              Value: ''
+            - Name: RDS_DB_NAME
+              Value: postgres
+            - Name: RDS_USERNAME
+              Value: postgres
+            - Name: RDS_PASSWORD
+              Value: postgres
+            - Name: RDS_HOSTNAME
+              Value: !Ref DBEndpoint
+            - Name: RDS_PORT
+              Value: 5432
+            - Name: CELERY_BROKER_URL
+              Value: !Ref RedisEndpoint
+            - Name: CELERY_RESULT_BACKEND
+              Value: !Ref RedisEndpoint
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value: !Sub "${StackName}-assets"
+            - Name: STACK_NAME
+              Value: !Ref StackName
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: 'backend.settings.production'
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref CollectstaticCloudWatchLogsGroup
+              awslogs-region: !Ref AWS::Region
+
+  CollectstaticCloudWatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Ref AWS::StackName
+      RetentionInDays: 1

@@ -252,6 +252,25 @@ Resources:
         FlowerUsername: !Ref FlowerUsername
         FlowerPassword: !Ref FlowerPassword
 
+  CollectstaticTask:
+    Type: AWS::CloudFormation::Stack
+    Condition: RunServices
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/collectstatic.yaml
+      Parameters:
+        GitSHA: !Ref GitSHA
+        DjangoSecretKey: !Ref DjangoSecretKey
+        AppUrl: !Ref AppUrl
+        VPC: !GetAtt VPC.Outputs.VPC
+        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+        DesiredCount: 1
+        Listener: !GetAtt ALB.Outputs.Listener
+        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
+        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        StackName: !Ref StackName
+
   FrontendResources:
     Type: AWS::CloudFormation::Stack
     Properties:
