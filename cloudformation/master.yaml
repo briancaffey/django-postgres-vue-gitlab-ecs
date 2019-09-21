@@ -128,7 +128,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecs-cluster.yaml
       Parameters:
-        EnvironmentName: !Ref AWS::StackName
+        EnvironmentName: !Ref EnvironmentName
         StackName: !Ref StackName
         InstanceType: t2.micro
         VPC: !GetAtt VPC.Outputs.VPC
@@ -257,6 +257,25 @@ Resources:
     Condition: RunServices
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/collectstatic.yaml
+      Parameters:
+        GitSHA: !Ref GitSHA
+        DjangoSecretKey: !Ref DjangoSecretKey
+        AppUrl: !Ref AppUrl
+        VPC: !GetAtt VPC.Outputs.VPC
+        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+        DesiredCount: 1
+        Listener: !GetAtt ALB.Outputs.Listener
+        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
+        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
+        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
+        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        StackName: !Ref StackName
+
+  MigrateTask:
+    Type: AWS::CloudFormation::Stack
+    Condition: RunServices
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/migrate.yaml
       Parameters:
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey

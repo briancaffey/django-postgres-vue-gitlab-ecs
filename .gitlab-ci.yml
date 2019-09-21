@@ -219,7 +219,7 @@ Release backend:
 
 .Create stack:
   image: python:3.7
-  stage: cloudformation
+  stage: deploy
   only:
     - master
   variables:
@@ -241,7 +241,7 @@ Release backend:
 
 Update stack:
   image: python:3.7
-  stage: cloudformation
+  stage: deploy
   # only:
   #   - master
   variables:
@@ -260,3 +260,29 @@ Update stack:
         --parameters file://./parameters.json
   after_script:
     - echo "Update stack complete"
+
+collectstatic: &task
+  image: python:3.7
+  stage: deploy
+  # only:
+  #   - master
+  variables:
+    EnvironmentName: staging
+  before_script:
+    - pip install awscli
+  when: manual
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${EnvironmentName}-cluster \
+        --task-definition collectstatic
+
+migrate:
+  <<: *task
+  variables:
+    EnvironmentName: staging
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${EnvironmentName}-cluster \
+        --task-definition migrate

@@ -61,6 +61,7 @@ Resources:
 
   ECSCluster:
     Type: AWS::ECS::Cluster
+    ClusterName: !Sub ${EnvironmentName}-cluster
 
   ContainerInstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
