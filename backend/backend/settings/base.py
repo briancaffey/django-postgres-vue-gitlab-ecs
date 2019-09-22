@@ -148,23 +148,23 @@ DATABASES = {
 
 ASGI_APPLICATION = 'backend.routing.application'
 
-ELASTICACHE_REDIS_HOST_NAME = \
+REDIS_SERVICE_HOST = \
     os.environ.get(
         'CELERY_BROKER_URL',
         'redis://redis:6379'
-    )[8:].split(':')[0]
+    )
 
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(ELASTICACHE_REDIS_HOST_NAME, 6379)],
+            "hosts": [(REDIS_SERVICE_HOST, 6379)],
         },
     },
 }
 
 REDIS = redis.Redis(
-    host=ELASTICACHE_REDIS_HOST_NAME,
+    host=REDIS_SERVICE_HOST,
     port=6379,
     db=3,
     charset="utf-8",
@@ -188,10 +188,6 @@ REST_FRAMEWORK = {
 
 # Celery Configuration
 
-CELERY_BROKER_URL = \
-    os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379')
-CELERY_RESULT_BACKEND = \
-    os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

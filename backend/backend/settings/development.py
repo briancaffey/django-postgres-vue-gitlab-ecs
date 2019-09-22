@@ -13,6 +13,13 @@ DATABASES = {
     }
 }
 
+# Celery
+
+CELERY_BROKER_URL = \
+    os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379')  # noqa
+CELERY_RESULT_BACKEND = \
+    os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379')  # noqa
+
 DEBUG_APPS = [
     'django_extensions',
     'debug_toolbar'
