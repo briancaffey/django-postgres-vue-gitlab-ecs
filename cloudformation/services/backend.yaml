@@ -98,9 +98,7 @@ Resources:
               Value: !Ref DBEndpoint
             - Name: RDS_PORT
               Value: 5432
-            - Name: CELERY_BROKER_URL
-              Value: !Ref RedisEndpoint
-            - Name: CELERY_RESULT_BACKEND
+            - Name: REDIS_SERVICE_HOST
               Value: !Ref RedisEndpoint
             - Name: AWS_STORAGE_BUCKET_NAME
               Value: !Sub "${StackName}-assets"

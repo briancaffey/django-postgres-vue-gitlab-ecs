@@ -150,7 +150,7 @@ ASGI_APPLICATION = 'backend.routing.application'
 
 REDIS_SERVICE_HOST = \
     os.environ.get(
-        'CELERY_BROKER_URL',
+        'REDIS_SERVICE_HOST',
         'redis://redis:6379'
     )
 
