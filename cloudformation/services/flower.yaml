@@ -73,7 +73,7 @@ Resources:
           Memory: 128
           Command:
             - 'flower'
-            - !Sub "--broker=redis://${RedisEndpoint}:6379/0"
+            - !Sub "--broker=redis://${RedisEndpoint}:6379"
             - !Sub "--basic_auth=${FlowerUsername}:${FlowerPassword}"
           PortMappings:
             - ContainerPort: 5555
