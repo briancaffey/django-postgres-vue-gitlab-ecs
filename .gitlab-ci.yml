@@ -12,7 +12,7 @@ variables:
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
-.pages:
+pages:
   image: node:latest
   stage: documentation
   script:
@@ -24,7 +24,7 @@ variables:
     changes:
       - documentation/**/*
 
-.Pytest:
+Pytest:
   image: python:3.7
   stage: test
   services:
@@ -50,7 +50,7 @@ variables:
     changes:
       - backend/**/*
 
-.Jest:
+Jest:
   image: node:8
   stage: test
   before_script:
@@ -94,7 +94,7 @@ Build backend:
       - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-.e2e: &cypress
+e2e: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:
@@ -137,7 +137,7 @@ Build backend:
   <<: *cypress
   image: localhost:5000/backend:latest
 
-.Build Quasar PWA Assets:
+Build Quasar PWA Assets:
   image: node:8
   stage: build
   only:
@@ -163,8 +163,8 @@ Build backend:
 Release backend:
   stage: release
   image: docker:stable
-  # only:
-  #   - master
+  only:
+    - master
   services:
     - docker:dind
   before_script:
@@ -188,7 +188,7 @@ Release backend:
   after_script:
     - echo "The production image has been released from GitLab to ECR"
 
-.Sync Quasar PWA Assets:
+Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
   only:
@@ -242,8 +242,8 @@ Release backend:
 Update stack:
   image: python:3.7
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   variables:
     EnvironmentName: staging
   before_script:
