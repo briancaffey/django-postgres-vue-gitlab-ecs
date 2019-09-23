@@ -169,7 +169,7 @@ Resources:
         GitSHA: !Ref GitSHA
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
-        VPC: !GetAtt VPC.Outputs.VPC
+        # VPC: !GetAtt VPC.Outputs.VPC
         ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
