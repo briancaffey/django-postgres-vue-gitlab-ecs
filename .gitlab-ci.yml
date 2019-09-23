@@ -163,8 +163,8 @@ Build backend:
 Release backend:
   stage: release
   image: docker:stable
-  only:
-    - master
+  # only:
+  #   - master
   services:
     - docker:dind
   before_script:
@@ -242,8 +242,8 @@ Release backend:
 Update stack:
   image: python:3.7
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     EnvironmentName: staging
   before_script:
