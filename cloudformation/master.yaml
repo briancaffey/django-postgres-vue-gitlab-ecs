@@ -87,7 +87,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/vpc.yaml
       Parameters:
-        EnvironmentName: !Ref AWS::StackName
+        EnvironmentName: !Ref EnvironmentName
 
   ALB:
     Type: AWS::CloudFormation::Stack
