@@ -11,6 +11,10 @@ Parameters:
     Type: String
     Description: The name of the stack
 
+  EnvironmentName:
+    Type: String
+    Description: An environemnt name to namespace cluster resources (e.g. qa, staging, production)
+
   AppUrl:
     Type: "String"
     Description: "The URL for our app (e.g. mydomain.com)"

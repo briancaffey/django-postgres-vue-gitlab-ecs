@@ -167,6 +167,7 @@ Resources:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
         GitSHA: !Ref GitSHA
+        EnvironmentName: !Ref EnvironmentName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
         # VPC: !GetAtt VPC.Outputs.VPC
