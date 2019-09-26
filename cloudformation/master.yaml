@@ -219,6 +219,7 @@ Resources:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
       Parameters:
         StackName: !Ref StackName
+        ElastiCacheHost: !Ref ElastiCacheRedis.Outputs.ElastiCacheHost
         VPC: !GetAtt VPC.Outputs.VPC
         Listener: !GetAtt ALB.Outputs.Listener
         DesiredCount: 1

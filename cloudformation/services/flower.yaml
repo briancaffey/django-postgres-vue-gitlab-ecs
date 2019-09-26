@@ -12,6 +12,10 @@ Parameters:
     Type: Number
     Default: 2
 
+  ElastiCacheHost:
+    Type: String
+    Decsription: ElastiCache hostname for the redis cluster
+
   Listener:
     Description: The Application Load Balancer listener to register with
     Type: String
@@ -61,7 +65,7 @@ Resources:
           Memory: 128
           Command:
             - 'flower'
-            - !Sub "--broker=redis://${RedisEndpoint}:6379//"
+            - !Sub "--broker=redis://${ElastiCacheHost}:6379//"
             - !Sub "--basic_auth=${FlowerUsername}:${FlowerPassword}"
           PortMappings:
             - ContainerPort: 5555
