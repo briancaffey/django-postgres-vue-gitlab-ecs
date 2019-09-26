@@ -220,8 +220,8 @@ Build backend:
 Create stack:
   image: python:3.7
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     EnvironmentName: staging
   before_script:
