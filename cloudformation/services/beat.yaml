@@ -16,10 +16,6 @@ Parameters:
     Description: "The URL for our app (e.g. mydomain.com)"
     AllowedPattern: "[a-z0-9._-]+"
 
-  VPC:
-    Description: The VPC that the ECS cluster is deployed to
-    Type: AWS::EC2::VPC::Id
-
   ECSCluster:
     Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
@@ -56,7 +52,10 @@ Resources:
   BeatService:
     Type: AWS::ECS::Service
     Properties:
-      Cluster: !Ref ECSCluster
+      # Cluster: !Ref ECSCluster
+      Cluster:
+        Fn::ImportValue:
+          !Sub ${StackName}:ECSCluster
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref BeatTaskDefinition
 
@@ -85,18 +84,20 @@ Resources:
               Value: !Ref AppUrl
             - Name: DEBUG
               Value: ''
-            - Name: RDS_DB_NAME
+            - Name: POSTGRES_NAME
               Value: postgres
-            - Name: RDS_USERNAME
+            - Name: POSTGRES_USERNAME
               Value: postgres
-            - Name: RDS_PASSWORD
+            - Name: POSTGRES_PASSWORD
               Value: postgres
-            - Name: RDS_HOSTNAME
-              Value: !Ref DBEndpoint
-            - Name: RDS_PORT
-              Value: 5432
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::ImportValue:
+                  !Sub ${StackName}:RDSHost
             - Name: REDIS_SERVICE_HOST
-              Value: !Ref RedisEndpoint
+              Value:
+                Fn::ImportValue:
+                  !Sub ${StackName}:ElastiCacheHost
             - Name: AWS_STORAGE_BUCKET_NAME
               Value: !Sub "${StackName}-assets"
             - Name: DJANGO_SETTINGS_MODULE

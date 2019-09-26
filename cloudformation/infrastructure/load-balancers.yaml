@@ -3,6 +3,11 @@ Description: >
   We create them in a seperate nested template, so it can be referenced by all of the other nested templates.
 
 Parameters:
+
+  StackName:
+    Type: String
+    Description: The name of the stack
+
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
@@ -40,7 +45,7 @@ Resources:
     Properties:
       VpcId:
         Fn::ImportValue:
-          !Sub ${EnvironmentName}:VpcId
+          !Sub ${StackName}:VpcId
       GroupDescription: Access to the load balancer that sits in front of ECS
       Tags:
         - Key: Name

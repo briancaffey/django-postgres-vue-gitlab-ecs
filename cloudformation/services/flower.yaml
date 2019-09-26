@@ -2,13 +2,6 @@ Description: >
   This is an example of a long running ECS service that serves a JSON API of products.
 
 Parameters:
-  VPC:
-    Description: The VPC that the ECS cluster is deployed to
-    Type: AWS::EC2::VPC::Id
-
-  ECSCluster:
-    Description: Please provide the ECS Cluster ID that this service should run on
-    Type: String
 
   DesiredCount:
     Description: How many instances of this task should we run across our cluster?
@@ -35,10 +28,6 @@ Parameters:
     Description: AppUrl
     Type: String
 
-  ECRBackendRepositoryURL:
-    Description: The ECR repository for the backend container
-    Type: String
-
   FlowerUsername:
     Description: Username for flower monitoring service authentication
     Type: String
@@ -53,7 +42,10 @@ Resources:
     Type: AWS::ECS::Service
     DependsOn: FlowerListenerRule
     Properties:
-      Cluster: !Ref ECSCluster
+      # Cluster: !Ref ECSCluster
+      Cluster:
+        Fn::ImportValue:
+          !Sub ${StackName}:ECSCluster
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref FlowerTaskDefinition
@@ -92,7 +84,9 @@ Resources:
   FlowerTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      VpcId: !Ref VPC
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${StackName}:VpcId
       Port: 80
       Protocol: HTTP
       Matcher:

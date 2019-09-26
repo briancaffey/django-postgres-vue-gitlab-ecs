@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  StackName:
+    Type: String
+    Description: The name of the stack
+
   PrivateSubnets:
     Description: List of private subnets for RDS
     Type: String
@@ -18,7 +22,7 @@ Resources:
       GroupDescription: ElastiCache Security Group
       VpcId:
         Fn::ImportValue:
-          !Sub ${EnvironmentName}:VpcId
+          !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 6379
@@ -42,6 +46,8 @@ Resources:
         - !GetAtt ElastiCacheSecurityGroup.GroupId
 
 Outputs:
-  RedisEndpoint:
-    Description: Endpoint for ElastiCache Cluster
+  ElastiCacheHost:
+    Description: Hostname for ElastiCache Cluster
     Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Address
+    Export:
+      Name: !Sub ${StackName}:ElastiCacheHost

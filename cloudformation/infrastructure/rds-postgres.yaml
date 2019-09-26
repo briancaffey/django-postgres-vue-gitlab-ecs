@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  StackName:
+    Type: String
+    Description: The name of the stack
+
   PrivateSubnets:
     Description: List of private subnets for RDS
     Type: String
@@ -19,7 +23,7 @@ Resources:
       GroupDescription: 'RDS-DBSG'
       VpcId:
         Fn::ImportValue:
-          !Sub ${EnvironmentName}:VpcId
+          !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 5432
@@ -51,8 +55,8 @@ Resources:
         - !GetAtt DatabaseSecurityGroup.GroupId
 
 Outputs:
-  DBEndpoint:
-    Description: The endpoint for the Postgres DB instance
+  RDSHost:
+    Description: Hostname for the Postgres DB instance
     Value: !GetAtt RDSPostgres.Endpoint.Address
     Export:
-      Name: GitSHA
+      Name: !Sub ${StackName}:RDSHost

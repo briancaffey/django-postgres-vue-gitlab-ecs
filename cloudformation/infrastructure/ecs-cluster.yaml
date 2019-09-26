@@ -21,10 +21,6 @@ Parameters:
      r5.large, r5.xlarge, r5.2xlarge, r5.4xlarge, r5.12xlarge, r5.24xlarge ]
     ConstraintDescription: Please choose a valid instance type.
 
-  VPC:
-    Description: Main VPC
-    Type: AWS::EC2::VPC::Id
-
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup::Id
     Description: Security group for the load balancer
@@ -68,7 +64,9 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Access to the ECS hosts that run containers.
-      VpcId: !Ref 'VPC'
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
           IpProtocol: -1
@@ -347,7 +345,7 @@ Outputs:
     Description: The name of the ECS cluster
     Value: !Ref 'ECSCluster'
     Export:
-      Name: !Sub ${EnvironmentName}:ClusterName
+      Name: !Sub ${StackName}:ECSCluster
 
   AutoScalingRole:
     Description: The ARN of the role used for auto-scaling

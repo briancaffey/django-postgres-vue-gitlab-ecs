@@ -3,9 +3,13 @@ Description: >
 
 Parameters:
 
+  StackName:
+    Type: String
+    Description: The name of the stack
+
   EnvironmentName:
     Type: String
-    Description: An environemnt name to namespace resources (e.g. qa, staging, production)
+    Description: An environment name to namespace resources (e.g. qa, staging, production)
 
 Mappings:
 
@@ -115,31 +119,31 @@ Outputs:
     Description: The ID of the VPC that this stack is deployed in
     Value: !Ref 'VPC'
     Export:
-      Name: !Sub ${EnvironmentName}:VpcId
+      Name: !Sub ${StackName}:VpcId
 
   PublicSubnetOne:
     Description: Public subnet one
     Value: !Ref 'PublicSubnetOne'
     Export:
-      Name: !Sub ${EnvironmentName}:PublicSubnetOne
+      Name: !Sub ${StackName}:PublicSubnetOne
 
   PublicSubnetTwo:
     Description: Public subnet two
     Value: !Ref 'PublicSubnetTwo'
     Export:
-      Name: !Sub ${EnvironmentName}:PublicSubnetTwo
+      Name: !Sub ${StackName}:PublicSubnetTwo
 
   PrivateSubnetOne:
     Description: Public subnet one
     Value: !Ref 'PublicSubnetOne'
     Export:
-      Name: !Sub ${EnvironmentName}:PrivateSubnetOne
+      Name: !Sub ${StackName}:PrivateSubnetOne
 
   PrivateSubnetTwo:
     Description: Private subnet two
     Value: !Ref 'PrivateSubnetTwo'
     Export:
-      Name: !Sub ${EnvironmentName}:PrivateSubnetTwo
+      Name: !Sub ${StackName}:PrivateSubnetTwo
 
   PublicSubnets:
     Description: A list of the public subnets
