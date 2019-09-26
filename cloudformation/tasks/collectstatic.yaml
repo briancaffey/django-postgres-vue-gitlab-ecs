@@ -2,9 +2,6 @@ Description: >
   This service runs collectstatic.
 
 Parameters:
-  GitSHA:
-    Type: String
-    Description: The Git SHA
 
   StackName:
     Type: String
@@ -14,23 +11,6 @@ Parameters:
     Type: "String"
     Description: "The URL for our app (e.g. mydomain.com)"
     AllowedPattern: "[a-z0-9._-]+"
-
-  DesiredCount:
-    Description: How many instances of this task should we run across our cluster?
-    Type: Number
-    Default: 2
-
-  DBEndpoint:
-    Description: The DB Endpoint
-    Type: String
-
-  RedisEndpoint:
-    Description: The Redis Endpoint
-    Type: String
-
-  ECRBackendRepositoryURL:
-    Description: The ECR repository for the backend container
-    Type: String
 
   DjangoSecretKey:
     Description: The Secret Key for backend, celery and beat containers
@@ -45,7 +25,9 @@ Resources:
       ContainerDefinitions:
         - Name: collectstatic
           Essential: true
-          Image: !Sub ${ECRBackendRepositoryURL}:${GitSHA}
+          Image:
+            Fn::ImportValue:
+              !Sub ${StackName}:BackendImage
           MemoryReservation: 128
           Command:
             - python3
@@ -53,8 +35,6 @@ Resources:
             - collectstatic
             - --no-input
           Environment:
-            - Name: GIT_SHA
-              Value: !Ref GitSHA
             - Name: SECRET_KEY
               Value: !Ref DjangoSecretKey
             - Name: APP_URL

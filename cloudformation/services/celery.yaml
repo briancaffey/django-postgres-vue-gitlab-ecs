@@ -3,10 +3,6 @@ Description: >
 
 Parameters:
 
-  GitSHA:
-    Type: String
-    Description: The Git SHA
-
   StackName:
     Type: String
     Description: The name of the stack
@@ -21,18 +17,6 @@ Parameters:
     Type: Number
     Default: 1
 
-  DBEndpoint:
-    Description: The DB Endpoint
-    Type: String
-
-  RedisEndpoint:
-    Description: The Redis Endpoint
-    Type: String
-
-  ECRBackendRepositoryURL:
-    Description: The ECR repository for the backend container
-    Type: String
-
   DjangoSecretKey:
     Description: The Secret Key for backend, celery and beat containers
     Type: String
@@ -43,7 +27,6 @@ Resources:
   CeleryService:
     Type: AWS::ECS::Service
     Properties:
-      # Cluster: !Ref ECSCluster
       Cluster:
         Fn::ImportValue:
           !Sub ${StackName}:ECSCluster
@@ -57,7 +40,9 @@ Resources:
       ContainerDefinitions:
         - Name: celery
           Essential: true
-          Image: !Sub ${ECRBackendRepositoryURL}:${GitSHA}
+          Image:
+            Fn::ImportValue:
+              !Sub ${StackName}:BackendImage
           MemoryReservation: 128
           Command:
             - 'celery'
@@ -67,8 +52,6 @@ Resources:
             - '-l'
             - 'info'
           Environment:
-            - Name: GIT_SHA
-              Value: !Ref GitSHA
             - Name: SECRET_KEY
               Value: !Ref DjangoSecretKey
             - Name: APP_URL

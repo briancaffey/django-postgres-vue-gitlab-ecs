@@ -20,14 +20,6 @@ Parameters:
     Description: "The URL for our app (e.g. mydomain.com)"
     AllowedPattern: "[a-z0-9._-]+"
 
-  # VPC:
-  #   Description: The VPC that the ECS cluster is deployed to
-  #   Type: AWS::EC2::VPC::Id
-
-  ECSCluster:
-    Description: Please provide the ECS Cluster ID that this service should run on
-    Type: String
-
   DesiredCount:
     Description: How many instances of this task should we run across our cluster?
     Type: Number
@@ -37,13 +29,8 @@ Parameters:
     Description: The Application Load Balancer listener to register with
     Type: String
 
-
   ServiceRole:
     Description: An IAM Role that grants the service access to register/unregister with the Application Load Balancer (ALB).
-    Type: String
-
-  ECRBackendRepositoryURL:
-    Description: The ECR repository for the backend container
     Type: String
 
   DjangoSecretKey:

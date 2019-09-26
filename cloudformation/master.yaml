@@ -132,7 +132,6 @@ Resources:
         StackName: !Ref StackName
         EnvironmentName: !Ref EnvironmentName
         InstanceType: t2.micro
-        VPC: !GetAtt VPC.Outputs.VPC
         PublicSubnetOne: !GetAtt VPC.Outputs.PublicSubnetOne
         PublicSubnetTwo: !GetAtt VPC.Outputs.PublicSubnetTwo
         MaxSize: '2'
@@ -168,13 +167,14 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
+        GitSHA: !Ref GitSHA
         StackName: !Ref StackName
         EnvironmentName: !Ref EnvironmentName
-        DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        DjangoSecretKey: !Ref DjangoSecretKey
 
   DaphneService:
     Type: AWS::CloudFormation::Stack
