@@ -4,8 +4,8 @@ Description: >
 Parameters:
 
   StackName:
-    Type: String
     Description: The name of the stack
+    Type: String
 
   DesiredCount:
     Description: How many instances of this task should we run across our cluster?
@@ -13,8 +13,8 @@ Parameters:
     Default: 2
 
   ElastiCacheHost:
+    Description: ElastiCache hostname for the redis cluster
     Type: String
-    Decsription: ElastiCache hostname for the redis cluster
 
   Listener:
     Description: The Application Load Balancer listener to register with
