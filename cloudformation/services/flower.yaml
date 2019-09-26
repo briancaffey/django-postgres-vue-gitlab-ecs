@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  StackName:
+    Type: String
+    Description: The name of the stack
+
   DesiredCount:
     Description: How many instances of this task should we run across our cluster?
     Type: Number
