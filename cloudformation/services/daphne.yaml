@@ -65,8 +65,6 @@ Resources:
             - "--port"
             - "9000"
           Environment:
-            - Name: GIT_SHA
-              Value: !Ref GitSHA
             - Name: SECRET_KEY
               Value: !Ref DjangoSecretKey
             - Name: APP_URL
