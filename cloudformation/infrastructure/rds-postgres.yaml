@@ -2,9 +2,6 @@ Description: >
   This template deploys a Postgres RDS instance
 
 Parameters:
-  VPC:
-    Description: Main VPC
-    Type: AWS::EC2::VPC::Id
 
   PrivateSubnets:
     Description: List of private subnets for RDS
@@ -20,7 +17,9 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: 'RDS-DBSG'
-      VpcId: !Ref VPC
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${EnvironmentName}:VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 5432
@@ -55,3 +54,5 @@ Outputs:
   DBEndpoint:
     Description: The endpoint for the Postgres DB instance
     Value: !GetAtt RDSPostgres.Endpoint.Address
+    Export:
+      Name: GitSHA

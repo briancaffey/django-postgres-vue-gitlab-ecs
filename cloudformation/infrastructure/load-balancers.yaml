@@ -7,10 +7,6 @@ Parameters:
     Description: An environment name that will be prefixed to resource names
     Type: String
 
-  VPC:
-    Type: AWS::EC2::VPC::Id
-    Description: Choose which VPC the Application Load Balancer should be deployed to
-
   Subnets:
     Description: Choose which subnets the Application Load Balancer should be deployed to
     Type: List<AWS::EC2::Subnet::Id>
@@ -42,12 +38,10 @@ Resources:
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId: !Ref VPC
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${EnvironmentName}:VpcId
       GroupDescription: Access to the load balancer that sits in front of ECS
-      # SecurityGroupIngress:
-      #   # Allow access from anywhere to our ECS services
-      #   - CidrIp: 0.0.0.0/0
-      #     IpProtocol: -1
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-LoadBalancerSecurityGroup
@@ -69,16 +63,6 @@ Resources:
       FromPort: 443
       ToPort: 443
       CidrIp: '0.0.0.0/0'
-
-  # LoadBalancerListener:
-  #   Type: AWS::ElasticLoadBalancingV2::Listener
-  #   Properties:
-  #     LoadBalancerArn: !Ref LoadBalancer
-  #     Port: 80
-  #     Protocol: HTTP
-  #     DefaultActions:
-  #       - TargetGroupArn: !Ref DefaultTargetGroup
-  #         Type: forward
 
   PublicLoadBalancerHttpRedirectListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -115,7 +99,9 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: !Sub ${EnvironmentName}-default
-      VpcId: !Ref VPC
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${EnvironmentName}:VpcId
       Port: 80
       Protocol: HTTP
 

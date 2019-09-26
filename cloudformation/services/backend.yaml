@@ -37,10 +37,6 @@ Parameters:
     Description: The Application Load Balancer listener to register with
     Type: String
 
-  DBEndpoint:
-    Description: The DB Endpoint
-    Type: String
-
   RedisEndpoint:
     Description: The Redis Endpoint
     Type: String
@@ -92,16 +88,16 @@ Resources:
               Value: !Ref AppUrl
             - Name: DEBUG
               Value: ''
-            - Name: RDS_DB_NAME
+            - Name: POSTGRES_NAME
               Value: postgres
-            - Name: RDS_USERNAME
+            - Name: POSTGRES_USERNAME
               Value: postgres
-            - Name: RDS_PASSWORD
+            - Name: POSTGRES_PASSWORD
               Value: postgres
-            - Name: RDS_HOSTNAME
-              Value: !Ref DBEndpoint
-            - Name: RDS_PORT
-              Value: 5432
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::ImportValue:
+                  !Sub ${}
             - Name: REDIS_SERVICE_HOST
               Value: !Ref RedisEndpoint
             - Name: AWS_STORAGE_BUCKET_NAME
