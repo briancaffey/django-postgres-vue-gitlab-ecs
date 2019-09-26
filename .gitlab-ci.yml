@@ -137,7 +137,7 @@ Build backend:
   <<: *cypress
   image: localhost:5000/backend:latest
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:8
   stage: build
   # only:
@@ -188,7 +188,7 @@ Release backend:
   after_script:
     - echo "The production image has been released from GitLab to ECR"
 
-Sync Quasar PWA Assets:
+.Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
   # only:
