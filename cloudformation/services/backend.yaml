@@ -1,5 +1,5 @@
 Description: >
-  This service runs the Django webserver.
+  This service runs the Django webserver
 
 Parameters:
 
