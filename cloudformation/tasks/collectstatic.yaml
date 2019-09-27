@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  ImageUrl:
+    Type: String
+    Description: ECR Image
+
   StackName:
     Type: String
     Description: The name of the stack
@@ -25,9 +29,7 @@ Resources:
       ContainerDefinitions:
         - Name: collectstatic
           Essential: true
-          Image:
-            Fn::ImportValue:
-              !Sub ${StackName}:BackendImage
+          Image: !Ref ImageUrl
           MemoryReservation: 128
           Command:
             - python3

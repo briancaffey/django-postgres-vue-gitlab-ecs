@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  ImageUrl:
+    Type: String
+    Description: ECR Image
+
   StackName:
     Type: String
     Description: The name of the stack
@@ -44,9 +48,7 @@ Resources:
       ContainerDefinitions:
         - Name: beat
           Essential: true
-          Image:
-            Fn::ImportValue:
-              !Sub ${StackName}:BackendImage
+          Image: !Ref ImageUrl
           Memory: 128
           Command:
             - 'celery'

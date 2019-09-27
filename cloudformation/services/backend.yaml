@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  ImageUrl:
+    Type: String
+    Description: ECR Image
+
   GitSHA:
     Type: String
     Description: The Git SHA
@@ -61,9 +65,7 @@ Resources:
       ContainerDefinitions:
         - Name: backend
           Essential: true
-          Image:
-            Fn::ImportValue:
-              !Sub ${StackName}:BackendImage
+          Image: !Ref ImageUrl
           MemoryReservation: 128
           Command:
             - '/start_prod.sh'
