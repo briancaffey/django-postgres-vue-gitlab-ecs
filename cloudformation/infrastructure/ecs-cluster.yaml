@@ -3,6 +3,10 @@ Description: >
 
 Parameters:
 
+  StackName:
+    Type: String
+    Description: The name of the stack
+
   EnvironmentName:
     Type: String
     Description: An environemnt name to namespace cluster resources (e.g. qa, staging, production)
@@ -16,10 +20,6 @@ Parameters:
      c5.large, c5.xlarge, c5.2xlarge, c5.4xlarge, c5.9xlarge, c5.18xlarge,
      r5.large, r5.xlarge, r5.2xlarge, r5.4xlarge, r5.12xlarge, r5.24xlarge ]
     ConstraintDescription: Please choose a valid instance type.
-
-  VPC:
-    Description: Main VPC
-    Type: AWS::EC2::VPC::Id
 
   LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup::Id
@@ -57,12 +57,16 @@ Resources:
 
   ECSCluster:
     Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub ${EnvironmentName}-cluster
 
   ContainerInstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Access to the ECS hosts that run containers.
-      VpcId: !Ref 'VPC'
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
           IpProtocol: -1
@@ -173,6 +177,29 @@ Resources:
         - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
         - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
       Policies:
+        - PolicyName: s3-access
+          PolicyDocument: !Sub |
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "VisualEditor0",
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3:PutObject",
+                            "s3:GetObjectAcl",
+                            "s3:GetObject",
+                            "s3:ListBucket",
+                            "s3:DeleteObject",
+                            "s3:PutObjectAcl"
+                        ],
+                        "Resource": [
+                            "arn:aws:s3:::${StackName}-assets/*",
+                            "arn:aws:s3:::${StackName}-assets"
+                        ]
+                    }
+                ]
+            }
         - PolicyName: ecs-service
           PolicyDocument: |
             {
@@ -318,7 +345,7 @@ Outputs:
     Description: The name of the ECS cluster
     Value: !Ref 'ECSCluster'
     Export:
-      Name: !Sub ${EnvironmentName}:ClusterName
+      Name: !Sub ${StackName}:ECSCluster
 
   AutoScalingRole:
     Description: The ARN of the role used for auto-scaling

@@ -57,7 +57,11 @@ module.exports = function(ctx) {
         "QSelect",
         "QForm",
         "QSpinnerGears",
-        "QInnerLoading"
+        "QInnerLoading",
+        "QTable",
+        "QTh",
+        "QTr",
+        "QTd"
       ],
 
       directives: ["Ripple", "ClosePopup"],

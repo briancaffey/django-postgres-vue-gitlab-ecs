@@ -18,9 +18,7 @@ variables = [
     'WildcardSSLCertificateArn',
     'FlowerUsername',
     'FlowerPassword',
-    'DjangoSecretKey',
-    'AWSAccessKeyId',
-    'AWSSecretAccessKey',
+    'DjangoSecretKey'
 ]
 
 for v in variables:

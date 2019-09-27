@@ -36,3 +36,8 @@ LOGGING = {
         },
     },
 }
+
+# Celery
+
+CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
+CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa

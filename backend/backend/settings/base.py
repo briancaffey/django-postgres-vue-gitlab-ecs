@@ -36,6 +36,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers + (
     'access-control-allow-headers',
     'access-control-allow-methods',
+    'access-control-allow-origin'
 )
 
 # Application definition
@@ -102,6 +103,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -136,33 +138,33 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('RDS_DB_NAME', 'postgres'),
-        'USER': os.environ.get('RDS_USERNAME', 'postgres'),
-        'PASSWORD': os.environ.get('RDS_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('RDS_HOSTNAME', 'postgres'),
-        'PORT': os.environ.get('RDS_PORT', 5432),
+        'NAME': os.environ.get('POSTGRES_NAME', 'postgres'),
+        'USER': os.environ.get('POSTGRES_USERNAME', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': os.environ.get('POSTGRES_SERVICE_HOST', 'postgres'),
+        'PORT': os.environ.get('POSTGRES_SERVICE_PORT', 5432),
     }
 }
 
 ASGI_APPLICATION = 'backend.routing.application'
 
-ELASTICACHE_REDIS_HOST_NAME = \
+REDIS_SERVICE_HOST = \
     os.environ.get(
-        'CELERY_BROKER_URL',
+        'REDIS_SERVICE_HOST',
         'redis://redis:6379'
-    )[8:].split(':')[0]
+    )
 
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(ELASTICACHE_REDIS_HOST_NAME, 6379)],
+            "hosts": [(REDIS_SERVICE_HOST, 6379)],
         },
     },
 }
 
 REDIS = redis.Redis(
-    host=ELASTICACHE_REDIS_HOST_NAME,
+    host=REDIS_SERVICE_HOST,
     port=6379,
     db=3,
     charset="utf-8",
@@ -186,10 +188,6 @@ REST_FRAMEWORK = {
 
 # Celery Configuration
 
-CELERY_BROKER_URL = \
-    os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379')
-CELERY_RESULT_BACKEND = \
-    os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -234,8 +232,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 AWS_DEFAULT_ACL = None
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'key_id')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', 'key')
+
 AWS_STORAGE_BUCKET_NAME = os.environ.get(
     'AWS_STORAGE_BUCKET_NAME', 'bucketname')
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"

@@ -2,9 +2,10 @@ Description: >
   This template deploys a Postgres RDS instance
 
 Parameters:
-  VPC:
-    Description: Main VPC
-    Type: AWS::EC2::VPC::Id
+
+  StackName:
+    Type: String
+    Description: The name of the stack
 
   PrivateSubnets:
     Description: List of private subnets for RDS
@@ -20,7 +21,9 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: 'RDS-DBSG'
-      VpcId: !Ref VPC
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 5432
@@ -52,6 +55,8 @@ Resources:
         - !GetAtt DatabaseSecurityGroup.GroupId
 
 Outputs:
-  DBEndpoint:
-    Description: The endpoint for the Postgres DB instance
+  RDSHost:
+    Description: Hostname for the Postgres DB instance
     Value: !GetAtt RDSPostgres.Endpoint.Address
+    Export:
+      Name: !Sub ${StackName}:RDSHost
