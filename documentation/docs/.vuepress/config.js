@@ -56,6 +56,10 @@ module.exports = {
         ]
       },
       {
+        text: "DevOps",
+        items: [{ text: "AWS", link: "/devops/aws/" }]
+      },
+      {
         text: "Topics",
         items: [{ text: "Minikube", link: "/topics/minikube/" }]
       },

@@ -20,7 +20,8 @@
       <q-carousel-slide name="style" class="column no-wrap flex-center">
         <q-icon name="layers" size="56px" />
         <div class="q-mt-md text-center">
-          A full stack application with Vue, Django, docker and AWS
+          A full-stack application built with Django, Quasar, Postgres and other
+          technologies
         </div>
       </q-carousel-slide>
       <q-carousel-slide name="tv" class="column no-wrap flex-center">
