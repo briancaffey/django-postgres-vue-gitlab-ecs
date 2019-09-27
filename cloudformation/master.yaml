@@ -74,7 +74,7 @@ Parameters:
     NoEcho: true
 
 Conditions:
-  RunServices: !Equals [ 1, 1 ]
+  RunServices: !Equals [ 1, 0 ]
   UseRDS: !Equals [ 1, 1 ]
   UseALB: !Equals [ 1, 1 ]
   UseECS: !Equals [ 1, 1 ]
@@ -167,6 +167,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
+        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
         GitSHA: !Ref GitSHA
         StackName: !Ref StackName
         EnvironmentName: !Ref EnvironmentName
@@ -182,6 +183,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/daphne.yaml
       Parameters:
+        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -195,6 +197,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
+        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -206,6 +209,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
+        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -233,6 +237,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/collectstatic.yaml
       Parameters:
+        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -243,6 +248,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/migrate.yaml
       Parameters:
+        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -301,14 +307,3 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}:SSHKeyName
 
-  GitSHA:
-    Description: "This is a test parameter used to see how to pass parameters from GitLab"
-    Value: !Ref GitSHA
-    Export:
-      Name: !Sub ${AWS::StackName}:GitSHA
-
-  BackendImage:
-    Description: The current docker image URI to use in all Django-related container definitions for services and tasks
-    Value: !Sub ${ECRBackendRepositoryName}:${GitSHA}
-    Export:
-      Name: !Sub ${AWS::StackName}:BackendImage

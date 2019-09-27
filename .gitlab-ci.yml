@@ -8,7 +8,8 @@ stages:
   - cloudformation
 
 variables:
-  ECRBackendRepositoryName: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
+  REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
+  ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
 pages:
@@ -159,7 +160,7 @@ Build backend:
   after_script:
     - echo "Build Complete"
 
-Release backend:
+.Release backend:
   stage: release
   image: docker:stable
   # only:
@@ -180,10 +181,10 @@ Release backend:
       docker build \
         --cache-from $CI_REGISTRY_IMAGE/backend:latest \
         --target production \
-        --tag $ECRBackendRepositoryName:${GitSHA} \
+        --tag $REPOSITORY_URL:${GitSHA} \
         --file backend/scripts/prod/Dockerfile .
     - $(aws ecr get-login --no-include-email --region us-east-1)
-    - docker push $ECRBackendRepositoryName:${GitSHA}
+    - docker push $REPOSITORY_URL:${GitSHA}
   after_script:
     - echo "The production image has been released from GitLab to ECR"
 

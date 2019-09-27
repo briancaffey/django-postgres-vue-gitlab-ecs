@@ -18,8 +18,6 @@ Resources:
       RepositoryName: !Ref ECRBackendRepositoryName
 
 Outputs:
-  ECRBackendRepositoryURL:
+  EcrBackendRepo:
     Description: The ECR Repository for the main backend container
     Value: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRBackendRepositoryName}"
-    Export:
-      Name: !Sub ${StackName}:ECRBackendRepositoryURL
