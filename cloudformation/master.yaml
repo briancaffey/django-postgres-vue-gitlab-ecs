@@ -145,7 +145,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/service-role.yaml
 
-  ECRBackendRepository:
+  ECRRepository:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecr-repository.yaml
@@ -167,7 +167,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
-        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
         GitSHA: !Ref GitSHA
         StackName: !Ref StackName
         EnvironmentName: !Ref EnvironmentName
@@ -183,7 +183,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/daphne.yaml
       Parameters:
-        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -197,7 +197,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
-        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -209,7 +209,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
-        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -237,7 +237,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/collectstatic.yaml
       Parameters:
-        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
@@ -248,7 +248,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/migrate.yaml
       Parameters:
-        ImageUrl: !Sub ${ECRBackendRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
         StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
         AppUrl: !Ref AppUrl
