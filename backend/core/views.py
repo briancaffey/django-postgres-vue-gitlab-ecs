@@ -47,7 +47,7 @@ def hello_world(request):
             'message': 'Hello, World!',
             'git_sha': os.environ.get('GIT_SHA', '<git SHA>'),
             'debug': settings.DEBUG,
-            'format': 'json'
+            'format': 'JSON'
         }
     )
     return response
