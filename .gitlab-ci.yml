@@ -160,7 +160,7 @@ Build backend:
   after_script:
     - echo "Build Complete"
 
-.Release backend:
+Release backend:
   stage: release
   image: docker:stable
   # only:

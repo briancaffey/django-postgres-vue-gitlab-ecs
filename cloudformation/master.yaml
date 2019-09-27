@@ -74,7 +74,7 @@ Parameters:
     NoEcho: true
 
 Conditions:
-  RunServices: !Equals [ 1, 0 ]
+  RunServices: !Equals [ 1, 1 ]
   UseRDS: !Equals [ 1, 1 ]
   UseALB: !Equals [ 1, 1 ]
   UseECS: !Equals [ 1, 1 ]
@@ -294,12 +294,6 @@ Outputs:
     Value: !Ref WildcardSSLCertificateArn
     Export:
       Name: !Sub ${AWS::StackName}:WildcardSSLCertificateArn
-
-  ECRBackendRepositoryName:
-    Description: "Name of ECR Repository for the main backend container."
-    Value: !Ref ECRBackendRepositoryName
-    Export:
-      Name: !Sub ${AWS::StackName}:ECRBackendRepositoryName
 
   SSHKeyName:
     Description: The name of the key-pair used for SSH access to ECS hosts
