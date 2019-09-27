@@ -1,7 +1,11 @@
 Description: >
-  This service runs the Django webserver.
+  This service runs the Django webserver
 
 Parameters:
+
+  ImageUrl:
+    Type: String
+    Description: ECR Image
 
   GitSHA:
     Type: String
@@ -11,18 +15,14 @@ Parameters:
     Type: String
     Description: The name of the stack
 
+  EnvironmentName:
+    Type: String
+    Description: An environemnt name to namespace cluster resources (e.g. qa, staging, production)
+
   AppUrl:
     Type: "String"
     Description: "The URL for our app (e.g. mydomain.com)"
     AllowedPattern: "[a-z0-9._-]+"
-
-  VPC:
-    Description: The VPC that the ECS cluster is deployed to
-    Type: AWS::EC2::VPC::Id
-
-  ECSCluster:
-    Description: Please provide the ECS Cluster ID that this service should run on
-    Type: String
 
   DesiredCount:
     Description: How many instances of this task should we run across our cluster?
@@ -33,28 +33,8 @@ Parameters:
     Description: The Application Load Balancer listener to register with
     Type: String
 
-  DBEndpoint:
-    Description: The DB Endpoint
-    Type: String
-
-  RedisEndpoint:
-    Description: The Redis Endpoint
-    Type: String
-
   ServiceRole:
     Description: An IAM Role that grants the service access to register/unregister with the Application Load Balancer (ALB).
-    Type: String
-
-  ECRBackendRepositoryURL:
-    Description: The ECR repository for the backend container
-    Type: String
-
-  AWSAccessKeyId:
-    Description: "AWS ACCESS KEY ID"
-    Type: String
-
-  AWSSecretAccessKey:
-    Description: "AWS SECRET ACCESS KEY"
     Type: String
 
   DjangoSecretKey:
@@ -67,7 +47,9 @@ Resources:
     Type: AWS::ECS::Service
     DependsOn: ListenerRule
     Properties:
-      Cluster: !Ref ECSCluster
+      Cluster:
+        Fn::ImportValue:
+          !Sub ${StackName}:ECSCluster
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
@@ -83,37 +65,35 @@ Resources:
       ContainerDefinitions:
         - Name: backend
           Essential: true
-          Image: !Sub ${ECRBackendRepositoryURL}:${GitSHA}
+          Image: !Ref ImageUrl
           MemoryReservation: 128
           Command:
             - '/start_prod.sh'
           Environment:
             - Name: GIT_SHA
               Value: !Ref GitSHA
-            - Name: AWS_ACCESS_KEY_ID
-              Value: !Ref AWSAccessKeyId
-            - Name: AWS_SECRET_ACCESS_KEY
-              Value: !Ref AWSSecretAccessKey
             - Name: SECRET_KEY
               Value: !Ref DjangoSecretKey
             - Name: APP_URL
               Value: !Ref AppUrl
             - Name: DEBUG
               Value: ''
-            - Name: RDS_DB_NAME
+            - Name: POSTGRES_NAME
               Value: postgres
-            - Name: RDS_USERNAME
+            - Name: POSTGRES_USERNAME
               Value: postgres
-            - Name: RDS_PASSWORD
+            - Name: POSTGRES_PASSWORD
               Value: postgres
-            - Name: RDS_HOSTNAME
-              Value: !Ref DBEndpoint
-            - Name: RDS_PORT
-              Value: 5432
-            - Name: CELERY_BROKER_URL
-              Value: !Ref RedisEndpoint
-            - Name: CELERY_RESULT_BACKEND
-              Value: !Ref RedisEndpoint
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::ImportValue:
+                  !Sub ${StackName}:RDSHost
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::ImportValue:
+                  !Sub ${StackName}:ElastiCacheHost
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value: !Sub "${StackName}-assets"
             - Name: STACK_NAME
               Value: !Ref StackName
             - Name: DJANGO_SETTINGS_MODULE
@@ -129,7 +109,9 @@ Resources:
   BackendTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      VpcId: !Ref VPC
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${StackName}:VpcId
       Port: 80
       Protocol: HTTP
       Matcher:
@@ -157,4 +139,4 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref AWS::StackName
-      RetentionInDays: 365
+      RetentionInDays: 7

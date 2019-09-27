@@ -11,8 +11,6 @@ variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
-  AWSAccessKeyId: $AWS_ACCESS_KEY_ID
-  AWSSecretAccessKey: $AWS_SECRET_ACCESS_KEY
 
 pages:
   image: node:latest
@@ -145,13 +143,11 @@ Build Quasar PWA Assets:
   only:
     - master
   variables:
-    VUE_APP_CI_COMMIT_SHORT_SHA: "$CI_COMMIT_SHORT_SHA"
-    VUE_APP_CI_JOB_URL: "$CI_JOB_URL"
-    VUE_APP_API_BASE_URL: "https://api.${AppUrl}"
-    VUE_APP_BASE_URL: "https://${AppUrl}"
-    VUE_APP_WS_PROTOCOL: wss://
-    VUE_APP_BASE_HOST: api.${AppUrl}
-    VUE_APP_SITE_DOMAIN: ${AppUrl}
+    DOMAIN_NAME: "api.${AppUrl}"
+    GOOGLE_OAUTH2_KEY: google123
+    GITHUB_KEY: github123
+    WS_PROTOCOL: wss
+    HTTP_PROTOCOL: https
   artifacts:
     paths:
       - quasar/dist/pwa
@@ -172,7 +168,6 @@ Release backend:
   services:
     - docker:dind
   before_script:
-    - cd backend
     - apk add --no-cache curl jq python py-pip
     - pip install awscli
   script:
@@ -181,17 +176,17 @@ Release backend:
         -u $CI_REGISTRY_USER \
         -p $CI_REGISTRY_PASSWORD \
         $CI_REGISTRY
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker pull $CI_REGISTRY_IMAGE/backend:latest || true
     - |
       docker build \
-        --cache-from $CI_REGISTRY_IMAGE:latest \
+        --cache-from $CI_REGISTRY_IMAGE/backend:latest \
         --target production \
         --tag $REPOSITORY_URL:${GitSHA} \
-        --file scripts/prod/Dockerfile .
+        --file backend/scripts/prod/Dockerfile .
     - $(aws ecr get-login --no-include-email --region us-east-1)
     - docker push $REPOSITORY_URL:${GitSHA}
   after_script:
-    - echo "The production image has been released from the GitLab to ECR"
+    - echo "The production image has been released from GitLab to ECR"
 
 Sync Quasar PWA Assets:
   image: python:3.7
@@ -213,7 +208,7 @@ Sync Quasar PWA Assets:
         ./dist/pwa/ s3://${AppUrl}/
     - |
       aws s3 cp \
-        --cache-control 'max-age=0'
+        --cache-control 'max-age=0' \
         ./dist/pwa/index.html s3://${AppUrl}/
     - |
       aws s3 cp \
@@ -224,9 +219,7 @@ Sync Quasar PWA Assets:
 
 .Create stack:
   image: python:3.7
-  stage: cloudformation
-  only:
-    - master
+  stage: deploy
   variables:
     EnvironmentName: staging
   before_script:
@@ -246,7 +239,7 @@ Sync Quasar PWA Assets:
 
 Update stack:
   image: python:3.7
-  stage: cloudformation
+  stage: deploy
   only:
     - master
   variables:
@@ -265,3 +258,29 @@ Update stack:
         --parameters file://./parameters.json
   after_script:
     - echo "Update stack complete"
+
+collectstatic: &task
+  image: python:3.7
+  stage: deploy
+  only:
+    - master
+  variables:
+    EnvironmentName: staging
+  before_script:
+    - pip install awscli
+  when: manual
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${EnvironmentName}-cluster \
+        --task-definition collectstatic
+
+migrate:
+  <<: *task
+  variables:
+    EnvironmentName: staging
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${EnvironmentName}-cluster \
+        --task-definition migrate

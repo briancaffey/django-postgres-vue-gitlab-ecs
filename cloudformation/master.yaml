@@ -12,7 +12,7 @@ Description: >
 
   It also deploys a static site with S3 and CloudFront.
 
-  Last Modified: 24th March 2019
+  Last Modified: 26th September 2019
   Author: Brian Caffey
 
 Parameters:
@@ -68,27 +68,17 @@ Parameters:
     Type: String
     NoEcho: true
 
-  AWSAccessKeyId:
-    Description: "AWS ACCESS KEY ID"
-    Type: String
-    NoEcho: true
-
-  AWSSecretAccessKey:
-    Description: "AWS SECRET ACCESS KEY"
-    Type: String
-    NoEcho: true
-
   DjangoSecretKey:
     Description: The Secret Key for backend, celery and beat containers
     Type: String
     NoEcho: true
 
 Conditions:
-  RunServices: !Equals [ 1, 0 ]
-  UseRDS: !Equals [ 1, 0 ]
-  UseALB: !Equals [ 1, 0 ]
-  UseECS: !Equals [ 1, 0 ]
-  UseElastiCache: !Equals [ 1, 0 ]
+  RunServices: !Equals [ 1, 1 ]
+  UseRDS: !Equals [ 1, 1 ]
+  UseALB: !Equals [ 1, 1 ]
+  UseECS: !Equals [ 1, 1 ]
+  UseElastiCache: !Equals [ 1, 1 ]
 
 Resources:
 
@@ -97,7 +87,8 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/vpc.yaml
       Parameters:
-        EnvironmentName: !Ref AWS::StackName
+        StackName: !Ref StackName
+        EnvironmentName: !Ref EnvironmentName
 
   ALB:
     Type: AWS::CloudFormation::Stack
@@ -105,10 +96,10 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/load-balancers.yaml
       Parameters:
+        StackName: !Ref StackName
         EnvironmentName: !Ref AWS::StackName
         AppUrl: !Ref AppUrl
         HostedZoneId: !Ref HostedZoneId
-        VPC: !GetAtt VPC.Outputs.VPC
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         WildcardSSLCertificateArn: !Ref WildcardSSLCertificateArn
 
@@ -118,7 +109,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
       Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
+        StackName: !Ref StackName
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
         SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
 
@@ -128,7 +119,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/elasticache-redis.yaml
       Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
+        StackName: !Ref StackName
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
         SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
 
@@ -138,9 +129,9 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecs-cluster.yaml
       Parameters:
-        EnvironmentName: !Ref AWS::StackName
+        StackName: !Ref StackName
+        EnvironmentName: !Ref EnvironmentName
         InstanceType: t2.micro
-        VPC: !GetAtt VPC.Outputs.VPC
         PublicSubnetOne: !GetAtt VPC.Outputs.PublicSubnetOne
         PublicSubnetTwo: !GetAtt VPC.Outputs.PublicSubnetTwo
         MaxSize: '2'
@@ -154,11 +145,12 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/service-role.yaml
 
-  ECRBackendRepository:
+  ECRRepository:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecr-repository.yaml
       Parameters:
+        StackName: !Ref StackName
         ECRBackendRepositoryName: !Ref ECRBackendRepositoryName
 
   DjangoS3Storage:
@@ -166,8 +158,8 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/django-assets.yaml
       Parameters:
-        AppUrl: !Ref AppUrl
         StackName: !Ref StackName
+        AppUrl: !Ref AppUrl
 
   BackendService7:
     Type: AWS::CloudFormation::Stack
@@ -175,20 +167,15 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/backend.yaml
       Parameters:
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
         GitSHA: !Ref GitSHA
-        DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
+        StackName: !Ref StackName
+        EnvironmentName: !Ref EnvironmentName
         AppUrl: !Ref AppUrl
-        VPC: !GetAtt VPC.Outputs.VPC
-        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
-        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
-        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
-        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
-        StackName: !Ref StackName
+        DjangoSecretKey: !Ref DjangoSecretKey
 
   DaphneService:
     Type: AWS::CloudFormation::Stack
@@ -196,20 +183,13 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/daphne.yaml
       Parameters:
-        GitSHA: !Ref GitSHA
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
-        VPC: !GetAtt VPC.Outputs.VPC
-        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
-        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
-        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
-        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
-        StackName: !Ref StackName
 
   CeleryService4:
     Type: AWS::CloudFormation::Stack
@@ -217,18 +197,11 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/celery.yaml
       Parameters:
-        GitSHA: !Ref GitSHA
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
-        VPC: !GetAtt VPC.Outputs.VPC
-        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
-        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
-        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
-        ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
   BeatService5:
     Type: AWS::CloudFormation::Stack
@@ -236,17 +209,11 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/beat.yaml
       Parameters:
-        GitSHA: !Ref GitSHA
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        StackName: !Ref StackName
         DjangoSecretKey: !Ref DjangoSecretKey
-        AWSAccessKeyId: !Ref AWSAccessKeyId
-        AWSSecretAccessKey: !Ref AWSSecretAccessKey
         AppUrl: !Ref AppUrl
-        VPC: !GetAtt VPC.Outputs.VPC
-        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
         DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
-        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
-        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
 
   FlowerService1:
@@ -255,79 +222,82 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/services/flower.yaml
       Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        ECSCluster: !GetAtt ECS.Outputs.ECSCluster
+        StackName: !Ref StackName
+        ElastiCacheHost: !GetAtt ElastiCacheRedis.Outputs.ElastiCacheHost
         Listener: !GetAtt ALB.Outputs.Listener
         DesiredCount: 1
-        DBEndpoint: !GetAtt RDSPostgresDB.Outputs.DBEndpoint
-        ECRBackendRepositoryURL: !GetAtt ECRBackendRepository.Outputs.ECRBackendRepositoryURL
         AppUrl: !Ref AppUrl
-        RedisEndpoint: !GetAtt ElastiCacheRedis.Outputs.RedisEndpoint
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
         FlowerUsername: !Ref FlowerUsername
         FlowerPassword: !Ref FlowerPassword
+
+  CollectstaticTask:
+    Type: AWS::CloudFormation::Stack
+    Condition: RunServices
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/collectstatic.yaml
+      Parameters:
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        StackName: !Ref StackName
+        DjangoSecretKey: !Ref DjangoSecretKey
+        AppUrl: !Ref AppUrl
+
+  MigrateTask:
+    Type: AWS::CloudFormation::Stack
+    Condition: RunServices
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/tasks/migrate.yaml
+      Parameters:
+        ImageUrl: !Sub ${ECRRepository.Outputs.EcrBackendRepo}:${GitSHA}
+        StackName: !Ref StackName
+        DjangoSecretKey: !Ref DjangoSecretKey
+        AppUrl: !Ref AppUrl
 
   FrontendResources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
       Parameters:
+        StackName: !Ref StackName
         AppUrl: !Ref AppUrl
         HostedZoneId: !Ref HostedZoneId
         SSLCertificateArn: !Ref SSLCertificateArn
 
 Outputs:
 
-  StackName:
-    Description: The name of the stack
-    Value: !Ref StackName
-    Export:
-      Name: StackName
-
   EnvironmentName:
     Description: An environemnt name to namespace resources (e.g. qa, staging, production)
     Value: !Ref EnvironmentName
     Export:
-      Name: EnvironmentName
+      Name: !Sub ${AWS::StackName}:EnvironmentName
 
   AppUrl:
     Description: "The URL for our app (e.g. mydomain.com)"
     Value: !Ref AppUrl
     Export:
-      Name: AppUrl
+      Name: !Sub ${AWS::StackName}:AppUrl
 
   HostedZoneId:
     Description: "The hosted zone ID to add the Route 53 recordset to."
     Value: !Ref HostedZoneId
     Export:
-      Name: HostedZoneId
+      Name: !Sub ${AWS::StackName}:HostedZoneId
 
   SSLCertificateArn:
     Description: "ARN pointing to an SSL cert to use for this app URL."
     Value: !Ref SSLCertificateArn
     Export:
-      Name: SSLCertificateArn
+      Name: !Sub ${AWS::StackName}:SSLCertificateArn
 
   WildcardSSLCertificateArn:
     Description: "ARN pointing to a wildcard SSL cert to use for this app URL."
     Value: !Ref WildcardSSLCertificateArn
     Export:
-      Name: WildcardSSLCertificateArn
-
-  ECRBackendRepositoryName:
-    Description: "Name of ECR Repository for backend web server."
-    Value: !Ref ECRBackendRepositoryName
-    Export:
-      Name: ECRBackendRepositoryName
+      Name: !Sub ${AWS::StackName}:WildcardSSLCertificateArn
 
   SSHKeyName:
     Description: The name of the key-pair used for SSH access to ECS hosts
     Value: !Ref SSHKeyName
     Export:
-      Name: SSHKeyName
+      Name: !Sub ${AWS::StackName}:SSHKeyName
 
-  GitSHA:
-    Description: "This is a test parameter used to see how to pass parameters from GitLab"
-    Value: !Ref GitSHA
-    Export:
-      Name: GitSHA

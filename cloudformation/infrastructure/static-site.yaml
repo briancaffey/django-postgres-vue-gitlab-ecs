@@ -2,6 +2,11 @@ Description: >
   This template deploys a static site using S3, CloudFront and Route53.
 
 Parameters:
+
+  StackName:
+    Type: String
+    Description: The name of the stack
+
   AppUrl:
     Type: "String"
     Description: "The URL for our app (e.g. mydomain.com)"

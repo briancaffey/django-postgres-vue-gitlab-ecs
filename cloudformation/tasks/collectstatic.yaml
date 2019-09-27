@@ -1,5 +1,5 @@
 Description: >
-  This service runs the celery workers.
+  This service runs collectstatic.
 
 Parameters:
 
@@ -16,43 +16,26 @@ Parameters:
     Description: "The URL for our app (e.g. mydomain.com)"
     AllowedPattern: "[a-z0-9._-]+"
 
-  DesiredCount:
-    Description: How many instances of this task should we run across our cluster?
-    Type: Number
-    Default: 1
-
   DjangoSecretKey:
     Description: The Secret Key for backend, celery and beat containers
     Type: String
     NoEcho: true
 
 Resources:
-
-  CeleryService:
-    Type: AWS::ECS::Service
-    Properties:
-      Cluster:
-        Fn::ImportValue:
-          !Sub ${StackName}:ECSCluster
-      DesiredCount: !Ref DesiredCount
-      TaskDefinition: !Ref CeleryTaskDefinition
-
-  CeleryTaskDefinition:
+  CollectstaticTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: celery
+      Family: collectstatic
       ContainerDefinitions:
-        - Name: celery
+        - Name: collectstatic
           Essential: true
           Image: !Ref ImageUrl
           MemoryReservation: 128
           Command:
-            - 'celery'
-            - 'worker'
-            - '-A'
-            - 'backend.celery_app:app'
-            - '-l'
-            - 'info'
+            - python3
+            - manage.py
+            - collectstatic
+            - --no-input
           Environment:
             - Name: SECRET_KEY
               Value: !Ref DjangoSecretKey
@@ -83,11 +66,11 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: !Ref CeleryCloudWatchLogsGroup
+              awslogs-group: !Ref CollectstaticCloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
 
-  CeleryCloudWatchLogsGroup:
+  CollectstaticCloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref AWS::StackName
-      RetentionInDays: 7
+      RetentionInDays: 1
