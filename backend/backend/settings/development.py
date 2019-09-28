@@ -2,16 +2,12 @@ from .base import * # noqa
 
 SECRET_KEY = "my-secret-key"
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('RDS_DB_NAME', 'postgres'), # noqa
-        'USER': os.environ.get('RDS_USERNAME', 'postgres'), # noqa
-        'PASSWORD': os.environ.get('RDS_PASSWORD', 'postgres'), # noqa
-        'HOST': os.environ.get('RDS_HOSTNAME', 'postgres'), # noqa
-        'PORT': os.environ.get('RDS_PORT', 5432), # noqa
-    }
-}
+# Celery
+
+CELERY_BROKER_URL = \
+    os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379')  # noqa
+CELERY_RESULT_BACKEND = \
+    os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379')  # noqa
 
 DEBUG_APPS = [
     'django_extensions',

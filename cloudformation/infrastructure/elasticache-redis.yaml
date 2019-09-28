@@ -2,9 +2,10 @@ Description: >
   This template deploys a single node ElastiCache cluster that runs Redis
 
 Parameters:
-  VPC:
-    Description: Main VPC
-    Type: AWS::EC2::VPC::Id
+
+  StackName:
+    Type: String
+    Description: The name of the stack
 
   PrivateSubnets:
     Description: List of private subnets for RDS
@@ -19,7 +20,9 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: ElastiCache Security Group
-      VpcId: !Ref VPC
+      VpcId:
+        Fn::ImportValue:
+          !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 6379
@@ -43,6 +46,8 @@ Resources:
         - !GetAtt ElastiCacheSecurityGroup.GroupId
 
 Outputs:
-  RedisEndpoint:
-    Description: Endpoint for ElastiCache Cluster
-    Value: !Join ['', ['redis://', !GetAtt ElastiCacheCluster.RedisEndpoint.Address, ':6379/0']]
+  ElastiCacheHost:
+    Description: Hostname for ElastiCache Cluster
+    Value: !GetAtt ElastiCacheCluster.RedisEndpoint.Address
+    Export:
+      Name: !Sub ${StackName}:ElastiCacheHost
