@@ -6,7 +6,7 @@ stages:
   - release
   - deploy
 
-inlucde:
+include:
   - local: /gitlab-ci/aws.yml
 
 variables:
