@@ -160,4 +160,3 @@ There is one script in our `scripts` folder, and this script generates a file th
 ### Tests
 
 The `tests` folder contains one test which validates the CloudFormation templates. This can help prevent CloudFormation from having to rollback deployments because of syntax errors or other problems in our YAML templates.
-

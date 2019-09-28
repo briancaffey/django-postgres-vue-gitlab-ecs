@@ -148,6 +148,7 @@ DATABASES = {
 
 ASGI_APPLICATION = 'backend.routing.application'
 
+# Redis
 REDIS_SERVICE_HOST = \
     os.environ.get(
         'REDIS_SERVICE_HOST',
