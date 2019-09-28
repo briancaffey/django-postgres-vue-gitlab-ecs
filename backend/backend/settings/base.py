@@ -151,7 +151,7 @@ ASGI_APPLICATION = 'backend.routing.application'
 REDIS_SERVICE_HOST = \
     os.environ.get(
         'REDIS_SERVICE_HOST',
-        'redis://redis:6379'
+        'redis'
     )
 
 CHANNEL_LAYERS = {
