@@ -14,7 +14,7 @@ variables:
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
-pages:
+.pages:
   image: node:latest
   stage: documentation
   script:
@@ -26,7 +26,7 @@ pages:
     changes:
       - documentation/**/*
 
-Pytest:
+.Pytest:
   image: python:3.7
   stage: test
   services:
@@ -52,7 +52,7 @@ Pytest:
     changes:
       - backend/**/*
 
-Jest:
+.Jest:
   image: node:8
   stage: test
   before_script:
@@ -68,7 +68,7 @@ Jest:
     changes:
       - quasar/**/*
 
-Build backend:
+.Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -96,7 +96,7 @@ Build backend:
       - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-e2e: &cypress
+.e2e: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:
@@ -139,7 +139,7 @@ e2e: &cypress
   <<: *cypress
   image: localhost:5000/backend:latest
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:8
   stage: build
   only:
