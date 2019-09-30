@@ -73,16 +73,6 @@ Parameters:
     Type: String
     NoEcho: true
 
-  StagingDBSnapshot:
-    Type: String
-    Description: Snapshot ARN for development environment
-    Default: ""
-
-  ProductionDBSnapshot:
-    Type: String
-    Description: Snapshot ARN for production environment
-    Default: ""
-
 
 Conditions:
   RunServices: !Equals [ 1, 1 ]
@@ -121,8 +111,6 @@ Resources:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
       Parameters:
         EnvironmentName: !Ref EnvironmentName
-        StagingDBSnapshot: !Ref StagingDBSnapshot
-        ProductionDBSnapshot: !Ref ProductionDBSnapshot
         StackName: !Ref StackName
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
         SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup

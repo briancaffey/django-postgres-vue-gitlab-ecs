@@ -19,8 +19,7 @@ variables = [
     'FlowerUsername',
     'FlowerPassword',
     'DjangoSecretKey',
-    'StagingDBSnapshot',
-    # 'ProductionDBSnapshot'
+    'StagingDBSnapshot'
 ]
 
 for v in variables:

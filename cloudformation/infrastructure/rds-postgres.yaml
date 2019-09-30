@@ -7,16 +7,6 @@ Parameters:
     Type: String
     Description: The name of the stack
 
-  StagingDBSnapshot:
-    Type: String
-    Description: Snapshot ARN for development environment
-    Default: ""
-
-  ProductionDBSnapshot:
-    Type: String
-    Description: Snapshot ARN for production environment
-    Default: ""
-
   EnvironmentName:
     Type: String
     Description: An environemnt name to namespace cluster resources (e.g. qa, staging, production)
@@ -32,9 +22,9 @@ Parameters:
 Mappings:
   SnapshotMappings:
     staging:
-      SnapshotArn: !Ref StagingDBSnapshot
+      SnapshotArn: "arn:aws:rds:us-east-1:733623710918:snapshot:my-snapshot"
     production:
-      SnapshotArn: !Ref ProductionDBSnapshot
+      SnapshotArn: ""
 
 Resources:
 
