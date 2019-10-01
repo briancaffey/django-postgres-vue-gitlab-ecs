@@ -33,12 +33,14 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+        #   readinessProbe:
+        #     httpGet:
+        #       path: /readiness
+        #       port: http
+        #     initialDelaySeconds: 10
+        #     timeoutSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

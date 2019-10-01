@@ -13,10 +13,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-service:
-  type: ClusterIP
-  port: 80
-
 gunicorn:
   command:
     - "./manage.py"
@@ -24,6 +20,10 @@ gunicorn:
     - "0.0.0.0:8000"
   port: 8000
   replicaCount: 1
+
+  service:
+    type: NodePort
+    port: 8000
 
 
 
