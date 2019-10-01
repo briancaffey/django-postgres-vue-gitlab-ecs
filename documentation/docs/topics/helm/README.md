@@ -330,3 +330,166 @@ helm delete foppish-badger
 release "foppish-badger" deleted
 ```
 
+We can see that the container was brought up, but it is not ready because our readiness checks are failing (we don't have postgres or redis setup yet).
+
+We could add templates for these services, or we can use the officially supported Helm charts for redis and postgres. Here is the list of the `stable` charts that Helm curates: [https://github.com/helm/charts/tree/master/stable](https://github.com/helm/charts/tree/master/stable), which includes both postgres and redis.
+
+We need to know the name of the services (we want them to be `postgres` and `redis`, and also want to make sure that environment variables `REDIS_SERVICE_HOST` and `POSTGRES_SERVICE_HOST` are available to the containers in our application).
+
+Here's how we would deploy the redis and postgres charts in our cluster with the default values:
+
+```
+helm install stable/redis
+helm install stable/postgres
+```
+
+Let's try this out. Here's the output of the redis Helm chart:
+
+
+```
+helm install stable/redis
+NAME:   enervated-rodent
+LAST DEPLOYED: Tue Oct  1 10:09:09 2019
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/ConfigMap
+NAME                           DATA  AGE
+enervated-rodent-redis         3     0s
+enervated-rodent-redis-health  6     0s
+
+==> v1/Pod(related)
+NAME                             READY  STATUS   RESTARTS  AGE
+enervated-rodent-redis-master-0  0/1    Pending  0         0s
+enervated-rodent-redis-slave-0   0/1    Pending  0         0s
+
+==> v1/Secret
+NAME                    TYPE    DATA  AGE
+enervated-rodent-redis  Opaque  1     0s
+
+==> v1/Service
+NAME                             TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)   AGE
+enervated-rodent-redis-headless  ClusterIP  None           <none>       6379/TCP  0s
+enervated-rodent-redis-master    ClusterIP  10.107.217.31  <none>       6379/TCP  0s
+enervated-rodent-redis-slave     ClusterIP  10.107.23.215  <none>       6379/TCP  0s
+
+==> v1beta2/StatefulSet
+NAME                           READY  AGE
+enervated-rodent-redis-master  0/1    0s
+enervated-rodent-redis-slave   0/2    0s
+
+
+NOTES:
+** Please be patient while the chart is being deployed **
+Redis can be accessed via port 6379 on the following DNS names from within your cluster:
+
+enervated-rodent-redis-master.default.svc.cluster.local for read/write operations
+enervated-rodent-redis-slave.default.svc.cluster.local for read-only operations
+
+
+To get your password run:
+
+    export REDIS_PASSWORD=$(kubectl get secret --namespace default enervated-rodent-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+
+To connect to your Redis server:
+
+1. Run a Redis pod that you can use as a client:
+
+   kubectl run --namespace default enervated-rodent-redis-client --rm --tty -i --restart='Never' \
+    --env REDIS_PASSWORD=$REDIS_PASSWORD \
+   --image docker.io/bitnami/redis:5.0.5-debian-9-r36 -- bash
+
+2. Connect using the Redis CLI:
+   redis-cli -h enervated-rodent-redis-master -a $REDIS_PASSWORD
+   redis-cli -h enervated-rodent-redis-slave -a $REDIS_PASSWORD
+
+To connect to your database from outside the cluster execute the following commands:
+
+    kubectl port-forward --namespace default svc/enervated-rodent-redis 6379:6379 &
+    redis-cli -h 127.0.0.1 -p 6379 -a $REDIS_PASSWORD
+```
+
+It includes a `ConfigMap`, a `Pod` (why?), a `Secret`, a `Service` and a `Stateful Set`.
+
+Let's examine our pods:
+
+```
+k get pods
+NAME                              READY   STATUS    RESTARTS   AGE
+enervated-rodent-redis-master-0   0/1     Pending   0          2m32s
+enervated-rodent-redis-slave-0    0/1     Pending   0          2m32s
+```
+
+We see an error message if we look at the Kubernetes dashboard with `minikube dashboard`:
+
+```
+pod has unbound immediate PersistentVolumeClaims
+```
+
+Let's delete this release with:
+
+```
+helm delete enervated-rodent
+```
+
+The issue might be related to storage classes. Let's rerun the deployment with a dry-run:
+
+Googling for the error message, let's look the accepted answer to this question:
+
+[https://stackoverflow.com/questions/52668938/pod-has-unbound-persistentvolumeclaims](https://stackoverflow.com/questions/52668938/pod-has-unbound-persistentvolumeclaims)
+
+
+> You have to define a PersistentVolume providing disc space to be consumed by the PersistentVolumeClaim.
+
+Let's reference the PV that we previously created for our Postgres instance in minikube, changing `postgres` to `redis`:
+
+```
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: redis-pv
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/redis-pv
+```
+
+Apply this PV, and view it with:
+
+```
+k get pv
+NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+redis-pv   5Gi        RWO            Retain           Available                                   13s
+```
+
+Now let's try to deploy redis again, but we will change the size of the master node, and we will disable the slave and also disable persistence:
+
+```
+helm install stable/redis --set cluster.enabled=false --set master.persistance.enabled=false
+```
+
+
+```
+helm install stable/redis --set cluster.enabled=false --set master.persistance.size=2Gi --set master.securityContext.enabled=true --set master.securityContext.runAsUser=0 --set master.securityContext.fsGroup=2000
+```
+
+Since there is no `storageClass` defined on the `StatefulSet`'s `volumeClaimTemplates`, we should create a PV that also has no storage class.
+
+> `--set` has a higher precedence than the default `values.yaml`
+
+
+
+```
+helm install stable/redis
+```
+
+
+## Resources
+
+- [https://dzone.com/articles/the-art-of-the-helm-chart-patterns-from-the-offici](https://dzone.com/articles/the-art-of-the-helm-chart-patterns-from-the-offici)
