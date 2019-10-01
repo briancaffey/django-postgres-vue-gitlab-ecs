@@ -6,7 +6,7 @@
     content-class="bg-grey-5"
   >
     <q-list>
-      <q-item-label header>Menu</q-item-label>
+      <q-item-label header>Main Menu</q-item-label>
 
       <left-menu-link
         :label="$t('leftDrawer.home.main')"
