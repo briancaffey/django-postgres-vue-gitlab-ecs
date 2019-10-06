@@ -147,6 +147,11 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/service-role.yaml
 
+  TaskRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/task-role.yaml
+
   ECRRepository:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -177,6 +182,7 @@ Resources:
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        TaskRole: !GetAtt TaskRole.Outputs.TaskRole
         DjangoSecretKey: !Ref DjangoSecretKey
 
   DaphneService:

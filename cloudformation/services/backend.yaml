@@ -37,6 +37,10 @@ Parameters:
     Description: An IAM Role that grants the service access to register/unregister with the Application Load Balancer (ALB).
     Type: String
 
+  TaskRole:
+    Description: An IAM Role that allows tasks to access SSM parameter store
+    Type: String
+
   DjangoSecretKey:
     Description: The Secret Key for backend, celery and beat containers
     Type: String
@@ -62,6 +66,7 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       Family: backend
+      ExecutionRoleArn: !Ref TaskRole
       ContainerDefinitions:
         - Name: backend
           Essential: true
@@ -69,6 +74,9 @@ Resources:
           MemoryReservation: 128
           Command:
             - '/start_prod.sh'
+          Secrets:
+            - Name: MY_PARAM
+              ValueFrom: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/my-param"
           Environment:
             - Name: GIT_SHA
               Value: !Ref GitSHA
