@@ -7,16 +7,18 @@ Resources:
   TaskRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ecs-service-${AWS::StackName}
+      RoleName: !Sub ecs-task-role-${AWS::StackName}
       Path: /
       AssumeRolePolicyDocument: |
         {
             "Statement": [{
                 "Effect": "Allow",
-                "Principal": { "Service": [ "ecs.amazonaws.com" ]},
+                "Principal": { "Service": [ "ecs-tasks.amazonaws.com" ]},
                 "Action": [ "sts:AssumeRole" ]
             }]
         }
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
       Policies:
         - PolicyName: !Sub ecs-task-role-${AWS::StackName}
           PolicyDocument: !Sub |
