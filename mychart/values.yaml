@@ -25,6 +25,9 @@ gunicorn:
     type: NodePort
     port: 8000
 
+postgresql:
+  persistence:
+    enabled: false
 
 
 ingress:
