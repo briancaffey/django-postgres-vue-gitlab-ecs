@@ -104,7 +104,7 @@ Resources:
   ContainerInstances:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
-      ImageId: 'ami-aff65ad2'
+      ImageId: !Ref ECSAMI
       SecurityGroups: [!Ref 'ContainerInstanceSecurityGroup']
       InstanceType: !Ref 'InstanceType'
       IamInstanceProfile: !Ref 'ECSInstanceProfile'
