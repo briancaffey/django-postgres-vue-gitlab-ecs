@@ -75,7 +75,7 @@ Parameters:
 
 
 Conditions:
-  RunServices: !Equals [ 1, 0 ]
+  RunServices: !Equals [ 1, 1 ]
   UseRDS: !Equals [ 1, 1 ]
   UseALB: !Equals [ 1, 1 ]
   UseECS: !Equals [ 1, 1 ]
