@@ -57,7 +57,10 @@ module.exports = {
       },
       {
         text: "DevOps",
-        items: [{ text: "AWS", link: "/devops/aws/" }]
+        items: [
+          { text: "AWS", link: "/devops/aws/" },
+          { text: "GCP", link: "/devops/gcp/" }
+        ]
       },
       {
         text: "Topics",
