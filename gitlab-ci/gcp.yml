@@ -10,14 +10,14 @@
     - pip install gcloud (google sdk)
 
 Terraform Plan:
+  stage: deploy
   image: hashicorp/terraform:light
   before_script:
-    - rm -rf .terraform
     - terraform --version
     - echo $GCP_SERVICE_ACCOUNT | base64 -d > ./terraform/account.json
     - terraform init -var-file=production.tfvars
   script:
-    - terraform plan -out "planfile"
+    - terraform plan -out "planfile" -var-file=production.tfvars
   artifacts:
     paths:
       - planfile
