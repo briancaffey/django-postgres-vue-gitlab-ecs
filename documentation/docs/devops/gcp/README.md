@@ -231,6 +231,19 @@ tiller-deploy-57f498469-9ck5t                                    1/1     Running
 Install Postgres with the Bitnami Helm Chart
 
 
+### Deploying to Terraform from GitLab CI
+
+Now that we can deploy Terraform resources from the command line, let's automate this in our GitLab CI pipeline.
+
+First, we need to save our `account.json` file in our GitLab CI variables. This can be done with the following commands:
+
+```
+cat terraform/account.json | base64 -w0
+```
+
+Here are some resources showing how to use Terraform and in GitLab CI
+
+
 ::: warning In progress
 This section is not complete. Updates coming soon.
 :::

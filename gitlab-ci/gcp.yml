@@ -1,0 +1,24 @@
+.Release backend:
+  stage: release
+  image: docker:stable
+  only:
+    master
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache curl jq python py-pip
+    - pip install gcloud (google sdk)
+
+Terraform Plan:
+  image: hashicorp/terraform:light
+
+  before_script:
+    - rm -rf .terraform
+    - terraform --version
+    - echo $SERVICEACCOUNT | base64 -d > ./terraform/account.json
+    - terraform init -var-file=production.tfvars
+  script:
+    - terraform plan -out "planfile"
+  artifacts:
+    paths:
+      - planfile
