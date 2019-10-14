@@ -13,7 +13,7 @@ Terraform Plan:
   stage: deploy
   image: hashicorp/terraform:light
   before_script:
-    - terraform --version
+    - terraform
     - echo $GCP_SERVICE_ACCOUNT | base64 -d > ./terraform/account.json
     - terraform init -var-file=production.tfvars
   script:
