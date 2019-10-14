@@ -147,22 +147,51 @@ Type `yes` to confirm.
 
 The cluster will take some time to come up. It will also restart itself with the custom node pool that is defined in Terraform.
 
-### Helm
+### Using Helm in GKE
 
-Let's install Helm in our cluster:
+Let's install Helm in our cluster. This guide shows how to setup Tiller with a service account so that it will be authorized to create resources in our cluster.
+
+#### Create service account for helm
+
+Create the following service account:
+
+
+
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: helm
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: helm
+    namespace: kube-system
+```
+
+```
+k apply -f k8s/service-account.yaml
+serviceaccount/helm created
+clusterrolebinding.rbac.authorization.k8s.io/helm created
+```
+
+If this is successful, initialize Helm with the following command:
+
+```
+helm init --service-account helm
+```
+
 
 https://medium.com/google-cloud/helm-on-gke-cluster-quick-hands-on-guide-ecffad94b0
-
-```
-helm init
-$HELM_HOME has been configured at /home/brian/.helm.
-
-Tiller (the Helm server-side component) has been installed into your Kubernetes Cluster.
-
-Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
-To prevent this, run `helm init` with the --tiller-tls-verify flag.
-For more information on securing your installation see: https://docs.helm.sh/using_helm/#securing-your-helm-installation
-```
 
 Let's list the pods in the `kube-system` namespace to see if Tiller is running:
 

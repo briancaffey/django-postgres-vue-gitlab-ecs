@@ -53,17 +53,16 @@ resource "google_container_node_pool" "general_purpose" {
   name       = "${var.project}-general"
   location   = "${var.region}"
   cluster    = "${google_container_cluster.cluster.name}"
-  node_count = "${var.worker_node_count}"
 
   management {
     auto_repair = "true"
     auto_upgrade = "true"
   }
 
-#   autoscaling {
-#     min_node_count = "${var.general_purpose_min_node_count}"
-#     max_node_count = "${var.general_purpose_max_node_count}"
-#   }
+  autoscaling {
+    min_node_count = "${var.general_purpose_min_node_count}"
+    max_node_count = "${var.general_purpose_max_node_count}"
+  }
   initial_node_count = "${var.general_purpose_min_node_count}"
 
   node_config {
