@@ -1,0 +1,44 @@
+Description: >
+  An IAM Role that gives tasks access to SSM Parameter store.
+  https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html
+
+Resources:
+
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ecs-task-role-${AWS::StackName}
+      Path: /
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": { "Service": [ "ecs-tasks.amazonaws.com" ]},
+                "Action": [ "sts:AssumeRole" ]
+            }]
+        }
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Policies:
+        - PolicyName: !Sub ecs-task-role-${AWS::StackName}
+          PolicyDocument: !Sub |
+            {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ssm:GetParameters"
+                  ],
+                  "Resource": [
+                    "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/my-param"
+                  ]
+                }
+              ]
+            }
+
+
+Outputs:
+  TaskRole:
+    Description: An IAM Role that gives tasks read access to SSM Parameter store parameters.
+    Value: !Ref TaskRole

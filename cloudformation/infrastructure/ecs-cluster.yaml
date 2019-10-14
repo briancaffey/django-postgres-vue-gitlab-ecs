@@ -104,7 +104,7 @@ Resources:
   ContainerInstances:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
-      ImageId: 'ami-aff65ad2'
+      ImageId: !Ref ECSAMI
       SecurityGroups: [!Ref 'ContainerInstanceSecurityGroup']
       InstanceType: !Ref 'InstanceType'
       IamInstanceProfile: !Ref 'ECSInstanceProfile'
@@ -132,6 +132,8 @@ Resources:
               command: !Sub echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config
             02_enable_cloudwatch_agent:
               command: !Sub /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c ssm:${ECSCloudWatchParameter} -s
+            03_enable_awslogs_executionrole_override:
+              command: echo ECS_ENABLE_AWSLOGS_EXECUTIONROLE_OVERRIDE=true >> /etc/ecs/ecs.config
           files:
             /etc/cfn/cfn-hup.conf:
               mode: 000400

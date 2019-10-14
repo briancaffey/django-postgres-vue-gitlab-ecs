@@ -49,7 +49,7 @@ Resources:
       GroupDescription: Access to the load balancer that sits in front of ECS
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName}-LoadBalancerSecurityGroup
+          Value: !Sub ${StackName}-LoadBalancerSecurityGroup
 
   ALBSecurityGroupInHttpWorld:
     Type: 'AWS::EC2::SecurityGroupIngress'

@@ -7,6 +7,10 @@ Parameters:
     Type: String
     Description: The name of the stack
 
+  EnvironmentName:
+    Type: String
+    Description: An environemnt name to namespace cluster resources (e.g. qa, staging, production)
+
   PrivateSubnets:
     Description: List of private subnets for RDS
     Type: String
@@ -14,6 +18,13 @@ Parameters:
   SourceSecurityGroupId:
     Description: VPC Security Group ID
     Type: AWS::EC2::SecurityGroup::Id
+
+Mappings:
+  SnapshotMappings:
+    staging:
+      SnapshotArn: "arn:aws:rds:us-east-1:733623710918:snapshot:my-snapshot"
+    production:
+      SnapshotArn: ""
 
 Resources:
 
@@ -42,11 +53,12 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       AllocatedStorage: "5"
-      DBInstanceClass: db.t2.small
+      DBInstanceClass: db.t3.small
       Engine: "postgres"
-      EngineVersion: "10.4"
+      EngineVersion: "10.6"
       MasterUsername: "postgres"
       MasterUserPassword: "postgres"
+      DBSnapshotIdentifier: !FindInMap [SnapshotMappings, !Ref EnvironmentName, SnapshotArn]
       Port: "5432"
       PubliclyAccessible: true
       StorageType: standard

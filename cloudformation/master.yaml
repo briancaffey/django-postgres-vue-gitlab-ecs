@@ -12,7 +12,7 @@ Description: >
 
   It also deploys a static site with S3 and CloudFront.
 
-  Last Modified: 26th September 2019
+  Last Modified: 9th October 2019
   Author: Brian Caffey
 
 Parameters:
@@ -73,6 +73,7 @@ Parameters:
     Type: String
     NoEcho: true
 
+
 Conditions:
   RunServices: !Equals [ 1, 1 ]
   UseRDS: !Equals [ 1, 1 ]
@@ -109,6 +110,7 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/rds-postgres.yaml
       Parameters:
+        EnvironmentName: !Ref EnvironmentName
         StackName: !Ref StackName
         PrivateSubnets: !GetAtt VPC.Outputs.PrivateSubnets
         SourceSecurityGroupId: !GetAtt ECS.Outputs.ContainerInstanceSecurityGroup
@@ -145,6 +147,11 @@ Resources:
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/service-role.yaml
 
+  TaskRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/task-role.yaml
+
   ECRRepository:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -175,6 +182,7 @@ Resources:
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         ServiceRole: !GetAtt ServiceRole.Outputs.ServiceRole
+        TaskRole: !GetAtt TaskRole.Outputs.TaskRole
         DjangoSecretKey: !Ref DjangoSecretKey
 
   DaphneService:

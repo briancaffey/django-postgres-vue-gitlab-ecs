@@ -58,11 +58,6 @@ Resources:
             - '-l'
             - 'info'
           Environment:
-<<<<<<< HEAD
-            - Name: GIT_SHA
-              Value: !Ref GitSHA
-=======
->>>>>>> cc0cae19ecaa93c00a0868ea2deef03872846643
             - Name: SECRET_KEY
               Value: !Ref DjangoSecretKey
             - Name: APP_URL
@@ -97,8 +92,4 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Ref AWS::StackName
-<<<<<<< HEAD
-      RetentionInDays: 15
-=======
       RetentionInDays: 7
->>>>>>> cc0cae19ecaa93c00a0868ea2deef03872846643
