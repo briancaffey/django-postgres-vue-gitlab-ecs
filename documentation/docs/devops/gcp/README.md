@@ -228,7 +228,358 @@ prometheus-to-sd-zvzdg                                           1/1     Running
 tiller-deploy-57f498469-9ck5t                                    1/1     Running   0          6m58s
 ```
 
-Install Postgres with the Bitnami Helm Chart
+### Install Postgres with the Bitnami Helm Chart
+
+
+Here is a slightly outdated guide from Bitnami that shows how to install postgres with Helm:
+
+[https://engineering.bitnami.com/articles/create-a-production-ready-postgresql-cluster-bitnami-kubernetes-and-helm.html](https://engineering.bitnami.com/articles/create-a-production-ready-postgresql-cluster-bitnami-kubernetes-and-helm.html)
+
+
+First, download the `values-production.yaml` file using the following command:
+
+```
+curl -O https://raw.githubusercontent.com/helm/charts/master/stable/wordpress/values-production.yaml
+```
+
+I had to change one value to disable monitoring:
+
+```
+metrics:
+  enabled: false
+```
+
+See the command below that sets this value in a CLI parameter.
+
+To deploy the `stable/postgres` chart, run the following command.
+
+```
+helm install --name my-postgres stable/postgresql \
+    -f values-production.yaml \
+    --set postgresqlPassword=ROOT_PASSWORD \
+    --set replication.password=REPLICATION_PASSWORD
+    --set metrics.enabled=false
+```
+### How to delete all resources
+
+
+The `stable/helm` release creates several resources:
+
+- services
+- statefulsets
+- persistentvolumes
+- pvc
+
+Also, GCP will dynamically provision disks that are used by the PVs. We can list these with
+
+```
+gcloud compute disks list
+NAME                                                             LOCATION       LOCATION_SCOPE  SIZE_GB  TYPE         STATUS
+gke-verbose-equals-t-verbose-equals-t-379740c0-0c5j              us-central1-c  zone            100      pd-standard  READY
+gke-verbose-equals-tru-pvc-2b60b760-ee20-11e9-afd8-42010a800fe4  us-central1-c  zone            8        pd-standard  READY
+gke-verbose-equals-t-verbose-equals-t-dee69f6e-9w5h              us-central1-b  zone            100      pd-standard  READY
+gke-verbose-equals-tru-pvc-0b603b57-ee20-11e9-afd8-42010a800fe4  us-central1-b  zone            8        pd-standard  READY
+gke-verbose-equals-t-verbose-equals-t-0604b9f8-n9xc              us-central1-f  zone            100      pd-standard  READY
+gke-verbose-equals-tru-pvc-0b6f922a-ee20-11e9-afd8-42010a800fe4  us-central1-f  zone            8        pd-standard  READY
+```
+
+The 100GB disks are provisioned for the nodes in our cluster, and the 8GB nodes are provisioned for the PVs.
+
+When we delete the helm release with the following command:
+
+```
+helm delete my-release
+```
+
+The PVs and PVCs are not deleted. They *persist*. Let's show this:
+
+```
+k get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                          STORAGECLASS   REASON   AGE
+pvc-0b603b57-ee20-11e9-afd8-42010a800fe4   8Gi        RWO            Delete           Bound    default/data-my-postgres-postgresql-slave-0    standard                25h
+pvc-0b6f922a-ee20-11e9-afd8-42010a800fe4   8Gi        RWO            Delete           Bound    default/data-my-postgres-postgresql-master-0   standard                25h
+pvc-2b60b760-ee20-11e9-afd8-42010a800fe4   8Gi        RWO            Delete           Bound    default/data-my-postgres-postgresql-slave-1    standard                25h
+```
+
+```
+k describe pv pvc-0b603b57-ee20-11e9-afd8-42010a800fe4
+Name:              pvc-0b603b57-ee20-11e9-afd8-42010a800fe4
+Labels:            failure-domain.beta.kubernetes.io/region=us-central1
+                   failure-domain.beta.kubernetes.io/zone=us-central1-b
+Annotations:       kubernetes.io/createdby: gce-pd-dynamic-provisioner
+                   pv.kubernetes.io/bound-by-controller: yes
+                   pv.kubernetes.io/provisioned-by: kubernetes.io/gce-pd
+Finalizers:        [kubernetes.io/pv-protection]
+StorageClass:      standard
+Status:            Bound
+Claim:             default/data-my-postgres-postgresql-slave-0
+Reclaim Policy:    Delete
+Access Modes:      RWO
+VolumeMode:        Filesystem
+Capacity:          8Gi
+Node Affinity:
+  Required Terms:
+    Term 0:        failure-domain.beta.kubernetes.io/zone in [us-central1-b]
+                   failure-domain.beta.kubernetes.io/region in [us-central1]
+Message:
+Source:
+    Type:       GCEPersistentDisk (a Persistent Disk resource in Google Compute Engine)
+    PDName:     gke-verbose-equals-tru-pvc-0b603b57-ee20-11e9-afd8-42010a800fe4
+    FSType:     ext4
+    Partition:  0
+    ReadOnly:   false
+Events:         <none>
+```
+
+Note that the `PDName` for the PV we described is one of the 8GB disks that was automatically provisioned.
+
+Let's delete the Kubernetes cluster and see what happens to the PDs.
+
+Run
+
+```
+terraform destroy -var-file=production.tfvars
+Acquiring state lock. This may take a few moments...
+google_container_cluster.cluster: Refreshing state... [id=verbose-equals-true-cluster]
+google_container_node_pool.general_purpose: Refreshing state... [id=us-central1/verbose-equals-true-cluster/verbose-equals-true-general]
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # google_container_cluster.cluster will be destroyed
+  - resource "google_container_cluster" "cluster" {
+      - additional_zones          = [
+          - "us-central1-b",
+          - "us-central1-c",
+          - "us-central1-f",
+        ] -> null
+      - cluster_autoscaling       = [] -> null
+      - cluster_ipv4_cidr         = "10.20.0.0/14" -> null
+      - default_max_pods_per_node = 110 -> null
+      - enable_kubernetes_alpha   = false -> null
+      - enable_legacy_abac        = false -> null
+      - endpoint                  = "35.225.76.157" -> null
+      - id                        = "verbose-equals-true-cluster" -> null
+      - initial_node_count        = 1 -> null
+      - instance_group_urls       = [
+          - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-b/instanceGroups/gke-verbose-equals-t-verbose-equals-t-dee69f6e-grp",
+          - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-c/instanceGroups/gke-verbose-equals-t-verbose-equals-t-379740c0-grp",
+          - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-f/instanceGroups/gke-verbose-equals-t-verbose-equals-t-0604b9f8-grp",
+        ] -> null
+      - ip_allocation_policy      = [] -> null
+      - location                  = "us-central1" -> null
+      - logging_service           = "logging.googleapis.com" -> null
+      - master_version            = "1.13.10-gke.0" -> null
+      - monitoring_service        = "monitoring.googleapis.com" -> null
+      - name                      = "verbose-equals-true-cluster" -> null
+      - network                   = "projects/verbose-equals-true/global/networks/default" -> null
+      - node_locations            = [
+          - "us-central1-b",
+          - "us-central1-c",
+          - "us-central1-f",
+        ] -> null
+      - node_version              = "1.13.10-gke.0" -> null
+      - project                   = "verbose-equals-true" -> null
+      - region                    = "us-central1" -> null
+      - remove_default_node_pool  = true -> null
+      - resource_labels           = {} -> null
+      - services_ipv4_cidr        = "10.23.240.0/20" -> null
+      - subnetwork                = "projects/verbose-equals-true/regions/us-central1/subnetworks/default" -> null
+
+      - addons_config {
+
+          - kubernetes_dashboard {
+              - disabled = true -> null
+            }
+
+          - network_policy_config {
+              - disabled = false -> null
+            }
+        }
+
+      - master_auth {
+          - cluster_ca_certificate = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURDekNDQWZPZ0F3SUJBZ0lRZTF1SXNuTTR6YndYNjg0Z2JxazRvakFOQmdrcWhraUc5dzBCQVFzRkFEQXYKTVMwd0t3WURWUVFERXlRek5tRXhNekpsTXkxaE1HUmxMVFJsWVRNdE9UQmpNaTFqWW1Wak56SmlaamsyTkdZdwpIaGNOTVRreE1ERXpNak14TXpBeVdoY05NalF4TURFeU1EQXhNekF5V2pBdk1TMHdLd1lEVlFRREV5UXpObUV4Ck16SmxNeTFoTUdSbExUUmxZVE10T1RCak1pMWpZbVZqTnpKaVpqazJOR1l3Z2dFaU1BMEdDU3FHU0liM0RRRUIKQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUURQbFZvVjR4d0lqbHprRlFiQ3p1NDFhbEN0SVE4UFh5ekpmeUwyRkk4VApHQVJpZGQwTWlTb05NY3Z3aXZIVk1xei9rTFdNa2RjWjJvVW9Qc0ZOZjY0ZGJ3VU9OOWRFN2Z4Q0k5K0tzUUlHCk1kckVkM2dKd0F3WFVGQSthMXpRVHBVZVJiQTFZQTAyVmJnOXh2SVZuQjJ4N3VpYW0vVWxSQnl1Ly9ubi9MN3YKdjF0RlBEUFdwV1YyaTRMa0xFM3dPaVJaVkJJZy8rU0ozNTVxMnlnVEloVmRaUHBkdHJBWEJWbG5qRFp6OUYzYwo5Zk8veVExWGQrazEva1RLR3hSVmhvMG1HZkFNS011Z0VWSEZJV2lIME9Rc3ByZHI3Wjk3T1FPaVRxY2RPcmg0CitObUZsSWd1c01Cb2gyV2JEVVEvb1ZCeks3OFg3ZThOWTJkSTFVWks1RnR0QWdNQkFBR2pUQURBUUgvTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFBeApLRGM4OW5BN21ab2R2bHhhemNCKzdtRFpkZHgyVVkzT0NrY3V2RzZKcUJjVmtEUXRCRk9ReEhNeGMwcm12enpKCkQyUVoxME1Hd3M0Mkt0akRLcGl0Qm5SNHJCRGMyZ1hJdVQ4UzdOWlpXaEJVOHdNeDFjYkJUK0JhQ2J1UlpNZk0KVzlhUWNQWUM3aXJaNE1TaVhRWFNPYk00SFBHL3Y0YkcrWUFyVHdFT1MwVjF6QlFOTFFxeTJXZ3Zqc2dnY09MdQpUY0pUY01tSFlCM241NVE5emh1NUc0QThHY1ZWTldKS2lXN3Q5aGZXeDgvclN3aDdNUElqZWFJQWd6VU9UZjM2CmJLdkhsaS9sTUhNamd2M0lxMlFKUlduVkNkUFRWbjhjMkFxbGtjS05HRGRsRmVvaHlDWmV2MTBPV21jdmx1eDkKOERRQWkzRHJkMHc3QVllQjI2WHAKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=" -> null
+
+          - client_certificate_config {
+              - issue_client_certificate = false -> null
+            }
+        }
+
+      - network_policy {
+          - enabled  = true -> null
+          - provider = "CALICO" -> null
+        }
+
+      - node_config {
+          - disk_size_gb      = 100 -> null
+          - disk_type         = "pd-standard" -> null
+          - guest_accelerator = [] -> null
+          - image_type        = "COS" -> null
+          - labels            = {} -> null
+          - local_ssd_count   = 0 -> null
+          - machine_type      = "n1-standard-1" -> null
+          - metadata          = {
+              - "disable-legacy-endpoints" = "true"
+            } -> null
+          - oauth_scopes      = [
+              - "https://www.googleapis.com/auth/devstorage.read_only",
+              - "https://www.googleapis.com/auth/logging.write",
+              - "https://www.googleapis.com/auth/monitoring",
+            ] -> null
+          - preemptible       = false -> null
+          - service_account   = "default" -> null
+          - tags              = [] -> null
+        }
+
+      - node_pool {
+          - initial_node_count  = 1 -> null
+          - instance_group_urls = [
+              - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-b/instanceGroupManagers/gke-verbose-equals-t-verbose-equals-t-dee69f6e-grp",
+              - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-c/instanceGroupManagers/gke-verbose-equals-t-verbose-equals-t-379740c0-grp",
+              - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-f/instanceGroupManagers/gke-verbose-equals-t-verbose-equals-t-0604b9f8-grp",
+            ] -> null
+          - max_pods_per_node   = 0 -> null
+          - name                = "verbose-equals-true-general" -> null
+          - node_count          = 1 -> null
+          - version             = "1.13.10-gke.0" -> null
+
+          - autoscaling {
+              - max_node_count = 1 -> null
+              - min_node_count = 1 -> null
+            }
+
+          - management {
+              - auto_repair  = true -> null
+              - auto_upgrade = true -> null
+            }
+
+          - node_config {
+              - disk_size_gb      = 100 -> null
+              - disk_type         = "pd-standard" -> null
+              - guest_accelerator = [] -> null
+              - image_type        = "COS" -> null
+              - labels            = {} -> null
+              - local_ssd_count   = 0 -> null
+              - machine_type      = "n1-standard-1" -> null
+              - metadata          = {
+                  - "disable-legacy-endpoints" = "true"
+                } -> null
+              - oauth_scopes      = [
+                  - "https://www.googleapis.com/auth/devstorage.read_only",
+                  - "https://www.googleapis.com/auth/logging.write",
+                  - "https://www.googleapis.com/auth/monitoring",
+                ] -> null
+              - preemptible       = false -> null
+              - service_account   = "default" -> null
+              - tags              = [] -> null
+            }
+        }
+    }
+
+  # google_container_node_pool.general_purpose will be destroyed
+  - resource "google_container_node_pool" "general_purpose" {
+      - cluster             = "verbose-equals-true-cluster" -> null
+      - id                  = "us-central1/verbose-equals-true-cluster/verbose-equals-true-general" -> null
+      - initial_node_count  = 1 -> null
+      - instance_group_urls = [
+          - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-b/instanceGroupManagers/gke-verbose-equals-t-verbose-equals-t-dee69f6e-grp",
+          - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-c/instanceGroupManagers/gke-verbose-equals-t-verbose-equals-t-379740c0-grp",
+          - "https://www.googleapis.com/compute/v1/projects/verbose-equals-true/zones/us-central1-f/instanceGroupManagers/gke-verbose-equals-t-verbose-equals-t-0604b9f8-grp",
+        ] -> null
+      - location            = "us-central1" -> null
+      - name                = "verbose-equals-true-general" -> null
+      - node_count          = 1 -> null
+      - project             = "verbose-equals-true" -> null
+      - region              = "us-central1" -> null
+      - version             = "1.13.10-gke.0" -> null
+
+      - autoscaling {
+          - max_node_count = 1 -> null
+          - min_node_count = 1 -> null
+        }
+
+      - management {
+          - auto_repair  = true -> null
+          - auto_upgrade = true -> null
+        }
+
+      - node_config {
+          - disk_size_gb      = 100 -> null
+          - disk_type         = "pd-standard" -> null
+          - guest_accelerator = [] -> null
+          - image_type        = "COS" -> null
+          - labels            = {} -> null
+          - local_ssd_count   = 0 -> null
+          - machine_type      = "n1-standard-1" -> null
+          - metadata          = {
+              - "disable-legacy-endpoints" = "true"
+            } -> null
+          - oauth_scopes      = [
+              - "https://www.googleapis.com/auth/devstorage.read_only",
+              - "https://www.googleapis.com/auth/logging.write",
+              - "https://www.googleapis.com/auth/monitoring",
+            ] -> null
+          - preemptible       = false -> null
+          - service_account   = "default" -> null
+          - tags              = [] -> null
+        }
+    }
+
+Plan: 0 to add, 0 to change, 2 to destroy.
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+...
+google_container_node_pool.general_purpose: Still destroying... [id=us-central1/verbose-equals-true-cluster/verbose-equals-true-general, 6m30s elapsed]
+google_container_node_pool.general_purpose: Still destroying... [id=us-central1/verbose-equals-true-cluster/verbose-equals-true-general, 6m40s elapsed]
+google_container_node_pool.general_purpose: Destruction complete after 6m47s
+google_container_cluster.cluster: Destroying... [id=verbose-equals-true-cluster]
+google_container_cluster.cluster: Still destroying... [id=verbose-equals-true-cluster, 10s elapsed]
+...
+google_container_cluster.cluster: Still destroying... [id=verbose-equals-true-cluster, 4m0s elapsed]
+google_container_cluster.cluster: Still destroying... [id=verbose-equals-true-cluster, 4m10s elapsed]
+google_container_cluster.cluster: Still destroying... [id=verbose-equals-true-cluster, 4m20s elapsed]
+google_container_cluster.cluster: Still destroying... [id=verbose-equals-true-cluster, 4m30s elapsed]
+google_container_cluster.cluster: Destruction complete after 4m37s
+
+Destroy complete! Resources: 2 destroyed.
+```
+
+Now let's check on the Persistent Disks:
+
+```
+gcloud compute disks list
+NAME                                                             LOCATION       LOCATION_SCOPE  SIZE_GB  TYPE         STATUS
+gke-verbose-equals-tru-pvc-2b60b760-ee20-11e9-afd8-42010a800fe4  us-central1-c  zone            8        pd-standard  READY
+gke-verbose-equals-tru-pvc-0b603b57-ee20-11e9-afd8-42010a800fe4  us-central1-b  zone            8        pd-standard  READY
+gke-verbose-equals-tru-pvc-0b6f922a-ee20-11e9-afd8-42010a800fe4  us-central1-f  zone            8        pd-standard  READY
+```
+
+Let's delete these with:
+
+```
+gcloud compute disks delete `gcloud compute disks list --format='json' | jq '.[] | .name'`
+The following disks will be deleted:
+ - ["gke-verbose-equals-tru-pvc-0b603b57-ee20-11e9-afd8-42010a800fe4"]
+ in [us-east1-b]
+ - ["gke-verbose-equals-tru-pvc-0b6f922a-ee20-11e9-afd8-42010a800fe4"]
+ in [us-east1-b]
+ - ["gke-verbose-equals-tru-pvc-2b60b760-ee20-11e9-afd8-42010a800fe4"]
+ in [us-east1-b]
+
+Do you want to continue (Y/n)?
+```
+
+::: warning This is not working
+The resources were not found
+:::
 
 
 ### Deploying to Terraform from GitLab CI
