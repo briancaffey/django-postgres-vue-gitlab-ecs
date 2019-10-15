@@ -598,4 +598,3 @@ Here are some resources showing how to use Terraform and in GitLab CI
 ::: warning In progress
 This section is not complete. Updates coming soon.
 :::
-
