@@ -13,6 +13,7 @@ Terraform Plan:
   stage: deploy
   image: hashicorp/terraform:light
   before_script:
+    - echo "starting terraform plan..."
     - pwd
     - ls
     - cd terraform
