@@ -28,7 +28,9 @@ Terraform Plan: &terraform
 
 Terraform Apply:
   <<: *terraform
-  stage: apply
+  stage: deploy
+  dependencies:
+    - "Terraform Plan"
   script:
     - terraform apply -input=false "planfile"
   dependencies:
