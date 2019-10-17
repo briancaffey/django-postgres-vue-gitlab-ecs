@@ -4,6 +4,7 @@ stages:
   - build
   - integration
   - release
+  - plan
   - deploy
 
 include:

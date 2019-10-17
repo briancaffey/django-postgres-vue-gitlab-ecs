@@ -10,7 +10,7 @@
     - pip install gcloud (google sdk)
 
 Terraform Plan: &terraform
-  stage: deploy
+  stage: plan
   image:
     name: hashicorp/terraform:light
     entrypoint:
