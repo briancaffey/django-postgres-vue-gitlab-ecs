@@ -17,11 +17,8 @@ Terraform Plan:
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
-    - echo "starting terraform plan..."
-    - pwd
-    - ls
     - cd terraform
-    - echo $GCP_SERVICE_ACCOUNT | base64 -d > ./terraform/account.json
+    - echo $GCP_SERVICE_ACCOUNT | base64 -d > ./account.json
     - terraform init -var-file=production.tfvars
   script:
     - terraform plan -out "planfile" -var-file=production.tfvars
