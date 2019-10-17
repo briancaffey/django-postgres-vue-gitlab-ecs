@@ -24,4 +24,4 @@ Terraform Plan:
     - terraform plan -out "planfile" -var-file=production.tfvars
   artifacts:
     paths:
-      - planfile
+      - terraform/planfile
