@@ -33,6 +33,4 @@ Terraform Apply:
     - "Terraform Plan"
   script:
     - terraform apply -input=false "planfile"
-  dependencies:
-    - plan
   when: manual
