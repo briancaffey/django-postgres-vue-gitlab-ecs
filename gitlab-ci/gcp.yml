@@ -34,3 +34,4 @@ Terraform Apply:
   script:
     - terraform apply -input=false "planfile"
   when: manual
+  artifacts: {}

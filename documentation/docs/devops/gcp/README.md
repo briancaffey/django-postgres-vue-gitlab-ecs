@@ -32,6 +32,16 @@ terraform --version
 Terraform v0.11.11
 ```
 
+Install a specific version of Terraform:
+
+```
+wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
+unzip terraform_0.12.10_linux_amd64.zip
+chmod +x terraform
+sudo mv terraform /usr/local/bin/
+terraform --version
+```
+
 ### Create a Service Account for Terraform
 
 In the Google Cloud Console go to `IAM` > `Service Accounts`, and then add a service account with the name `terraform`.
@@ -592,7 +602,49 @@ First, we need to save our `account.json` file in our GitLab CI variables. This 
 cat terraform/account.json | base64 -w0
 ```
 
-Here are some resources showing how to use Terraform and in GitLab CI
+Save the output of this command to a GitLab CI environment variable called `GCP_SERVICE_ACCOUNT`.
+
+
+Next we need to define Terraform jobs that will be triggered in our GitLab CI pipeline.
+
+[This link](https://medium.com/@timhberry/terraform-pipelines-in-gitlab-415b9d842596) provides a good introduction to Terraform pipelines in GitLab CI. The examples provided below are based on the techniques described in this article.
+
+[This article](https://learn.hashicorp.com/terraform/development/running-terraform-in-automation) in the Terraform documentation goes into more detail about running Terraform jobs in automated pipelines.
+
+We will start with two pipelines: `Terraform Plan` and `Terraform Apply`.
+
+::: tip GitLab CI modules
+The following example can be found in `/gitlab-ci/gcp.yml`. This file is referenced in the main `.gitlab-ci.yml` file. This will
+:::
+
+```yml
+Terraform Plan: &terraform
+  stage: plan
+  image:
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    - cd terraform
+    - echo $GCP_SERVICE_ACCOUNT | base64 -d > ./account.json
+    - terraform init -var-file=production.tfvars
+  script:
+    - terraform plan -out "planfile" -var-file=production.tfvars
+  artifacts:
+    paths:
+      - terraform/planfile
+
+Terraform Apply:
+  <<: *terraform
+  stage: deploy
+  dependencies:
+    - "Terraform Plan"
+  script:
+    - terraform apply -input=false "planfile"
+  when: manual
+  artifacts: {}
+```
 
 
 ::: warning In progress
