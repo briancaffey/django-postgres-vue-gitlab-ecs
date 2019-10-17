@@ -9,7 +9,7 @@
     - apk add --no-cache curl jq python py-pip
     - pip install gcloud (google sdk)
 
-Terraform Plan:
+Terraform Plan: &terraform
   stage: deploy
   image:
     name: hashicorp/terraform:light
@@ -25,3 +25,12 @@ Terraform Plan:
   artifacts:
     paths:
       - terraform/planfile
+
+Terraform Apply:
+  <<: *terraform
+  stage: apply
+  script:
+    - terraform apply -input=false "planfile"
+  dependencies:
+    - plan
+  when: manual
