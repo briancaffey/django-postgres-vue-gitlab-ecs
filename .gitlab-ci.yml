@@ -9,14 +9,14 @@ stages:
 
 include:
   # - local: /gitlab-ci/aws.yml
-  - local: /gitlab-ci/gcp.yml
+  #- local: /gitlab-ci/gcp.yml
 
 variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
-.pages:
+pages:
   image: node:latest
   stage: documentation
   script:
