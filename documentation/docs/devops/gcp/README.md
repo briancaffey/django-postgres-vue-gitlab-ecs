@@ -166,7 +166,6 @@ Let's install Helm in our cluster. This guide shows how to setup Tiller with a s
 Create the following service account:
 
 
-
 ```
 apiVersion: v1
 kind: ServiceAccount
