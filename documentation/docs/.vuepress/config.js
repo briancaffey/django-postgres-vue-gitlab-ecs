@@ -64,7 +64,10 @@ module.exports = {
       },
       {
         text: "Topics",
-        items: [{ text: "Minikube", link: "/topics/minikube/" }]
+        items: [
+          { text: "Minikube", link: "/topics/minikube/" },
+          { text: "Helm", link: "/topics/helm/" }
+        ]
       },
       {
         text: "Source Code",
