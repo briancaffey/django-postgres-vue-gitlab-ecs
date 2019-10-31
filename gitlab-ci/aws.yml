@@ -1,4 +1,4 @@
-Release backend:
+.Release backend:
   stage: release
   image: docker:stable
   only:
