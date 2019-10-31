@@ -75,16 +75,33 @@ Parameters:
 
 
 Conditions:
-  RunServices: !Equals [ 1, 1 ]
-  UseRDS: !Equals [ 1, 1 ]
-  UseALB: !Equals [ 1, 1 ]
-  UseECS: !Equals [ 1, 1 ]
-  UseElastiCache: !Equals [ 1, 1 ]
+  UseACM: !Equals [ 1, 1 ]
+  UseVPC: !Equals [ 1, 0 ]
+  UseDjangoStorage: !Equals [ 1, 0 ]
+  UseServiceRole: !Equals [ 1, 0 ]
+  UseTaskRole: !Equals [ 1, 0 ]
+  UseECR: !Equals [ 1, 0 ]
+  RunServices: !Equals [ 1, 0 ]
+  UseRDS: !Equals [ 1, 0 ]
+  UseALB: !Equals [ 1, 0 ]
+  UseECS: !Equals [ 1, 0 ]
+  UseElastiCache: !Equals [ 1, 0 ]
+  FrontendResources: !Equals [ 1, 0 ]
 
 Resources:
 
+  AmazonCertificate:
+    Type: AWS::CloudFormation::Stack
+    Condition: UseACM
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/certs.yaml
+      Parameters:
+        AppUrl: !Ref AppUrl
+        StackName: !Ref StackName
+
   VPC:
     Type: AWS::CloudFormation::Stack
+    Condition: UseVPC
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/vpc.yaml
       Parameters:
@@ -144,16 +161,19 @@ Resources:
 
   ServiceRole:
     Type: AWS::CloudFormation::Stack
+    Condition: UseServiceRole
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/service-role.yaml
 
   TaskRole:
     Type: AWS::CloudFormation::Stack
+    Condition: UseTaskRole
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/task-role.yaml
 
   ECRRepository:
     Type: AWS::CloudFormation::Stack
+    Condition: UseECR
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/ecr-repository.yaml
       Parameters:
@@ -162,6 +182,7 @@ Resources:
 
   DjangoS3Storage:
     Type: AWS::CloudFormation::Stack
+    Condition: UseDjangoStorage
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/django-assets.yaml
       Parameters:
@@ -263,6 +284,7 @@ Resources:
 
   FrontendResources:
     Type: AWS::CloudFormation::Stack
+    Condition: FrontendResources
     Properties:
       TemplateURL: !Sub "https://s3.amazonaws.com/${AppUrl}-cloudformation/infrastructure/static-site.yaml"
       Parameters:

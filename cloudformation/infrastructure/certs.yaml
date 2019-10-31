@@ -1,0 +1,24 @@
+Description: >
+  This template deploys a wildcard Amazon Certificate Manager (ACM) certificate.
+
+Parameters:
+  AppUrl:
+    Type: "String"
+    Description: "The URL for our app (e.g. mydomain.com)"
+    AllowedPattern: "[a-z0-9._-]+"
+
+  StackName:
+    Type: String
+    Description: The name of the stack
+
+Resources:
+  WildcardCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref AppUrl
+      SubjectAlternativeNames:
+        - !Sub "*.${AppUrl}"
+      DomainValidationOptions:
+        - DomainName: !Ref AppUrl
+          ValidationDomain: !Ref AppUrl
+      ValidationMethod: DNS
