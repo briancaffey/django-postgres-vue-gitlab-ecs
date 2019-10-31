@@ -8,7 +8,7 @@ stages:
   - deploy
 
 include:
-  # - local: /gitlab-ci/aws.yml
+  - local: /gitlab-ci/aws.yml
   #- local: /gitlab-ci/gcp.yml
 
 variables:
