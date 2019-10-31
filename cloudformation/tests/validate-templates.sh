@@ -4,7 +4,7 @@ ERROR_COUNT=0;
 echo "Validating AWS CloudFormation templates..."
 
 # Loop through the YAML templates in this repository
-for TEMPLATE in $(find . -name '*.yaml'); do
+for TEMPLATE in $(find ./cloudformation -name '*.yaml'); do
 
     # Validate the template with CloudFormation
     ERRORS=$(aws cloudformation validate-template --template-body file://$TEMPLATE 2>&1 >/dev/null);
