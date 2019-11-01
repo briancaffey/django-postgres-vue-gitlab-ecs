@@ -86,7 +86,7 @@ Conditions:
   UseALB: !Equals [ 1, 0 ]
   UseECS: !Equals [ 1, 0 ]
   UseElastiCache: !Equals [ 1, 0 ]
-  FrontendResources: !Equals [ 1, 0 ]
+  FrontendResources: !Equals [ 1, 1 ]
 
 Resources:
 
@@ -119,7 +119,7 @@ Resources:
         AppUrl: !Ref AppUrl
         HostedZoneId: !Ref HostedZoneId
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
-        WildcardSSLCertificateArn: !Ref WildcardSSLCertificateArn
+        WildcardSSLCertificateArn: !GetAtt AmazonCertificate.Outputs.WildcardCert
 
   RDSPostgresDB:
     Type: AWS::CloudFormation::Stack
@@ -291,7 +291,7 @@ Resources:
         StackName: !Ref StackName
         AppUrl: !Ref AppUrl
         HostedZoneId: !Ref HostedZoneId
-        SSLCertificateArn: !Ref SSLCertificateArn
+        WildcardSSLCertificateArn: !GetAtt AmazonCertificate.Outputs.WildcardCert
 
 Outputs:
 

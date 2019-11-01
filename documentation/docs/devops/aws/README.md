@@ -160,3 +160,72 @@ There is one script in our `scripts` folder, and this script generates a file th
 ### Tests
 
 The `tests` folder contains one test which validates the CloudFormation templates. This can help prevent CloudFormation from having to rollback deployments because of syntax errors or other problems in our YAML templates.
+
+## Preparation for AWS deployment
+
+To deploy the site to AWS, most things are done automatically. However, some things cannot be done automatically. This section will provide details on the manual steps that are required before we can take advantage of automated deployments with GitLab CI.
+
+### Accounts
+
+You will need a GitLab account and an AWS account.
+
+### GitLab environment variables
+
+In our project we ned to go to `Settings` > `CI/CD` > `Variables` and add the following variables:
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_ACCOUNT_ID`
+- `AWS_DEFAULT_REGION`
+
+These variables will allow us to use the aws-cli tool in our GitLab CI jobs.
+
+### S3 Bucket for CloudFormation templates
+
+CloudFormation will deploy our resources by reading templates from an S3 bucket, so we need to manually create an S3 bucket in our AWS account that will store our CloudFormation templates.
+
+We can create this bucket in the console, or we can create this bucket using the aws-cli with two commands. First, create the bucket:
+
+```
+export BUCKET_NAME=my-bucket-name
+aws s3api create-bucket --acl private --bucket $BUCKET_NAME
+```
+
+Then, put a public access block on the bucket:
+
+```
+aws s3api put-public-access-block --bucket $BUCKET_NAME --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+```
+
+These two commands can be found in the aws-cli documentation [here](https://docs.aws.amazon.com/cli/latest/reference/s3api/create-bucket.html) and [here](https://docs.aws.amazon.com/cli/latest/reference/s3api/put-public-access-block.html).
+
+Verify that the bucket has been create and has the correct access policy by checking it in the AWS console. The `Access` column should say `Bucket and objects not public`.
+
+### Domain name
+
+In AWS, we will need to purchase a domain name. We will use the domain's hosted zone ID Amazon Resource Number (ARN) in CloudFormation and pass it to the ALB and Vue.js frontend site.
+
+### SSM Parameter Store Parameters
+
+We will use AWS Systems Manager to store sensitive information for our application. For example, we will store the `SECRET_KEY` for Django and reference it in our container definitions so that our Django application running in ECS will have access to this and other secret values. AWS also has a Secrets Manager service that has more features, but SSM Parameter Store will be fine.
+
+To organize the various parameters in our application, we will take advantage of paths. For example, the Django `SECRET_KEY` parameter will have the following name:
+
+```
+/verbose-equals-true-staging/staging/env/SECRET_KEY
+```
+
+In this example `verbose-equals-true-staging` is the StackName for the staging site. `staging` is the environment, `env` is where environment variables are stored and `SECRET_KEY` is the name  of the environment variable. The name of the parameter can be whatever you choose, but this will help us organize parameters as our applications grows and we need to store more sensitive information, such as OAuth keys for social authentication, third-party API keys, passwords, etc.
+
+Similar to our S3 bucket that we previously configured, we can set these parameters in the AWS console or through the command line.
+
+To set the parameters through the aws-cli, we can do the following:
+
+```
+export SECRET_KEY=my-secret-key
+aws ssm put-parameter \
+    --name "/verbose-equals-true-staging/staging/env/SECRET_KEY" \
+    --value "$SECRET_KEY" \
+    --type "String"
+```
+

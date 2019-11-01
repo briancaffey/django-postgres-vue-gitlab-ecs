@@ -16,7 +16,7 @@ Parameters:
     Type: AWS::Route53::HostedZone::Id
     Description: "The hosted zone ID to add the Route 53 recordset to."
 
-  SSLCertificateArn:
+  WildcardSSLCertificateArn:
     Type: "String"
     Description: "ARN pointing to an SSL cert to use for this app URL."
     AllowedPattern: "arn:aws:acm:.*"
@@ -71,7 +71,7 @@ Resources:
           S3OriginConfig:
             OriginAccessIdentity: ""
         ViewerCertificate:
-          AcmCertificateArn: !Ref SSLCertificateArn
+          AcmCertificateArn: !Ref WildcardSSLCertificateArn
           SslSupportMethod: "sni-only"
 
   DNSRecord:

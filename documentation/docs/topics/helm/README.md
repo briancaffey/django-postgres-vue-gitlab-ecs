@@ -243,6 +243,7 @@ metadata:
 
 `mychart.fullname` is a function that is defined in `_helpers.tpl`:
 
+::: v-pre
 ```yml
 {{/*
 Create a default fully qualified app name.
@@ -262,36 +263,45 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 ```
+:::
 
 Let's talk about the template language
 
 
+::: v-pre
 ```html
 <div>
   {{ .Title }}
 </div>
 ```
+:::
 
 Results in
 
+::: v-pre
 ```html
 <div>
   Hello, World!
 </div>
 ```
+:::
 
+::: v-pre
 ```html
 <div>
   {{- .Title -}}
 </div>
-
 ```
+:::
+
 
 ```html
 <div>Hello, World!</div>
 ```
 
+::: v-pre
 For the most part, the templating language is pretty straightforward. The `{{- ... -}}` was not clear to me at first. It removes whitespace and newlines from the left of right side of the template.
+:::
 
 ## Writing our first templates
 

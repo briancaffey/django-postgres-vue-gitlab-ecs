@@ -22,3 +22,8 @@ Resources:
         - DomainName: !Ref AppUrl
           ValidationDomain: !Ref AppUrl
       ValidationMethod: DNS
+
+Outputs:
+  WildcardCert:
+    Description: The Wildcard Certificate
+    Value: !Ref WildcardCertificate
