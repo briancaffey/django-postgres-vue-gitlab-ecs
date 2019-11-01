@@ -76,16 +76,16 @@ Parameters:
 
 Conditions:
   UseACM: !Equals [ 1, 1 ]
-  UseVPC: !Equals [ 1, 0 ]
-  UseDjangoStorage: !Equals [ 1, 0 ]
-  UseServiceRole: !Equals [ 1, 0 ]
-  UseTaskRole: !Equals [ 1, 0 ]
-  UseECR: !Equals [ 1, 0 ]
+  UseVPC: !Equals [ 1, 1 ]
+  UseDjangoStorage: !Equals [ 1, 1 ]
+  UseServiceRole: !Equals [ 1, 1 ]
+  UseTaskRole: !Equals [ 1, 1 ]
+  UseECR: !Equals [ 1, 1 ]
   RunServices: !Equals [ 1, 0 ]
-  UseRDS: !Equals [ 1, 0 ]
-  UseALB: !Equals [ 1, 0 ]
-  UseECS: !Equals [ 1, 0 ]
-  UseElastiCache: !Equals [ 1, 0 ]
+  UseRDS: !Equals [ 1, 1 ]
+  UseALB: !Equals [ 1, 1 ]
+  UseECS: !Equals [ 1, 1 ]
+  UseElastiCache: !Equals [ 1, 1 ]
   FrontendResources: !Equals [ 1, 1 ]
 
 Resources:
