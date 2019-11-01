@@ -16,7 +16,7 @@ variables:
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
-.pages:
+pages:
   image: node:latest
   stage: documentation
   script:
@@ -70,7 +70,7 @@ variables:
     changes:
       - quasar/**/*
 
-.Build backend:
+Build backend:
   stage: build
   image: docker:stable
   variables:
@@ -141,11 +141,11 @@ variables:
   <<: *cypress
   image: localhost:5000/backend:latest
 
-.Build Quasar PWA Assets:
+Build Quasar PWA Assets:
   image: node:8
   stage: build
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     DOMAIN_NAME: "api.${AppUrl}"
     GOOGLE_OAUTH2_KEY: google123

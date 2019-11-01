@@ -229,3 +229,4 @@ aws ssm put-parameter \
     --type "String"
 ```
 
+We will reference these values in the container definitions under the `Secrets` key.
