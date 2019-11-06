@@ -1,8 +1,8 @@
 Release backend:
   stage: release
   image: docker:stable
-  # only:
-  #   - master
+  only:
+    - master
   services:
     - docker:dind
   before_script:
@@ -29,8 +29,8 @@ Release backend:
 Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   dependencies:
     - "Build Quasar PWA Assets"
   before_script:
@@ -78,8 +78,8 @@ Sync Quasar PWA Assets:
 Update stack:
   image: python:3.7
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   variables:
     EnvironmentName: staging
   before_script:
@@ -100,8 +100,8 @@ Update stack:
 collectstatic: &task
   image: python:3.7
   stage: deploy
-  # only:
-  #   - master
+  only:
+    - master
   variables:
     EnvironmentName: staging
   before_script:
