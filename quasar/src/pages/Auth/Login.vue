@@ -1,8 +1,15 @@
 <template>
   <base-page>
     <div class="login">
-      <page-header>Login</page-header>
+      <page-header>Loginoij</page-header>
       <base-card class="card">
+        <q-btn
+          type="a"
+          class="full-width q-mt-md"
+          :href="$store.getters.githubOauth2Link"
+          >GitHub {{ $store.getters.githubOauth2Link }}</q-btn
+        >
+
         <login-form></login-form>
       </base-card>
       <span class="signup">
