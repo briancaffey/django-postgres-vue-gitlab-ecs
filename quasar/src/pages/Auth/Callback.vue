@@ -1,5 +1,7 @@
 <template>
-  <base-page>Logging in with {{ provider }}...</base-page>
+  <base-page>
+    <page-text> Logging in with {{ provider }}... </page-text>
+  </base-page>
 </template>
 
 <script>

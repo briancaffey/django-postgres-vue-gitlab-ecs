@@ -6,8 +6,8 @@
         <q-btn
           type="a"
           class="full-width q-mt-md"
-          :href="$store.getters.githubOauth2Link"
-          >GitHub {{ $store.getters.githubOauth2Link }}</q-btn
+          :href="$store.getters.oauthUrl('github')"
+          >GitHub</q-btn
         >
 
         <login-form></login-form>
