@@ -15,7 +15,7 @@ class CoreConsumer(AsyncWebsocketConsumer):
         self.user = self.scope['user']
 
         # Join room group
-        print(self.channel_name)
+        print(self.channel_name) # noqa
         await self.channel_layer.group_add(
             self.ping_pong_group,
             self.channel_name
