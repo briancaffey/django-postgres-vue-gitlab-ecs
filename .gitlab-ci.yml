@@ -99,7 +99,7 @@ Build backend:
       - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
-e2e: &cypress
+.e2e: &cypress
   stage: integration
   image: $CI_REGISTRY_IMAGE/backend:latest
   services:
