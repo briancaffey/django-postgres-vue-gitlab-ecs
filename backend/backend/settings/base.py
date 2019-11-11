@@ -242,8 +242,8 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
-
 AWS_STATIC_LOCATION = 'static'
+
 PRIVATE_FILE_STORAGE = 'backend.storage_backends.PrivateMediaStorage'
 
 
