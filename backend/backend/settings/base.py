@@ -149,6 +149,7 @@ DATABASES = {
 ASGI_APPLICATION = 'backend.routing.application'
 
 # Redis
+
 REDIS_SERVICE_HOST = \
     os.environ.get(
         'REDIS_SERVICE_HOST',
@@ -242,8 +243,8 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 
 AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
-
 AWS_STATIC_LOCATION = 'static'
+
 PRIVATE_FILE_STORAGE = 'backend.storage_backends.PrivateMediaStorage'
 
 
