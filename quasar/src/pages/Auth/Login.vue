@@ -6,6 +6,12 @@
         <q-btn
           type="a"
           class="full-width q-mt-md"
+          :href="$store.getters.oauthUrl('google-oauth2')"
+          >Google</q-btn
+        >
+        <q-btn
+          type="a"
+          class="full-width q-mt-md"
           :href="$store.getters.oauthUrl('github')"
           >GitHub</q-btn
         >
