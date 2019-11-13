@@ -22,6 +22,14 @@ const oauth = {
       nonce: "forewijf43oirjoifj",
       login_hint: ""
     }
+  },
+  facebook: {
+    url: "https://www.facebook.com/v5.0/dialog/oauth",
+    params: {
+      client_id: process.env.FACEBOOK_KEY,
+      redirect_uri: `${url}/auth/google-oauth2/callback`,
+      state: "eworifjeovivoiej" // TODO: change these
+    }
   }
 };
 

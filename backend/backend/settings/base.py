@@ -69,13 +69,16 @@ SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 for key in ['GITHUB_KEY',
             'GITHUB_SECRET',
             'GOOGLE_OAUTH2_KEY',
-            'GOOGLE_OAUTH2_SECRET'
+            'GOOGLE_OAUTH2_SECRET',
+            'FACEBOOK_KEY',
+            'FACEBOOK_SECRET'
             ]:
     # Use exec instead of eval here because we're not
     # just trying to evaluate a dynamic value here;

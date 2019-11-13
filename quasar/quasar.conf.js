@@ -82,20 +82,26 @@ module.exports = function(ctx) {
               `${process.env.HTTP_PROTOCOL}://${process.env.DOMAIN_NAME}`
             ),
             WS_PING_PONG: JSON.stringify(
-              `${process.env.WS_PROTOCOL}://${process.env.DOMAIN_NAME}/ws/ping-pong/`
+              `${process.env.WS_PROTOCOL}://${
+                process.env.DOMAIN_NAME
+              }/ws/ping-pong/`
             ),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
-            GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY)
+            GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY),
+            FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY)
           }
         : {
             API_URL: JSON.stringify(
               `${process.env.HTTP_PROTOCOL}://${process.env.DOMAIN_NAME}`
             ),
             WS_PING_PONG: JSON.stringify(
-              `${process.env.WS_PROTOCOL}://${process.env.DOMAIN_NAME}/ws/ping-pong/`
+              `${process.env.WS_PROTOCOL}://${
+                process.env.DOMAIN_NAME
+              }/ws/ping-pong/`
             ),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
-            GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY)
+            GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY),
+            FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY)
           },
       scopeHoisting: true,
       useNotifier: false,

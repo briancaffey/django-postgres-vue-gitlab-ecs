@@ -70,3 +70,11 @@ def get_access_token_from_code(backend, code):
         token = r.json()['access_token']
 
         return token
+
+    elif backend == "facebook":
+
+        print(r.json())
+
+        token = r.json()['access_token']
+
+        return token
