@@ -118,7 +118,7 @@ services:
     build:
       context: ./backend
       dockerfile: scripts/dev/Dockerfile
-    entrypoint: /start_asgi.sh
+    command: bash -c 'python3 manage.py watch_daphne'
     volumes:
       - ./backend:/code
     ports: []
