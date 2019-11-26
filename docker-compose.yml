@@ -111,6 +111,7 @@ services:
       - REDIS_SERVICE_HOST=redis
     depends_on:
       - postgres
+      - redis
 
   asgiserver:
     <<: *backend
