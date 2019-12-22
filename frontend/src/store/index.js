@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import user from "./modules/user";
 import auth from "./modules/auth";
 import chat from "./modules/chat";
-import socialAuth from "./modules/socialAuth";
 
 Vue.use(Vuex);
 
@@ -13,8 +12,7 @@ export default new Vuex.Store({
   modules: {
     user,
     auth,
-    chat,
-    socialAuth
+    chat
   },
   strict: debug
 });
