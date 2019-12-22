@@ -22,6 +22,7 @@ def get_payload(backend, code):
             'client_secret': client_secret,
         }
 
+    # TODO: change `localhost` to env var
     elif backend == 'google-oauth2':
         payload = {
             'code': code,
