@@ -113,6 +113,12 @@ Set permissions on the files in the `accounts` app:
 sudo chown -R $USER:$USER .
 ```
 
+Move the app to be inside the Django project:
+
+```
+mv accounts/ backend/
+```
+
 ### URL Routing
 
 Now let's hook up our `accounts` app to the rest of our Django project. Add `'accounts'` to `INSTALLED_APPS` and add the following to the `urls.py` file in `backend`:
