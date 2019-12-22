@@ -1,7 +1,7 @@
 <template>
   <base-page>
     <div class="login">
-      <page-header>Loginoij</page-header>
+      <page-header>Login</page-header>
       <base-card class="card">
         <q-btn
           type="a"
