@@ -9,5 +9,9 @@ OAUTH = {
     'google-oauth2': {
         'name': 'google-oauth2',
         'url': 'https://oauth2.googleapis.com/token'
+    },
+    'facebook': {
+        'name': 'facebook',
+        'url': 'https://graph.facebook.com/v5.0/oauth/access_token'
     }
 }

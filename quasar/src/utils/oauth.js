@@ -27,8 +27,9 @@ const oauth = {
     url: "https://www.facebook.com/v5.0/dialog/oauth",
     params: {
       client_id: process.env.FACEBOOK_KEY,
-      redirect_uri: `${url}/auth/google-oauth2/callback`,
-      state: "eworifjeovivoiej" // TODO: change these
+      redirect_uri: `${url}/auth/facebook/callback`,
+      state: "eworifjeovivoiej", // TODO: change these
+      scope: "email"
     }
   }
 };

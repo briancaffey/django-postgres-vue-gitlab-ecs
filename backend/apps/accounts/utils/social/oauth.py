@@ -30,6 +30,13 @@ def get_payload(backend, code):
             'redirect_uri': "http://localhost/auth/google-oauth2/callback",
             'grant_type': "authorization_code"
         }
+    elif backend == 'facebook':
+        payload = {
+            'code': code,
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'redirect_uri': 'http://localhost/auth/facebook/callback'
+        }
 
     return payload
 
@@ -38,10 +45,7 @@ def get_access_token_from_code(backend, code):
     """Get access token for any OAuth backend from code"""
 
     url = c.OAUTH[backend]['url']
-
     payload = get_payload(backend, code)
-
-    r = requests.post(url, data=payload)
 
     # different providers have different responses to their oauth endpoints
     # for example:
@@ -50,6 +54,7 @@ def get_access_token_from_code(backend, code):
     #
     #   b'access_token=76e9d25ed009fb7feroifjf0f58jf9rneb0b6b&scope=user&token_type=bearer'
     if backend == "github":
+        r = requests.post(url, data=payload)
 
         # TODO: cleanup logic
         url = "http://example.com?" + str(r.content)
@@ -66,15 +71,13 @@ def get_access_token_from_code(backend, code):
     #   'id_token': 'oierfoie940j.ferferfoprek/refpekf9efoeik.long token'
     # }
     elif backend == "google-oauth2":
+        r = requests.post(url, data=payload)
 
         token = r.json()['access_token']
 
         return token
 
     elif backend == "facebook":
-
-        print(r.json())
-
+        r = requests.get(url, params=payload)
         token = r.json()['access_token']
-
         return token

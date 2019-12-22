@@ -98,6 +98,14 @@ SOCIAL_AUTH_PIPELINE = (
   'social_core.pipeline.user.user_details',
 )
 
+# this is needed to get a user's email from Facebook. See:
+# https://stackoverflow.com/questions/32024327/facebook-doesnt-return-email-python-social-auth
+# https://stackoverflow.com/a/32129851/6084948
+# https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}
+
 # SOCIAL_AUTH_GITHUB_WHITELISTED_DOMAINS=['localhost']
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
