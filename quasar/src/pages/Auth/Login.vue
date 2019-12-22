@@ -3,6 +3,25 @@
     <div class="login">
       <page-header>Login</page-header>
       <base-card class="card">
+        <q-btn
+          type="a"
+          class="full-width q-mt-md"
+          :href="$store.getters.oauthUrl('google-oauth2')"
+          >Google</q-btn
+        >
+        <q-btn
+          type="a"
+          class="full-width q-mt-md"
+          :href="$store.getters.oauthUrl('github')"
+          >GitHub</q-btn
+        >
+        <q-btn
+          type="a"
+          class="full-width q-mt-md"
+          :href="$store.getters.oauthUrl('facebook')"
+          >Facebook</q-btn
+        >
+
         <login-form></login-form>
       </base-card>
       <span class="signup">

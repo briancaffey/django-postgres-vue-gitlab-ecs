@@ -3,7 +3,7 @@ from urllib import parse
 
 import requests
 
-from core import constants as c
+from apps.core import constants as c
 
 
 def get_payload(backend, code):
@@ -66,6 +66,14 @@ def get_access_token_from_code(backend, code):
     #   'id_token': 'oierfoie940j.ferferfoprek/refpekf9efoeik.long token'
     # }
     elif backend == "google-oauth2":
+
+        token = r.json()['access_token']
+
+        return token
+
+    elif backend == "facebook":
+
+        print(r.json())
 
         token = r.json()['access_token']
 

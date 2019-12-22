@@ -4,7 +4,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:11.5
     networks:
       - main
     ports:
@@ -71,6 +71,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - GITHUB_KEY=${GITHUB_KEY}
       - GOOGLE_OAUTH2_KEY=${GOOGLE_OAUTH2_KEY}
+      - FACEBOOK_KEY=${FACEBOOK_KEY}
       - HTTP_PROTOCOL=http
       - WS_PROTOCOL=ws
       - DOMAIN_NAME=${DOMAIN_NAME}
@@ -108,9 +109,12 @@ services:
       - GITHUB_SECRET=${GITHUB_SECRET}
       - GOOGLE_OAUTH2_KEY=${GOOGLE_OAUTH2_KEY}
       - GOOGLE_OAUTH2_SECRET=${GOOGLE_OAUTH2_SECRET}
+      - FACEBOOK_KEY=${FACEBOOK_KEY}
+      - FACEBOOK_SECRET=${FACEBOOK_SECRET}
       - REDIS_SERVICE_HOST=redis
     depends_on:
       - postgres
+      - redis
 
   asgiserver:
     <<: *backend
@@ -118,7 +122,7 @@ services:
     build:
       context: ./backend
       dockerfile: scripts/dev/Dockerfile
-    entrypoint: /start_asgi.sh
+    command: bash -c 'python3 manage.py watch_daphne'
     volumes:
       - ./backend:/code
     ports: []
