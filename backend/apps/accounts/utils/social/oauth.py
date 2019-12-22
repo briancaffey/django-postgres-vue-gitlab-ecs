@@ -3,7 +3,7 @@ from urllib import parse
 
 import requests
 
-from core import constants as c
+from apps.core import constants as c
 
 
 def get_payload(backend, code):
