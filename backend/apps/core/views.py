@@ -64,26 +64,6 @@ def debug_task_view(request):
     return JsonResponse({'message': 'Task sent to queue.'})
 
 
-def verify_domain(request):
-    valid_subdomains = ['test', 'sub', 'localhost']
-    subdomain = request.META['HTTP_HOST'].split('.')[0]
-    if subdomain in valid_subdomains:
-        return JsonResponse(
-            {
-                "message": "OK",
-                "subdomain": subdomain,
-            },
-            status=200
-        )
-    else:
-        return JsonResponse(
-            {
-                "message": "Subdomain does not exist"
-            },
-            status=404
-        )
-
-
 def send_test_email(request):
     send_test_email_task.delay()
     return JsonResponse({"message": "Success"})

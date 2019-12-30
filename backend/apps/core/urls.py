@@ -19,14 +19,9 @@ urlpatterns = [
         name="debug-task"
     ),
     path(
-        'verify-domain/',
-        views.verify_domain,
-        name="verify-domain"
-    ),
-    path(
         'debug/send-test-email/',
         views.send_test_email,
-        name="verify-domain"
+        name="send-test-email"
     ),
     path(
         'debug/redis/',
