@@ -14,6 +14,12 @@
         icon="home"
         :caption="$t('leftDrawer.home.sub')"
       />
+      <left-menu-link
+        :label="$t('Banking')"
+        to="/banking"
+        icon="money"
+        :caption="$t('Banking info')"
+      />
 
       <left-menu-link
         :label="$t('leftDrawer.about.main')"

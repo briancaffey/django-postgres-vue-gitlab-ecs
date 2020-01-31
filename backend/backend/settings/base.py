@@ -54,6 +54,7 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     'apps.accounts',
     'apps.core',
+    'apps.banking'
 ]
 
 THIRD_PARTY_APPS = [

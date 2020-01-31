@@ -15,3 +15,5 @@ OAUTH = {
         'url': 'https://graph.facebook.com/v5.0/oauth/access_token'
     }
 }
+
+TEST_BASE_URL = "http://localhost"

@@ -44,6 +44,14 @@ const routes = [
         component: () => import("pages/About.vue")
       },
       {
+        path: "banking",
+        component: () => import("pages/Banking/index.vue")
+      },
+      {
+        path: "transactions",
+        component: () => import("pages/Transactions/index.vue")
+      },
+      {
         path: "protected",
         // beforeEnter: ifAuthenticated,
         component: () => import("pages/Protected.vue")

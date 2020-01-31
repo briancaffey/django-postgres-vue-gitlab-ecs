@@ -4,6 +4,7 @@ import ui from "./ui";
 import auth from "./auth";
 import user from "./user";
 import social from "./social";
+import banking from "./banking";
 
 // import example from './module-example'
 
@@ -19,7 +20,8 @@ export default function(/* { ssrContext } */) {
       ui,
       auth,
       user,
-      social
+      social,
+      banking
     },
 
     // enable strict mode (adds overhead!)
