@@ -20,6 +20,12 @@
         icon="money"
         :caption="$t('Banking info')"
       />
+      <left-menu-link
+        :label="$t('HN Clone')"
+        to="/hn-clone"
+        icon="info"
+        :caption="$t('HN Clone Using GraphQL')"
+      />
 
       <left-menu-link
         :label="$t('leftDrawer.about.main')"

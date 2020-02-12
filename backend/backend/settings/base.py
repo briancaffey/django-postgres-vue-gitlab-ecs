@@ -54,20 +54,32 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     'apps.accounts',
     'apps.core',
-    'apps.banking'
+    'apps.banking',
+    'apps.hn'
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework',
     'corsheaders',
     'social_django',
+    'graphene_django'
 ]
+
+# GraphQL
+
+GRAPHENE = {
+    'SCHEMA': 'backend.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware'
+    ]
+}
 
 # Python Social Auth
 
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
 AUTHENTICATION_BACKENDS = (
+    'graphql_jwt.backends.JSONWebTokenBackend',
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',

@@ -65,6 +65,7 @@ module.exports = {
       {
         text: "Topics",
         items: [
+          { text: "GraphQL", link: "/topics/graphql/" },
           { text: "Minikube", link: "/topics/minikube/" },
           { text: "Helm", link: "/topics/helm/" }
         ]

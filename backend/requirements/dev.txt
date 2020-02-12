@@ -4,3 +4,4 @@ django-extensions==2.1.6  # NOTE: in installed_apps
 Werkzeug==0.15.2 # used for runserver_plus exception console
 ipython==7.4.0
 jupyter==1.0.0
+gql==0.3.0

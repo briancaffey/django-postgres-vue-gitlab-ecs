@@ -48,6 +48,10 @@ const routes = [
         component: () => import("pages/Banking/index.vue")
       },
       {
+        path: "hn-clone",
+        component: () => import("pages/HackerNewsClone/index.vue")
+      },
+      {
         path: "transactions",
         component: () => import("pages/Transactions/index.vue")
       },
