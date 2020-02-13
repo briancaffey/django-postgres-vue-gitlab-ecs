@@ -1,8 +1,8 @@
 <template>
   <base-page>
     <page-header>Hacker News Clone</page-header>
-    <div v-for="(link, i) in links" :key="i">
-      {{ link.id }} {{ link.url }}
+    <div v-for="(link, i) in $store.getters['hn/getLinks']" :key="i">
+      {{ link.url }}
 
       <div v-for="(vote, j) in link.votes" :key="j">
         {{ vote.id }} {{ vote.user.email }}
@@ -12,23 +12,9 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
 export default {
-  apollo: {
-    links: gql`
-      query {
-        links {
-          url
-          id
-          votes {
-            id
-            user {
-              email
-            }
-          }
-        }
-      }
-    `
+  created() {
+    this.$store.dispatch("hn/getLinks", { vm: this });
   }
 };
 </script>

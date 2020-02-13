@@ -2,28 +2,40 @@ import VueApollo from "vue-apollo";
 
 import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
+import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
-  // You should use an absolute URL here
   uri: `${process.env.API_URL}/graphql/`
 });
 
 // Cache implementation
 const cache = new InMemoryCache();
 
-// Create the apollo client
-const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache
-});
+export default ({ app, Vue, store }) => {
+  const authLink = setContext((_, { headers }) => {
+    let authorization = "";
+    if (store.getters.isAuthenticated) {
+      authorization = `Bearer ${store.getters.getToken}`;
+    }
+    return {
+      headers: {
+        ...headers,
+        authorization
+      }
+    };
+  });
 
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
-});
+  const apolloClient = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache
+  });
 
-export default ({ app, Vue }) => {
+  const apolloProvider = new VueApollo({
+    defaultClient: apolloClient
+  });
+
   Vue.use(VueApollo);
   app.apolloProvider = apolloProvider;
 };

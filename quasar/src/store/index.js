@@ -5,6 +5,7 @@ import auth from "./auth";
 import user from "./user";
 import social from "./social";
 import banking from "./banking";
+import hn from "./hn";
 
 // import example from './module-example'
 
@@ -21,7 +22,8 @@ export default function(/* { ssrContext } */) {
       auth,
       user,
       social,
-      banking
+      banking,
+      hn
     },
 
     // enable strict mode (adds overhead!)

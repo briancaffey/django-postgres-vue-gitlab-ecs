@@ -15,6 +15,7 @@
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-link": "^1.2.13",
+    "apollo-link-context": "^1.0.19",
     "apollo-link-http": "^1.5.16",
     "axios": "^0.18.1",
     "emoji-mart-vue": "^2.6.6",
