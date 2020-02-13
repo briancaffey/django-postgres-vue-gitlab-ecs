@@ -11,3 +11,5 @@ To setup the Apollo client with Vue Apollo, I followed along with the following 
 2. [https://lmiller1990.github.io/electic/posts/integrating_apollo_with_vue_and_vuex.html](https://lmiller1990.github.io/electic/posts/integrating_apollo_with_vue_and_vuex.html)
 
 3. [https://apollo.vuejs.org/](https://apollo.vuejs.org/)
+
+4. [https://www.apollographql.com/docs/react/networking/authentication/#header](https://www.apollographql.com/docs/react/networking/authentication/#header)
