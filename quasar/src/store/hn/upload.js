@@ -21,6 +21,10 @@ const actions = {
             id
             url
             description
+            postedBy {
+              email
+              id
+            }
           }
         }
       `,

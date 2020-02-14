@@ -17,7 +17,9 @@ export default ({ app, Vue, store }) => {
   const authLink = setContext((_, { headers }) => {
     let authorization = "";
     if (store.getters.isAuthenticated) {
-      authorization = `Bearer ${store.getters.getToken}`;
+      authorization = `JWT ${store.getters["gqljwt/getToken"]}`;
+      console.log("jwt is...");
+      console.log(store.getters["gqljwt/getToken"]);
     }
     return {
       headers: {

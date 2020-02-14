@@ -10,6 +10,7 @@ export const AUTH_REFRESH = "AUTH_REFRESH";
 import Vue from "vue";
 import { Cookies } from "quasar";
 import { USER_REQUEST } from "../user";
+import gqljwt from "./gqljwt";
 
 const state = {
   token: Cookies.get("user-token") || "",
@@ -84,9 +85,14 @@ const mutations = {
   }
 };
 
+const modules = {
+  gqljwt
+};
+
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
+  modules
 };

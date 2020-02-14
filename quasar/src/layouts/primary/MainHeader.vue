@@ -38,6 +38,27 @@
         color="white"
         text-color="primary"
         label="Login"
+        v-if="!$store.getters['gqljwt/isAuthenticated']"
+        no-caps
+        @click="$router.push('/login-gql')"
+      />
+      <q-btn
+        id="logout"
+        :ripple="false"
+        color="white"
+        text-color="primary"
+        label="Logout"
+        v-if="$store.getters['gqljwt/isAuthenticated']"
+        no-caps
+        @click="logout"
+      />
+
+      <q-btn
+        id="login"
+        :ripple="false"
+        color="white"
+        text-color="primary"
+        label="Login"
         v-if="!$store.getters.isAuthenticated"
         no-caps
         @click="$router.push('/login')"

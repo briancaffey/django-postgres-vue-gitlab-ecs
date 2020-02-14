@@ -38,6 +38,7 @@ const routes = [
         component: () => import("pages/Index.vue")
       },
       { path: "login", component: () => import("pages/Auth/Login.vue") },
+      { path: "login-gql", component: () => import("pages/Auth/LoginGQL.vue") },
       { path: "signup", component: () => import("pages/Auth/SignUp.vue") },
       {
         path: "about",
