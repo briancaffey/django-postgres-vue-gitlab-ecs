@@ -1,14 +1,13 @@
-version: '3.7'
+version: "3.7"
 
 services:
-
   postgres:
     container_name: postgres
     image: postgres:11.5
     networks:
       - main
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
@@ -30,9 +29,9 @@ services:
     image: rediscommander/redis-commander:latest
     restart: always
     environment:
-    - REDIS_HOST=redis
+      - REDIS_HOST=redis
     ports:
-    - "8085:8081"
+      - "8085:8081"
     networks:
       - main
 
