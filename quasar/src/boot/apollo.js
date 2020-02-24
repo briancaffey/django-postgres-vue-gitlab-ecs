@@ -18,8 +18,6 @@ export default ({ app, Vue, store }) => {
     let authorization = "";
     if (store.getters.isAuthenticated) {
       authorization = `JWT ${store.getters["gqljwt/getToken"]}`;
-      console.log("jwt is...");
-      console.log(store.getters["gqljwt/getToken"]);
     }
     return {
       headers: {
