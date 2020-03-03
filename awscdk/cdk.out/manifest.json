@@ -1,0 +1,137 @@
+{
+  "version": "1.21.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "awscdk": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "awscdk.template.json"
+      },
+      "metadata": {
+        "/awscdk/SiteCert/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SiteCert6025247C",
+            "trace": [
+              "new Certificate (/tmp/jsii-kernel-wA2tI6/node_modules/@aws-cdk/aws-certificatemanager/lib/certificate.js:27:22)",
+              "/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:49",
+              "Kernel._wrapSandboxCode (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8298:20)",
+              "Kernel._create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:26)",
+              "Kernel.create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7585:21)",
+              "KernelHost.processRequest (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7372:28)",
+              "KernelHost.run (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7312:14)",
+              "Immediate._onImmediate (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7315:37)",
+              "processImmediate (internal/timers.js:456:21)"
+            ]
+          }
+        ],
+        "/awscdk/StaticSite/StaticSiteBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StaticSiteStaticSiteBucket442CE34F",
+            "trace": [
+              "new Bucket (/tmp/jsii-kernel-wA2tI6/node_modules/@aws-cdk/aws-s3/lib/bucket.js:366:26)",
+              "/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:49",
+              "Kernel._wrapSandboxCode (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8298:20)",
+              "Kernel._create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:26)",
+              "Kernel.create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7585:21)",
+              "KernelHost.processRequest (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7372:28)",
+              "KernelHost.run (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7312:14)",
+              "Immediate._onImmediate (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7315:37)",
+              "processImmediate (internal/timers.js:456:21)"
+            ]
+          }
+        ],
+        "/awscdk/StaticSite/StaticSiteBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StaticSiteStaticSiteBucketPolicyC8E62485",
+            "trace": [
+              "new BucketPolicy (/tmp/jsii-kernel-wA2tI6/node_modules/@aws-cdk/aws-s3/lib/bucket-policy.js:21:9)",
+              "Bucket.addToResourcePolicy (/tmp/jsii-kernel-wA2tI6/node_modules/@aws-cdk/aws-s3/lib/bucket.js:125:27)",
+              "/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7665:51",
+              "Kernel._wrapSandboxCode (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8298:20)",
+              "/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7665:25",
+              "Kernel._ensureSync (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8274:20)",
+              "Kernel.invoke (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7664:26)",
+              "KernelHost.processRequest (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7372:28)",
+              "KernelHost.run (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7312:14)",
+              "Immediate._onImmediate (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7315:37)",
+              "processImmediate (internal/timers.js:456:21)"
+            ]
+          }
+        ],
+        "/awscdk/StaticSite/CloudFrontDistribution/CFDistribution": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StaticSiteCloudFrontDistributionCFDistributionA70E78CD",
+            "trace": [
+              "new CloudFrontWebDistribution (/tmp/jsii-kernel-wA2tI6/node_modules/@aws-cdk/aws-cloudfront/lib/web_distribution.js:346:30)",
+              "/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:49",
+              "Kernel._wrapSandboxCode (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8298:20)",
+              "Kernel._create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:26)",
+              "Kernel.create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7585:21)",
+              "KernelHost.processRequest (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7372:28)",
+              "KernelHost.run (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7312:14)",
+              "Immediate._onImmediate (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7315:37)",
+              "processImmediate (internal/timers.js:456:21)"
+            ]
+          }
+        ],
+        "/awscdk/StaticSite/AliasRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "StaticSiteAliasRecord4F27A661",
+            "trace": [
+              "new RecordSet (/tmp/jsii-kernel-wA2tI6/node_modules/@aws-cdk/aws-route53/lib/record-set.js:59:27)",
+              "new ARecord (/tmp/jsii-kernel-wA2tI6/node_modules/@aws-cdk/aws-route53/lib/record-set.js:85:9)",
+              "/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:49",
+              "Kernel._wrapSandboxCode (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:8298:20)",
+              "Kernel._create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7838:26)",
+              "Kernel.create (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7585:21)",
+              "KernelHost.processRequest (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7372:28)",
+              "KernelHost.run (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7312:14)",
+              "Immediate._onImmediate (/home/brian/gitlab/django-postgres-vue-gitlab-ecs/awscdk/.env/lib/python3.6/site-packages/jsii/_embedded/jsii/jsii-runtime.js:7315:37)",
+              "processImmediate (internal/timers.js:456:21)"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "runtime": {
+    "libraries": {
+      "@aws-cdk/cx-api": "1.25.0",
+      "@aws-cdk/core": "1.25.0",
+      "@aws-cdk/region-info": "1.25.0",
+      "@aws-cdk/aws-iam": "1.25.0",
+      "@aws-cdk/aws-cloudwatch": "1.25.0",
+      "@aws-cdk/aws-logs": "1.25.0",
+      "@aws-cdk/aws-events": "1.25.0",
+      "@aws-cdk/aws-kms": "1.25.0",
+      "@aws-cdk/aws-s3": "1.25.0",
+      "@aws-cdk/aws-ssm": "1.25.0",
+      "@aws-cdk/aws-ec2": "1.25.0",
+      "@aws-cdk/assets": "1.25.0",
+      "@aws-cdk/aws-s3-assets": "1.25.0",
+      "@aws-cdk/aws-sqs": "1.25.0",
+      "@aws-cdk/aws-lambda": "1.25.0",
+      "@aws-cdk/aws-sns": "1.25.0",
+      "@aws-cdk/aws-cloudformation": "1.25.0",
+      "@aws-cdk/aws-route53": "1.25.0",
+      "@aws-cdk/aws-certificatemanager": "1.25.0",
+      "@aws-cdk/aws-cloudfront": "1.25.0",
+      "@aws-cdk/aws-elasticloadbalancingv2": "1.25.0",
+      "@aws-cdk/aws-apigateway": "1.25.0",
+      "@aws-cdk/aws-elasticloadbalancing": "1.25.0",
+      "@aws-cdk/aws-route53-targets": "1.25.0",
+      "jsii-runtime": "Python/3.6.8"
+    }
+  }
+}

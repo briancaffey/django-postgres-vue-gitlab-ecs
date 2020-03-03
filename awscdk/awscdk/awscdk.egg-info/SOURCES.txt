@@ -1,0 +1,7 @@
+README.md
+setup.py
+awscdk/awscdk.egg-info/PKG-INFO
+awscdk/awscdk.egg-info/SOURCES.txt
+awscdk/awscdk.egg-info/dependency_links.txt
+awscdk/awscdk.egg-info/requires.txt
+awscdk/awscdk.egg-info/top_level.txt

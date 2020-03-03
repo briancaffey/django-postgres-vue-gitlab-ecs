@@ -1,0 +1,6 @@
+aws-cdk.core==1.25.0
+aws-cdk.aws_certificatemanager==1.25.0
+aws-cdk.aws_route53==1.25.0
+aws-cdk.aws_s3==1.25.0
+aws-cdk.aws_cloudfront==1.25.0
+aws-cdk.aws_route53_targets==1.25.0

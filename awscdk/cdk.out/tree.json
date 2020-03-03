@@ -1,0 +1,227 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree"
+      },
+      "awscdk": {
+        "id": "awscdk",
+        "path": "awscdk",
+        "children": {
+          "HostedZone": {
+            "id": "HostedZone",
+            "path": "awscdk/HostedZone",
+            "children": {
+              "hosted_zone": {
+                "id": "hosted_zone",
+                "path": "awscdk/HostedZone/hosted_zone"
+              }
+            }
+          },
+          "SiteCert": {
+            "id": "SiteCert",
+            "path": "awscdk/SiteCert",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "awscdk/SiteCert/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CertificateManager::Certificate",
+                  "aws:cdk:cloudformation:props": {
+                    "domainName": "*.mysite.com",
+                    "domainValidationOptions": [
+                      {
+                        "domainName": "*.mysite.com",
+                        "validationDomain": "mysite.com"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "StaticSite": {
+            "id": "StaticSite",
+            "path": "awscdk/StaticSite",
+            "children": {
+              "StaticSiteBucket": {
+                "id": "StaticSiteBucket",
+                "path": "awscdk/StaticSite/StaticSiteBucket",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "awscdk/StaticSite/StaticSiteBucket/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                      "aws:cdk:cloudformation:props": {
+                        "accessControl": "PublicRead",
+                        "bucketName": "mysite.com"
+                      }
+                    }
+                  },
+                  "Notifications": {
+                    "id": "Notifications",
+                    "path": "awscdk/StaticSite/StaticSiteBucket/Notifications"
+                  },
+                  "Policy": {
+                    "id": "Policy",
+                    "path": "awscdk/StaticSite/StaticSiteBucket/Policy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "awscdk/StaticSite/StaticSiteBucket/Policy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "bucket": {
+                              "Ref": "StaticSiteStaticSiteBucket442CE34F"
+                            },
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "s3:GetObject",
+                                  "Effect": "Allow",
+                                  "Principal": "*",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "StaticSiteStaticSiteBucket442CE34F",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/*"
+                                      ]
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "CloudFrontDistribution": {
+                "id": "CloudFrontDistribution",
+                "path": "awscdk/StaticSite/CloudFrontDistribution",
+                "children": {
+                  "AliasConfigurationCert": {
+                    "id": "AliasConfigurationCert",
+                    "path": "awscdk/StaticSite/CloudFrontDistribution/AliasConfigurationCert"
+                  },
+                  "CFDistribution": {
+                    "id": "CFDistribution",
+                    "path": "awscdk/StaticSite/CloudFrontDistribution/CFDistribution",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                      "aws:cdk:cloudformation:props": {
+                        "distributionConfig": {
+                          "enabled": true,
+                          "defaultRootObject": "index.html",
+                          "httpVersion": "http2",
+                          "priceClass": "PriceClass_100",
+                          "ipv6Enabled": true,
+                          "customErrorResponses": [
+                            {
+                              "errorCode": 403,
+                              "errorCachingMinTtl": 0,
+                              "responseCode": 200,
+                              "responsePagePath": "/index.html"
+                            },
+                            {
+                              "errorCode": 404,
+                              "errorCachingMinTtl": 0,
+                              "responseCode": 200,
+                              "responsePagePath": "/index.html"
+                            }
+                          ],
+                          "origins": [
+                            {
+                              "id": "origin1",
+                              "domainName": {
+                                "Fn::GetAtt": [
+                                  "StaticSiteStaticSiteBucket442CE34F",
+                                  "RegionalDomainName"
+                                ]
+                              },
+                              "s3OriginConfig": {}
+                            }
+                          ],
+                          "defaultCacheBehavior": {
+                            "allowedMethods": [
+                              "GET",
+                              "HEAD"
+                            ],
+                            "cachedMethods": [
+                              "GET",
+                              "HEAD"
+                            ],
+                            "compress": true,
+                            "forwardedValues": {
+                              "queryString": false,
+                              "cookies": {
+                                "forward": "none"
+                              }
+                            },
+                            "targetOriginId": "origin1",
+                            "viewerProtocolPolicy": "redirect-to-https"
+                          },
+                          "aliases": [
+                            "mysite.com",
+                            "*.mysite.com"
+                          ],
+                          "viewerCertificate": {
+                            "acmCertificateArn": {
+                              "Ref": "SiteCert6025247C"
+                            },
+                            "sslSupportMethod": "sni-only"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "AliasRecord": {
+                "id": "AliasRecord",
+                "path": "awscdk/StaticSite/AliasRecord",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "awscdk/StaticSite/AliasRecord/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                      "aws:cdk:cloudformation:props": {
+                        "name": "mysite.com.",
+                        "type": "A",
+                        "aliasTarget": {
+                          "hostedZoneId": "Z2FDTNDATAQYW2",
+                          "dnsName": {
+                            "Fn::GetAtt": [
+                              "StaticSiteCloudFrontDistributionCFDistributionA70E78CD",
+                              "DomainName"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
