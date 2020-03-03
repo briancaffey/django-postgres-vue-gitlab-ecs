@@ -2,7 +2,6 @@ Description: >
   This template deploys a static site using S3, CloudFront and Route53.
 
 Parameters:
-
   StackName:
     Type: String
     Description: The name of the stack
@@ -37,18 +36,18 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-        - Sid: PublicReadForGetBucketObjects
-          Effect: "Allow"
-          Principal: "*"
-          Action: "s3:GetObject"
-          Resource: !Sub "${StaticSiteBucket.Arn}/*"
+          - Sid: PublicReadForGetBucketObjects
+            Effect: "Allow"
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${StaticSiteBucket.Arn}/*"
   CFDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:
       DistributionConfig:
         Aliases:
-        - !Ref AppUrl
-        - !Sub "*.${AppUrl}"
+          - !Ref AppUrl
+          - !Sub "*.${AppUrl}"
         DefaultRootObject: "index.html"
         DefaultCacheBehavior:
           TargetOriginId: !Sub "S3-${StaticSiteBucket}"
@@ -56,20 +55,20 @@ Resources:
           ForwardedValues:
             QueryString: false
         CustomErrorResponses:
-        - ErrorCachingMinTTL: 0
-          ErrorCode: 403
-          ResponseCode: 200
-          ResponsePagePath: "/index.html"
-        - ErrorCachingMinTTL: 0
-          ErrorCode: 404
-          ResponseCode: 200
-          ResponsePagePath: "/index.html"
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: "/index.html"
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: "/index.html"
         Enabled: true
         Origins:
-        - DomainName: !GetAtt StaticSiteBucket.DomainName
-          Id: !Sub "S3-${StaticSiteBucket}"
-          S3OriginConfig:
-            OriginAccessIdentity: ""
+          - DomainName: !GetAtt StaticSiteBucket.DomainName
+            Id: !Sub "S3-${StaticSiteBucket}"
+            S3OriginConfig:
+              OriginAccessIdentity: ""
         ViewerCertificate:
           AcmCertificateArn: !Ref WildcardSSLCertificateArn
           SslSupportMethod: "sni-only"
