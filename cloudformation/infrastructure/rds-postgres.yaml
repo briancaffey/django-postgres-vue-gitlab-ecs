@@ -2,7 +2,6 @@ Description: >
   This template deploys a Postgres RDS instance
 
 Parameters:
-
   StackName:
     Type: String
     Description: The name of the stack
@@ -27,14 +26,12 @@ Mappings:
       SnapshotArn: ""
 
 Resources:
-
   DatabaseSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
+    Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: 'RDS-DBSG'
+      GroupDescription: "RDS-DBSG"
       VpcId:
-        Fn::ImportValue:
-          !Sub ${StackName}:VpcId
+        Fn::ImportValue: !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 5432
@@ -42,14 +39,14 @@ Resources:
           SourceSecurityGroupId: !Ref SourceSecurityGroupId
 
   DBSubnetGroup:
-    Type: 'AWS::RDS::DBSubnetGroup'
+    Type: "AWS::RDS::DBSubnetGroup"
     Properties:
-      DBSubnetGroupName: 'My DB Subnet Group'
-      DBSubnetGroupDescription: !Ref 'AWS::StackName'
-      SubnetIds: !Split [',', !Ref PrivateSubnets]
+      DBSubnetGroupName: "My DB Subnet Group"
+      DBSubnetGroupDescription: !Ref "AWS::StackName"
+      SubnetIds: !Split [",", !Ref PrivateSubnets]
 
   RDSPostgres:
-    Type: 'AWS::RDS::DBInstance'
+    Type: "AWS::RDS::DBInstance"
     DeletionPolicy: Delete
     Properties:
       AllocatedStorage: "5"
@@ -58,7 +55,8 @@ Resources:
       EngineVersion: "10.6"
       MasterUsername: "postgres"
       MasterUserPassword: "postgres"
-      DBSnapshotIdentifier: !FindInMap [SnapshotMappings, !Ref EnvironmentName, SnapshotArn]
+      DBSnapshotIdentifier:
+        !FindInMap [SnapshotMappings, !Ref EnvironmentName, SnapshotArn]
       Port: "5432"
       PubliclyAccessible: true
       StorageType: standard

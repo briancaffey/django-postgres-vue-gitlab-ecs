@@ -3,13 +3,21 @@
     "SiteCert6025247C": {
       "Type": "AWS::CertificateManager::Certificate",
       "Properties": {
-        "DomainName": "*.mysite.com",
+        "DomainName": "jamescaffey.com",
         "DomainValidationOptions": [
           {
-            "DomainName": "*.mysite.com",
-            "ValidationDomain": "mysite.com"
+            "DomainName": "jamescaffey.com",
+            "ValidationDomain": "jamescaffey.com"
+          },
+          {
+            "DomainName": "*.jamescaffey.com",
+            "ValidationDomain": "jamescaffey.com"
           }
-        ]
+        ],
+        "SubjectAlternativeNames": [
+          "*.jamescaffey.com"
+        ],
+        "ValidationMethod": "DNS"
       },
       "Metadata": {
         "aws:cdk:path": "awscdk/SiteCert/Resource"
@@ -19,7 +27,7 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "mysite.com"
+        "BucketName": "jamescaffey.com"
       },
       "UpdateReplacePolicy": "Delete",
       "DeletionPolicy": "Delete",
@@ -67,8 +75,8 @@
       "Properties": {
         "DistributionConfig": {
           "Aliases": [
-            "mysite.com",
-            "*.mysite.com"
+            "jamescaffey.com",
+            "*.jamescaffey.com"
           ],
           "CustomErrorResponses": [
             {
@@ -135,7 +143,7 @@
     "StaticSiteAliasRecord4F27A661": {
       "Type": "AWS::Route53::RecordSet",
       "Properties": {
-        "Name": "mysite.com.",
+        "Name": "*.jamescaffey.com.",
         "Type": "A",
         "AliasTarget": {
           "DNSName": {
@@ -145,10 +153,31 @@
             ]
           },
           "HostedZoneId": "Z2FDTNDATAQYW2"
-        }
+        },
+        "HostedZoneId": "Z1EJVU8DMBV0XG"
       },
       "Metadata": {
         "aws:cdk:path": "awscdk/StaticSite/AliasRecord/Resource"
+      }
+    },
+    "StaticSiteAliasRecord1B2F1F710": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "Name": "jamescaffey.com.",
+        "Type": "A",
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "StaticSiteCloudFrontDistributionCFDistributionA70E78CD",
+              "DomainName"
+            ]
+          },
+          "HostedZoneId": "Z2FDTNDATAQYW2"
+        },
+        "HostedZoneId": "Z1EJVU8DMBV0XG"
+      },
+      "Metadata": {
+        "aws:cdk:path": "awscdk/StaticSite/AliasRecord1/Resource"
       }
     }
   }

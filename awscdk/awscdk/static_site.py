@@ -82,7 +82,18 @@ class StaticSite(core.Construct):
             target=route53.AddressRecordTarget.from_alias(
                 targets.CloudFrontTarget(self.distribution)
             ),
-            zone=hosted_zone,
+            zone=hosted_zone.hosted_zone,
             # don't forget the '.' at the end of the record name!
             record_name=f"*.{os.environ.get('DOMAIN_NAME', 'mysite.com')}."
+        )
+
+
+        route53.ARecord(
+            self, "AliasRecord1",
+            target=route53.AddressRecordTarget.from_alias(
+                targets.CloudFrontTarget(self.distribution)
+            ),
+            zone=hosted_zone.hosted_zone,
+            # don't forget the '.' at the end of the record name!
+            record_name=f"{os.environ.get('DOMAIN_NAME', 'mysite.com')}."
         )

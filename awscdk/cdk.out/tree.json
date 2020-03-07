@@ -32,13 +32,21 @@
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CertificateManager::Certificate",
                   "aws:cdk:cloudformation:props": {
-                    "domainName": "*.mysite.com",
+                    "domainName": "jamescaffey.com",
                     "domainValidationOptions": [
                       {
-                        "domainName": "*.mysite.com",
-                        "validationDomain": "mysite.com"
+                        "domainName": "jamescaffey.com",
+                        "validationDomain": "jamescaffey.com"
+                      },
+                      {
+                        "domainName": "*.jamescaffey.com",
+                        "validationDomain": "jamescaffey.com"
                       }
-                    ]
+                    ],
+                    "subjectAlternativeNames": [
+                      "*.jamescaffey.com"
+                    ],
+                    "validationMethod": "DNS"
                   }
                 }
               }
@@ -59,7 +67,7 @@
                       "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                       "aws:cdk:cloudformation:props": {
                         "accessControl": "PublicRead",
-                        "bucketName": "mysite.com"
+                        "bucketName": "jamescaffey.com"
                       }
                     }
                   },
@@ -177,8 +185,8 @@
                             "viewerProtocolPolicy": "redirect-to-https"
                           },
                           "aliases": [
-                            "mysite.com",
-                            "*.mysite.com"
+                            "jamescaffey.com",
+                            "*.jamescaffey.com"
                           ],
                           "viewerCertificate": {
                             "acmCertificateArn": {
@@ -202,7 +210,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
                       "aws:cdk:cloudformation:props": {
-                        "name": "mysite.com.",
+                        "name": "*.jamescaffey.com.",
                         "type": "A",
                         "aliasTarget": {
                           "hostedZoneId": "Z2FDTNDATAQYW2",
@@ -212,7 +220,35 @@
                               "DomainName"
                             ]
                           }
-                        }
+                        },
+                        "hostedZoneId": "Z1EJVU8DMBV0XG"
+                      }
+                    }
+                  }
+                }
+              },
+              "AliasRecord1": {
+                "id": "AliasRecord1",
+                "path": "awscdk/StaticSite/AliasRecord1",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "awscdk/StaticSite/AliasRecord1/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                      "aws:cdk:cloudformation:props": {
+                        "name": "jamescaffey.com.",
+                        "type": "A",
+                        "aliasTarget": {
+                          "hostedZoneId": "Z2FDTNDATAQYW2",
+                          "dnsName": {
+                            "Fn::GetAtt": [
+                              "StaticSiteCloudFrontDistributionCFDistributionA70E78CD",
+                              "DomainName"
+                            ]
+                          }
+                        },
+                        "hostedZoneId": "Z1EJVU8DMBV0XG"
                       }
                     }
                   }
