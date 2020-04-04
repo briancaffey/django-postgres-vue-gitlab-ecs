@@ -26,9 +26,9 @@ class AwscdkStack(core.Stack):
             certificate=self.certificate
         )
 
-        # self.ecr_repo = ElasticContainerRepo(self, "ElasticContainerRepo")
+        self.ecr_repo = ElasticContainerRepo(self, "ElasticContainerRepo")
 
-        # self.vpc = Vpc(self, "Vpc")
+        self.vpc = Vpc(self, "Vpc")
 
         # self.assets = Assets(self, "BackendAssets")
 
@@ -36,12 +36,12 @@ class AwscdkStack(core.Stack):
 
         # self.elasticache = ElastiCache(self, "ElastiCacheRedis", vpc=self.vpc.vpc)
 
-        # self.alb = ApplicationLoadBalancer(
-        #     self, "ApplicationLoadBalancer",
-        #     hosted_zone=self.hosted_zone,
-        #     certificate=self.certificate,
-        #     vpc=self.vpc.vpc,
-        # )
+        self.alb = ApplicationLoadBalancer(
+            self, "ApplicationLoadBalancer",
+            hosted_zone=self.hosted_zone,
+            certificate=self.certificate,
+            vpc=self.vpc.vpc,
+        )
 
         # self.ecs = Ecs(
         #     self,
