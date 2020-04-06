@@ -32,6 +32,8 @@ services:
       - REDIS_HOST=redis
     ports:
       - "8085:8081"
+    depends_on:
+      - "redis"
     networks:
       - main
 
@@ -183,6 +185,8 @@ services:
        - pgadmin:/root/.pgadmin
     ports:
       - "5050:80"
+    depends_on:
+      - "postgres"
     networks:
       - main
     restart: unless-stopped
