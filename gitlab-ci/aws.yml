@@ -1,4 +1,4 @@
-Release backend:
+.Release backend:
   stage: release
   image: docker:stable
   only:
@@ -26,7 +26,7 @@ Release backend:
   after_script:
     - echo "The production image has been released from GitLab to ECR"
 
-Sync Quasar PWA Assets:
+.Sync Quasar PWA Assets:
   image: python:3.7
   stage: deploy
   only:
@@ -75,7 +75,7 @@ Sync Quasar PWA Assets:
   after_script:
     - echo "Create stack complete"
 
-Update stack:
+.Update stack:
   image: python:3.7
   stage: deploy
   only:
@@ -97,7 +97,7 @@ Update stack:
   after_script:
     - echo "Update stack complete"
 
-collectstatic: &task
+.collectstatic: &task
   image: python:3.7
   stage: deploy
   only:
@@ -113,7 +113,7 @@ collectstatic: &task
         --cluster ${EnvironmentName}-cluster \
         --task-definition collectstatic
 
-migrate:
+.migrate:
   <<: *task
   variables:
     EnvironmentName: staging
