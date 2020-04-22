@@ -22,14 +22,13 @@ renovate:
   image: docker:latest
   services:
     - docker:dind
-  renovate:
-    stage: renovate
-    script:
-      - |
-        docker run \
-          -e RENOVATE_TOKEN="$GITLAB_TOKEN" \
-          -v $PWD/renovate/config.js:/usr/src/app/config.js \
-          renovate/renovate:19
+  stage: renovate
+  script:
+    - |
+      docker run \
+        -e RENOVATE_TOKEN="$GITLAB_TOKEN" \
+        -v $PWD/renovate/config.js:/usr/src/app/config.js \
+        renovate/renovate:19
 
 .pages:
   image: node:latest
