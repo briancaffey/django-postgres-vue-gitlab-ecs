@@ -1,6 +1,6 @@
 dependencies:
   - name: "postgresql"
-    version: "3.10.0"
+    version: "3.18.4"
     repository: "@stable"
 
   - name: "redis"
