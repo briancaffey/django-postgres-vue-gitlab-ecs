@@ -29,6 +29,8 @@ renovate:
         -e RENOVATE_TOKEN="$GITLAB_TOKEN" \
         -v $PWD/renovate/config.js:/usr/src/app/config.js \
         renovate/renovate:19
+  only:
+    - renovate
 
 .pages:
   image: node:latest
