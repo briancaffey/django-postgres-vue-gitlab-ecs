@@ -1,4 +1,5 @@
 better_exceptions==0.2.2
+black==19.10b0
 pyupio==1.0.2
 django-extensions==2.1.6  # NOTE: in installed_apps
 Werkzeug==0.15.2 # used for runserver_plus exception console

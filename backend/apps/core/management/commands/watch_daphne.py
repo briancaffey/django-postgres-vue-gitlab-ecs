@@ -14,14 +14,13 @@ from django.utils import autoreload
 
 
 def restart_daphne():
-    cmd = 'pkill -9 daphne'
+    cmd = "pkill -9 daphne"
     subprocess.call(shlex.split(cmd))
-    cmd = 'daphne backend.asgi:application --bind 0.0.0.0 --port 9000'  # noqa
+    cmd = "daphne backend.asgi:application --bind 0.0.0.0 --port 9000"  # noqa
     subprocess.call(shlex.split(cmd))
 
 
 class Command(BaseCommand):
-
     def handle(self, *args, **options):
-        print('Starting daphne server with autoreload...')
+        print("Starting daphne server with autoreload...")
         autoreload.run_with_reloader(restart_daphne)

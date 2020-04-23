@@ -1,14 +1,14 @@
 import graphene
 import graphql_jwt
 
-import apps.hn.schema
 import apps.accounts.schema
+import apps.hn.schema
 
 
 class Query(
     apps.accounts.schema.Query,
     apps.hn.schema.Query,
-    graphene.ObjectType
+    graphene.ObjectType,
 ):
     pass
 
@@ -16,7 +16,7 @@ class Query(
 class Mutation(
     apps.accounts.schema.Mutation,
     apps.hn.schema.Mutation,
-    graphene.ObjectType
+    graphene.ObjectType,
 ):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

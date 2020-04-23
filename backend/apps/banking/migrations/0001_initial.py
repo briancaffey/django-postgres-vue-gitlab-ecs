@@ -7,26 +7,50 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='StatementFile',
+            name="StatementFile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('statement_file', models.FileField(upload_to='')),
-                ('month', models.DateField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "statement_file",
+                    models.FileField(upload_to=""),
+                ),
+                ("month", models.DateField()),
             ],
         ),
         migrations.CreateModel(
-            name='Transaction',
+            name="Transaction",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('description', models.CharField(max_length=1000)),
-                ('location', models.CharField(max_length=1000)),
-                ('amount', models.FloatField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                (
+                    "description",
+                    models.CharField(max_length=1000),
+                ),
+                (
+                    "location",
+                    models.CharField(max_length=1000),
+                ),
+                ("amount", models.FloatField()),
             ],
         ),
     ]

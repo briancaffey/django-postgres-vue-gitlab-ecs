@@ -1,12 +1,8 @@
 import json
-from django.test import TestCase
-
-# Create your tests here.
 
 import pytest
-
-from django.core.files.base import ContentFile
-from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.uploadedfile import \
+    SimpleUploadedFile  # noqa; noqa; noqa
 from django.test import override_settings
 from django.urls import reverse
 
@@ -25,24 +21,21 @@ def test_upload_statement_file():
     filename = "test.csv"
     file_path = "apps/banking/fixtures/" + filename
 
-    form = {
-        "month": "2019-01-19"
-    }
+    form = {"month": "2019-01-19"}
 
-    with open(file_path, 'rb') as fp:
+    with open(file_path, "rb") as fp:
         tmp_file = SimpleUploadedFile(
-            filename, fp.read(), content_type="multipart/form-data"
+            filename,
+            fp.read(),
+            content_type="multipart/form-data",
         )
-        data = {
-            "form": json.dumps(form),
-            "file": tmp_file
-        }
+        data = {"form": json.dumps(form), "file": tmp_file}
 
-        url = reverse('statements')
-        resp = client.post(
+        url = reverse("statements")
+        client.post(
             f"{c.TEST_BASE_URL}{url}",
             data,
-            format='multipart'
+            format="multipart",
         )
 
     assert StatementFile.objects.all().count() == 1

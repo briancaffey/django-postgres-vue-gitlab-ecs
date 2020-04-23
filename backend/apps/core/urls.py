@@ -3,34 +3,29 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("", views.home, name="home"),
     path(
-        '',
-        views.home,
-        name="home"
+        "hello-world", views.hello_world, name="hello-world"
     ),
     path(
-        'hello-world',
-        views.hello_world,
-        name="hello-world"
-    ),
-    path(
-        'debug-task/',
+        "debug-task/",
         views.debug_task_view,
-        name="debug-task"
+        name="debug-task",
     ),
     path(
-        'debug/send-test-email/',
+        "debug/send-test-email/",
         views.send_test_email,
-        name="send-test-email"
+        name="send-test-email",
     ),
     path(
-        'debug/redis/',
-        views.DebugRedis.as_view({
-            "get": "get",
-            "post": "post",
-            "delete": "delete"
-        }),
-        name="debug-redis"
+        "debug/redis/",
+        views.DebugRedis.as_view(
+            {
+                "get": "get",
+                "post": "post",
+                "delete": "delete",
+            }
+        ),
+        name="debug-redis",
     ),
-
 ]

@@ -5,13 +5,14 @@ import logging
 import os
 
 import redis
-from django.http import HttpResponse, HttpResponseServerError
+from django.http import (
+    HttpResponse,
+    HttpResponseServerError
+)
 
 logger = logging.getLogger("django")
 
-r = redis.Redis(
-    host=os.environ.get('REDIS_SERVICE_HOST')
-)
+r = redis.Redis(host=os.environ.get("REDIS_SERVICE_HOST"))
 
 
 class HealthCheckMiddleware(object):
@@ -39,27 +40,36 @@ class HealthCheckMiddleware(object):
         # being present.
         try:
             from django.db import connections
+
             for name in connections:
                 cursor = connections[name].cursor()
                 cursor.execute("SELECT 1;")
                 row = cursor.fetchone()
                 if row is None:
                     return HttpResponseServerError(
-                        "Postgres: invalid response")
+                        "Postgres: invalid response"
+                    )
         except Exception as e:
             logger.exception(e)
             return HttpResponseServerError(
-                "Postgres: cannot connect to database.")
+                "Postgres: cannot connect to database."
+            )
 
         # Call get_stats() to connect to each memcached
         # instance and get it's stats.
         # This can effectively check if each is online.
         try:
             import redis
-            r = redis.Redis(host=os.environ.get('REDIS_SERVICE_HOST', 'redis'))
+
+            r = redis.Redis(
+                host=os.environ.get(
+                    "REDIS_SERVICE_HOST", "redis"
+                )
+            )
             r.ping()
         except Exception as e:
             logger.exception(e)
             return HttpResponseServerError(
-                "Redis: cannot connect to redis.")
+                "Redis: cannot connect to redis."
+            )
         return HttpResponse("OK")
