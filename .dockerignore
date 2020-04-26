@@ -1,3 +1,4 @@
+backend/media/*
 documentation/
 cloudformation/
 .vscode
