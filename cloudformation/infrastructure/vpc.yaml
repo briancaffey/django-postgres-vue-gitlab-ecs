@@ -2,7 +2,6 @@ Description: >
   The main VPC for our ECS cluster and related resources
 
 Parameters:
-
   StackName:
     Type: String
     Description: The name of the stack
@@ -12,35 +11,32 @@ Parameters:
     Description: An environment name to namespace resources (e.g. qa, staging, production)
 
 Mappings:
-
   SubnetConfig:
-
     VPC:
-      CIDR: '10.0.0.0/16'
+      CIDR: "10.0.0.0/16"
     PublicOne:
-      CIDR: '10.0.0.0/24'
+      CIDR: "10.0.0.0/24"
     PublicTwo:
-      CIDR: '10.0.1.0/24'
+      CIDR: "10.0.1.0/24"
     PrivateOne:
-      CIDR: '10.0.2.0/24'
+      CIDR: "10.0.2.0/24"
     PrivateTwo:
-      CIDR: '10.0.3.0/24'
+      CIDR: "10.0.3.0/24"
 
 Resources:
-
   VPC:
     Type: AWS::EC2::VPC
     Properties:
       EnableDnsSupport: true
       EnableDnsHostnames: true
-      CidrBlock: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+      CidrBlock: !FindInMap ["SubnetConfig", "VPC", "CIDR"]
 
   PublicSubnetOne:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Select [0, !GetAZs ""]
-      VpcId: !Ref 'VPC'
-      CidrBlock: !FindInMap ['SubnetConfig', 'PublicOne', 'CIDR']
+      VpcId: !Ref "VPC"
+      CidrBlock: !FindInMap ["SubnetConfig", "PublicOne", "CIDR"]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -50,8 +46,8 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: !Select [1, !GetAZs ""]
-      VpcId: !Ref 'VPC'
-      CidrBlock: !FindInMap ['SubnetConfig', 'PublicTwo', 'CIDR']
+      VpcId: !Ref "VPC"
+      CidrBlock: !FindInMap ["SubnetConfig", "PublicTwo", "CIDR"]
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
@@ -62,7 +58,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [0, !GetAZs ""]
-      CidrBlock: !FindInMap ['SubnetConfig', 'PrivateOne', 'CIDR']
+      CidrBlock: !FindInMap ["SubnetConfig", "PrivateOne", "CIDR"]
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
@@ -73,7 +69,7 @@ Resources:
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !FindInMap ['SubnetConfig', 'PrivateTwo', 'CIDR']
+      CidrBlock: !FindInMap ["SubnetConfig", "PrivateTwo", "CIDR"]
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
@@ -85,21 +81,21 @@ Resources:
   GatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      VpcId: !Ref 'VPC'
-      InternetGatewayId: !Ref 'InternetGateway'
+      VpcId: !Ref "VPC"
+      InternetGatewayId: !Ref "InternetGateway"
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref 'VPC'
+      VpcId: !Ref "VPC"
 
   PublicRoute:
     Type: AWS::EC2::Route
     DependsOn: GatewayAttachment
     Properties:
-      RouteTableId: !Ref 'PublicRouteTable'
-      DestinationCidrBlock: '0.0.0.0/0'
-      GatewayId: !Ref 'InternetGateway'
+      RouteTableId: !Ref "PublicRouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref "InternetGateway"
 
   PublicSubnetOneRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -114,34 +110,33 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
 
 Outputs:
-
   VPC:
     Description: The ID of the VPC that this stack is deployed in
-    Value: !Ref 'VPC'
+    Value: !Ref "VPC"
     Export:
       Name: !Sub ${StackName}:VpcId
 
   PublicSubnetOne:
     Description: Public subnet one
-    Value: !Ref 'PublicSubnetOne'
+    Value: !Ref "PublicSubnetOne"
     Export:
       Name: !Sub ${StackName}:PublicSubnetOne
 
   PublicSubnetTwo:
     Description: Public subnet two
-    Value: !Ref 'PublicSubnetTwo'
+    Value: !Ref "PublicSubnetTwo"
     Export:
       Name: !Sub ${StackName}:PublicSubnetTwo
 
   PrivateSubnetOne:
     Description: Public subnet one
-    Value: !Ref 'PublicSubnetOne'
+    Value: !Ref "PublicSubnetOne"
     Export:
       Name: !Sub ${StackName}:PrivateSubnetOne
 
   PrivateSubnetTwo:
     Description: Private subnet two
-    Value: !Ref 'PrivateSubnetTwo'
+    Value: !Ref "PrivateSubnetTwo"
     Export:
       Name: !Sub ${StackName}:PrivateSubnetTwo
 

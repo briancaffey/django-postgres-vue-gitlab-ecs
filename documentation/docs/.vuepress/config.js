@@ -59,6 +59,7 @@ module.exports = {
         text: "DevOps",
         items: [
           { text: "AWS", link: "/devops/aws/" },
+          { text: "AWS CDK", link: "/devops/aws-cdk/" },
           { text: "GCP", link: "/devops/gcp/" }
         ]
       },

@@ -54,7 +54,7 @@ Pytest:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
     DJANGO_SETTINGS_MODULE: "backend.settings.gitlab-ci"
     SECRET_KEY: "secret"
-    STACK_NAME: 'placeholder'
+    STACK_NAME: "placeholder"
     DEBUG: "True"
   before_script:
     - cd backend
@@ -65,7 +65,7 @@ Pytest:
     - pytest --cov
   after_script:
     - echo "Pytest tests complete"
-  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+  coverage: "/TOTAL.+ ([0-9]{1,3}%)/"
   only:
     changes:
       - backend/**/*
@@ -121,15 +121,15 @@ Pytest:
     - postgres:latest
     - redis:latest
   variables:
-    SECRET_KEY: 'secret'
-    DEBUG: 'True'
-    DJANGO_EMAIL_HOST: 'mail'
-    DJANGO_EMAIL_PORT: '1025'
+    SECRET_KEY: "secret"
+    DEBUG: "True"
+    DJANGO_EMAIL_HOST: "mail"
+    DJANGO_EMAIL_PORT: "1025"
     DJANGO_SETTINGS_MODULE: backend.settings.gitlab-ci
-    GITHUB_KEY: 'github123'
-    GITHUB_SECRET: 'github123'
-    GOOGLE_OAUTH2_KEY: 'google123'
-    GOOGLE_OAUTH2_SECRET: 'google123'
+    GITHUB_KEY: "github123"
+    GITHUB_SECRET: "github123"
+    GOOGLE_OAUTH2_KEY: "google123"
+    GOOGLE_OAUTH2_SECRET: "google123"
   before_script:
     - python backend/manage.py migrate
     - python backend/manage.py create_default_user

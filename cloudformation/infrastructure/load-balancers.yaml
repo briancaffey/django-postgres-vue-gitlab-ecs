@@ -3,7 +3,6 @@ Description: >
   We create them in a seperate nested template, so it can be referenced by all of the other nested templates.
 
 Parameters:
-
   StackName:
     Type: String
     Description: The name of the stack
@@ -44,30 +43,29 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       VpcId:
-        Fn::ImportValue:
-          !Sub ${StackName}:VpcId
+        Fn::ImportValue: !Sub ${StackName}:VpcId
       GroupDescription: Access to the load balancer that sits in front of ECS
       Tags:
         - Key: Name
           Value: !Sub ${StackName}-LoadBalancerSecurityGroup
 
   ALBSecurityGroupInHttpWorld:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: "AWS::EC2::SecurityGroupIngress"
     Properties:
       GroupId: !Ref LoadBalancerSecurityGroup
       IpProtocol: tcp
       FromPort: 80
       ToPort: 80
-      CidrIp: '0.0.0.0/0'
+      CidrIp: "0.0.0.0/0"
 
   ALBSecurityGroupInHttpsWorld:
-    Type: 'AWS::EC2::SecurityGroupIngress'
+    Type: "AWS::EC2::SecurityGroupIngress"
     Properties:
       GroupId: !Ref LoadBalancerSecurityGroup
       IpProtocol: tcp
       FromPort: 443
       ToPort: 443
-      CidrIp: '0.0.0.0/0'
+      CidrIp: "0.0.0.0/0"
 
   PublicLoadBalancerHttpRedirectListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -81,7 +79,7 @@ Resources:
             Query: "#{query}"
             StatusCode: HTTP_301
           Type: redirect
-      LoadBalancerArn: !Ref 'LoadBalancer'
+      LoadBalancerArn: !Ref "LoadBalancer"
       Port: 80
       Protocol: HTTP
 
@@ -105,8 +103,7 @@ Resources:
     Properties:
       Name: !Sub ${EnvironmentName}-default
       VpcId:
-        Fn::ImportValue:
-          !Sub ${EnvironmentName}:VpcId
+        Fn::ImportValue: !Sub ${EnvironmentName}:VpcId
       Port: 80
       Protocol: HTTP
 
