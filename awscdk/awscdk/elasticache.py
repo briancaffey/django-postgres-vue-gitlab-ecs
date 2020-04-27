@@ -16,21 +16,24 @@ class ElastiCache(core.Construct):
             "ElastiCacheSecurityGroup",
             vpc_id=vpc.vpc_id,
             group_description="ElastiCacheSecurityGroup",
-            security_group_ingress=[ec2.CfnSecurityGroup.IngressProperty(
-                ip_protocol="tcp",
-                to_port=6379,
-                from_port=6379,
-                # TODO: replace this with ECS security group
-                source_security_group_id="security-group-id"
-            )]
+            security_group_ingress=[
+                ec2.CfnSecurityGroup.IngressProperty(
+                    ip_protocol="tcp",
+                    to_port=6379,
+                    from_port=6379,
+                    # TODO: replace this with ECS security group
+                    source_security_group_id="security-group-id",
+                )
+            ],
         )
 
         self.elasticache_subnet_group = elasticache.CfnSubnetGroup(
-            self, "CfnSubnetGroup",
+            self,
+            "CfnSubnetGroup",
             subnet_ids=vpc.select_subnets(
                 subnet_type=ec2.SubnetType.ISOLATED
             ).subnet_ids,
-            description="The subnet group for ElastiCache"
+            description="The subnet group for ElastiCache",
         )
 
         self.elasticache = elasticache.CfnCacheCluster(
@@ -42,5 +45,5 @@ class ElastiCache(core.Construct):
             vpc_security_group_ids=[
                 self.elasticache_security_group.get_att("GroupId").to_string()
             ],
-            cache_subnet_group_name=self.elasticache_subnet_group.cache_subnet_group_name
+            cache_subnet_group_name=self.elasticache_subnet_group.cache_subnet_group_name,
         )

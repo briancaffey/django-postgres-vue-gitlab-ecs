@@ -4,7 +4,7 @@ from aws_cdk import (
     aws_route53 as route53,
     aws_certificatemanager as acm,
     aws_elasticloadbalancingv2 as elbv2,
-    core
+    core,
 )
 
 
@@ -21,20 +21,15 @@ class ApplicationLoadBalancer(core.Construct):
         super().__init__(scope, id, **kwargs)
 
         self.alb = elbv2.ApplicationLoadBalancer(
-            self,
-            "ALB",
-            internet_facing=True,
-            vpc=vpc
+            self, "ALB", internet_facing=True, vpc=vpc
         )
 
         self.alb.connections.allow_from_any_ipv4(
-            ec2.Port.tcp(80),
-            "Internet access ALB 80"
+            ec2.Port.tcp(80), "Internet access ALB 80"
         )
 
         self.alb.connections.allow_from_any_ipv4(
-            ec2.Port.tcp(443),
-            "Internet access ALB 443"
+            ec2.Port.tcp(443), "Internet access ALB 443"
         )
 
         redirect_listener = elbv2.CfnListener(
@@ -52,18 +47,14 @@ class ApplicationLoadBalancer(core.Construct):
                         "port": "443",
                         "protocol": "HTTPS",
                         "query": "#{query}",
-                        "statusCode": "HTTP_301"
-                    }
+                        "statusCode": "HTTP_301",
+                    },
                 }
-            ]
+            ],
         )
 
         self.default_target_group = elbv2.CfnTargetGroup(
-            self,
-            "DefaultTargetGroup",
-            vpc_id=vpc.vpc_id,
-            port=80,
-            protocol="HTTP"
+            self, "DefaultTargetGroup", vpc_id=vpc.vpc_id, port=80, protocol="HTTP"
         )
 
         self.https_listener = elbv2.CfnListener(
@@ -72,15 +63,13 @@ class ApplicationLoadBalancer(core.Construct):
             protocol="HTTPS",
             port=443,
             load_balancer_arn=self.alb.load_balancer_arn,
-            certificates=[
-                {
-                    "certificateArn": certificate.certificate_arn
-                }
-            ],
+            certificates=[{"certificateArn": certificate.certificate_arn}],
             default_actions=[
                 {
-                    "targetGroupArn": self.default_target_group.get_att('Arn').to_string(),
-                    "type": "forward"
+                    "targetGroupArn": self.default_target_group.get_att(
+                        "TargetGroupFullName"
+                    ).to_string(),
+                    "type": "forward",
                 }
-            ]
+            ],
         )
