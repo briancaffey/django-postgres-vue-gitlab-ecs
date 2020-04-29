@@ -101,7 +101,8 @@ CDK:
   image: node:13
   stage: deploy
   before_script:
-    - sudo apt-get update || : && apt-get install python -y
+    - |
+      sudo apt-get update || : && apt-get install python -y
   script:
     - python --version
     - node -v
