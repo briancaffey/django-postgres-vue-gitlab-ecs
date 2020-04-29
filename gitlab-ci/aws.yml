@@ -102,9 +102,12 @@ CDK:
   stage: deploy
   before_script:
     - sudo apt-get update || : && apt-get install python -y
-  after_script:
+  script:
     - python --version
     - node -v
+    - cd awscdk
+    - pip install -r requirements.txt
+    - cdk synth
 
 
 .collectstatic: &task
