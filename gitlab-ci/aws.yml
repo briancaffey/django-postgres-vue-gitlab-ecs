@@ -101,7 +101,7 @@ CDK:
   image: python:3.8
   stage: deploy
   before_script:
-    - sudo apt-get -qq update && sudo apt-get -y install nodejs npm
+    - apt-get -qq update && apt-get -y install nodejs npm
   script:
     - node -v
     - cd awscdk
