@@ -18,6 +18,7 @@ class StaticSite(core.Construct):
         id: str,
         hosted_zone: route53.IHostedZone,
         certificate: acm.ICertificate,
+        alb: str,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -52,7 +53,19 @@ class StaticSite(core.Construct):
                         s3_bucket_source=self.static_site_bucket
                     ),
                     behaviors=[cloudfront.Behavior(is_default_behavior=True)],
-                )
+                ),
+                cloudfront.SourceConfiguration(
+                    # origin_path="/test",
+                    custom_origin_source=cloudfront.CustomOriginConfig(
+                        domain_name=alb,
+                    ),
+                    behaviors=[
+                        cloudfront.Behavior(
+                            path_pattern="/test",
+                            # forwarded_values={"headers": ["*"], "query_string": True},
+                        )
+                    ],
+                ),
             ],
             alias_configuration=cloudfront.AliasConfiguration(
                 acm_cert_ref=certificate.certificate_arn,

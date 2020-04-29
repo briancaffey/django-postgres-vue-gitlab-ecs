@@ -32,44 +32,54 @@ class ApplicationLoadBalancer(core.Construct):
             ec2.Port.tcp(443), "Internet access ALB 443"
         )
 
-        redirect_listener = elbv2.CfnListener(
-            self,
-            "RedirectListener",
-            protocol="HTTP",
-            port=80,
-            load_balancer_arn=self.alb.load_balancer_arn,
-            default_actions=[
-                {
-                    "type": "redirect",
-                    "redirectConfig": {
-                        "host": "#{host}",
-                        "path": "/#{path}",
-                        "port": "443",
-                        "protocol": "HTTPS",
-                        "query": "#{query}",
-                        "statusCode": "HTTP_301",
-                    },
-                }
-            ],
-        )
+        # redirect_listener = elbv2.CfnListener(
+        #     self,
+        #     "RedirectListener",
+        #     protocol="HTTP",
+        #     port=80,
+        #     load_balancer_arn=self.alb.load_balancer_arn,
+        #     default_actions=[
+        #         {
+        #             "type": "redirect",
+        #             "redirectConfig": {
+        #                 "host": "#{host}",
+        #                 "path": "/#{path}",
+        #                 "port": "443",
+        #                 "protocol": "HTTPS",
+        #                 "query": "#{query}",
+        #                 "statusCode": "HTTP_301",
+        #             },
+        #         }
+        #     ],
+        # )
 
-        self.default_target_group = elbv2.CfnTargetGroup(
-            self, "DefaultTargetGroup", vpc_id=vpc.vpc_id, port=80, protocol="HTTP"
-        )
-
-        self.https_listener = elbv2.CfnListener(
-            self,
-            "HttpsListener",
+        self.redirect_response = elbv2.RedirectResponse(
+            status_code="HTTP_301",
+            host="#{host}",
+            path="/#{path}",
+            port="80",
             protocol="HTTPS",
+            query="#{query}",
+        )
+
+        self.https_listener = elbv2.ApplicationListener(
+            self,
+            "HTTPSListener",
+            load_balancer=self.alb,
             port=443,
-            load_balancer_arn=self.alb.load_balancer_arn,
-            certificates=[{"certificateArn": certificate.certificate_arn}],
-            default_actions=[
-                {
-                    "targetGroupArn": self.default_target_group.get_att(
-                        "TargetGroupFullName"
-                    ).to_string(),
-                    "type": "forward",
-                }
+            certificates=[
+                elbv2.ListenerCertificate(certificate.certificate_arn)
             ],
+        )
+
+        self.default_target_group = elbv2.ApplicationTargetGroup(
+            self,
+            "DefaultTargetGroup",
+            port=80,
+            protocol=elbv2.ApplicationProtocol.HTTP,
+            vpc=vpc,
+        )
+
+        self.https_listener.add_target_groups(
+            "DefaultTargetGroup", target_groups=[self.default_target_group]
         )

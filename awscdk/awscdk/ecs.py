@@ -7,24 +7,24 @@ class Ecs(core.Construct):
         scope: core.Construct,
         id: str,
         vpc: ec2.IVpc,
-        assets: core.Construct,
+        # assets: core.Construct,
         **kwargs
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.cluster = ecs.Cluster(self, "EcsCluster", vpc=vpc)
 
-        self.asg = autoscaling.AutoScalingGroup(
-            self,
-            "AutoScalingGroup",
-            instance_type=ec2.InstanceType("t2.micro"),
-            machine_image=ecs.EcsOptimizedAmi(),
-            update_type=autoscaling.UpdateType.REPLACING_UPDATE,
-            desired_capacity=1,
-            vpc=vpc,
-            vpc_subnets={"subnet_type": ec2.SubnetType.PUBLIC},
-        )
+        # self.asg = autoscaling.AutoScalingGroup(
+        #     self,
+        #     "AutoScalingGroup",
+        #     instance_type=ec2.InstanceType("t2.micro"),
+        #     machine_image=ecs.EcsOptimizedAmi(),
+        #     update_type=autoscaling.UpdateType.REPLACING_UPDATE,
+        #     desired_capacity=1,
+        #     vpc=vpc,
+        #     vpc_subnets={"subnet_type": ec2.SubnetType.PUBLIC},
+        # )
 
-        assets.assets_bucket.grant_read_write(self.asg)
+        # assets.assets_bucket.grant_read_write(self.asg)
 
-        self.cluster.add_auto_scaling_group(self.asg)
+        # self.cluster.add_auto_scaling_group(self.asg)

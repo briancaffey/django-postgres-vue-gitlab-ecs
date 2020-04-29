@@ -11,6 +11,8 @@ from elasticache import ElastiCache
 from alb import ApplicationLoadBalancer
 from ecs import Ecs
 
+from backend import Backend
+
 
 class AwscdkStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
@@ -20,22 +22,7 @@ class AwscdkStack(core.Stack):
 
         self.certificate = SiteCertificate(self, "SiteCert")
 
-        self.static_site = StaticSite(
-            self,
-            "StaticSite",
-            hosted_zone=self.hosted_zone,
-            certificate=self.certificate,
-        )
-
-        self.ecr_repo = ElasticContainerRepo(self, "ElasticContainerRepo")
-
         self.vpc = Vpc(self, "Vpc")
-
-        # self.assets = Assets(self, "BackendAssets")
-
-        # self.rds = Rds(self, "RdsInstance", vpc=self.vpc.vpc)
-
-        # self.elasticache = ElastiCache(self, "ElastiCacheRedis", vpc=self.vpc.vpc)
 
         self.alb = ApplicationLoadBalancer(
             self,
@@ -44,6 +31,28 @@ class AwscdkStack(core.Stack):
             certificate=self.certificate,
             vpc=self.vpc.vpc,
         )
+
+        self.static_site = StaticSite(
+            self,
+            "StaticSite",
+            hosted_zone=self.hosted_zone,
+            certificate=self.certificate,
+            alb=self.alb.alb.load_balancer_dns_name,
+        )
+
+        self.ecr_repo = ElasticContainerRepo(self, "ElasticContainerRepo")
+
+        self.ecs = Ecs(self, "Ecs", vpc=self.vpc.vpc)
+
+        self.backend = Backend(
+            self, "Backend", load_balancer=self.alb, cluster=self.ecs.cluster
+        )
+
+        # self.assets = Assets(self, "BackendAssets")
+
+        # self.rds = Rds(self, "RdsInstance", vpc=self.vpc.vpc)
+
+        # self.elasticache = ElastiCache(self, "ElastiCacheRedis", vpc=self.vpc.vpc)
 
         # self.ecs = Ecs(
         #     self,
