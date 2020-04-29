@@ -102,9 +102,12 @@ CDK:
   stage: deploy
   before_script:
     - |
-      sudo apt-get update || : && apt-get install python -y
+      sudo apt update
+      sudo apt install software-properties-common
+      sudo add-apt-repository ppa:deadsnakes/ppa -y
+      sudo apt install python3.8
+      python3.8 --version
   script:
-    - python --version
     - node -v
     - cd awscdk
     - pip install -r requirements.txt
