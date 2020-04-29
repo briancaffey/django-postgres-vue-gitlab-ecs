@@ -102,10 +102,11 @@ CDK:
   stage: deploy
   before_script:
     - apt-get -qq update && apt-get -y install nodejs npm
-  script:
     - node -v
+    - npm i -g aws-cdk
     - cd awscdk
     - pip3 install -r requirements.txt
+  script:
     - cdk synth
 
 
