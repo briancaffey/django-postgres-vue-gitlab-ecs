@@ -107,7 +107,8 @@ CDK:
     - cd awscdk
     - pip3 install -r requirements.txt
   script:
-    - cdk synth
+    - cdk diff
+    - cdk deploy --require-approval never
 
 
 .collectstatic: &task
