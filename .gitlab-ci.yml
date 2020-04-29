@@ -18,7 +18,7 @@ variables:
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
 
-renovate:
+.renovate:
   image: docker:latest
   services:
     - docker:dind
@@ -44,7 +44,7 @@ renovate:
     changes:
       - documentation/**/*
 
-Pytest:
+.Pytest:
   image: python:3.7
   stage: test
   services:
