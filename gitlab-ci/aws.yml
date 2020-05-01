@@ -107,7 +107,6 @@ CDK:
     - cd awscdk
     - pip3 install -r requirements.txt
   script:
-    - cdk diff
     - cdk deploy --require-approval never
 
 
