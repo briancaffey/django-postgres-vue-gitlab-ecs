@@ -28,6 +28,7 @@ setuptools.setup(
         "aws-cdk.aws_elasticache==1.35.0",
         "aws-cdk.aws_elasticloadbalancingv2==1.35.0",
         "aws-cdk.aws_ecs==1.35.0",
+        "aws-cdk.aws_ecs_patterns==1.35.0",
         "aws-cdk.aws_autoscaling==1.35.0",
     ],
     python_requires=">=3.6",

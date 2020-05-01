@@ -6,6 +6,6 @@ from awscdk.awscdk_stack import AwscdkStack
 
 
 app = core.App()
-AwscdkStack(app, "awscdk", env={'region': 'us-east-1'})
+AwscdkStack(app, "awscdk", env={"region": "us-east-1"})
 
 app.synth()

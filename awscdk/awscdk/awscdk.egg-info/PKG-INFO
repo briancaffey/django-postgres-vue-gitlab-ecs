@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: awscdk
 Version: 0.0.1
-Summary: An empty CDK Python app
+Summary: Verbose Equals True application
 Home-page: UNKNOWN
-Author: author
+Author: Brian Caffey
 License: UNKNOWN
 Description: 
         # Welcome to your CDK Python project!
