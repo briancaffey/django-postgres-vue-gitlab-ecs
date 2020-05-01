@@ -40,7 +40,7 @@ class ApplicationLoadBalancer(core.Construct):
             "HTTPSListener", port=443, certificates=[certificate]
         )
 
-        self.https_listener.add_redirect_response(
+        self.listener.add_redirect_response(
             'RedirectNonHttpsTraffic', status_code="HTTP_301", port="443"
         )
 
