@@ -24,7 +24,8 @@ class Backend(core.Construct):
         self.backend_task = ecs.FargateTaskDefinition(self, "BackendTask")
 
         self.backend_task.add_container(
-            "nginx", image=ecs.ContainerImage.from_registry("nginx:alpine"),
+            "nginx",
+            image=ecs.ContainerImage.from_registry("nginxdemos/hello:latest"),
         )
 
         port_mapping = ecs.PortMapping(
