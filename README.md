@@ -13,6 +13,10 @@ Documentation for this project can be found here:
 
 First, copy `.env.template` to a new file in the project's root directory called `.env`. This file will be read by `docker-compose` in the next step. Adjust any of the values in this file if needed, or add new variables for any secret information you need to pass to docker-compose (or to docker containers).
 
+## Current Project Goals
+
+Currently I am working on replacing CloudFormation with CDK for infrastructure and deployment.
+
 ### Social Authentication Keys
 
 To use social sign on in development, you will need to create an application with the given provider.
