@@ -40,11 +40,7 @@ class Backend(core.Construct):
             cluster=cluster,
         )
 
-        # backend_listener = load_balancer.alb.add_listener(
-        #     "BackendListener", port=80, open=True
-        # )
-
-        load_balancer.https_listener.add_targets(
+        load_balancer.listener.add_targets(
             "BackendTarget",
             port=80,
             targets=[self.backend_service],

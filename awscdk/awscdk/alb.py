@@ -28,49 +28,7 @@ class ApplicationLoadBalancer(core.Construct):
             ec2.Port.tcp(80), "Internet access ALB 80"
         )
 
-        self.alb.connections.allow_from_any_ipv4(
-            ec2.Port.tcp(443), "Internet access ALB 443"
-        )
-
-        # redirect_listener = elbv2.CfnListener(
-        #     self,
-        #     "RedirectListener",
-        #     protocol="HTTP",
-        #     port=80,
-        #     load_balancer_arn=self.alb.load_balancer_arn,
-        #     default_actions=[
-        #         {
-        #             "type": "redirect",
-        #             "redirectConfig": {
-        #                 "host": "#{host}",
-        #                 "path": "/#{path}",
-        #                 "port": "443",
-        #                 "protocol": "HTTPS",
-        #                 "query": "#{query}",
-        #                 "statusCode": "HTTP_301",
-        #             },
-        #         }
-        #     ],
-        # )
-
-        self.redirect_response = elbv2.RedirectResponse(
-            status_code="HTTP_301",
-            host="#{host}",
-            path="/#{path}",
-            port="80",
-            protocol="HTTPS",
-            query="#{query}",
-        )
-
-        self.https_listener = elbv2.ApplicationListener(
-            self,
-            "HTTPSListener",
-            load_balancer=self.alb,
-            port=443,
-            certificates=[
-                elbv2.ListenerCertificate(certificate.certificate_arn)
-            ],
-        )
+        self.listener = self.alb.add_listener("ALBListener", port=80)
 
         self.default_target_group = elbv2.ApplicationTargetGroup(
             self,
@@ -80,6 +38,6 @@ class ApplicationLoadBalancer(core.Construct):
             vpc=vpc,
         )
 
-        self.https_listener.add_target_groups(
+        self.listener.add_target_groups(
             "DefaultTargetGroup", target_groups=[self.default_target_group]
         )
