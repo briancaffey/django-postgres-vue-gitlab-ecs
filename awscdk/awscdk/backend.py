@@ -43,7 +43,7 @@ class Backend(core.Construct):
 
         load_balancer.https_listener.add_targets(
             "BackendTarget",
-            port=443,
+            port=80,
             targets=[self.backend_service],
             priority=1,
             path_patterns=["*"],
