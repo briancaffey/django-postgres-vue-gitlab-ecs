@@ -37,7 +37,7 @@ class ApplicationLoadBalancer(core.Construct):
         )
 
         self.https_listener = self.alb.add_listener(
-            "HTTPSListener", port=443, certificates=[certificate]
+            "HTTPSListener", port=443, certificates=[certificate], open=True
         )
 
         # self.listener.add_redirect_response(
