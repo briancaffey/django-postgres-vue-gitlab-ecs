@@ -51,7 +51,7 @@ class StaticSite(core.Construct):
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
                         domain_name=alb,
-                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,
                     ),
                     behaviors=[
                         cloudfront.Behavior(
