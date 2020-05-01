@@ -28,7 +28,13 @@ class ApplicationLoadBalancer(core.Construct):
             ec2.Port.tcp(80), "Internet access ALB 80"
         )
 
-        self.listener = self.alb.add_listener("ALBListener", port=80)
+        self.alb.connections.allow_from_any_ipv4(
+            ec2.Port.tcp(443), "Internet access ALB 443"
+        )
+
+        self.listener = self.alb.add_listener(
+            "ALBListener", port=80, open=True
+        )
 
         self.default_target_group = elbv2.ApplicationTargetGroup(
             self,

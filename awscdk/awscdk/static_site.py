@@ -49,20 +49,30 @@ class StaticSite(core.Construct):
             "CloudFrontDistribution",
             origin_configs=[
                 cloudfront.SourceConfiguration(
-                    s3_origin_source=cloudfront.S3OriginConfig(
-                        s3_bucket_source=self.static_site_bucket
-                    ),
-                    behaviors=[cloudfront.Behavior(is_default_behavior=True)],
-                ),
-                cloudfront.SourceConfiguration(
-                    # origin_path="/test",
                     custom_origin_source=cloudfront.CustomOriginConfig(
                         domain_name=alb,
+                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,
                     ),
                     behaviors=[
                         cloudfront.Behavior(
-                            path_pattern="/test",
-                            # forwarded_values={"headers": ["*"], "query_string": True},
+                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
+                            path_pattern="/api/*",
+                            forwarded_values={
+                                "headers": ["*"],
+                                "cookies": {"forward": "all"},
+                                "query_string": True,
+                            },
+                        )
+                    ],
+                ),
+                cloudfront.SourceConfiguration(
+                    s3_origin_source=cloudfront.S3OriginConfig(
+                        s3_bucket_source=self.static_site_bucket
+                    ),
+                    behaviors=[
+                        cloudfront.Behavior(
+                            is_default_behavior=True,
+                            cached_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,
                         )
                     ],
                 ),
