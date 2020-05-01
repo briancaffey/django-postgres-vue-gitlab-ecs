@@ -55,3 +55,8 @@ class ApplicationLoadBalancer(core.Construct):
         self.listener.add_target_groups(
             "DefaultTargetGroup", target_groups=[self.default_target_group]
         )
+
+        self.https_listener.add_target_groups(
+            "HTTPSDefaultTargetGroup",
+            target_groups=[self.default_target_group],
+        )
