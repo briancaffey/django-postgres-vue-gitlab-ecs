@@ -36,6 +36,14 @@ class ApplicationLoadBalancer(core.Construct):
             "ALBListener", port=80, open=True
         )
 
+        self.https_listener = self.alb.add_listener(
+            "HTTPSListener", port=443, certificates=[certificate]
+        )
+
+        self.https_listener.add_redirect_response(
+            'RedirectNonHttpsTraffic', status_code="HTTP_301", port="443"
+        )
+
         self.default_target_group = elbv2.ApplicationTargetGroup(
             self,
             "DefaultTargetGroup",
