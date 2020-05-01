@@ -40,9 +40,9 @@ class ApplicationLoadBalancer(core.Construct):
             "HTTPSListener", port=443, certificates=[certificate]
         )
 
-        self.listener.add_redirect_response(
-            'RedirectNonHttpsTraffic', status_code="HTTP_301", port="443"
-        )
+        # self.listener.add_redirect_response(
+        #     'RedirectNonHttpsTraffic', status_code="HTTP_301", port="443"
+        # )
 
         self.default_target_group = elbv2.ApplicationTargetGroup(
             self,
