@@ -52,11 +52,6 @@ class AwscdkStack(core.Stack):
 
         # self.rds = Rds(self, "RdsInstance", vpc=self.vpc.vpc)
 
-        # self.elasticache = ElastiCache(self, "ElastiCacheRedis", vpc=self.vpc.vpc)
-
-        # self.ecs = Ecs(
-        #     self,
-        #     "EcsResources",
-        #     vpc=self.vpc.vpc,
-        #     assets=self.assets
+        # self.elasticache = ElastiCache(
+        #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
         # )
