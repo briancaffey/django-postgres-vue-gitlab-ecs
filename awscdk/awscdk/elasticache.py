@@ -8,7 +8,9 @@ from aws_cdk import (
 
 
 class ElastiCache(core.Construct):
-    def __init__(self, scope: core.Construct, id: str, vpc: ec2.IVpc, **kwargs):
+    def __init__(
+        self, scope: core.Construct, id: str, vpc: ec2.IVpc, **kwargs
+    ):
         super().__init__(scope, id, **kwargs)
 
         self.elasticache_security_group = ec2.CfnSecurityGroup(

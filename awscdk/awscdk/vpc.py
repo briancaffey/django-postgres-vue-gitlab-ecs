@@ -15,10 +15,14 @@ class Vpc(core.Construct):
             nat_gateways=0,
             subnet_configuration=[
                 ec2.SubnetConfiguration(
-                    subnet_type=ec2.SubnetType.PUBLIC, name="Public", cidr_mask=24
+                    subnet_type=ec2.SubnetType.PUBLIC,
+                    name="Public",
+                    cidr_mask=24,
                 ),
                 ec2.SubnetConfiguration(
-                    subnet_type=ec2.SubnetType.ISOLATED, name="Isolated", cidr_mask=24
+                    subnet_type=ec2.SubnetType.ISOLATED,
+                    name="Isolated",
+                    cidr_mask=24,
                 ),
             ],
         )
