@@ -10,8 +10,9 @@ stages:
 
 # gitlab ci deployment options
 include:
-  - local: /gitlab-ci/aws.yml
-  #- local: /gitlab-ci/gcp.yml
+  - local: /gitlab-ci/aws/cdk.yml
+  # - local: /gitlab-ci/aws/cloudformation.yml
+  #- local: /gitlab-ci/gcp/terraform.yml
 
 variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
