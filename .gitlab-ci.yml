@@ -27,7 +27,8 @@ variables:
   script:
     - |
       docker run \
-        -e RENOVATE_TOKEN="$GITLAB_TOKEN" \
+        -e GITLAB_TOKEN="$GITLAB_TOKEN" \
+        -e GITHUB_TOKEN="$GITHUB_TOKEN" \
         -v $PWD/renovate/config.js:/usr/src/app/config.js \
         renovate/renovate:19
   only:
