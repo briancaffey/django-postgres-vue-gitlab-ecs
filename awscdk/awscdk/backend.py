@@ -26,6 +26,7 @@ class Backend(core.Construct):
         self.backend_task.add_container(
             "nginx",
             image=ecs.ContainerImage.from_registry("nginxdemos/hello:latest"),
+            logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
         )
 
         port_mapping = ecs.PortMapping(
