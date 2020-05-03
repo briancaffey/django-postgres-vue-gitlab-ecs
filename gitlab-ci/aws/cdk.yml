@@ -58,7 +58,7 @@
   after_script:
     - echo "Deploy frontend complete"
 
-.cdk deploy:
+cdk deploy:
   image: python:3.8
   stage: deploy
   before_script:
