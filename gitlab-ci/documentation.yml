@@ -1,0 +1,11 @@
+pages:
+  image: node:latest
+  stage: documentation
+  script:
+    - ./documentation/build_documentation.sh
+  artifacts:
+    paths:
+      - public
+  only:
+    changes:
+      - documentation/**/*
