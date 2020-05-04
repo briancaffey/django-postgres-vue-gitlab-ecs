@@ -2,7 +2,7 @@ from aws_cdk import core
 
 from cert import SiteCertificate
 from hosted_zone import HostedZone
-from static_site import StaticSite
+from cloudfront import CloudFront
 from ecr import ElasticContainerRepo
 from vpc import Vpc
 from assets import Assets
@@ -14,13 +14,18 @@ from ecs import Ecs
 from backend import Backend
 
 
-class AwscdkStack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class ApplicationStack(core.Stack):
+    def __init__(
+        self, scope: core.Construct, id: str, domain_name: str, **kwargs
+    ) -> None:
+
         super().__init__(scope, id, **kwargs)
 
         self.hosted_zone = HostedZone(self, "HostedZone")
 
-        self.certificate = SiteCertificate(self, "SiteCert")
+        self.certificate = SiteCertificate(
+            self, "SiteCert", domain_name=domain_name
+        )
 
         self.vpc = Vpc(self, "Vpc")
 
@@ -32,23 +37,30 @@ class AwscdkStack(core.Stack):
             vpc=self.vpc.vpc,
         )
 
-        self.static_site = StaticSite(
+        self.cloudfront = CloudFront(
             self,
             "StaticSite",
             hosted_zone=self.hosted_zone,
             certificate=self.certificate,
             alb=self.alb.alb.load_balancer_dns_name,
+            domain_name=domain_name,
         )
 
-        self.ecr_repo = ElasticContainerRepo(self, "ElasticContainerRepo")
+        self.ecr_repo = ElasticContainerRepo(
+            self, "ElasticContainerRepo", domain_name=domain_name
+        )
 
-        self.ecs = Ecs(self, "Ecs", vpc=self.vpc.vpc)
+        self.ecs = Ecs(self, "Ecs", vpc=self.vpc.vpc, domain_name=domain_name)
 
         self.backend = Backend(
-            self, "Backend", load_balancer=self.alb, cluster=self.ecs.cluster
+            self,
+            "Backend",
+            load_balancer=self.alb,
+            cluster=self.ecs.cluster,
+            domain_name=domain_name,
         )
 
-        # self.assets = Assets(self, "BackendAssets")
+        self.assets = Assets(self, "BackendAssets", domain_name=domain_name)
 
         # self.rds = Rds(self, "RdsInstance", vpc=self.vpc.vpc)
 

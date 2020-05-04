@@ -16,11 +16,6 @@ include:
   # - local: /gitlab-ci/aws/cloudformation.yml
   #- local: /gitlab-ci/gcp/terraform.yml
 
-variables:
-  REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
-  ECRBackendRepositoryName: ${AppUrl}/backend
-  GitSHA: $CI_COMMIT_SHORT_SHA
-
 .Pytest:
   image: python:3.7
   stage: test
@@ -133,26 +128,3 @@ variables:
 .e2e-local:
   <<: *cypress
   image: localhost:5000/backend:latest
-
-.Build Quasar PWA Assets:
-  image: node:8
-  stage: build
-  only:
-    - master
-  variables:
-    DOMAIN_NAME: "api.${AppUrl}"
-    GOOGLE_OAUTH2_KEY: google123
-    GITHUB_KEY: github123
-    WS_PROTOCOL: wss
-    HTTP_PROTOCOL: https
-  artifacts:
-    paths:
-      - quasar/dist/pwa
-  before_script:
-    - npm install -g @quasar/cli
-    - cd quasar
-    - npm install --progress=false
-  script:
-    - quasar build -m pwa
-  after_script:
-    - echo "Build Complete"
