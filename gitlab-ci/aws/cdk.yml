@@ -61,6 +61,8 @@
 cdk deploy:
   image: python:3.8
   stage: deploy
+  only:
+    - master
   before_script:
     - apt-get -qq update && apt-get -y install nodejs npm
     - node -v

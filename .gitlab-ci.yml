@@ -10,6 +10,8 @@ stages:
 
 # gitlab ci deployment options
 include:
+  - local: /gitlab-ci/documentation.yml
+  - local: /gitlab-ci/renovate.yml
   - local: /gitlab-ci/aws/cdk.yml
   # - local: /gitlab-ci/aws/cloudformation.yml
   #- local: /gitlab-ci/gcp/terraform.yml
@@ -18,33 +20,6 @@ variables:
   REPOSITORY_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AppUrl}/backend
   ECRBackendRepositoryName: ${AppUrl}/backend
   GitSHA: $CI_COMMIT_SHORT_SHA
-
-.renovate:
-  image: docker:latest
-  services:
-    - docker:dind
-  stage: renovate
-  script:
-    - |
-      docker run \
-        -e GITLAB_TOKEN="$GITLAB_TOKEN" \
-        -e GITHUB_TOKEN="$GITHUB_TOKEN" \
-        -v $PWD/renovate/config.js:/usr/src/app/config.js \
-        renovate/renovate:19
-  only:
-    - renovate
-
-.pages:
-  image: node:latest
-  stage: documentation
-  script:
-    - ./documentation/build_documentation.sh
-  artifacts:
-    paths:
-      - public
-  only:
-    changes:
-      - documentation/**/*
 
 .Pytest:
   image: python:3.7

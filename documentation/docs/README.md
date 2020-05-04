@@ -11,6 +11,8 @@ features:
   details: This project aims to have verbose explanations for the code, design decisions and best practices.
 - title: Beginner Friendly
   details: This project aims to be accessible to people with all levels of skill.
+- title: Best Practices
+  details: Covers best practices for local development, CI/CD, staging and production environments
 footer: MIT Licensed | Copyright © 2020 Brian Caffey
 ---
 
