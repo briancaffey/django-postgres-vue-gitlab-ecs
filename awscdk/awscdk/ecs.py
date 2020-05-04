@@ -17,5 +17,8 @@ class Ecs(core.Construct):
         super().__init__(scope, id, **kwargs)
 
         self.cluster = ecs.Cluster(
-            self, "EcsCluster", vpc=vpc, cluster_name=f"{domain_name}-cluster"
+            self,
+            "EcsCluster",
+            vpc=vpc,
+            cluster_name=f"{domain_name.replace('.', '-')}-cluster",
         )
