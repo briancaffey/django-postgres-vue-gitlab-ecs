@@ -36,7 +36,7 @@ variables:
     - echo "The production image has been released from GitLab to ECR"
 
 Build Quasar PWA Assets:
-  image: node:8
+  image: node:10
   stage: build
   only:
     - master
