@@ -11,9 +11,11 @@ class Ecs(core.Construct):
         scope: core.Construct,
         id: str,
         vpc: ec2.IVpc,
-        # assets: core.Construct,
-        **kwargs
+        domain_name: str,
+        **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.cluster = ecs.Cluster(self, "EcsCluster", vpc=vpc)
+        self.cluster = ecs.Cluster(
+            self, "EcsCluster", vpc=vpc, cluster_name=f"{domain_name}-cluster"
+        )

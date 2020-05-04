@@ -50,13 +50,17 @@ class ApplicationStack(core.Stack):
             self, "ElasticContainerRepo", domain_name=domain_name
         )
 
-        self.ecs = Ecs(self, "Ecs", vpc=self.vpc.vpc)
+        self.ecs = Ecs(self, "Ecs", vpc=self.vpc.vpc, domain_name=domain_name)
 
         self.backend = Backend(
-            self, "Backend", load_balancer=self.alb, cluster=self.ecs.cluster
+            self,
+            "Backend",
+            load_balancer=self.alb,
+            cluster=self.ecs.cluster,
+            domain_name=domain_name,
         )
 
-        # self.assets = Assets(self, "BackendAssets")
+        self.assets = Assets(self, "BackendAssets", domain_name=domain_name)
 
         # self.rds = Rds(self, "RdsInstance", vpc=self.vpc.vpc)
 
