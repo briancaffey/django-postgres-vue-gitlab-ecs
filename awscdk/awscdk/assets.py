@@ -9,7 +9,7 @@ class Assets(core.Construct):
 
         bucket_name = domain_name.replace(".", "-")  # noqa
         self.assets_bucket = s3.Bucket(
-            self, "AssetsBucket", bucket_name="f{bucket_name}-assets"
+            self, "AssetsBucket", bucket_name=f"{bucket_name}-assets"
         )
 
         self.policy_statement = iam.PolicyStatement(
