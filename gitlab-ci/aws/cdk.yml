@@ -104,7 +104,6 @@ cdk deploy:
   script:
     - cdk deploy --require-approval never
 
-
 .collectstatic: &task
   image: python:3.8
   stage: deploy
