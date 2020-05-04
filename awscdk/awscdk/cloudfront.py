@@ -1,5 +1,3 @@
-import os
-
 from aws_cdk import (
     aws_certificatemanager as acm,
     aws_s3 as s3,
@@ -11,7 +9,7 @@ from aws_cdk import (
 )
 
 
-class StaticSite(core.Construct):
+class CloudFront(core.Construct):
     def __init__(
         self,
         scope: core.Construct,
@@ -19,6 +17,7 @@ class StaticSite(core.Construct):
         hosted_zone: route53.IHostedZone,
         certificate: acm.ICertificate,
         alb: str,
+        domain_name: str,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -27,7 +26,7 @@ class StaticSite(core.Construct):
             self,
             "StaticSiteBucket",
             access_control=s3.BucketAccessControl.PUBLIC_READ,
-            bucket_name=os.environ.get("DOMAIN_NAME", "mysite.com"),
+            bucket_name=domain_name,
             removal_policy=core.RemovalPolicy.DESTROY,
         )
 
@@ -51,11 +50,11 @@ class StaticSite(core.Construct):
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
                         domain_name=alb,
-                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,
+                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,  # noqa
                     ),
                     behaviors=[
                         cloudfront.Behavior(
-                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
+                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,  # noqa
                             path_pattern="/api/*",
                             forwarded_values={
                                 "headers": ["*"],
@@ -72,17 +71,13 @@ class StaticSite(core.Construct):
                     behaviors=[
                         cloudfront.Behavior(
                             is_default_behavior=True,
-                            cached_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,
+                            cached_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,  # noqa
                         )
                     ],
                 ),
             ],
             alias_configuration=cloudfront.AliasConfiguration(
-                acm_cert_ref=certificate.certificate_arn,
-                names=[
-                    os.environ.get("DOMAIN_NAME", "mysite.com"),
-                    f"*.{os.environ.get('DOMAIN_NAME', 'mysite.com')}",
-                ],
+                acm_cert_ref=certificate.certificate_arn, names=[domain_name],
             ),
             error_configurations=[
                 {
@@ -108,16 +103,5 @@ class StaticSite(core.Construct):
             ),
             zone=hosted_zone.hosted_zone,
             # don't forget the '.' at the end of the record name!
-            record_name=f"*.{os.environ.get('DOMAIN_NAME', 'mysite.com')}.",
-        )
-
-        route53.ARecord(
-            self,
-            "AliasRecord1",
-            target=route53.AddressRecordTarget.from_alias(
-                targets.CloudFrontTarget(self.distribution)
-            ),
-            zone=hosted_zone.hosted_zone,
-            # don't forget the '.' at the end of the record name!
-            record_name=f"{os.environ.get('DOMAIN_NAME', 'mysite.com')}.",
+            record_name=f"{domain_name}.",
         )
