@@ -15,6 +15,7 @@ class Backend(core.Construct):
         id: str,
         load_balancer,
         cluster: ecs.ICluster,
+        domain_name: str,
         **kwargs,
     ) -> None:
         super().__init__(

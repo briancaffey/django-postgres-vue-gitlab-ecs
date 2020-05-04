@@ -35,7 +35,7 @@ variables:
   after_script:
     - echo "The production image has been released from GitLab to ECR"
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:10
   stage: build
   only:
@@ -59,7 +59,7 @@ Build Quasar PWA Assets:
     - echo "Build Complete"
 
 
-Sync Quasar PWA Assets:
+.Sync Quasar PWA Assets:
   image: python:3.8
   stage: deploy
   only:
