@@ -36,6 +36,7 @@ class Backend(core.Construct):
             image=ecs.AssetImage("../backend", file="scripts/prod/Dockerfile"),
             logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
             environment=environment_variables,
+            command=["/start_prod.sh"],
         )
 
         port_mapping = ecs.PortMapping(
