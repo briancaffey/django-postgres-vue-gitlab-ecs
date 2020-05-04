@@ -102,6 +102,7 @@ cdk deploy:
     - cd awscdk
     - pip3 install -r requirements.txt
   script:
+    - cdk bootstrap aws://$AWS_ACCOUNT_ID/$AWS_DEFAULT_REGION
     - cdk deploy --require-approval never
 
 .collectstatic: &task
