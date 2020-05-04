@@ -24,14 +24,22 @@ class Backend(core.Construct):
 
         self.backend_task = ecs.FargateTaskDefinition(self, "BackendTask")
 
+        environment_variables = {
+            "DJANGO_SETTINGS_MODULE": "backend.settings.production",
+            "DEBUG": "",
+            "SECRET_KEY": "secret",
+            "AWS_STORAGE_BUCKET_NAME": f"{domain_name.replace('.', '-')}-assets",  # noqa
+        }
+
         self.backend_task.add_container(
             "nginx",
-            image=ecs.ContainerImage.from_registry("nginxdemos/hello:latest"),
+            image=ecs.AssetImage("../backend", file="scripts/prod/Dockerfile"),
             logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
+            environment=environment_variables,
         )
 
         port_mapping = ecs.PortMapping(
-            container_port=80, protocol=ecs.Protocol.TCP
+            container_port=8000, protocol=ecs.Protocol.TCP
         )
         self.backend_task.default_container.add_port_mappings(port_mapping)
 
