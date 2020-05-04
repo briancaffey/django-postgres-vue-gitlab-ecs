@@ -99,9 +99,9 @@ cdk deploy:
     ENVIRONMENT: dev
   before_script:
     # - apt-get -qq update && apt-get -y install nodejs npm
-    - apk add --no-cache python py-pip
+    - apk add --no-cache python3
     - python -V
-    - apk add nodejs-current
+    - apk add nodejs-current npm
     - node -v
     - npm i -g aws-cdk
     - cd awscdk
