@@ -62,4 +62,9 @@ class Backend(core.Construct):
             targets=[self.backend_service],
             priority=1,
             path_patterns=["*"],
+            health_check=elbv2.HealthCheck(
+                healthy_http_codes="200-299",
+                path="/api/hello-world",
+                port="443",
+            ),
         )

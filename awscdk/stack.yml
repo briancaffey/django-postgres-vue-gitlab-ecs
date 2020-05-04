@@ -303,6 +303,10 @@ Resources:
   ApplicationLoadBalancerALBHTTPSListenerBackendTargetGroupEFEFD916:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
+      HealthCheckPath: /api/hello-world
+      HealthCheckPort: "443"
+      Matcher:
+        HttpCode: 200-299
       Port: 80
       Protocol: HTTP
       TargetType: ip
@@ -508,15 +512,15 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:ed8e30cd14a68124b8bd695080143a06c51ca4575551e5a4eaa691fed21fc150
+                - /aws-cdk/assets:782f3fdf5b4a00a28f10cec57d1aa51c438820b849e33dadf4279ea64acd6e15
           LogConfiguration:
             LogDriver: awslogs
             Options:
               awslogs-group:
-                Ref: BackendBackendTasknginxLogGroup95BDE81C
+                Ref: BackendBackendTaskDjangoBackendLogGroup020EB920
               awslogs-stream-prefix: Backend
               awslogs-region: us-east-1
-          Name: nginx
+          Name: DjangoBackend
           PortMappings:
             - ContainerPort: 8000
               Protocol: tcp
@@ -536,12 +540,12 @@ Resources:
           - Arn
     Metadata:
       aws:cdk:path: cdk-app-dev/Backend/BackendTask/Resource
-  BackendBackendTasknginxLogGroup95BDE81C:
+  BackendBackendTaskDjangoBackendLogGroup020EB920:
     Type: AWS::Logs::LogGroup
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendTask/nginx/LogGroup/Resource
+      aws:cdk:path: cdk-app-dev/Backend/BackendTask/DjangoBackend/LogGroup/Resource
   BackendBackendTaskExecutionRole3B22D4E5:
     Type: AWS::IAM::Role
     Properties:
@@ -581,7 +585,7 @@ Resources:
             Effect: Allow
             Resource:
               Fn::GetAtt:
-                - BackendBackendTasknginxLogGroup95BDE81C
+                - BackendBackendTaskDjangoBackendLogGroup020EB920
                 - Arn
         Version: "2012-10-17"
       PolicyName: BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2
@@ -602,7 +606,7 @@ Resources:
       HealthCheckGracePeriodSeconds: 60
       LaunchType: FARGATE
       LoadBalancers:
-        - ContainerName: nginx
+        - ContainerName: DjangoBackend
           ContainerPort: 8000
           TargetGroupArn:
             Ref: ApplicationLoadBalancerALBHTTPSListenerBackendTargetGroupEFEFD916
