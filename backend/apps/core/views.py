@@ -9,13 +9,14 @@ from rest_framework import viewsets
 from apps.core.tasks import debug_task, send_test_email_task
 
 # Serve Vue Application via template for GitLab CI
-index_view = never_cache(TemplateView.as_view(template_name='index.html'))
+index_view = never_cache(
+    TemplateView.as_view(template_name="index.html")
+)
 
 r = settings.REDIS
 
 
 class DebugRedis(viewsets.ViewSet):
-
     def get(self, request):
         count = None
 
@@ -38,30 +39,36 @@ class DebugRedis(viewsets.ViewSet):
 
     def delete(self, request):
         r.delete("cached_value")
-        return JsonResponse({"count": r.get("cached_value")})
+        return JsonResponse(
+            {"count": r.get("cached_value")}
+        )
 
 
 def hello_world(request):
     response = JsonResponse(
         {
-            'message': 'Hello, World!',
-            'git_sha': os.environ.get('GIT_SHA', '<git SHA>'),
-            'debug': settings.DEBUG,
-            'format': 'JSON',
-            'ssm_param': os.environ.get('MY_PARAM', 'param_value')
+            "message": "Hello, World!",
+            "git_sha": os.environ.get(
+                "GIT_SHA", "<git SHA>"
+            ),
+            "debug": settings.DEBUG,
+            "format": "JSON",
+            "ssm_param": os.environ.get(
+                "MY_PARAM", "param_value"
+            ),
         }
     )
     return response
 
 
 def home(request):
-    response = JsonResponse({'message': 'Root'})
+    response = JsonResponse({"message": "Root"})
     return response
 
 
 def debug_task_view(request):
     debug_task.delay()
-    return JsonResponse({'message': 'Task sent to queue.'})
+    return JsonResponse({"message": "Task sent to queue."})
 
 
 def send_test_email(request):

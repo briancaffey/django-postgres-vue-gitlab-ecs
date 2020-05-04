@@ -2,7 +2,6 @@ Description: >
   This template deploys a single node ElastiCache cluster that runs Redis
 
 Parameters:
-
   StackName:
     Type: String
     Description: The name of the stack
@@ -21,8 +20,7 @@ Resources:
     Properties:
       GroupDescription: ElastiCache Security Group
       VpcId:
-        Fn::ImportValue:
-          !Sub ${StackName}:VpcId
+        Fn::ImportValue: !Sub ${StackName}:VpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 6379
@@ -33,7 +31,7 @@ Resources:
     Type: AWS::ElastiCache::SubnetGroup
     Properties:
       Description: ElastiCache Subnet Group
-      SubnetIds: !Split [',', !Ref PrivateSubnets]
+      SubnetIds: !Split [",", !Ref PrivateSubnets]
 
   ElastiCacheCluster:
     Type: AWS::ElastiCache::CacheCluster

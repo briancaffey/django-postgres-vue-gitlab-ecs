@@ -7,6 +7,7 @@ from celery.task import task
 
 from apps.banking.models import StatementFile, Transaction
 
+
 class BaseTask(celery.Task):
     pass
 
@@ -20,13 +21,19 @@ def process_statement_file(self, statement_file_id):
     of the transactions with one bulk create database operation
     """
 
-    statement_file = StatementFile.objects.get(id=statement_file_id).statement_file
-    file_data = statement_file.read().decode('utf-8')
-    csv_data = csv.DictReader(StringIO(file_data), delimiter=',')
+    statement_file = StatementFile.objects.get(
+        id=statement_file_id
+    ).statement_file
+    file_data = statement_file.read().decode("utf-8")
+    csv_data = csv.DictReader(
+        StringIO(file_data), delimiter=","
+    )
 
     transactions = []
     for row in csv_data:
-        date = datetime.datetime.strptime(row["Posted Date"], '%m/%d/%Y')
+        date = datetime.datetime.strptime(
+            row["Posted Date"], "%m/%d/%Y"
+        )
         description = row["Payee"]
         address = row["Address"]
         amount = row["Amount"]
@@ -35,7 +42,7 @@ def process_statement_file(self, statement_file_id):
             description=description,
             location=address,
             amount=amount,
-            source_file_id=statement_file_id
+            source_file_id=statement_file_id,
         )
         transactions.append(transaction)
 

@@ -4,13 +4,15 @@ from . import views
 
 urlpatterns = [
     path(
-        'transactions/',
+        "transactions/",
         views.TransactionViewSet.as_view({"get": "get"}),
-        name="transactions"
+        name="transactions",
     ),
     path(
-        'statements/',
-        views.StatementViewSet.as_view({"get": "get", "post": "post"}),
-        name="statements"
-    )
+        "statements/",
+        views.StatementViewSet.as_view(
+            {"get": "get", "post": "post"}
+        ),
+        name="statements",
+    ),
 ]

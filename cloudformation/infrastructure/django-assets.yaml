@@ -24,8 +24,8 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-        - Sid: PublicReadForGetBucketObjects
-          Effect: "Allow"
-          Principal: "*"
-          Action: "s3:GetObject"
-          Resource: !Sub "${AssetsBucket.Arn}/static/*"
+          - Sid: PublicReadForGetBucketObjects
+            Effect: "Allow"
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${AssetsBucket.Arn}/static/*"

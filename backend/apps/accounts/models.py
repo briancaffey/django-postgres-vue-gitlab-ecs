@@ -6,15 +6,16 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
     username = None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(
+        _("email address"), unique=True
+    )
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()

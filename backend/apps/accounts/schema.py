@@ -1,6 +1,5 @@
-from django.contrib.auth import get_user_model
-
 import graphene
+from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
 
 
@@ -33,9 +32,7 @@ class CreateUser(graphene.Mutation):
         email = graphene.String(required=True)
 
     def mutate(self, info, password, email):
-        user = get_user_model()(
-            email=email
-        )
+        user = get_user_model()(email=email)
         user.set_password(password)
         user.save()
 

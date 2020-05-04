@@ -21,7 +21,7 @@ COPY quasar /app/
 RUN quasar build -m pwa
 
 # ci stage
-FROM nginx:1.13.12-alpine as ci-stage
+FROM nginx:1.18.0-alpine as ci-stage
 COPY nginx/minikube/minikube.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /app/dist/pwa /dist/
 EXPOSE 80

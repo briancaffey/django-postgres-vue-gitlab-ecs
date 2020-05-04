@@ -6,9 +6,11 @@ from apps.accounts.schema import UserType
 
 from .models import Link, Vote
 
+
 class LinkType(DjangoObjectType):
     class Meta:
         model = Link
+
 
 class VoteType(DjangoObjectType):
     class Meta:
@@ -20,16 +22,22 @@ class Query(graphene.ObjectType):
         LinkType,
         search=graphene.String(),
         first=graphene.Int(),
-        skip=graphene.Int()
+        skip=graphene.Int(),
     )
     votes = graphene.List(VoteType)
 
-    def resolve_links(self, info, search=None, first=None, skip=None, **kwargs):
+    def resolve_links(
+        self,
+        info,
+        search=None,
+        first=None,
+        skip=None,
+        **kwargs
+    ):
         qs = Link.objects.all()
         if search:
-            filter = (
-                Q(url__icontains=search) |
-                Q(description__icontains=search)
+            filter = Q(url__icontains=search) | Q(
+                description__icontains=search
             )
             qs = qs.filter(filter)
 
@@ -60,9 +68,7 @@ class CreateLink(graphene.Mutation):
         if user.is_anonymous:
             user = None
         link = Link(
-            url=url,
-            description=description,
-            posted_by=user
+            url=url, description=description, posted_by=user
         )
 
         link.save()
@@ -71,8 +77,9 @@ class CreateLink(graphene.Mutation):
             id=link.id,
             url=link.url,
             description=link.description,
-            posted_by=link.posted_by
+            posted_by=link.posted_by,
         )
+
 
 class CreateVote(graphene.Mutation):
     user = graphene.Field(UserType)
@@ -91,12 +98,10 @@ class CreateVote(graphene.Mutation):
         if not link:
             raise Exception("Invalid link")
 
-        Vote.objects.create(
-            user=user,
-            link=link
-        )
+        Vote.objects.create(user=user, link=link)
 
         return CreateVote(user=user, link=link)
+
 
 class Mutation(graphene.ObjectType):
     create_link = CreateLink.Field()

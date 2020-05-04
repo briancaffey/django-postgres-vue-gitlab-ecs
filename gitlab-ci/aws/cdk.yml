@@ -1,0 +1,128 @@
+# This template uses AWS CDK and AWS CLI to make infrastrcutre updates
+# and to deploy changes to the frontend and backend
+
+variables:
+  ECR_BASE_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+  ENVIRONMENT: dev
+
+.Release backend:
+  stage: release
+  image: docker:19.03.8
+  only:
+    - master
+  services:
+    - docker:19.03.8-dind
+  before_script:
+    - apk add --no-cache curl jq python py-pip
+    - pip install awscli
+  variables:
+    REPOSITORY_URL: ${ECR_BASE_URL}/${ENVIRONMENT}.${DOMAIN_NAME}/backend
+  script:
+    - |
+      docker login \
+        -u $CI_REGISTRY_USER \
+        -p $CI_REGISTRY_PASSWORD \
+        $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE/backend:latest || true
+    - |
+      docker build \
+        --cache-from $CI_REGISTRY_IMAGE/backend:latest \
+        --target production \
+        --tag $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA \
+        --file backend/scripts/prod/Dockerfile .
+    - $(aws ecr get-login --no-include-email --region us-east-1)
+    - docker push $REPOSITORY_URL:$CI_COMMIT_SHORT_SHA
+  after_script:
+    - echo "The production image has been released from GitLab to ECR"
+
+Build Quasar PWA Assets:
+  image: node:8
+  stage: build
+  only:
+    - master
+  variables:
+    DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
+    GOOGLE_OAUTH2_KEY: google123
+    GITHUB_KEY: github123
+    WS_PROTOCOL: wss
+    HTTP_PROTOCOL: https
+  artifacts:
+    paths:
+      - quasar/dist/pwa
+  before_script:
+    - npm install -g @quasar/cli
+    - cd quasar
+    - npm install --progress=false
+  script:
+    - quasar build -m pwa
+  after_script:
+    - echo "Build Complete"
+
+
+Sync Quasar PWA Assets:
+  image: python:3.8
+  stage: deploy
+  only:
+    - master
+  dependencies:
+    - "Build Quasar PWA Assets"
+  before_script:
+    - cd quasar
+    - pip install awscli
+    - aws iam get-user
+  script:
+    - |
+      aws s3 sync \
+        --delete \
+        --exclude index.html \
+        --exclude service-worker.js \
+        ./dist/pwa/ s3://${ENVIRONMENT}.${DOMAIN_NAME}/
+    - |
+      aws s3 cp \
+        --cache-control 'max-age=0' \
+        ./dist/pwa/index.html s3://${ENVIRONMENT}.${DOMAIN_NAME}/
+    - |
+      aws s3 cp \
+        --cache-control 'max-age=0' \
+        ./dist/pwa/service-worker.js s3://${ENVIRONMENT}.${DOMAIN_NAME}/
+  after_script:
+    - echo "Deploy frontend complete"
+
+cdk deploy:
+  image: python:3.8
+  stage: deploy
+  only:
+    - master
+  variables:
+    ENVIRONMENT: dev
+  before_script:
+    - apt-get -qq update && apt-get -y install nodejs npm
+    - node -v
+    - npm i -g aws-cdk
+    - cd awscdk
+    - pip3 install -r requirements.txt
+  script:
+    - cdk deploy --require-approval never
+
+
+.collectstatic: &task
+  image: python:3.8
+  stage: deploy
+  only:
+    - master
+  before_script:
+    - pip install awscli
+  when: manual
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${DOMAIN_NAME}-${ENVIRONMENT}-cluster \
+        --task-definition collectstatic
+
+.migrate:
+  <<: *task
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${DOMAIN_NAME}-${ENVIRONMENT}-cluster \
+        --task-definition migrate

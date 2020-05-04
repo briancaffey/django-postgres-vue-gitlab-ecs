@@ -1,5 +1,8 @@
 import jwt
-from channels.auth import AuthMiddlewareStack, CookieMiddleware
+from channels.auth import (
+    AuthMiddlewareStack,
+    CookieMiddleware
+)
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
@@ -18,22 +21,23 @@ class TokenAuthMiddleware:
 
     def __call__(self, scope):
         close_old_connections()
-        cookies = scope['cookies']
-        if 'user-token' in cookies:
+        cookies = scope["cookies"]
+        if "user-token" in cookies:
             token = jwt.decode(
-                cookies['user-token'],
+                cookies["user-token"],
                 settings.SECRET_KEY,
-                algorithms=['HS256'],
-                options={'verify_exp': False}
+                algorithms=["HS256"],
+                options={"verify_exp": False},
             )
-            user_id = token['user_id']
+            user_id = token["user_id"]
             try:
                 user = User.objects.get(id=user_id)
-                scope['user'] = user
+                scope["user"] = user
             except User.DoesNotExist:
-                scope['user'] = AnonymousUser()
+                scope["user"] = AnonymousUser()
         return self.inner(scope)
 
-TokenAuthMiddlewareStack = lambda inner: CookieMiddleware( # noqa
+
+TokenAuthMiddlewareStack = lambda inner: CookieMiddleware(  # noqa
     TokenAuthMiddleware(AuthMiddlewareStack(inner))
 )

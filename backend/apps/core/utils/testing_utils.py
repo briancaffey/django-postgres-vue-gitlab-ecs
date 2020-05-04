@@ -2,16 +2,10 @@
 Utility functions for tests
 """
 
-from datetime import datetime, timedelta
-
-import jwt
 from channels.db import database_sync_to_async
-from django.conf import settings
-from rest_framework_simplejwt.tokens import AccessToken
-
-
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
+from rest_framework_simplejwt.tokens import AccessToken
 
 User = get_user_model()
 
@@ -21,7 +15,9 @@ PASSWORD = "5Mr6IUPOFjuL"
 
 def token_for_new_user():
     email, password = EMAIL, PASSWORD
-    user = User.objects.create_user(email=email, password=password)
+    user = User.objects.create_user(
+        email=email, password=password
+    )
     token = AccessToken.for_user(user)
     return token
 

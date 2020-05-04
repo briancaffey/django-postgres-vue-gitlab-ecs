@@ -15,28 +15,28 @@ def get_payload(backend, code):
     client_id = os.environ.get(key, "nokey")
     client_secret = os.environ.get(secret, "nosecret")
 
-    if backend == 'github':
+    if backend == "github":
         payload = {
-            'code': code,
-            'client_id': client_id,
-            'client_secret': client_secret,
+            "code": code,
+            "client_id": client_id,
+            "client_secret": client_secret,
         }
 
     # TODO: change `localhost` to env var
-    elif backend == 'google-oauth2':
+    elif backend == "google-oauth2":
         payload = {
-            'code': code,
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'redirect_uri': "http://localhost/auth/google-oauth2/callback",
-            'grant_type': "authorization_code"
+            "code": code,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "redirect_uri": "http://localhost/auth/google-oauth2/callback",
+            "grant_type": "authorization_code",
         }
-    elif backend == 'facebook':
+    elif backend == "facebook":
         payload = {
-            'code': code,
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'redirect_uri': 'http://localhost/auth/facebook/callback'
+            "code": code,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "redirect_uri": "http://localhost/auth/facebook/callback",
         }
 
     return payload
@@ -45,7 +45,7 @@ def get_payload(backend, code):
 def get_access_token_from_code(backend, code):
     """Get access token for any OAuth backend from code"""
 
-    url = c.OAUTH[backend]['url']
+    url = c.OAUTH[backend]["url"]
     payload = get_payload(backend, code)
 
     # different providers have different responses to their oauth endpoints
@@ -59,7 +59,9 @@ def get_access_token_from_code(backend, code):
 
         # TODO: cleanup logic
         url = "http://example.com?" + str(r.content)
-        params = dict(parse.parse_qsl(parse.urlsplit(url).query))
+        params = dict(
+            parse.parse_qsl(parse.urlsplit(url).query)
+        )
 
         return params["b'access_token"]
 
@@ -74,11 +76,11 @@ def get_access_token_from_code(backend, code):
     elif backend == "google-oauth2":
         r = requests.post(url, data=payload)
 
-        token = r.json()['access_token']
+        token = r.json()["access_token"]
 
         return token
 
     elif backend == "facebook":
         r = requests.get(url, params=payload)
-        token = r.json()['access_token']
+        token = r.json()["access_token"]
         return token

@@ -19,9 +19,10 @@ def debug_task(self):
 
 
 @periodic_task(
-    run_every=(crontab(minute='*/1')),
+    run_every=(crontab(minute="*/1")),
     name="debug_periodic_task",
-    ignore_result=True)
+    ignore_result=True,
+)
 def debug_periodic_task():
     print("Periodic task complete")
 
@@ -29,9 +30,9 @@ def debug_periodic_task():
 @task(bind=True, base=BaseTask)
 def send_test_email_task(self):
     send_mail(
-        'Subject here',
-        'Here is the message.',
-        'from@example.com',
-        ['to@example.com'],
+        "Subject here",
+        "Here is the message.",
+        "from@example.com",
+        ["to@example.com"],
         fail_silently=False,
     )
