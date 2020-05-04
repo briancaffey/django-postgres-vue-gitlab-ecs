@@ -2,10 +2,10 @@ Resources:
   SiteCert6025247C:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: dev.jamescaffey.com
+      DomainName: dev.mydomain.com
       DomainValidationOptions:
-        - DomainName: dev.jamescaffey.com
-          ValidationDomain: jamescaffey.com
+        - DomainName: dev.mydomain.com
+          ValidationDomain: mydomain.com
       ValidationMethod: DNS
     Metadata:
       aws:cdk:path: cdk-app-dev/SiteCert/Resource
@@ -339,7 +339,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: dev.jamescaffey.com
+      BucketName: dev.mydomain.com
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
     Metadata:
@@ -369,7 +369,7 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-          - dev.jamescaffey.com
+          - dev.mydomain.com
         CacheBehaviors:
           - AllowedMethods:
               - DELETE
@@ -449,7 +449,7 @@ Resources:
   StaticSiteAliasRecord4F27A661:
     Type: AWS::Route53::RecordSet
     Properties:
-      Name: dev.jamescaffey.com.
+      Name: dev.mydomain.com.
       Type: A
       AliasTarget:
         DNSName:
@@ -463,7 +463,7 @@ Resources:
   ElasticContainerRepo2908E7AA:
     Type: AWS::ECR::Repository
     Properties:
-      RepositoryName: dev.jamescaffey.com/backend
+      RepositoryName: dev.mydomain.com/backend
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
@@ -471,7 +471,7 @@ Resources:
   EcsEcsCluster51C39CA0:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: dev-jamescaffey-com-cluster
+      ClusterName: dev-mydomain-com-cluster
     Metadata:
       aws:cdk:path: cdk-app-dev/Ecs/EcsCluster/Resource
   BackendBackendTaskTaskRoleD7BBECAE:
@@ -490,7 +490,9 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
-        - Environment:
+        - Command:
+            - /start_prod.sh
+          Environment:
             - Name: DJANGO_SETTINGS_MODULE
               Value: backend.settings.production
             - Name: DEBUG
@@ -498,7 +500,7 @@ Resources:
             - Name: SECRET_KEY
               Value: secret
             - Name: AWS_STORAGE_BUCKET_NAME
-              Value: dev-jamescaffey-com-assets
+              Value: dev-mydomain-com-assets
           Essential: true
           Image:
             Fn::Join:
@@ -506,7 +508,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:7a7349accde82368e032bcb18be28b83655808da3df45a242fde0b400cb78ff9
+                - /aws-cdk/assets:ed8e30cd14a68124b8bd695080143a06c51ca4575551e5a4eaa691fed21fc150
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -652,7 +654,7 @@ Resources:
   BackendAssetsAssetsBucket62473847:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: dev-jamescaffey-com-assets
+      BucketName: dev-mydomain-com-assets
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:

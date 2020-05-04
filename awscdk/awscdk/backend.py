@@ -32,8 +32,12 @@ class Backend(core.Construct):
         }
 
         self.backend_task.add_container(
-            "nginx",
-            image=ecs.AssetImage("../backend", file="scripts/prod/Dockerfile"),
+            "DjangoBackend",
+            image=ecs.AssetImage(
+                "../backend",
+                file="scripts/prod/Dockerfile",
+                target="production",
+            ),
             logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
             environment=environment_variables,
             command=["/start_prod.sh"],
