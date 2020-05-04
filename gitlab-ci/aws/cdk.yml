@@ -89,14 +89,19 @@ variables:
     - echo "Deploy frontend complete"
 
 cdk deploy:
-  image: python:3.8
+  image: docker:19.03.1
+  services:
+    - docker:19.03.5-dind
   stage: deploy
   only:
     - master
   variables:
     ENVIRONMENT: dev
   before_script:
-    - apt-get -qq update && apt-get -y install nodejs npm
+    # - apt-get -qq update && apt-get -y install nodejs npm
+    - apk add --no-cache python py-pip
+    - python -V
+    - apk add nodejs-current
     - node -v
     - npm i -g aws-cdk
     - cd awscdk
