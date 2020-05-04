@@ -40,7 +40,6 @@ Build Quasar PWA Assets:
   stage: build
   only:
     - master
-    # - tags
   variables:
     DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
     GOOGLE_OAUTH2_KEY: google123
