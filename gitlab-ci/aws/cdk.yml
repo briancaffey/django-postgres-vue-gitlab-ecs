@@ -100,7 +100,8 @@ cdk deploy:
   before_script:
     # - apt-get -qq update && apt-get -y install nodejs npm
     - apk add --no-cache python3
-    - python -V
+    - python3 -V
+    - pip3 -V
     - apk add nodejs-current npm
     - node -v
     - npm i -g aws-cdk
