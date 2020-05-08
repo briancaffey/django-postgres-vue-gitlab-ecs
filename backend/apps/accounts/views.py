@@ -84,7 +84,7 @@ def exchange_token(request, backend):
             # send a malformed
             # or incorrect access key.
             return Response(
-                {"errors": {"token": "Invalid token", "detail": str(e),}},
+                {"errors": {"token": "Invalid token", "detail": str(e)}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

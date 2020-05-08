@@ -59,7 +59,7 @@ class AccountsTests(APITestCase):
 
         resp = self.client.post(
             url,
-            {"email": "user@foo.com", "password": "password",},
+            {"email": "user@foo.com", "password": "password"},
             format="json",
         )
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -67,7 +67,7 @@ class AccountsTests(APITestCase):
         u.save()
         resp = self.client.post(
             url,
-            {"email": "user@foo.com", "password": "password",},
+            {"email": "user@foo.com", "password": "password"},
             format="json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)

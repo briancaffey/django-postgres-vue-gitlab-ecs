@@ -1,9 +1,8 @@
 import json
 
 import pytest
-from django.core.files.uploadedfile import (
-    SimpleUploadedFile,
-)  # noqa; noqa; noqa
+
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import override_settings
 from django.urls import reverse
 
