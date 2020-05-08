@@ -31,9 +31,10 @@ django-redis==4.10.0
 django-storages==1.7.1
 django-constance==2.4.0 # for managing settings in admin
 
-pandas==0.24.2
-pandas_flavor==0.1.2
-pyjanitor==0.16.6
+# TODO: figure out why pandas is taking a long time to download
+# pandas==0.24.2
+# pandas_flavor==0.1.2
+# pyjanitor==0.16.6
 
 xlrd==1.2.0 # required by pandas for Excel support
 XlsxWriter==1.1.6 # used by the excel recon tool

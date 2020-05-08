@@ -15,6 +15,7 @@ class Backend(core.Construct):
         id: str,
         load_balancer,
         cluster: ecs.ICluster,
+        domain_name: str,
         **kwargs,
     ) -> None:
         super().__init__(
@@ -23,14 +24,27 @@ class Backend(core.Construct):
 
         self.backend_task = ecs.FargateTaskDefinition(self, "BackendTask")
 
+        environment_variables = {
+            "DJANGO_SETTINGS_MODULE": "backend.settings.production",
+            "DEBUG": "",
+            "SECRET_KEY": "secret",
+            "AWS_STORAGE_BUCKET_NAME": f"{domain_name.replace('.', '-')}-assets",  # noqa
+        }
+
         self.backend_task.add_container(
-            "nginx",
-            image=ecs.ContainerImage.from_registry("nginxdemos/hello:latest"),
+            "DjangoBackend",
+            image=ecs.AssetImage(
+                "../backend",
+                file="scripts/prod/Dockerfile",
+                target="production",
+            ),
             logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
+            environment=environment_variables,
+            command=["/start_prod.sh"],
         )
 
         port_mapping = ecs.PortMapping(
-            container_port=80, protocol=ecs.Protocol.TCP
+            container_port=8000, protocol=ecs.Protocol.TCP
         )
         self.backend_task.default_container.add_port_mappings(port_mapping)
 
@@ -48,4 +62,7 @@ class Backend(core.Construct):
             targets=[self.backend_service],
             priority=1,
             path_patterns=["*"],
+            health_check=elbv2.HealthCheck(
+                healthy_http_codes="200-299", path="/api/hello-world",
+            ),
         )
