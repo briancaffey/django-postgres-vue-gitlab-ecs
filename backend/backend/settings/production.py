@@ -13,9 +13,7 @@ EMAIL_HOST_PASSWORD = os.environ.get(  # noqa
 # AWS S3 Static Files
 
 AWS_STATIC_LOCATION = "static"
-STATICFILES_STORAGE = (
-    "backend.storage_backends.StaticStorage"
-)
+STATICFILES_STORAGE = "backend.storage_backends.StaticStorage"
 STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"  # noqa
 
 
@@ -26,32 +24,20 @@ log_level = "INFO"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",  # noqa
-        },
-    },
+    "handlers": {"console": {"class": "logging.StreamHandler",},},  # noqa
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": os.getenv(  # noqa
-                "DJANGO_LOG_LEVEL", "INFO"
-            ),  # noqa
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa  # noqa
         },
         "portal": {
             "handlers": ["console"],
-            "level": os.getenv(  # noqa
-                "PORTAL_LOG_LEVEL", log_level
-            ),  # noqa
+            "level": os.getenv("PORTAL_LOG_LEVEL", log_level),  # noqa  # noqa
         },
     },
 }
 
 # Celery
 
-CELERY_BROKER_URL = (
-    f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
-)
-CELERY_RESULT_BACKEND = (
-    f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
-)
+CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
+CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa

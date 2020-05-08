@@ -1,8 +1,5 @@
 import jwt
-from channels.auth import (
-    AuthMiddlewareStack,
-    CookieMiddleware
-)
+from channels.auth import AuthMiddlewareStack, CookieMiddleware
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser

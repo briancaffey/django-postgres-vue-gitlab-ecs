@@ -34,23 +34,15 @@ log_level = "DEBUG"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",  # noqa
-        },
-    },
+    "handlers": {"console": {"class": "logging.StreamHandler",},},  # noqa
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": os.getenv(  # noqa
-                "DJANGO_LOG_LEVEL", "INFO"
-            ),  # noqa
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),  # noqa  # noqa
         },
         "portal": {
             "handlers": ["console"],
-            "level": os.getenv(  # noqa
-                "PORTAL_LOG_LEVEL", log_level
-            ),  # noqa
+            "level": os.getenv("PORTAL_LOG_LEVEL", log_level),  # noqa  # noqa
         },
     },
 }

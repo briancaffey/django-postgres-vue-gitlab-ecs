@@ -27,12 +27,7 @@ class Query(graphene.ObjectType):
     votes = graphene.List(VoteType)
 
     def resolve_links(
-        self,
-        info,
-        search=None,
-        first=None,
-        skip=None,
-        **kwargs
+        self, info, search=None, first=None, skip=None, **kwargs
     ):
         qs = Link.objects.all()
         if search:
@@ -67,9 +62,7 @@ class CreateLink(graphene.Mutation):
         user = info.context.user
         if user.is_anonymous:
             user = None
-        link = Link(
-            url=url, description=description, posted_by=user
-        )
+        link = Link(url=url, description=description, posted_by=user)
 
         link.save()
 

@@ -34,6 +34,7 @@ Pytest:
     - pip install -r requirements/base.txt
   script:
     - flake8
+    - black -l 79 -S --check .
     - pytest --cov
   after_script:
     - echo "Pytest tests complete"

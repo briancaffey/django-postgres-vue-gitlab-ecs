@@ -23,10 +23,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("url", models.URLField()),
-                (
-                    "description",
-                    models.TextField(blank=True),
-                ),
+                ("description", models.TextField(blank=True),),
             ],
         ),
     ]

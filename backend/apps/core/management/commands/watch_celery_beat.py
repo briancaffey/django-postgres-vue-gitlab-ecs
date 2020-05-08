@@ -25,9 +25,7 @@ def restart_celery_beat():
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        print(
-            "Starting celery worker with autoreload..."
-        )  # noqa
+        print("Starting celery worker with autoreload...")  # noqa
         try:
             os.remove("celerybeat.pid")
         except FileNotFoundError as e:

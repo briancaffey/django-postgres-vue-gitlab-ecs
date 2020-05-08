@@ -8,9 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(
-            settings.AUTH_USER_MODEL
-        ),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("hn", "0002_link_posted_by"),
     ]
 

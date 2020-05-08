@@ -25,15 +25,11 @@ def process_statement_file(self, statement_file_id):
         id=statement_file_id
     ).statement_file
     file_data = statement_file.read().decode("utf-8")
-    csv_data = csv.DictReader(
-        StringIO(file_data), delimiter=","
-    )
+    csv_data = csv.DictReader(StringIO(file_data), delimiter=",")
 
     transactions = []
     for row in csv_data:
-        date = datetime.datetime.strptime(
-            row["Posted Date"], "%m/%d/%Y"
-        )
+        date = datetime.datetime.strptime(row["Posted Date"], "%m/%d/%Y")
         description = row["Payee"]
         address = row["Address"]
         amount = row["Amount"]

@@ -2,7 +2,7 @@ from django.urls import include, path, re_path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
-    TokenVerifyView
+    TokenVerifyView,
 )
 
 from . import views
@@ -23,17 +23,9 @@ urlpatterns = [
         TokenVerifyView.as_view(),
         name="api-jwt-verify",
     ),
-    path(
-        "users/profile/",
-        views.Profile.as_view(),
-        name="user-profile",
-    ),
+    path("users/profile/", views.Profile.as_view(), name="user-profile",),
     # Social Auth Callbacks
-    path(
-        "social/<backend>/",
-        views.exchange_token,
-        name="social-auth",
-    ),
+    path("social/<backend>/", views.exchange_token, name="social-auth",),
 ]
 
 urlpatterns += [

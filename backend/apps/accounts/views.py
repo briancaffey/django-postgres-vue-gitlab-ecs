@@ -2,10 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from requests.exceptions import HTTPError
 from rest_framework import permissions, serializers, status
-from rest_framework.decorators import (
-    api_view,
-    permission_classes
-)
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -32,9 +29,7 @@ class SocialSerializer(serializers.Serializer):
     Serializer which accepts an OAuth2 code.
     """
 
-    code = serializers.CharField(
-        allow_blank=False, trim_whitespace=True,
-    )
+    code = serializers.CharField(allow_blank=False, trim_whitespace=True,)
 
 
 @api_view(http_method_names=["POST"])
@@ -66,9 +61,7 @@ def exchange_token(request, backend):
     if serializer.is_valid(raise_exception=True):
 
         code = serializer.validated_data["code"]
-        access_token = get_access_token_from_code(
-            backend, code
-        )
+        access_token = get_access_token_from_code(backend, code)
         # set up non-field errors key
         # http://www.django-rest-framework.org/api-guide/exceptions/
         # #exception-handling-in-rest-framework-views
@@ -91,12 +84,7 @@ def exchange_token(request, backend):
             # send a malformed
             # or incorrect access key.
             return Response(
-                {
-                    "errors": {
-                        "token": "Invalid token",
-                        "detail": str(e),
-                    }
-                },
+                {"errors": {"token": "Invalid token", "detail": str(e),}},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -112,11 +100,7 @@ def exchange_token(request, backend):
                 # normal credentials anymore, so they can't log in with social
                 # credentials either.
                 return Response(
-                    {
-                        "errors": {
-                            nfe: "This user account is inactive"
-                        }
-                    },
+                    {"errors": {nfe: "This user account is inactive"}},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         else:

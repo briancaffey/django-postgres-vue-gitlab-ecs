@@ -5,10 +5,7 @@ import logging
 import os
 
 import redis
-from django.http import (
-    HttpResponse,
-    HttpResponseServerError
-)
+from django.http import HttpResponse, HttpResponseServerError
 
 logger = logging.getLogger("django")
 
@@ -61,15 +58,9 @@ class HealthCheckMiddleware(object):
         try:
             import redis
 
-            r = redis.Redis(
-                host=os.environ.get(
-                    "REDIS_SERVICE_HOST", "redis"
-                )
-            )
+            r = redis.Redis(host=os.environ.get("REDIS_SERVICE_HOST", "redis"))
             r.ping()
         except Exception as e:
             logger.exception(e)
-            return HttpResponseServerError(
-                "Redis: cannot connect to redis."
-            )
+            return HttpResponseServerError("Redis: cannot connect to redis.")
         return HttpResponse("OK")

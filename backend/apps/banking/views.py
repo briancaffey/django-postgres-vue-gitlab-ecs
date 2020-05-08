@@ -6,10 +6,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 
 from .models import StatementFile, Transaction
-from .serializers import (
-    StatementFileSerializer,
-    TransactionSerializer
-)
+from .serializers import StatementFileSerializer, TransactionSerializer
 from .tasks import process_statement_file
 
 # Create your views here.
@@ -19,15 +16,9 @@ class TransactionViewSet(viewsets.ViewSet):
     def get(self, request):
         paginator = LimitOffsetPagination()
         transactions = Transaction.objects.all()
-        result_page = paginator.paginate_queryset(
-            transactions, request
-        )
-        serializer = TransactionSerializer(
-            result_page, many=True
-        )
-        return_data = paginator.get_paginated_response(
-            serializer.data
-        )
+        result_page = paginator.paginate_queryset(transactions, request)
+        serializer = TransactionSerializer(result_page, many=True)
+        return_data = paginator.get_paginated_response(serializer.data)
         return return_data
 
 
@@ -35,15 +26,9 @@ class StatementViewSet(viewsets.ViewSet):
     def get(self, request):
         paginator = LimitOffsetPagination()
         statement_files = StatementFile.objects.all()
-        result_page = paginator.paginate_queryset(
-            statement_files, request
-        )
-        serializer = StatementFileSerializer(
-            result_page, many=True
-        )
-        return_data = paginator.get_paginated_response(
-            serializer.data
-        )
+        result_page = paginator.paginate_queryset(statement_files, request)
+        serializer = StatementFileSerializer(result_page, many=True)
+        return_data = paginator.get_paginated_response(serializer.data)
         return return_data
 
     def post(self, request):
@@ -62,9 +47,7 @@ class StatementViewSet(viewsets.ViewSet):
             **form_data,
             "statement_file": source_file,
         }
-        serializer = StatementFileSerializer(
-            data=serializer_data
-        )
+        serializer = StatementFileSerializer(data=serializer_data)
         serializer.is_valid(raise_exception=True)
 
         serializer.save()

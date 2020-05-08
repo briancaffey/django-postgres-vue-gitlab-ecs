@@ -5,12 +5,8 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
 
-def make_password(
-    size=10, chars=string.ascii_uppercase + string.digits
-):
-    return "".join(
-        random.choice(chars) for _ in range(size)
-    )
+def make_password(size=10, chars=string.ascii_uppercase + string.digits):
+    return "".join(random.choice(chars) for _ in range(size))
 
 
 class CustomUserManager(BaseUserManager):
@@ -19,9 +15,7 @@ class CustomUserManager(BaseUserManager):
     for authentication instead of usernames.
     """
 
-    def create_user(
-        self, email, password=None, **extra_fields
-    ):
+    def create_user(self, email, password=None, **extra_fields):
         """
         Create and save a User with the given email and password.
         """
@@ -37,9 +31,7 @@ class CustomUserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(
-        self, email, password, **extra_fields
-    ):
+    def create_superuser(self, email, password, **extra_fields):
         """
         Create and save a SuperUser with the given email and password.
         """
@@ -48,13 +40,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_active", True)
 
         if extra_fields.get("is_staff") is not True:
-            raise ValueError(
-                _("Superuser must have is_staff=True.")
-            )
+            raise ValueError(_("Superuser must have is_staff=True."))
         if extra_fields.get("is_superuser") is not True:
-            raise ValueError(
-                _("Superuser must have is_superuser=True.")
-            )
-        return self.create_user(
-            email, password, **extra_fields
-        )
+            raise ValueError(_("Superuser must have is_superuser=True."))
+        return self.create_user(email, password, **extra_fields)

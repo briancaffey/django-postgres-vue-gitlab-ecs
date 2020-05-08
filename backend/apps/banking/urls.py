@@ -10,9 +10,7 @@ urlpatterns = [
     ),
     path(
         "statements/",
-        views.StatementViewSet.as_view(
-            {"get": "get", "post": "post"}
-        ),
+        views.StatementViewSet.as_view({"get": "get", "post": "post"}),
         name="statements",
     ),
 ]

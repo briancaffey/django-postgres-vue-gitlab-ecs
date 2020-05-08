@@ -1,10 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .forms import (
-    CustomUserChangeForm,
-    CustomUserCreationForm
-)
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 from .models import CustomUser
 
 
@@ -24,10 +21,7 @@ class CustomUserAdmin(UserAdmin):
     )
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (
-            "Permissions",
-            {"fields": ("is_staff", "is_active")},
-        ),
+        ("Permissions", {"fields": ("is_staff", "is_active")},),
     )
     add_fieldsets = (
         (

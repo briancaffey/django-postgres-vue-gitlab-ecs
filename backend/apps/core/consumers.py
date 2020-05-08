@@ -1,9 +1,7 @@
 import json
 import time
 
-from channels.generic.websocket import (
-    AsyncWebsocketConsumer
-)
+from channels.generic.websocket import AsyncWebsocketConsumer
 from django.conf import settings
 
 r = settings.REDIS

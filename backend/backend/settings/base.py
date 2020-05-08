@@ -17,9 +17,7 @@ from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(
-    os.path.dirname(
-        os.path.dirname(os.path.abspath(__file__))
-    )
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 )
 
 
@@ -72,9 +70,7 @@ THIRD_PARTY_APPS = [
 
 GRAPHENE = {
     "SCHEMA": "backend.schema.schema",
-    "MIDDLEWARE": [
-        "graphql_jwt.middleware.JSONWebTokenMiddleware"
-    ],
+    "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware"],
 }
 
 # Python Social Auth
@@ -125,9 +121,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 # SOCIAL_AUTH_GITHUB_WHITELISTED_DOMAINS=['localhost']
 
-INSTALLED_APPS = (
-    DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
-)
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -169,18 +163,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": os.environ.get("POSTGRES_NAME", "postgres"),
-        "USER": os.environ.get(
-            "POSTGRES_USERNAME", "postgres"
-        ),
-        "PASSWORD": os.environ.get(
-            "POSTGRES_PASSWORD", "postgres"
-        ),
-        "HOST": os.environ.get(
-            "POSTGRES_SERVICE_HOST", "postgres"
-        ),
-        "PORT": os.environ.get(
-            "POSTGRES_SERVICE_PORT", 5432
-        ),
+        "USER": os.environ.get("POSTGRES_USERNAME", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "postgres"),
+        "HOST": os.environ.get("POSTGRES_SERVICE_HOST", "postgres"),
+        "PORT": os.environ.get("POSTGRES_SERVICE_PORT", 5432),
     }
 }
 
@@ -188,16 +174,12 @@ ASGI_APPLICATION = "backend.routing.application"
 
 # Redis
 
-REDIS_SERVICE_HOST = os.environ.get(
-    "REDIS_SERVICE_HOST", "redis"
-)
+REDIS_SERVICE_HOST = os.environ.get("REDIS_SERVICE_HOST", "redis")
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(REDIS_SERVICE_HOST, 6379)],  # noqa
-        },
+        "CONFIG": {"hosts": [(REDIS_SERVICE_HOST, 6379)],},  # noqa
     },
 }
 
@@ -273,9 +255,7 @@ AWS_DEFAULT_ACL = None
 AWS_STORAGE_BUCKET_NAME = os.environ.get(
     "AWS_STORAGE_BUCKET_NAME", "bucketname"
 )
-AWS_S3_CUSTOM_DOMAIN = (
-    f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-)
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
 }
@@ -283,9 +263,7 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_PRIVATE_MEDIA_LOCATION = "media/private"
 AWS_STATIC_LOCATION = "static"
 
-PRIVATE_FILE_STORAGE = (
-    "backend.storage_backends.PrivateMediaStorage"
-)
+PRIVATE_FILE_STORAGE = "backend.storage_backends.PrivateMediaStorage"
 
 
 # Email

@@ -6,9 +6,7 @@ import apps.hn.schema
 
 
 class Query(
-    apps.accounts.schema.Query,
-    apps.hn.schema.Query,
-    graphene.ObjectType,
+    apps.accounts.schema.Query, apps.hn.schema.Query, graphene.ObjectType,
 ):
     pass
 

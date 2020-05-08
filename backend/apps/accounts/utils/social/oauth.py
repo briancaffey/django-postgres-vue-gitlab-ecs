@@ -59,9 +59,7 @@ def get_access_token_from_code(backend, code):
 
         # TODO: cleanup logic
         url = "http://example.com?" + str(r.content)
-        params = dict(
-            parse.parse_qsl(parse.urlsplit(url).query)
-        )
+        params = dict(parse.parse_qsl(parse.urlsplit(url).query))
 
         return params["b'access_token"]
 

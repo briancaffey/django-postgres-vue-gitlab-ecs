@@ -22,10 +22,7 @@ from graphene_django.views import GraphQLView
 
 urlpatterns = [
     path(
-        "graphql/",
-        csrf_exempt(
-            GraphQLView.as_view(graphiql=settings.DEBUG)
-        ),
+        "graphql/", csrf_exempt(GraphQLView.as_view(graphiql=settings.DEBUG)),
     ),
     path("admin/", admin.site.urls),
     path("api/", include("apps.accounts.urls")),
@@ -41,20 +38,11 @@ if settings.DEBUG:
         urlpatterns
         + [
             # path('', index_view, name='index'),
-            path(
-                "admin/__debug__/",
-                include(debug_toolbar.urls),
-            ),
+            path("admin/__debug__/", include(debug_toolbar.urls),),
             # catch all rule so that we can navigate to
             # routes in vue app other than "/"
             # re_path(r'^(?!js)(?!css)(?!statics)(?!fonts)(?!service\-worker\.js)(?!manifest\.json)(?!precache).*', index_view, name='index') # noqa
         ]
-        + static(
-            settings.STATIC_URL,
-            document_root=settings.STATIC_ROOT,
-        )
-        + static(
-            settings.MEDIA_URL,
-            document_root=settings.MEDIA_ROOT,
-        )
+        + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT,)
+        + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,)
     )

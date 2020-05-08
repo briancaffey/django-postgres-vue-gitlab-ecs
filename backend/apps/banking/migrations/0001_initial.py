@@ -22,10 +22,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                (
-                    "statement_file",
-                    models.FileField(upload_to=""),
-                ),
+                ("statement_file", models.FileField(upload_to=""),),
                 ("month", models.DateField()),
             ],
         ),
@@ -42,14 +39,8 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("date", models.DateField()),
-                (
-                    "description",
-                    models.CharField(max_length=1000),
-                ),
-                (
-                    "location",
-                    models.CharField(max_length=1000),
-                ),
+                ("description", models.CharField(max_length=1000),),
+                ("location", models.CharField(max_length=1000),),
                 ("amount", models.FloatField()),
             ],
         ),

@@ -11,9 +11,7 @@ class CustomUser(AbstractUser):
         verbose_name_plural = _("users")
 
     username = None
-    email = models.EmailField(
-        _("email address"), unique=True
-    )
+    email = models.EmailField(_("email address"), unique=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
