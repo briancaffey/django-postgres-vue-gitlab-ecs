@@ -1,3 +1,30 @@
+.Build backend:
+  stage: build
+  image: docker:19.03.1
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:19.03.5-dind
+  before_script:
+    - |
+      docker login \
+        -u $CI_REGISTRY_USER \
+        -p $CI_REGISTRY_PASSWORD \
+        $CI_REGISTRY
+  script:
+    - |
+      docker build \
+        -t $CI_REGISTRY_IMAGE/backend:latest \
+        -f backend/scripts/prod/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/backend:latest
+  after_script:
+    - echo "Build backend complete"
+  only:
+    changes:
+      - backend/**/*
+      - quasar/**/*
+
 .Release backend:
   stage: release
   image: docker:stable

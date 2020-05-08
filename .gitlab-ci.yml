@@ -44,10 +44,10 @@ Pytest:
   #     - backend/**/*
 
 Jest:
-  image: node:8
+  image: node:12.16.3
   stage: test
   before_script:
-    - cd frontend
+    - cd quasar
     - npm install --progress=false
   script:
     - npm run lint
@@ -58,33 +58,6 @@ Jest:
   # only:
   #   changes:
   #     - quasar/**/*
-
-.Build backend:
-  stage: build
-  image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
-  before_script:
-    - |
-      docker login \
-        -u $CI_REGISTRY_USER \
-        -p $CI_REGISTRY_PASSWORD \
-        $CI_REGISTRY
-  script:
-    - |
-      docker build \
-        -t $CI_REGISTRY_IMAGE/backend:latest \
-        -f backend/scripts/prod/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/backend:latest
-  after_script:
-    - echo "Build backend complete"
-  only:
-    changes:
-      - backend/**/*
-      - quasar/**/*
 
 # gitlab-runner exec docker "e2e cypress tests without docker-compose"
 .e2e: &cypress
