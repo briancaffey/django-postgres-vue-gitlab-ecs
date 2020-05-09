@@ -17,7 +17,7 @@ include:
   #- local: /gitlab-ci/gcp/terraform.yml
 
 Pytest:
-  image: python:3.7
+  image: python:3.8
   stage: test
   services:
     - postgres:11.7
