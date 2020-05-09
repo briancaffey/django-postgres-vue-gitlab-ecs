@@ -1,4 +1,4 @@
-renovate:
+.renovate:
   image: docker:19.03.8
   services:
     - docker:19.03.8-dind

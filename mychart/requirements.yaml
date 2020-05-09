@@ -1,8 +1,8 @@
 dependencies:
   - name: "postgresql"
-    version: "3.18.4"
+    version: "3.10.0"
     repository: "@stable"
 
   - name: "redis"
-    version: "9.5.5"
+    version: "9.2.2"
     repository: "@stable"

@@ -1,5 +1,5 @@
 # this image is tagged and pushed to the production registry (such as ECR)
-FROM python:3.7-slim as production
+FROM python:3.8 as production
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 RUN mkdir /code
