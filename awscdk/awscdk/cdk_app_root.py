@@ -52,6 +52,8 @@ class ApplicationStack(core.Stack):
 
         self.ecs = Ecs(self, "Ecs", vpc=self.vpc.vpc, domain_name=domain_name)
 
+        self.assets = Assets(self, "BackendAssets", domain_name=domain_name)
+
         self.backend = Backend(
             self,
             "Backend",
@@ -59,8 +61,6 @@ class ApplicationStack(core.Stack):
             cluster=self.ecs.cluster,
             domain_name=domain_name,
         )
-
-        self.assets = Assets(self, "BackendAssets", domain_name=domain_name)
 
         # give the backend service read/write access to the assets bucket
         self.assets.assets_bucket.grant_read_write(

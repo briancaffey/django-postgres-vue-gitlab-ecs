@@ -477,6 +477,34 @@ Resources:
       ClusterName: dev-mysite-com-cluster
     Metadata:
       aws:cdk:path: cdk-app-dev/Ecs/EcsCluster/Resource
+  BackendAssetsAssetsBucket62473847:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: dev-mysite-com-assets
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: cdk-app-dev/BackendAssets/AssetsBucket/Resource
+  BackendAssetsAssetsBucketPolicyE8C83357:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: BackendAssetsAssetsBucket62473847
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal: "*"
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - BackendAssetsAssetsBucket62473847
+                      - Arn
+                  - /static/*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: cdk-app-dev/BackendAssets/AssetsBucket/Policy/Resource
   BackendBackendTaskTaskRoleD7BBECAE:
     Type: AWS::IAM::Role
     Properties:
@@ -683,36 +711,8 @@ Resources:
       ToPort: 8000
     Metadata:
       aws:cdk:path: cdk-app-dev/Backend/BackendService/SecurityGroup/from cdkappdevApplicationLoadBalancerALBSecurityGroup3D940044:8000
-  BackendAssetsAssetsBucket62473847:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: dev-mysite-com-assets
-    UpdateReplacePolicy: Retain
-    DeletionPolicy: Retain
-    Metadata:
-      aws:cdk:path: cdk-app-dev/BackendAssets/AssetsBucket/Resource
-  BackendAssetsAssetsBucketPolicyE8C83357:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket:
-        Ref: BackendAssetsAssetsBucket62473847
-      PolicyDocument:
-        Statement:
-          - Action: s3:GetObject
-            Effect: Allow
-            Principal: "*"
-            Resource:
-              Fn::Join:
-                - ""
-                - - Fn::GetAtt:
-                      - BackendAssetsAssetsBucket62473847
-                      - Arn
-                  - /static/*
-        Version: "2012-10-17"
-    Metadata:
-      aws:cdk:path: cdk-app-dev/BackendAssets/AssetsBucket/Policy/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.35.0,@aws-cdk/aws-apigateway=1.35.0,@aws-cdk/aws-applicationautoscaling=1.35.0,@aws-cdk/aws-autoscaling=1.35.0,@aws-cdk/aws-autoscaling-common=1.35.0,@aws-cdk/aws-autoscaling-hooktargets=1.35.0,@aws-cdk/aws-batch=1.35.0,@aws-cdk/aws-certificatemanager=1.35.0,@aws-cdk/aws-cloudformation=1.35.0,@aws-cdk/aws-cloudfront=1.35.0,@aws-cdk/aws-cloudwatch=1.35.0,@aws-cdk/aws-codebuild=1.35.0,@aws-cdk/aws-codecommit=1.35.0,@aws-cdk/aws-codepipeline=1.35.0,@aws-cdk/aws-cognito=1.35.0,@aws-cdk/aws-ec2=1.35.0,@aws-cdk/aws-ecr=1.35.0,@aws-cdk/aws-ecr-assets=1.35.0,@aws-cdk/aws-ecs=1.35.0,@aws-cdk/aws-ecs-patterns=1.35.0,@aws-cdk/aws-elasticache=1.35.0,@aws-cdk/aws-elasticloadbalancing=1.35.0,@aws-cdk/aws-elasticloadbalancingv2=1.35.0,@aws-cdk/aws-events=1.35.0,@aws-cdk/aws-events-targets=1.35.0,@aws-cdk/aws-iam=1.35.0,@aws-cdk/aws-kms=1.35.0,@aws-cdk/aws-lambda=1.35.0,@aws-cdk/aws-logs=1.35.0,@aws-cdk/aws-rds=1.35.0,@aws-cdk/aws-route53=1.35.0,@aws-cdk/aws-route53-targets=1.35.0,@aws-cdk/aws-s3=1.35.0,@aws-cdk/aws-s3-assets=1.35.0,@aws-cdk/aws-sam=1.35.0,@aws-cdk/aws-secretsmanager=1.35.0,@aws-cdk/aws-servicediscovery=1.35.0,@aws-cdk/aws-sns=1.35.0,@aws-cdk/aws-sns-subscriptions=1.35.0,@aws-cdk/aws-sqs=1.35.0,@aws-cdk/aws-ssm=1.35.0,@aws-cdk/aws-stepfunctions=1.35.0,@aws-cdk/cloud-assembly-schema=1.35.0,@aws-cdk/core=1.35.0,@aws-cdk/custom-resources=1.35.0,@aws-cdk/cx-api=1.35.0,@aws-cdk/region-info=1.35.0,jsii-runtime=Python/3.6.8
+      Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.38.0,@aws-cdk/aws-apigateway=1.38.0,@aws-cdk/aws-applicationautoscaling=1.38.0,@aws-cdk/aws-autoscaling=1.38.0,@aws-cdk/aws-autoscaling-common=1.38.0,@aws-cdk/aws-autoscaling-hooktargets=1.38.0,@aws-cdk/aws-batch=1.38.0,@aws-cdk/aws-certificatemanager=1.38.0,@aws-cdk/aws-cloudformation=1.38.0,@aws-cdk/aws-cloudfront=1.38.0,@aws-cdk/aws-cloudwatch=1.38.0,@aws-cdk/aws-codebuild=1.38.0,@aws-cdk/aws-codecommit=1.38.0,@aws-cdk/aws-codepipeline=1.38.0,@aws-cdk/aws-cognito=1.38.0,@aws-cdk/aws-ec2=1.38.0,@aws-cdk/aws-ecr=1.38.0,@aws-cdk/aws-ecr-assets=1.38.0,@aws-cdk/aws-ecs=1.38.0,@aws-cdk/aws-ecs-patterns=1.38.0,@aws-cdk/aws-elasticache=1.38.0,@aws-cdk/aws-elasticloadbalancing=1.38.0,@aws-cdk/aws-elasticloadbalancingv2=1.38.0,@aws-cdk/aws-events=1.38.0,@aws-cdk/aws-events-targets=1.38.0,@aws-cdk/aws-iam=1.38.0,@aws-cdk/aws-kms=1.38.0,@aws-cdk/aws-lambda=1.38.0,@aws-cdk/aws-logs=1.38.0,@aws-cdk/aws-rds=1.38.0,@aws-cdk/aws-route53=1.38.0,@aws-cdk/aws-route53-targets=1.38.0,@aws-cdk/aws-s3=1.38.0,@aws-cdk/aws-s3-assets=1.38.0,@aws-cdk/aws-sam=1.38.0,@aws-cdk/aws-secretsmanager=1.38.0,@aws-cdk/aws-servicediscovery=1.38.0,@aws-cdk/aws-sns=1.38.0,@aws-cdk/aws-sns-subscriptions=1.38.0,@aws-cdk/aws-sqs=1.38.0,@aws-cdk/aws-ssm=1.38.0,@aws-cdk/aws-stepfunctions=1.38.0,@aws-cdk/cloud-assembly-schema=1.38.0,@aws-cdk/core=1.38.0,@aws-cdk/custom-resources=1.38.0,@aws-cdk/cx-api=1.38.0,@aws-cdk/region-info=1.38.0,jsii-runtime=Python/3.6.8
 
