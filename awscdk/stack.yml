@@ -2,10 +2,10 @@ Resources:
   SiteCert6025247C:
     Type: AWS::CertificateManager::Certificate
     Properties:
-      DomainName: dev.mydomain.com
+      DomainName: dev.mysite.com
       DomainValidationOptions:
-        - DomainName: dev.mydomain.com
-          ValidationDomain: mydomain.com
+        - DomainName: dev.mysite.com
+          ValidationDomain: mysite.com
       ValidationMethod: DNS
     Metadata:
       aws:cdk:path: cdk-app-dev/SiteCert/Resource
@@ -304,7 +304,6 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckPath: /api/hello-world
-      HealthCheckPort: "443"
       Matcher:
         HttpCode: 200-299
       Port: 80
@@ -343,7 +342,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: dev.mydomain.com
+      BucketName: dev.mysite.com
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
     Metadata:
@@ -373,7 +372,7 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-          - dev.mydomain.com
+          - dev.mysite.com
         CacheBehaviors:
           - AllowedMethods:
               - DELETE
@@ -453,7 +452,7 @@ Resources:
   StaticSiteAliasRecord4F27A661:
     Type: AWS::Route53::RecordSet
     Properties:
-      Name: dev.mydomain.com.
+      Name: dev.mysite.com.
       Type: A
       AliasTarget:
         DNSName:
@@ -467,7 +466,7 @@ Resources:
   ElasticContainerRepo2908E7AA:
     Type: AWS::ECR::Repository
     Properties:
-      RepositoryName: dev.mydomain.com/backend
+      RepositoryName: dev.mysite.com/backend
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
@@ -475,7 +474,7 @@ Resources:
   EcsEcsCluster51C39CA0:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: dev-mydomain-com-cluster
+      ClusterName: dev-mysite-com-cluster
     Metadata:
       aws:cdk:path: cdk-app-dev/Ecs/EcsCluster/Resource
   BackendBackendTaskTaskRoleD7BBECAE:
@@ -490,6 +489,35 @@ Resources:
         Version: "2012-10-17"
     Metadata:
       aws:cdk:path: cdk-app-dev/Backend/BackendTask/TaskRole/Resource
+  BackendBackendTaskTaskRoleDefaultPolicy35F40EEC:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsAssetsBucket62473847
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsAssetsBucket62473847
+                        - Arn
+                    - /*
+        Version: "2012-10-17"
+      PolicyName: BackendBackendTaskTaskRoleDefaultPolicy35F40EEC
+      Roles:
+        - Ref: BackendBackendTaskTaskRoleD7BBECAE
+    Metadata:
+      aws:cdk:path: cdk-app-dev/Backend/BackendTask/TaskRole/DefaultPolicy/Resource
   BackendBackendTask22B2DD1D:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -504,7 +532,7 @@ Resources:
             - Name: SECRET_KEY
               Value: secret
             - Name: AWS_STORAGE_BUCKET_NAME
-              Value: dev-mydomain-com-assets
+              Value: dev-mysite-com-assets
           Essential: true
           Image:
             Fn::Join:
@@ -512,7 +540,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:782f3fdf5b4a00a28f10cec57d1aa51c438820b849e33dadf4279ea64acd6e15
+                - /aws-cdk/assets:8adb3315763fea85a72e31068cfdad0e74929abfeea02b92d4984164d726cda2
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -658,7 +686,7 @@ Resources:
   BackendAssetsAssetsBucket62473847:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: dev-mydomain-com-assets
+      BucketName: dev-mysite-com-assets
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
@@ -686,5 +714,5 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=1.36.1,@aws-cdk/assets=1.35.0,@aws-cdk/aws-apigateway=1.35.0,@aws-cdk/aws-applicationautoscaling=1.35.0,@aws-cdk/aws-autoscaling=1.35.0,@aws-cdk/aws-autoscaling-common=1.35.0,@aws-cdk/aws-autoscaling-hooktargets=1.35.0,@aws-cdk/aws-batch=1.35.0,@aws-cdk/aws-certificatemanager=1.35.0,@aws-cdk/aws-cloudformation=1.35.0,@aws-cdk/aws-cloudfront=1.35.0,@aws-cdk/aws-cloudwatch=1.35.0,@aws-cdk/aws-codebuild=1.35.0,@aws-cdk/aws-codecommit=1.35.0,@aws-cdk/aws-codepipeline=1.35.0,@aws-cdk/aws-cognito=1.35.0,@aws-cdk/aws-ec2=1.35.0,@aws-cdk/aws-ecr=1.35.0,@aws-cdk/aws-ecr-assets=1.35.0,@aws-cdk/aws-ecs=1.35.0,@aws-cdk/aws-ecs-patterns=1.35.0,@aws-cdk/aws-elasticache=1.35.0,@aws-cdk/aws-elasticloadbalancing=1.35.0,@aws-cdk/aws-elasticloadbalancingv2=1.35.0,@aws-cdk/aws-events=1.35.0,@aws-cdk/aws-events-targets=1.35.0,@aws-cdk/aws-iam=1.35.0,@aws-cdk/aws-kms=1.35.0,@aws-cdk/aws-lambda=1.35.0,@aws-cdk/aws-logs=1.35.0,@aws-cdk/aws-rds=1.35.0,@aws-cdk/aws-route53=1.35.0,@aws-cdk/aws-route53-targets=1.35.0,@aws-cdk/aws-s3=1.35.0,@aws-cdk/aws-s3-assets=1.35.0,@aws-cdk/aws-sam=1.35.0,@aws-cdk/aws-secretsmanager=1.35.0,@aws-cdk/aws-servicediscovery=1.35.0,@aws-cdk/aws-sns=1.35.0,@aws-cdk/aws-sns-subscriptions=1.35.0,@aws-cdk/aws-sqs=1.35.0,@aws-cdk/aws-ssm=1.35.0,@aws-cdk/aws-stepfunctions=1.35.0,@aws-cdk/cloud-assembly-schema=1.35.0,@aws-cdk/core=1.35.0,@aws-cdk/custom-resources=1.35.0,@aws-cdk/cx-api=1.35.0,@aws-cdk/region-info=1.35.0,jsii-runtime=Python/3.6.8
+      Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.35.0,@aws-cdk/aws-apigateway=1.35.0,@aws-cdk/aws-applicationautoscaling=1.35.0,@aws-cdk/aws-autoscaling=1.35.0,@aws-cdk/aws-autoscaling-common=1.35.0,@aws-cdk/aws-autoscaling-hooktargets=1.35.0,@aws-cdk/aws-batch=1.35.0,@aws-cdk/aws-certificatemanager=1.35.0,@aws-cdk/aws-cloudformation=1.35.0,@aws-cdk/aws-cloudfront=1.35.0,@aws-cdk/aws-cloudwatch=1.35.0,@aws-cdk/aws-codebuild=1.35.0,@aws-cdk/aws-codecommit=1.35.0,@aws-cdk/aws-codepipeline=1.35.0,@aws-cdk/aws-cognito=1.35.0,@aws-cdk/aws-ec2=1.35.0,@aws-cdk/aws-ecr=1.35.0,@aws-cdk/aws-ecr-assets=1.35.0,@aws-cdk/aws-ecs=1.35.0,@aws-cdk/aws-ecs-patterns=1.35.0,@aws-cdk/aws-elasticache=1.35.0,@aws-cdk/aws-elasticloadbalancing=1.35.0,@aws-cdk/aws-elasticloadbalancingv2=1.35.0,@aws-cdk/aws-events=1.35.0,@aws-cdk/aws-events-targets=1.35.0,@aws-cdk/aws-iam=1.35.0,@aws-cdk/aws-kms=1.35.0,@aws-cdk/aws-lambda=1.35.0,@aws-cdk/aws-logs=1.35.0,@aws-cdk/aws-rds=1.35.0,@aws-cdk/aws-route53=1.35.0,@aws-cdk/aws-route53-targets=1.35.0,@aws-cdk/aws-s3=1.35.0,@aws-cdk/aws-s3-assets=1.35.0,@aws-cdk/aws-sam=1.35.0,@aws-cdk/aws-secretsmanager=1.35.0,@aws-cdk/aws-servicediscovery=1.35.0,@aws-cdk/aws-sns=1.35.0,@aws-cdk/aws-sns-subscriptions=1.35.0,@aws-cdk/aws-sqs=1.35.0,@aws-cdk/aws-ssm=1.35.0,@aws-cdk/aws-stepfunctions=1.35.0,@aws-cdk/cloud-assembly-schema=1.35.0,@aws-cdk/core=1.35.0,@aws-cdk/custom-resources=1.35.0,@aws-cdk/cx-api=1.35.0,@aws-cdk/region-info=1.35.0,jsii-runtime=Python/3.6.8
 

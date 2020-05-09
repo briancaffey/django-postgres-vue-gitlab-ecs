@@ -62,6 +62,11 @@ class ApplicationStack(core.Stack):
 
         self.assets = Assets(self, "BackendAssets", domain_name=domain_name)
 
+        # give the backend service read/write access to the assets bucket
+        self.assets.assets_bucket.grant_read_write(
+            self.backend.backend_task.task_role
+        )
+
         # self.rds = Rds(self, "RdsInstance", vpc=self.vpc.vpc)
 
         # self.elasticache = ElastiCache(
