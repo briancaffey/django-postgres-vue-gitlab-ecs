@@ -5,7 +5,7 @@ description: A gentle introduction to standing up a Django/Vue.js application in
 tags: django, vue.js, minikube, kubernetes
 ---
 
-# Running the project in Minikube
+# Running the project with Minikube
 
 I'm currently reading the Manning Publication [Kubernetes in Action](https://www.manning.com/books/kubernetes-in-action) in a book club. Of the four of us who gather every week to discuss the chapter of the week (we just finished Chapter 8), we all seem to use different languages and frameworks for building backends. I have the most experience with Django, so I have been trying to apply my Django knowledge as I learn Kubernetes concepts.
 
