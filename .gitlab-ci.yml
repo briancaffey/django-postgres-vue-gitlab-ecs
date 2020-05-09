@@ -16,7 +16,7 @@ include:
   # - local: /gitlab-ci/aws/cloudformation.yml
   #- local: /gitlab-ci/gcp/terraform.yml
 
-Pytest:
+.Pytest:
   image: python:3.7
   stage: test
   services:
@@ -43,7 +43,7 @@ Pytest:
   #   changes:
   #     - backend/**/*
 
-Jest:
+.Jest:
   image: node:12.16.3
   stage: test
   before_script:
