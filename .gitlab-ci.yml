@@ -20,7 +20,7 @@ Pytest:
   image: python:3.8
   stage: test
   services:
-    - postgres:11.7
+    - postgres:11.5
     - redis:5.0
   variables:
     DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
