@@ -16,6 +16,7 @@ class Backend(core.Construct):
         load_balancer,
         cluster: ecs.ICluster,
         domain_name: str,
+        environment_variables: core.Construct,
         **kwargs,
     ) -> None:
         super().__init__(
@@ -24,12 +25,10 @@ class Backend(core.Construct):
 
         self.backend_task = ecs.FargateTaskDefinition(self, "BackendTask")
 
-        environment_variables = {
-            "DJANGO_SETTINGS_MODULE": "backend.settings.production",
-            "DEBUG": "",
-            "SECRET_KEY": "secret",
-            "AWS_STORAGE_BUCKET_NAME": f"{domain_name.replace('.', '-')}-assets",  # noqa
-        }
+        # TODO: Is this necessary? what is the best way to grant task
+        # execution role to secrets
+        for secret in environment_variables.secret_variables.values():
+            secret.grant_read(self.backend_task.task_role)
 
         self.backend_task.add_container(
             "DjangoBackend",
@@ -39,7 +38,8 @@ class Backend(core.Construct):
                 target="production",
             ),
             logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
-            environment=environment_variables,
+            environment=environment_variables.regular_variables,
+            secrets=environment_variables.secret_variables,
             command=["/start_prod.sh"],
         )
 

@@ -505,6 +505,14 @@ Resources:
         Version: "2012-10-17"
     Metadata:
       aws:cdk:path: cdk-app-dev/BackendAssets/AssetsBucket/Policy/Resource
+  VariablesDjangoSecretKeyE4FA41EE:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        ExcludePunctuation: true
+        IncludeSpace: false
+    Metadata:
+      aws:cdk:path: cdk-app-dev/Variables/DjangoSecretKey/Resource
   BackendBackendTaskTaskRoleD7BBECAE:
     Type: AWS::IAM::Role
     Properties:
@@ -522,6 +530,10 @@ Resources:
     Properties:
       PolicyDocument:
         Statement:
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
           - Action:
               - s3:GetObject*
               - s3:GetBucket*
@@ -557,10 +569,9 @@ Resources:
               Value: backend.settings.production
             - Name: DEBUG
               Value: ""
-            - Name: SECRET_KEY
-              Value: secret
             - Name: AWS_STORAGE_BUCKET_NAME
-              Value: dev-mysite-com-assets
+              Value:
+                Ref: BackendAssetsAssetsBucket62473847
           Essential: true
           Image:
             Fn::Join:
@@ -580,6 +591,10 @@ Resources:
           PortMappings:
             - ContainerPort: 8000
               Protocol: tcp
+          Secrets:
+            - Name: SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
       Cpu: "256"
       ExecutionRoleArn:
         Fn::GetAtt:
@@ -643,6 +658,10 @@ Resources:
               Fn::GetAtt:
                 - BackendBackendTaskDjangoBackendLogGroup020EB920
                 - Arn
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
         Version: "2012-10-17"
       PolicyName: BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2
       Roles:
@@ -711,6 +730,79 @@ Resources:
       ToPort: 8000
     Metadata:
       aws:cdk:path: cdk-app-dev/Backend/BackendService/SecurityGroup/from cdkappdevApplicationLoadBalancerALBSecurityGroup3D940044:8000
+  RdsInstanceDBSecret70A4200B:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        ExcludePunctuation: true
+        GenerateStringKey: password
+        IncludeSpace: false
+        SecretStringTemplate: '{"username": "postgres"}'
+      Name: RdsInstance-dev-mysite-com-secret
+    Metadata:
+      aws:cdk:path: cdk-app-dev/RdsInstance/DBSecret/Resource
+  RdsInstanceDBSecretArnCBCC1294:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value:
+        Ref: RdsInstanceDBSecret70A4200B
+      Name: dev-mysite-com-secret-arn
+    Metadata:
+      aws:cdk:path: cdk-app-dev/RdsInstance/DBSecretArn/Resource
+  RdsInstanceDBSecurityGroup8F5B5847:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: DBSecurityGroup
+      SecurityGroupIngress:
+        - FromPort: 5432
+          IpProtocol: tcp
+          SourceSecurityGroupId:
+            Fn::GetAtt:
+              - VpcC3027511
+              - DefaultSecurityGroup
+          ToPort: 5432
+      VpcId:
+        Ref: VpcC3027511
+    Metadata:
+      aws:cdk:path: cdk-app-dev/RdsInstance/DBSecurityGroup
+  RdsInstanceCfnDBSubnetGroupDCDD79F9:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: dev.mysite.com-db-subnet-group
+      SubnetIds:
+        - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
+        - Ref: VpcIsolatedSubnet2SubnetB479B99C
+    Metadata:
+      aws:cdk:path: cdk-app-dev/RdsInstance/CfnDBSubnetGroup
+  RdsInstanceDBCluster7C165EFA:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      Engine: aurora-postgresql
+      DBSubnetGroupName:
+        Ref: RdsInstanceDBSecurityGroup8F5B5847
+      EnableHttpEndpoint: true
+      EngineMode: serverless
+      EngineVersion: "10.7"
+      MasterUsername:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: RdsInstanceDBSecret70A4200B
+            - :SecretString:username::}}
+      MasterUserPassword:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: RdsInstanceDBSecret70A4200B
+            - :SecretString:password::}}
+      Port: 5432
+      VpcSecurityGroupIds:
+        - Fn::GetAtt:
+            - RdsInstanceDBSecurityGroup8F5B5847
+            - GroupId
+    Metadata:
+      aws:cdk:path: cdk-app-dev/RdsInstance/DBCluster
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:

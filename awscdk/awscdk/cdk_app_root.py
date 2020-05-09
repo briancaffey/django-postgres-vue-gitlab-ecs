@@ -10,6 +10,7 @@ from rds import Rds
 from elasticache import ElastiCache
 from alb import ApplicationLoadBalancer
 from ecs import Ecs
+from env_vars import Variables
 
 from backend import Backend
 
@@ -54,12 +55,19 @@ class ApplicationStack(core.Stack):
 
         self.assets = Assets(self, "BackendAssets", domain_name=domain_name)
 
+        self.variables = Variables(
+            self,
+            "Variables",
+            bucket_name=self.assets.assets_bucket.bucket_name,
+        )
+
         self.backend = Backend(
             self,
             "Backend",
             load_balancer=self.alb,
             cluster=self.ecs.cluster,
             domain_name=domain_name,
+            environment_variables=self.variables,
         )
 
         # give the backend service read/write access to the assets bucket
@@ -67,7 +75,9 @@ class ApplicationStack(core.Stack):
             self.backend.backend_task.task_role
         )
 
-        # self.rds = Rds(self, "RdsInstance", vpc=self.vpc.vpc)
+        self.rds = Rds(
+            self, "RdsInstance", vpc=self.vpc.vpc, domain_name=domain_name
+        )
 
         # self.elasticache = ElastiCache(
         #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
