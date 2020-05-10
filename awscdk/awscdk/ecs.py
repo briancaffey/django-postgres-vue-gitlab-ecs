@@ -11,7 +11,7 @@ class Ecs(core.Construct):
         scope: core.Construct,
         id: str,
         vpc: ec2.IVpc,
-        domain_name: str,
+        full_app_name: str,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -20,5 +20,5 @@ class Ecs(core.Construct):
             self,
             "EcsCluster",
             vpc=vpc,
-            cluster_name=f"{domain_name.replace('.', '-')}-cluster",
+            cluster_name=f"{full_app_name}-cluster",
         )
