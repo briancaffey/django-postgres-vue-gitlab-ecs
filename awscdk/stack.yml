@@ -885,6 +885,13 @@ Resources:
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
                 - /aws-cdk/assets:8adb3315763fea85a72e31068cfdad0e74929abfeea02b92d4984164d726cda2
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: BackendTasksMigrateTaskMigrateCommandLogGroup94452D93
+              awslogs-stream-prefix: MigrateCommand
+              awslogs-region: us-east-1
           Name: MigrateCommand
           Secrets:
             - Name: SECRET_KEY
@@ -909,6 +916,12 @@ Resources:
           - Arn
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/Resource
+  BackendTasksMigrateTaskMigrateCommandLogGroup94452D93:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/MigrateCommand/LogGroup/Resource
   BackendTasksMigrateTaskExecutionRole44C9D955:
     Type: AWS::IAM::Role
     Properties:
@@ -942,6 +955,14 @@ Resources:
           - Action: ecr:GetAuthorizationToken
             Effect: Allow
             Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - BackendTasksMigrateTaskMigrateCommandLogGroup94452D93
+                - Arn
           - Action: secretsmanager:GetSecretValue
             Effect: Allow
             Resource:
@@ -1022,6 +1043,13 @@ Resources:
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
                 - /aws-cdk/assets:8adb3315763fea85a72e31068cfdad0e74929abfeea02b92d4984164d726cda2
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: BackendTasksCollecstaticTaskCollecstaticCommandLogGroupE150F561
+              awslogs-stream-prefix: CollectstaticCommand
+              awslogs-region: us-east-1
           Name: CollecstaticCommand
           Secrets:
             - Name: SECRET_KEY
@@ -1046,6 +1074,12 @@ Resources:
           - Arn
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/Resource
+  BackendTasksCollecstaticTaskCollecstaticCommandLogGroupE150F561:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/CollecstaticCommand/LogGroup/Resource
   BackendTasksCollecstaticTaskExecutionRole64C8813C:
     Type: AWS::IAM::Role
     Properties:
@@ -1079,6 +1113,14 @@ Resources:
           - Action: ecr:GetAuthorizationToken
             Effect: Allow
             Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - BackendTasksCollecstaticTaskCollecstaticCommandLogGroupE150F561
+                - Arn
           - Action: secretsmanager:GetSecretValue
             Effect: Allow
             Resource:

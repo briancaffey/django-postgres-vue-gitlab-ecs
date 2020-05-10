@@ -32,6 +32,7 @@ class BackendTasks(core.Construct):
             environment=environment_variables.regular_variables,
             secrets=environment_variables.secret_variables,
             command=["python3", "manage.py", "migrate", "--no-input"],
+            logging=ecs.LogDrivers.aws_logs(stream_prefix="MigrateCommand"),
         )
 
         self.collectstatic_task = ecs.FargateTaskDefinition(
@@ -44,4 +45,7 @@ class BackendTasks(core.Construct):
             environment=environment_variables.regular_variables,
             secrets=environment_variables.secret_variables,
             command=["python3", "manage.py", "collectstatic", "--no-input"],
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix="CollectstaticCommand"
+            ),
         )
