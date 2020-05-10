@@ -80,7 +80,7 @@ cdk deploy:
     - cdk bootstrap aws://$AWS_ACCOUNT_ID/$AWS_DEFAULT_REGION
     - cdk deploy --require-approval never
 
-.collectstatic: &task
+collectstatic: &task
   image: python:3.8
   stage: deploy
   only:
@@ -94,7 +94,7 @@ cdk deploy:
         --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
         --task-definition ${ENVIRONMENT}-${APP_NAME}-collectstatic
 
-.migrate:
+migrate:
   <<: *task
   script:
     - |
