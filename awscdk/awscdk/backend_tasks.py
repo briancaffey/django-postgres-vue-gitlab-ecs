@@ -42,7 +42,7 @@ class BackendTasks(core.Construct):
             self, "CollecstaticTask", family=f"{full_app_name}-collectstatic"
         )
 
-        self.migrate_task.add_container(
+        self.collectstatic_task.add_container(
             "CollecstaticCommand",
             image=image,
             environment=environment_variables.regular_variables,
