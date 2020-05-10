@@ -102,7 +102,7 @@ collectstatic: &task
       aws ecs run-task \
         --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
         --task-definition ${ENVIRONMENT}-${APP_NAME}-collectstatic \
-        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=DISABLED}" \
+        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
         --count 1 \
         --launch-type FARGATE
 migrate:
@@ -112,7 +112,7 @@ migrate:
       aws ecs run-task \
         --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
         --task-definition ${ENVIRONMENT}-${APP_NAME}-migrate \
-        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=DISABLED}" \
+        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
         --count 1 \
         --launch-type FARGATE
 
