@@ -589,7 +589,7 @@ Resources:
     Properties:
       Engine: aurora-postgresql
       DBSubnetGroupName:
-        Ref: RdsDBClusterDBSecurityGroup83AB5EDA
+        Ref: RdsDBClusterCfnDBSubnetGroup38D3A78B
       EnableHttpEndpoint: true
       EngineMode: serverless
       EngineVersion: "10.7"
@@ -968,10 +968,73 @@ Resources:
         Version: "2012-10-17"
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/TaskRole/Resource
+  BackendTasksCollecstaticTaskTaskRoleDefaultPolicyDA990EDC:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsAssetsBucket62473847
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsAssetsBucket62473847
+                        - Arn
+                    - /*
+        Version: "2012-10-17"
+      PolicyName: BackendTasksCollecstaticTaskTaskRoleDefaultPolicyDA990EDC
+      Roles:
+        - Ref: BackendTasksCollecstaticTaskTaskRole68FA2F7B
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/TaskRole/DefaultPolicy/Resource
   BackendTasksCollecstaticTask92B4EE6A:
     Type: AWS::ECS::TaskDefinition
     Properties:
+      ContainerDefinitions:
+        - Command:
+            - python3
+            - manage.py
+            - collectstatic
+            - --no-input
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Ref: BackendAssetsAssetsBucket62473847
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:8adb3315763fea85a72e31068cfdad0e74929abfeea02b92d4984164d726cda2
+          Name: CollecstaticCommand
+          Secrets:
+            - Name: SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
+            - Name: POSTGRES_PASSWORD
+              ValueFrom:
+                Ref: RdsDBClusterDBSecret28397CCA
       Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - BackendTasksCollecstaticTaskExecutionRole64C8813C
+          - Arn
       Family: dev-mysite-com-collectstatic
       Memory: "512"
       NetworkMode: awsvpc
@@ -983,6 +1046,53 @@ Resources:
           - Arn
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/Resource
+  BackendTasksCollecstaticTaskExecutionRole64C8813C:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/ExecutionRole/Resource
+  BackendTasksCollecstaticTaskExecutionRoleDefaultPolicyF6ED755C:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendTasksCollecstaticTaskExecutionRoleDefaultPolicyF6ED755C
+      Roles:
+        - Ref: BackendTasksCollecstaticTaskExecutionRole64C8813C
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/ExecutionRole/DefaultPolicy/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
