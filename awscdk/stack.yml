@@ -8,7 +8,7 @@ Resources:
           ValidationDomain: mysite.com
       ValidationMethod: DNS
     Metadata:
-      aws:cdk:path: cdk-app-dev/SiteCert/Resource
+      aws:cdk:path: dev-mysite-com-stack/SiteCert/Resource
   VpcC3027511:
     Type: AWS::EC2::VPC
     Properties:
@@ -18,9 +18,9 @@ Resources:
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc
+          Value: dev-mysite-com-stack/Vpc/Vpc
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/Resource
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/Resource
   VpcPublicSubnet1Subnet8E8DEDC0:
     Type: AWS::EC2::Subnet
     Properties:
@@ -34,13 +34,13 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/PublicSubnet1
+          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1
         - Key: aws-cdk:subnet-name
           Value: Public
         - Key: aws-cdk:subnet-type
           Value: Public
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet1/Subnet
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/Subnet
   VpcPublicSubnet1RouteTable431DD755:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -48,9 +48,9 @@ Resources:
         Ref: VpcC3027511
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/PublicSubnet1
+          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet1/RouteTable
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/RouteTable
   VpcPublicSubnet1RouteTableAssociationBBCB7AA1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -59,7 +59,7 @@ Resources:
       SubnetId:
         Ref: VpcPublicSubnet1Subnet8E8DEDC0
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet1/RouteTableAssociation
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/RouteTableAssociation
   VpcPublicSubnet1DefaultRoute0F5C6C43:
     Type: AWS::EC2::Route
     Properties:
@@ -71,7 +71,7 @@ Resources:
     DependsOn:
       - VpcVPCGW42EC8516
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet1/DefaultRoute
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/DefaultRoute
   VpcPublicSubnet2SubnetA811849C:
     Type: AWS::EC2::Subnet
     Properties:
@@ -85,13 +85,13 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/PublicSubnet2
+          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2
         - Key: aws-cdk:subnet-name
           Value: Public
         - Key: aws-cdk:subnet-type
           Value: Public
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet2/Subnet
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/Subnet
   VpcPublicSubnet2RouteTable77FB35FC:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -99,9 +99,9 @@ Resources:
         Ref: VpcC3027511
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/PublicSubnet2
+          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet2/RouteTable
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/RouteTable
   VpcPublicSubnet2RouteTableAssociation3AFE92E6:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -110,7 +110,7 @@ Resources:
       SubnetId:
         Ref: VpcPublicSubnet2SubnetA811849C
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet2/RouteTableAssociation
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/RouteTableAssociation
   VpcPublicSubnet2DefaultRouteD629179A:
     Type: AWS::EC2::Route
     Properties:
@@ -122,7 +122,7 @@ Resources:
     DependsOn:
       - VpcVPCGW42EC8516
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/PublicSubnet2/DefaultRoute
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/DefaultRoute
   VpcIsolatedSubnet1SubnetDC3C6AF8:
     Type: AWS::EC2::Subnet
     Properties:
@@ -136,13 +136,13 @@ Resources:
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/IsolatedSubnet1
+          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1
         - Key: aws-cdk:subnet-name
           Value: Isolated
         - Key: aws-cdk:subnet-type
           Value: Isolated
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/IsolatedSubnet1/Subnet
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1/Subnet
   VpcIsolatedSubnet1RouteTableF057227C:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -150,9 +150,9 @@ Resources:
         Ref: VpcC3027511
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/IsolatedSubnet1
+          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/IsolatedSubnet1/RouteTable
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1/RouteTable
   VpcIsolatedSubnet1RouteTableAssociation0FC379C3:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -161,7 +161,7 @@ Resources:
       SubnetId:
         Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/IsolatedSubnet1/RouteTableAssociation
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1/RouteTableAssociation
   VpcIsolatedSubnet2SubnetB479B99C:
     Type: AWS::EC2::Subnet
     Properties:
@@ -175,13 +175,13 @@ Resources:
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/IsolatedSubnet2
+          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2
         - Key: aws-cdk:subnet-name
           Value: Isolated
         - Key: aws-cdk:subnet-type
           Value: Isolated
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/IsolatedSubnet2/Subnet
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2/Subnet
   VpcIsolatedSubnet2RouteTableBAB510EF:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -189,9 +189,9 @@ Resources:
         Ref: VpcC3027511
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc/IsolatedSubnet2
+          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/IsolatedSubnet2/RouteTable
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2/RouteTable
   VpcIsolatedSubnet2RouteTableAssociation8E8989F5:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -200,15 +200,15 @@ Resources:
       SubnetId:
         Ref: VpcIsolatedSubnet2SubnetB479B99C
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/IsolatedSubnet2/RouteTableAssociation
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2/RouteTableAssociation
   VpcIGW488B0FEB:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
         - Key: Name
-          Value: cdk-app-dev/Vpc/Vpc
+          Value: dev-mysite-com-stack/Vpc/Vpc
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/IGW
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IGW
   VpcVPCGW42EC8516:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
@@ -217,7 +217,7 @@ Resources:
       InternetGatewayId:
         Ref: VpcIGW488B0FEB
     Metadata:
-      aws:cdk:path: cdk-app-dev/Vpc/Vpc/VPCGW
+      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/VPCGW
   ApplicationLoadBalancerALBE88818A8:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -234,11 +234,11 @@ Resources:
       - VpcPublicSubnet1DefaultRoute0F5C6C43
       - VpcPublicSubnet2DefaultRouteD629179A
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/ALB/Resource
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/Resource
   ApplicationLoadBalancerALBSecurityGroup0D676F12:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Automatically created Security Group for ELB cdkappdevApplicationLoadBalancerALB373720D1
+      GroupDescription: Automatically created Security Group for ELB devmysitecomstackApplicationLoadBalancerALB35990729
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           Description: Internet access ALB 80
@@ -253,8 +253,8 @@ Resources:
       VpcId:
         Ref: VpcC3027511
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/ALB/SecurityGroup/Resource
-  ApplicationLoadBalancerALBSecurityGrouptocdkappdevBackendBackendServiceSecurityGroupEB920FD08000992962F4:
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/Resource
+  ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendServiceSecurityGroupB9B0030A80009B40785B:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId:
@@ -270,7 +270,7 @@ Resources:
       FromPort: 8000
       ToPort: 8000
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/ALB/SecurityGroup/to cdkappdevBackendBackendServiceSecurityGroupEB920FD0:8000
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/to devmysitecomstackBackendBackendServiceSecurityGroupB9B0030A:8000
   ApplicationLoadBalancerALBALBListener3A5A512C:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -283,7 +283,7 @@ Resources:
       Port: 80
       Protocol: HTTP
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/ALB/ALBListener/Resource
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/ALBListener/Resource
   ApplicationLoadBalancerALBHTTPSListenerE47034B1:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -299,7 +299,7 @@ Resources:
         - CertificateArn:
             Ref: SiteCert6025247C
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/ALB/HTTPSListener/Resource
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/HTTPSListener/Resource
   ApplicationLoadBalancerALBHTTPSListenerBackendTargetGroupEFEFD916:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -312,7 +312,7 @@ Resources:
       VpcId:
         Ref: VpcC3027511
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/ALB/HTTPSListener/BackendTargetGroup/Resource
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/HTTPSListener/BackendTargetGroup/Resource
   ApplicationLoadBalancerALBHTTPSListenerBackendTargetRule6CC8AE94:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
@@ -328,7 +328,7 @@ Resources:
         Ref: ApplicationLoadBalancerALBHTTPSListenerE47034B1
       Priority: 1
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/ALB/HTTPSListener/BackendTargetRule/Resource
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/HTTPSListener/BackendTargetRule/Resource
   ApplicationLoadBalancerDefaultTargetGroupF1B3D7D1:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -337,16 +337,16 @@ Resources:
       VpcId:
         Ref: VpcC3027511
     Metadata:
-      aws:cdk:path: cdk-app-dev/ApplicationLoadBalancer/DefaultTargetGroup/Resource
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/DefaultTargetGroup/Resource
   StaticSiteStaticSiteBucket442CE34F:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: dev.mysite.com
+      BucketName: dev-mysite-com-frontend
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
     Metadata:
-      aws:cdk:path: cdk-app-dev/StaticSite/StaticSiteBucket/Resource
+      aws:cdk:path: dev-mysite-com-stack/StaticSite/StaticSiteBucket/Resource
   StaticSiteStaticSiteBucketPolicyC8E62485:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -366,7 +366,7 @@ Resources:
                   - /*
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: cdk-app-dev/StaticSite/StaticSiteBucket/Policy/Resource
+      aws:cdk:path: dev-mysite-com-stack/StaticSite/StaticSiteBucket/Policy/Resource
   StaticSiteCloudFrontDistributionCFDistributionA70E78CD:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -393,6 +393,48 @@ Resources:
                 - "*"
               QueryString: true
             PathPattern: /api/*
+            TargetOriginId: origin1
+            ViewerProtocolPolicy: redirect-to-https
+          - AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            CachedMethods:
+              - GET
+              - HEAD
+            Compress: true
+            ForwardedValues:
+              Cookies:
+                Forward: all
+              Headers:
+                - "*"
+              QueryString: true
+            PathPattern: /admin/*
+            TargetOriginId: origin1
+            ViewerProtocolPolicy: redirect-to-https
+          - AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            CachedMethods:
+              - GET
+              - HEAD
+            Compress: true
+            ForwardedValues:
+              Cookies:
+                Forward: all
+              Headers:
+                - "*"
+              QueryString: true
+            PathPattern: /flower/*
             TargetOriginId: origin1
             ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses:
@@ -448,7 +490,7 @@ Resources:
             Ref: SiteCert6025247C
           SslSupportMethod: sni-only
     Metadata:
-      aws:cdk:path: cdk-app-dev/StaticSite/CloudFrontDistribution/CFDistribution
+      aws:cdk:path: dev-mysite-com-stack/StaticSite/CloudFrontDistribution/CFDistribution
   StaticSiteAliasRecord4F27A661:
     Type: AWS::Route53::RecordSet
     Properties:
@@ -462,21 +504,13 @@ Resources:
         HostedZoneId: Z2FDTNDATAQYW2
       HostedZoneId: ABC123
     Metadata:
-      aws:cdk:path: cdk-app-dev/StaticSite/AliasRecord/Resource
-  ElasticContainerRepo2908E7AA:
-    Type: AWS::ECR::Repository
-    Properties:
-      RepositoryName: dev.mysite.com/backend
-    UpdateReplacePolicy: Retain
-    DeletionPolicy: Retain
-    Metadata:
-      aws:cdk:path: cdk-app-dev/ElasticContainerRepo/Resource
+      aws:cdk:path: dev-mysite-com-stack/StaticSite/AliasRecord/Resource
   EcsEcsCluster51C39CA0:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: dev-mysite-com-cluster
     Metadata:
-      aws:cdk:path: cdk-app-dev/Ecs/EcsCluster/Resource
+      aws:cdk:path: dev-mysite-com-stack/Ecs/EcsCluster/Resource
   BackendAssetsAssetsBucket62473847:
     Type: AWS::S3::Bucket
     Properties:
@@ -484,7 +518,7 @@ Resources:
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
-      aws:cdk:path: cdk-app-dev/BackendAssets/AssetsBucket/Resource
+      aws:cdk:path: dev-mysite-com-stack/BackendAssets/AssetsBucket/Resource
   BackendAssetsAssetsBucketPolicyE8C83357:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -504,7 +538,80 @@ Resources:
                   - /static/*
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: cdk-app-dev/BackendAssets/AssetsBucket/Policy/Resource
+      aws:cdk:path: dev-mysite-com-stack/BackendAssets/AssetsBucket/Policy/Resource
+  RdsDBClusterDBSecret28397CCA:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        ExcludePunctuation: true
+        GenerateStringKey: password
+        IncludeSpace: false
+        SecretStringTemplate: '{"username": "postgres"}'
+      Name: dev-mysite-com-db-secret
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecret/Resource
+  RdsDBClusterDBSecretArn023C20B8:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value:
+        Ref: RdsDBClusterDBSecret28397CCA
+      Name: dev-mysite-com-secret-arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecretArn/Resource
+  RdsDBClusterDBSecurityGroup83AB5EDA:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: DBSecurityGroup
+      SecurityGroupIngress:
+        - FromPort: 5432
+          IpProtocol: tcp
+          SourceSecurityGroupId:
+            Fn::GetAtt:
+              - VpcC3027511
+              - DefaultSecurityGroup
+          ToPort: 5432
+      VpcId:
+        Ref: VpcC3027511
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecurityGroup
+  RdsDBClusterCfnDBSubnetGroup38D3A78B:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: dev-mysite-com-db-subnet-group
+      SubnetIds:
+        - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
+        - Ref: VpcIsolatedSubnet2SubnetB479B99C
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/CfnDBSubnetGroup
+  RdsDBCluster25564148:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      Engine: aurora-postgresql
+      DBSubnetGroupName:
+        Ref: RdsDBClusterDBSecurityGroup83AB5EDA
+      EnableHttpEndpoint: true
+      EngineMode: serverless
+      EngineVersion: "10.7"
+      MasterUsername:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: RdsDBClusterDBSecret28397CCA
+            - :SecretString:username::}}
+      MasterUserPassword:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: RdsDBClusterDBSecret28397CCA
+            - :SecretString:password::}}
+      Port: 5432
+      VpcSecurityGroupIds:
+        - Fn::GetAtt:
+            - RdsDBClusterDBSecurityGroup83AB5EDA
+            - GroupId
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBCluster
   VariablesDjangoSecretKeyE4FA41EE:
     Type: AWS::SecretsManager::Secret
     Properties:
@@ -512,7 +619,7 @@ Resources:
         ExcludePunctuation: true
         IncludeSpace: false
     Metadata:
-      aws:cdk:path: cdk-app-dev/Variables/DjangoSecretKey/Resource
+      aws:cdk:path: dev-mysite-com-stack/Variables/DjangoSecretKey/Resource
   BackendBackendTaskTaskRoleD7BBECAE:
     Type: AWS::IAM::Role
     Properties:
@@ -524,7 +631,7 @@ Resources:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendTask/TaskRole/Resource
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/TaskRole/Resource
   BackendBackendTaskTaskRoleDefaultPolicy35F40EEC:
     Type: AWS::IAM::Policy
     Properties:
@@ -534,6 +641,10 @@ Resources:
             Effect: Allow
             Resource:
               Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
           - Action:
               - s3:GetObject*
               - s3:GetBucket*
@@ -557,7 +668,7 @@ Resources:
       Roles:
         - Ref: BackendBackendTaskTaskRoleD7BBECAE
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendTask/TaskRole/DefaultPolicy/Resource
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/TaskRole/DefaultPolicy/Resource
   BackendBackendTask22B2DD1D:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -595,12 +706,15 @@ Resources:
             - Name: SECRET_KEY
               ValueFrom:
                 Ref: VariablesDjangoSecretKeyE4FA41EE
+            - Name: POSTGRES_PASSWORD
+              ValueFrom:
+                Ref: RdsDBClusterDBSecret28397CCA
       Cpu: "256"
       ExecutionRoleArn:
         Fn::GetAtt:
           - BackendBackendTaskExecutionRole3B22D4E5
           - Arn
-      Family: cdkappdevBackendBackendTaskA3FB348D
+      Family: devmysitecomstackBackendBackendTask23526354
       Memory: "512"
       NetworkMode: awsvpc
       RequiresCompatibilities:
@@ -610,13 +724,13 @@ Resources:
           - BackendBackendTaskTaskRoleD7BBECAE
           - Arn
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendTask/Resource
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/Resource
   BackendBackendTaskDjangoBackendLogGroup020EB920:
     Type: AWS::Logs::LogGroup
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendTask/DjangoBackend/LogGroup/Resource
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/DjangoBackend/LogGroup/Resource
   BackendBackendTaskExecutionRole3B22D4E5:
     Type: AWS::IAM::Role
     Properties:
@@ -628,7 +742,7 @@ Resources:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendTask/ExecutionRole/Resource
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/Resource
   BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2:
     Type: AWS::IAM::Policy
     Properties:
@@ -662,12 +776,16 @@ Resources:
             Effect: Allow
             Resource:
               Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
         Version: "2012-10-17"
       PolicyName: BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2
       Roles:
         - Ref: BackendBackendTaskExecutionRole3B22D4E5
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
   BackendBackendService9DB18AD9:
     Type: AWS::ECS::Service
     Properties:
@@ -700,11 +818,11 @@ Resources:
     DependsOn:
       - ApplicationLoadBalancerALBHTTPSListenerBackendTargetRule6CC8AE94
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendService/Service
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/Service
   BackendBackendServiceSecurityGroupA039445A:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: cdk-app-dev/Backend/BackendService/SecurityGroup
+      GroupDescription: dev-mysite-com-stack/Backend/BackendService/SecurityGroup
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           Description: Allow all outbound traffic by default
@@ -712,8 +830,8 @@ Resources:
       VpcId:
         Ref: VpcC3027511
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendService/SecurityGroup/Resource
-  BackendBackendServiceSecurityGroupfromcdkappdevApplicationLoadBalancerALBSecurityGroup3D9400448000F77E989D:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/SecurityGroup/Resource
+  BackendBackendServiceSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380002A813010:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       IpProtocol: tcp
@@ -729,80 +847,142 @@ Resources:
           - GroupId
       ToPort: 8000
     Metadata:
-      aws:cdk:path: cdk-app-dev/Backend/BackendService/SecurityGroup/from cdkappdevApplicationLoadBalancerALBSecurityGroup3D940044:8000
-  RdsInstanceDBSecret70A4200B:
-    Type: AWS::SecretsManager::Secret
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/SecurityGroup/from devmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D03:8000
+  BackendTasksMigrateTaskTaskRoleAE7059C2:
+    Type: AWS::IAM::Role
     Properties:
-      GenerateSecretString:
-        ExcludePunctuation: true
-        GenerateStringKey: password
-        IncludeSpace: false
-        SecretStringTemplate: '{"username": "postgres"}'
-      Name: RdsInstance-dev-mysite-com-secret
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: cdk-app-dev/RdsInstance/DBSecret/Resource
-  RdsInstanceDBSecretArnCBCC1294:
-    Type: AWS::SSM::Parameter
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/Resource
+  BackendTasksMigrateTask9BDCB431:
+    Type: AWS::ECS::TaskDefinition
     Properties:
-      Type: String
-      Value:
-        Ref: RdsInstanceDBSecret70A4200B
-      Name: dev-mysite-com-secret-arn
+      ContainerDefinitions:
+        - Command:
+            - python3
+            - manage.py
+            - migrate
+            - --no-input
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Ref: BackendAssetsAssetsBucket62473847
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:8adb3315763fea85a72e31068cfdad0e74929abfeea02b92d4984164d726cda2
+          Name: MigrateCommand
+          Secrets:
+            - Name: SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
+            - Name: POSTGRES_PASSWORD
+              ValueFrom:
+                Ref: RdsDBClusterDBSecret28397CCA
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - BackendTasksMigrateTaskExecutionRole44C9D955
+          - Arn
+      Family: dev-mysite-com-migrate
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn:
+        Fn::GetAtt:
+          - BackendTasksMigrateTaskTaskRoleAE7059C2
+          - Arn
     Metadata:
-      aws:cdk:path: cdk-app-dev/RdsInstance/DBSecretArn/Resource
-  RdsInstanceDBSecurityGroup8F5B5847:
-    Type: AWS::EC2::SecurityGroup
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/Resource
+  BackendTasksMigrateTaskExecutionRole44C9D955:
+    Type: AWS::IAM::Role
     Properties:
-      GroupDescription: DBSecurityGroup
-      SecurityGroupIngress:
-        - FromPort: 5432
-          IpProtocol: tcp
-          SourceSecurityGroupId:
-            Fn::GetAtt:
-              - VpcC3027511
-              - DefaultSecurityGroup
-          ToPort: 5432
-      VpcId:
-        Ref: VpcC3027511
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: cdk-app-dev/RdsInstance/DBSecurityGroup
-  RdsInstanceCfnDBSubnetGroupDCDD79F9:
-    Type: AWS::RDS::DBSubnetGroup
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/ExecutionRole/Resource
+  BackendTasksMigrateTaskExecutionRoleDefaultPolicy033E9FC3:
+    Type: AWS::IAM::Policy
     Properties:
-      DBSubnetGroupDescription: dev.mysite.com-db-subnet-group
-      SubnetIds:
-        - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
-        - Ref: VpcIsolatedSubnet2SubnetB479B99C
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendTasksMigrateTaskExecutionRoleDefaultPolicy033E9FC3
+      Roles:
+        - Ref: BackendTasksMigrateTaskExecutionRole44C9D955
     Metadata:
-      aws:cdk:path: cdk-app-dev/RdsInstance/CfnDBSubnetGroup
-  RdsInstanceDBCluster7C165EFA:
-    Type: AWS::RDS::DBCluster
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/ExecutionRole/DefaultPolicy/Resource
+  BackendTasksCollecstaticTaskTaskRole68FA2F7B:
+    Type: AWS::IAM::Role
     Properties:
-      Engine: aurora-postgresql
-      DBSubnetGroupName:
-        Ref: RdsInstanceDBSecurityGroup8F5B5847
-      EnableHttpEndpoint: true
-      EngineMode: serverless
-      EngineVersion: "10.7"
-      MasterUsername:
-        Fn::Join:
-          - ""
-          - - "{{resolve:secretsmanager:"
-            - Ref: RdsInstanceDBSecret70A4200B
-            - :SecretString:username::}}
-      MasterUserPassword:
-        Fn::Join:
-          - ""
-          - - "{{resolve:secretsmanager:"
-            - Ref: RdsInstanceDBSecret70A4200B
-            - :SecretString:password::}}
-      Port: 5432
-      VpcSecurityGroupIds:
-        - Fn::GetAtt:
-            - RdsInstanceDBSecurityGroup8F5B5847
-            - GroupId
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: cdk-app-dev/RdsInstance/DBCluster
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/TaskRole/Resource
+  BackendTasksCollecstaticTask92B4EE6A:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: "256"
+      Family: dev-mysite-com-collectstatic
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn:
+        Fn::GetAtt:
+          - BackendTasksCollecstaticTaskTaskRole68FA2F7B
+          - Arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:

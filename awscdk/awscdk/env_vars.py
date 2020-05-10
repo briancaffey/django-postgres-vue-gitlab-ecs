@@ -3,7 +3,12 @@ from aws_cdk import core, aws_secretsmanager as secrets, aws_ecs as ecs
 
 class Variables(core.Construct):
     def __init__(
-        self, scope: core.Construct, id: str, bucket_name: str, **kwargs,
+        self,
+        scope: core.Construct,
+        id: str,
+        bucket_name: str,
+        db_secret: secrets.ISecret,
+        **kwargs,
     ) -> None:
         super().__init__(
             scope, id, **kwargs,
@@ -26,5 +31,6 @@ class Variables(core.Construct):
         self.secret_variables = {
             "SECRET_KEY": ecs.Secret.from_secrets_manager(
                 self.django_secret_key
-            )
+            ),
+            "POSTGRES_PASSWORD": ecs.Secret.from_secrets_manager(db_secret),
         }

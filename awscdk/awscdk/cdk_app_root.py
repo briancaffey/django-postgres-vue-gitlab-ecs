@@ -13,11 +13,20 @@ from ecs import Ecs
 from env_vars import Variables
 
 from backend import Backend
+from backend_tasks import BackendTasks
 
 
 class ApplicationStack(core.Stack):
     def __init__(
-        self, scope: core.Construct, id: str, domain_name: str, **kwargs
+        self,
+        scope: core.Construct,
+        id: str,
+        environment_name: str,
+        base_domain_name: str,
+        full_domain_name: str,
+        base_app_name: str,
+        full_app_name: str,
+        **kwargs
     ) -> None:
 
         super().__init__(scope, id, **kwargs)
@@ -25,7 +34,7 @@ class ApplicationStack(core.Stack):
         self.hosted_zone = HostedZone(self, "HostedZone")
 
         self.certificate = SiteCertificate(
-            self, "SiteCert", domain_name=domain_name
+            self, "SiteCert", domain_name=full_domain_name
         )
 
         self.vpc = Vpc(self, "Vpc")
@@ -44,21 +53,36 @@ class ApplicationStack(core.Stack):
             hosted_zone=self.hosted_zone,
             certificate=self.certificate,
             alb=self.alb.alb.load_balancer_dns_name,
-            domain_name=domain_name,
+            full_domain_name=full_domain_name,
+            full_app_name=full_app_name,
         )
 
-        self.ecr_repo = ElasticContainerRepo(
-            self, "ElasticContainerRepo", domain_name=domain_name
+        # TODO: remove this
+        # self.ecr_repo = ElasticContainerRepo(
+        #     self, "ElasticContainerRepo", full_app_name=full_app_name
+        # )
+
+        self.ecs = Ecs(
+            self, "Ecs", vpc=self.vpc.vpc, full_app_name=full_app_name
         )
 
-        self.ecs = Ecs(self, "Ecs", vpc=self.vpc.vpc, domain_name=domain_name)
+        self.assets = Assets(
+            self, "BackendAssets", full_app_name=full_app_name
+        )
 
-        self.assets = Assets(self, "BackendAssets", domain_name=domain_name)
+        self.rds = Rds(
+            self, "RdsDBCluster", vpc=self.vpc.vpc, full_app_name=full_app_name
+        )
+
+        # self.elasticache = ElastiCache(
+        #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
+        # )
 
         self.variables = Variables(
             self,
             "Variables",
             bucket_name=self.assets.assets_bucket.bucket_name,
+            db_secret=self.rds.db_secret,
         )
 
         self.backend = Backend(
@@ -66,19 +90,24 @@ class ApplicationStack(core.Stack):
             "Backend",
             load_balancer=self.alb,
             cluster=self.ecs.cluster,
-            domain_name=domain_name,
             environment_variables=self.variables,
         )
 
+        # migrate, collectstatic, createsuperuser
+        self.backend_tasks = BackendTasks(
+            self,
+            "BackendTasks",
+            cluster=self.ecs.cluster,
+            environment_variables=self.variables,
+            full_app_name=full_app_name,
+        )
+
+        # TODO: loop over all task roles to grant bucket permissions
         # give the backend service read/write access to the assets bucket
-        self.assets.assets_bucket.grant_read_write(
-            self.backend.backend_task.task_role
-        )
+        task_roles = [
+            self.backend.backend_task.task_role,
+            self.backend_tasks.collectstatic_task.task_role,
+        ]
 
-        self.rds = Rds(
-            self, "RdsInstance", vpc=self.vpc.vpc, domain_name=domain_name
-        )
-
-        # self.elasticache = ElastiCache(
-        #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
-        # )
+        for task_role in task_roles:
+            self.assets.assets_bucket.grant_read_write(task_role)

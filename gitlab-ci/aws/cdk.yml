@@ -80,7 +80,7 @@ cdk deploy:
     - cdk bootstrap aws://$AWS_ACCOUNT_ID/$AWS_DEFAULT_REGION
     - cdk deploy --require-approval never
 
-.collectstatic: &task
+collectstatic: &task
   image: python:3.8
   stage: deploy
   only:
@@ -91,13 +91,25 @@ cdk deploy:
   script:
     - |
       aws ecs run-task \
-        --cluster ${DOMAIN_NAME}-${ENVIRONMENT}-cluster \
-        --task-definition collectstatic
+        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-collectstatic
 
-.migrate:
+migrate:
   <<: *task
   script:
     - |
       aws ecs run-task \
-        --cluster ${DOMAIN_NAME}-${ENVIRONMENT}-cluster \
-        --task-definition migrate
+        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-migrate
+
+.cdk destroy:
+  image: python:3.8
+  stage: deploy
+  before_script:
+    - apt-get -qq update && apt-get -y install nodejs npm
+    - node -v
+    - npm i -g aws-cdk
+    - cd awscdk
+    - pip3 install -r requirements.txt
+  script:
+    - cdk destroy --require-approval never

@@ -17,7 +17,8 @@ class CloudFront(core.Construct):
         hosted_zone: route53.IHostedZone,
         certificate: acm.ICertificate,
         alb: str,
-        domain_name: str,
+        full_domain_name: str,
+        full_app_name: str,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -26,7 +27,7 @@ class CloudFront(core.Construct):
             self,
             "StaticSiteBucket",
             access_control=s3.BucketAccessControl.PUBLIC_READ,
-            bucket_name=domain_name,
+            bucket_name=f"{full_app_name}-frontend",
             removal_policy=core.RemovalPolicy.DESTROY,
         )
 
@@ -43,6 +44,7 @@ class CloudFront(core.Construct):
 
         self.static_site_bucket.add_to_resource_policy(self.policy_statement)
 
+        path_patterns = ["/api/*", "/admin/*", "/flower/*"]
         self.distribution = cloudfront.CloudFrontWebDistribution(
             self,
             "CloudFrontDistribution",
@@ -55,13 +57,14 @@ class CloudFront(core.Construct):
                     behaviors=[
                         cloudfront.Behavior(
                             allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,  # noqa
-                            path_pattern="/api/*",
+                            path_pattern=path_pattern,
                             forwarded_values={
                                 "headers": ["*"],
                                 "cookies": {"forward": "all"},
                                 "query_string": True,
                             },
                         )
+                        for path_pattern in path_patterns
                     ],
                 ),
                 cloudfront.SourceConfiguration(
@@ -77,7 +80,8 @@ class CloudFront(core.Construct):
                 ),
             ],
             alias_configuration=cloudfront.AliasConfiguration(
-                acm_cert_ref=certificate.certificate_arn, names=[domain_name],
+                acm_cert_ref=certificate.certificate_arn,
+                names=[full_domain_name],
             ),
             error_configurations=[
                 {
@@ -102,6 +106,5 @@ class CloudFront(core.Construct):
                 targets.CloudFrontTarget(self.distribution)
             ),
             zone=hosted_zone.hosted_zone,
-            # don't forget the '.' at the end of the record name!
-            record_name=f"{domain_name}.",
+            record_name=f"{full_domain_name}.",
         )
