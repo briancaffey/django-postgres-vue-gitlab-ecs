@@ -589,7 +589,7 @@ Resources:
     Properties:
       Engine: aurora-postgresql
       DBSubnetGroupName:
-        Ref: RdsDBClusterDBSecurityGroup83AB5EDA
+        Ref: RdsDBClusterCfnDBSubnetGroup38D3A78B
       EnableHttpEndpoint: true
       EngineMode: serverless
       EngineVersion: "10.7"
@@ -637,10 +637,6 @@ Resources:
     Properties:
       PolicyDocument:
         Statement:
-          - Action: secretsmanager:GetSecretValue
-            Effect: Allow
-            Resource:
-              Ref: VariablesDjangoSecretKeyE4FA41EE
           - Action:
               - s3:GetObject*
               - s3:GetBucket*
@@ -659,6 +655,14 @@ Resources:
                         - BackendAssetsAssetsBucket62473847
                         - Arn
                     - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
         Version: "2012-10-17"
       PolicyName: BackendBackendTaskTaskRoleDefaultPolicy35F40EEC
       Roles:
@@ -1018,6 +1022,14 @@ Resources:
                         - BackendAssetsAssetsBucket62473847
                         - Arn
                     - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
         Version: "2012-10-17"
       PolicyName: BackendTasksCollecstaticTaskTaskRoleDefaultPolicyDA990EDC
       Roles:

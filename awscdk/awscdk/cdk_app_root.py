@@ -114,3 +114,11 @@ class ApplicationStack(core.Stack):
 
         for task_role in task_roles:
             self.assets.assets_bucket.grant_read_write(task_role)
+
+            # TODO: Is this necessary? what is the best way to grant task
+            # execution role to secrets?
+            for secret in [
+                self.variables.django_secret_key,
+                self.rds.db_secret,
+            ]:
+                secret.grant_read(task_role)
