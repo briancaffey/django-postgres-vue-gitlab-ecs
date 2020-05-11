@@ -110,6 +110,7 @@ class ApplicationStack(core.Stack):
         task_roles = [
             self.backend.backend_task.task_role,
             self.backend_tasks.collectstatic_task.task_role,
+            self.backend_tasks.create_superuser_task.task_role,
         ]
 
         for task_role in task_roles:
