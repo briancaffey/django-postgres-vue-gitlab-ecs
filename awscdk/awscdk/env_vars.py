@@ -39,7 +39,7 @@ class Variables(core.Construct):
         }
 
         self.secret_variables = {
-            "SECRET_KEY": ecs.Secret.from_secrets_manager(
+            "DJANGO_SECRET_KEY": ecs.Secret.from_secrets_manager(
                 self.django_secret_key
             ),
         }
