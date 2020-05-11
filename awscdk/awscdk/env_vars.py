@@ -1,3 +1,5 @@
+import os
+
 from aws_cdk import core, aws_secretsmanager as secrets, aws_ecs as ecs
 
 
@@ -15,6 +17,14 @@ class Variables(core.Construct):
             scope, id, **kwargs,
         )
 
+        self.django_secret_key = secrets.Secret(
+            self,
+            "DjangoSecretKey",
+            generate_secret_string=secrets.SecretStringGenerator(
+                exclude_punctuation=True, include_space=False,
+            ),
+        )
+
         self.regular_variables = {
             "DJANGO_SETTINGS_MODULE": "backend.settings.production",
             "DEBUG": "",
@@ -23,15 +33,10 @@ class Variables(core.Construct):
             "POSTGRES_PASSWORD": db_secret.secret_value_from_json(
                 "password"
             ).to_string(),
+            "SECRET_KEY": os.environ.get(
+                "SECRET_KEY", "mysecretkey123"
+            ),  # self.django_secret_key.to_string(),
         }
-
-        self.django_secret_key = secrets.Secret(
-            self,
-            "DjangoSecretKey",
-            generate_secret_string=secrets.SecretStringGenerator(
-                exclude_punctuation=True, include_space=False,
-            ),
-        )
 
         self.secret_variables = {
             "SECRET_KEY": ecs.Secret.from_secrets_manager(
