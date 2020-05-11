@@ -20,6 +20,9 @@ class Variables(core.Construct):
             "DEBUG": "",
             "AWS_STORAGE_BUCKET_NAME": bucket_name,
             "POSTGRES_SERVICE_HOST": postgres_host,
+            "POSTGRES_PASSWORD": db_secret.secret_value_from_json(
+                "password"
+            ).to_string(),
         }
 
         self.django_secret_key = secrets.Secret(
@@ -34,5 +37,4 @@ class Variables(core.Construct):
             "SECRET_KEY": ecs.Secret.from_secrets_manager(
                 self.django_secret_key
             ),
-            "POSTGRES_PASSWORD": ecs.Secret.from_secrets_manager(db_secret),
         }

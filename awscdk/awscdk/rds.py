@@ -26,7 +26,10 @@ class Rds(core.Construct):
             "DBSecret",
             secret_name=f"{full_app_name}-db-secret",
             generate_secret_string=secrets.SecretStringGenerator(
-                exclude_punctuation=True, include_space=False,
+                secret_string_template=json.dumps({"username": "postgres"}),
+                exclude_punctuation=True,
+                include_space=False,
+                generate_string_key="password",
             ),
         )
 
@@ -76,7 +79,7 @@ class Rds(core.Construct):
             "vpc_security_group_ids": [
                 self.db_security_group.get_att("GroupId").to_string()
             ],
-            "db_subnet_group_name": self.db_subnet_group.ref,
+            "db_subnet_group_name": self.db_security_group.ref,
         }
 
         self.rds_cluster = rds.CfnDBCluster(

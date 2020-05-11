@@ -544,7 +544,9 @@ Resources:
     Properties:
       GenerateSecretString:
         ExcludePunctuation: true
+        GenerateStringKey: password
         IncludeSpace: false
+        SecretStringTemplate: '{"username": "postgres"}'
       Name: dev-mysite-com-db-secret
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecret/Resource
@@ -587,7 +589,7 @@ Resources:
     Properties:
       Engine: aurora-postgresql
       DBSubnetGroupName:
-        Ref: RdsDBClusterCfnDBSubnetGroup38D3A78B
+        Ref: RdsDBClusterDBSecurityGroup83AB5EDA
       EnableHttpEndpoint: true
       EngineMode: serverless
       EngineVersion: "10.7"
@@ -639,10 +641,6 @@ Resources:
             Effect: Allow
             Resource:
               Ref: VariablesDjangoSecretKeyE4FA41EE
-          - Action: secretsmanager:GetSecretValue
-            Effect: Allow
-            Resource:
-              Ref: RdsDBClusterDBSecret28397CCA
           - Action:
               - s3:GetObject*
               - s3:GetBucket*
@@ -686,6 +684,13 @@ Resources:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
                   - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
           Essential: true
           Image:
             Fn::Join:
@@ -709,9 +714,6 @@ Resources:
             - Name: SECRET_KEY
               ValueFrom:
                 Ref: VariablesDjangoSecretKeyE4FA41EE
-            - Name: POSTGRES_PASSWORD
-              ValueFrom:
-                Ref: RdsDBClusterDBSecret28397CCA
       Cpu: "256"
       ExecutionRoleArn:
         Fn::GetAtt:
@@ -779,10 +781,6 @@ Resources:
             Effect: Allow
             Resource:
               Ref: VariablesDjangoSecretKeyE4FA41EE
-          - Action: secretsmanager:GetSecretValue
-            Effect: Allow
-            Resource:
-              Ref: RdsDBClusterDBSecret28397CCA
         Version: "2012-10-17"
       PolicyName: BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2
       Roles:
@@ -885,6 +883,13 @@ Resources:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
                   - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
           Essential: true
           Image:
             Fn::Join:
@@ -905,9 +910,6 @@ Resources:
             - Name: SECRET_KEY
               ValueFrom:
                 Ref: VariablesDjangoSecretKeyE4FA41EE
-            - Name: POSTGRES_PASSWORD
-              ValueFrom:
-                Ref: RdsDBClusterDBSecret28397CCA
       Cpu: "256"
       ExecutionRoleArn:
         Fn::GetAtt:
@@ -975,10 +977,6 @@ Resources:
             Effect: Allow
             Resource:
               Ref: VariablesDjangoSecretKeyE4FA41EE
-          - Action: secretsmanager:GetSecretValue
-            Effect: Allow
-            Resource:
-              Ref: RdsDBClusterDBSecret28397CCA
         Version: "2012-10-17"
       PolicyName: BackendTasksMigrateTaskExecutionRoleDefaultPolicy033E9FC3
       Roles:
@@ -1048,6 +1046,13 @@ Resources:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
                   - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
           Essential: true
           Image:
             Fn::Join:
@@ -1068,9 +1073,6 @@ Resources:
             - Name: SECRET_KEY
               ValueFrom:
                 Ref: VariablesDjangoSecretKeyE4FA41EE
-            - Name: POSTGRES_PASSWORD
-              ValueFrom:
-                Ref: RdsDBClusterDBSecret28397CCA
       Cpu: "256"
       ExecutionRoleArn:
         Fn::GetAtt:
@@ -1138,10 +1140,6 @@ Resources:
             Effect: Allow
             Resource:
               Ref: VariablesDjangoSecretKeyE4FA41EE
-          - Action: secretsmanager:GetSecretValue
-            Effect: Allow
-            Resource:
-              Ref: RdsDBClusterDBSecret28397CCA
         Version: "2012-10-17"
       PolicyName: BackendTasksCollecstaticTaskExecutionRoleDefaultPolicyF6ED755C
       Roles:
@@ -1181,6 +1179,13 @@ Resources:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
                   - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
           Essential: true
           Image:
             Fn::Join:
