@@ -70,55 +70,55 @@ class ApplicationStack(core.Stack):
             self, "BackendAssets", full_app_name=full_app_name
         )
 
-        self.rds = Rds(
-            self, "RdsDBCluster", vpc=self.vpc.vpc, full_app_name=full_app_name
-        )
-
-        # self.elasticache = ElastiCache(
-        #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
+        # self.rds = Rds(
+        #     self, "RdsDBCluster", vpc=self.vpc.vpc, full_app_name=full_app_name
         # )
 
-        self.variables = Variables(
-            self,
-            "Variables",
-            bucket_name=self.assets.assets_bucket.bucket_name,
-            db_secret=self.rds.db_secret,
-            postgres_host=self.rds.rds_cluster.get_att(
-                "Endpoint.Address"
-            ).to_string(),
-        )
+        # # self.elasticache = ElastiCache(
+        # #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
+        # # )
 
-        self.backend = Backend(
-            self,
-            "Backend",
-            load_balancer=self.alb,
-            cluster=self.ecs.cluster,
-            environment_variables=self.variables,
-        )
+        # self.variables = Variables(
+        #     self,
+        #     "Variables",
+        #     bucket_name=self.assets.assets_bucket.bucket_name,
+        #     db_secret=self.rds.db_secret,
+        #     postgres_host=self.rds.rds_cluster.get_att(
+        #         "Endpoint.Address"
+        #     ).to_string(),
+        # )
 
-        # migrate, collectstatic, createsuperuser
-        self.backend_tasks = BackendTasks(
-            self,
-            "BackendTasks",
-            cluster=self.ecs.cluster,
-            environment_variables=self.variables,
-            full_app_name=full_app_name,
-        )
+        # self.backend = Backend(
+        #     self,
+        #     "Backend",
+        #     load_balancer=self.alb,
+        #     cluster=self.ecs.cluster,
+        #     environment_variables=self.variables,
+        # )
 
-        # TODO: loop over all task roles to grant bucket permissions
-        # give the backend service read/write access to the assets bucket
-        task_roles = [
-            self.backend.backend_task.task_role,
-            self.backend_tasks.collectstatic_task.task_role,
-        ]
+        # # migrate, collectstatic, createsuperuser
+        # self.backend_tasks = BackendTasks(
+        #     self,
+        #     "BackendTasks",
+        #     cluster=self.ecs.cluster,
+        #     environment_variables=self.variables,
+        #     full_app_name=full_app_name,
+        # )
 
-        for task_role in task_roles:
-            self.assets.assets_bucket.grant_read_write(task_role)
+        # # TODO: loop over all task roles to grant bucket permissions
+        # # give the backend service read/write access to the assets bucket
+        # task_roles = [
+        #     self.backend.backend_task.task_role,
+        #     self.backend_tasks.collectstatic_task.task_role,
+        # ]
 
-            # TODO: Is this necessary? what is the best way to grant task
-            # execution role to secrets?
-            for secret in [
-                self.variables.django_secret_key,
-                self.rds.db_secret,
-            ]:
-                secret.grant_read(task_role)
+        # for task_role in task_roles:
+        #     self.assets.assets_bucket.grant_read_write(task_role)
+
+        #     # TODO: Is this necessary? what is the best way to grant task
+        #     # execution role to secrets?
+        #     for secret in [
+        #         self.variables.django_secret_key,
+        #         self.rds.db_secret,
+        #     ]:
+        #         secret.grant_read(task_role)
