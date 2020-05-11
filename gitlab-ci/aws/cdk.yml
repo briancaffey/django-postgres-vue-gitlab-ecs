@@ -116,6 +116,17 @@ migrate:
         --count 1 \
         --launch-type FARGATE
 
+createsuperuser:
+  <<: *task
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-create-superuser \
+        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
+        --count 1 \
+        --launch-type FARGATE
+
 .cdk destroy:
   image: python:3.8
   stage: deploy
