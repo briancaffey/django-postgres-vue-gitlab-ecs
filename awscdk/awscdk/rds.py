@@ -26,10 +26,7 @@ class Rds(core.Construct):
             "DBSecret",
             secret_name=f"{full_app_name}-db-secret",
             generate_secret_string=secrets.SecretStringGenerator(
-                secret_string_template=json.dumps({"username": "postgres"}),
-                exclude_punctuation=True,
-                include_space=False,
-                generate_string_key="password",
+                exclude_punctuation=True, include_space=False,
             ),
         )
 

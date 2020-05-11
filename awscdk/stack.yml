@@ -544,9 +544,7 @@ Resources:
     Properties:
       GenerateSecretString:
         ExcludePunctuation: true
-        GenerateStringKey: password
         IncludeSpace: false
-        SecretStringTemplate: '{"username": "postgres"}'
       Name: dev-mysite-com-db-secret
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecret/Resource
@@ -683,7 +681,7 @@ Resources:
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
-            - Name: POSTGRES_HOST
+            - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
@@ -882,7 +880,7 @@ Resources:
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
-            - Name: POSTGRES_HOST
+            - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
@@ -1045,7 +1043,7 @@ Resources:
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
-            - Name: POSTGRES_HOST
+            - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
@@ -1178,7 +1176,7 @@ Resources:
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
-            - Name: POSTGRES_HOST
+            - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
