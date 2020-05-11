@@ -19,7 +19,7 @@ class Variables(core.Construct):
             "DJANGO_SETTINGS_MODULE": "backend.settings.production",
             "DEBUG": "",
             "AWS_STORAGE_BUCKET_NAME": bucket_name,
-            "POSTGRES_HOST": postgres_host,
+            "POSTGRES_SERVICE_HOST": postgres_host,
         }
 
         self.django_secret_key = secrets.Secret(
