@@ -7,6 +7,7 @@ class Variables(core.Construct):
         scope: core.Construct,
         id: str,
         bucket_name: str,
+        postgres_host: str,
         db_secret: secrets.ISecret,
         **kwargs,
     ) -> None:
@@ -18,6 +19,7 @@ class Variables(core.Construct):
             "DJANGO_SETTINGS_MODULE": "backend.settings.production",
             "DEBUG": "",
             "AWS_STORAGE_BUCKET_NAME": bucket_name,
+            "POSTGRES_HOST": postgres_host,
         }
 
         self.django_secret_key = secrets.Secret(
