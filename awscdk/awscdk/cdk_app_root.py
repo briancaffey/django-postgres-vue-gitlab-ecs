@@ -83,7 +83,9 @@ class ApplicationStack(core.Stack):
             "Variables",
             bucket_name=self.assets.assets_bucket.bucket_name,
             db_secret=self.rds.db_secret,
-            postgres_host=self.rds.rds_cluster.get_att("Address").to_string(),
+            postgres_host=self.rds.rds_cluster.get_att(
+                "Endpoint.Address"
+            ).to_string(),
         )
 
         self.backend = Backend(

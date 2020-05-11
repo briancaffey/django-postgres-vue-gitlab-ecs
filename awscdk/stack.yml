@@ -687,7 +687,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
-                  - Address
+                  - Endpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -886,7 +886,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
-                  - Address
+                  - Endpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -1049,7 +1049,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
-                  - Address
+                  - Endpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -1182,7 +1182,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - RdsDBCluster25564148
-                  - Address
+                  - Endpoint.Address
           Essential: true
           Image:
             Fn::Join:
