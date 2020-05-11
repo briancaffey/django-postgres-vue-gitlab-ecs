@@ -34,5 +34,7 @@ class Variables(core.Construct):
             "SECRET_KEY": ecs.Secret.from_secrets_manager(
                 self.django_secret_key
             ),
-            "POSTGRES_PASSWORD": ecs.Secret.from_secrets_manager(db_secret),
+            "POSTGRES_PASSWORD": ecs.Secret.from_secrets_manager(
+                db_secret, field="password"
+            ),
         }
