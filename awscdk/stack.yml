@@ -695,6 +695,8 @@ Resources:
                   - - "{{resolve:secretsmanager:"
                     - Ref: RdsDBClusterDBSecret28397CCA
                     - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
           Essential: true
           Image:
             Fn::Join:
@@ -715,7 +717,7 @@ Resources:
             - ContainerPort: 8000
               Protocol: tcp
           Secrets:
-            - Name: SECRET_KEY
+            - Name: DJANGO_SECRET_KEY
               ValueFrom:
                 Ref: VariablesDjangoSecretKeyE4FA41EE
       Cpu: "256"
@@ -894,6 +896,8 @@ Resources:
                   - - "{{resolve:secretsmanager:"
                     - Ref: RdsDBClusterDBSecret28397CCA
                     - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
           Essential: true
           Image:
             Fn::Join:
@@ -911,7 +915,7 @@ Resources:
               awslogs-region: us-east-1
           Name: MigrateCommand
           Secrets:
-            - Name: SECRET_KEY
+            - Name: DJANGO_SECRET_KEY
               ValueFrom:
                 Ref: VariablesDjangoSecretKeyE4FA41EE
       Cpu: "256"
@@ -1065,6 +1069,8 @@ Resources:
                   - - "{{resolve:secretsmanager:"
                     - Ref: RdsDBClusterDBSecret28397CCA
                     - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
           Essential: true
           Image:
             Fn::Join:
@@ -1082,7 +1088,7 @@ Resources:
               awslogs-region: us-east-1
           Name: CollecstaticCommand
           Secrets:
-            - Name: SECRET_KEY
+            - Name: DJANGO_SECRET_KEY
               ValueFrom:
                 Ref: VariablesDjangoSecretKeyE4FA41EE
       Cpu: "256"
@@ -1170,6 +1176,43 @@ Resources:
         Version: "2012-10-17"
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/TaskRole/Resource
+  BackendTasksCreateSuperuserTaskTaskRoleDefaultPolicyF80ECD9D:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsAssetsBucket62473847
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsAssetsBucket62473847
+                        - Arn
+                    - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendTasksCreateSuperuserTaskTaskRoleDefaultPolicyF80ECD9D
+      Roles:
+        - Ref: BackendTasksCreateSuperuserTaskTaskRoleD91E1780
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/TaskRole/DefaultPolicy/Resource
   BackendTasksCreateSuperuserTask71A5D516:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -1198,6 +1241,8 @@ Resources:
                   - - "{{resolve:secretsmanager:"
                     - Ref: RdsDBClusterDBSecret28397CCA
                     - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
           Essential: true
           Image:
             Fn::Join:

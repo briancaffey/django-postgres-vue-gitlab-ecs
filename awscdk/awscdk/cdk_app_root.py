@@ -94,6 +94,7 @@ class ApplicationStack(core.Stack):
             load_balancer=self.alb,
             cluster=self.ecs.cluster,
             environment_variables=self.variables,
+            security_group=self.vpc.vpc.vpc_default_security_group,
         )
 
         # migrate, collectstatic, createsuperuser

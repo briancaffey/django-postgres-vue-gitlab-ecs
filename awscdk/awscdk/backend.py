@@ -2,6 +2,7 @@ import os
 
 from aws_cdk import (
     core,
+    aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_ecs_patterns as ecs_patterns,
     aws_elasticloadbalancingv2 as elbv2,
@@ -16,6 +17,7 @@ class Backend(core.Construct):
         load_balancer,
         cluster: ecs.ICluster,
         environment_variables: core.Construct,
+        security_group: str,
         **kwargs,
     ) -> None:
         super().__init__(
@@ -48,6 +50,9 @@ class Backend(core.Construct):
             task_definition=self.backend_task,
             assign_public_ip=True,
             cluster=cluster,
+            # security_group=ec2.SecurityGroup.from_security_group_id(
+            #     self, "BackendSecurityGroup", security_group_id=security_group
+            # ),
         )
 
         load_balancer.https_listener.add_targets(
