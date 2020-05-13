@@ -70,8 +70,9 @@ class CloudFront(core.Construct):
                     ],
                 ),
                 cloudfront.SourceConfiguration(
-                    s3_origin_source=cloudfront.S3OriginConfig(
-                        s3_bucket_source=self.static_site_bucket
+                    custom_origin_source=cloudfront.CustomOriginConfig(
+                        domain_name=self.static_site_bucket.bucket_website_url,
+                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,  # noqa
                     ),
                     behaviors=[
                         cloudfront.Behavior(

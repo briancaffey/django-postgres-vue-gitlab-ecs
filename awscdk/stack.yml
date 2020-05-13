@@ -472,12 +472,19 @@ Resources:
                 - ApplicationLoadBalancerALBE88818A8
                 - DNSName
             Id: origin1
-          - DomainName:
+          - CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginKeepaliveTimeout: 5
+              OriginProtocolPolicy: match-viewer
+              OriginReadTimeout: 30
+              OriginSSLProtocols:
+                - TLSv1.2
+            DomainName:
               Fn::GetAtt:
                 - StaticSiteStaticSiteBucket442CE34F
-                - RegionalDomainName
+                - WebsiteURL
             Id: origin2
-            S3OriginConfig: {}
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn:
@@ -698,7 +705,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:77471127f5c4b1a1dac754372ad729ae24634fe7a197826e5dd9b69f1cab8c0e
+                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -887,7 +894,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:77471127f5c4b1a1dac754372ad729ae24634fe7a197826e5dd9b69f1cab8c0e
+                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1060,7 +1067,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:77471127f5c4b1a1dac754372ad729ae24634fe7a197826e5dd9b69f1cab8c0e
+                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1232,7 +1239,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:77471127f5c4b1a1dac754372ad729ae24634fe7a197826e5dd9b69f1cab8c0e
+                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
           LogConfiguration:
             LogDriver: awslogs
             Options:
