@@ -71,7 +71,7 @@ class CloudFront(core.Construct):
                 ),
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
-                        domain_name=self.static_site_bucket.bucket_website_url,
+                        domain_name=self.static_site_bucket.bucket_domain_name,
                         origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,  # noqa
                     ),
                     behaviors=[
@@ -86,20 +86,6 @@ class CloudFront(core.Construct):
                 acm_cert_ref=certificate.certificate_arn,
                 names=[full_domain_name],
             ),
-            # error_configurations=[
-            #     {
-            #         "errorCode": 403,
-            #         "errorCachingMinTtl": 0,
-            #         "responseCode": 200,
-            #         "responsePagePath": "/index.html",
-            #     },
-            #     {
-            #         "errorCode": 404,
-            #         "errorCachingMinTtl": 0,
-            #         "responseCode": 200,
-            #         "responsePagePath": "/index.html",
-            #     },
-            # ],
         )
 
         route53.ARecord(
