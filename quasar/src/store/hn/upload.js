@@ -14,7 +14,7 @@ const getters = {
 
 const actions = {
   async submitLink({ getters }, { vm }) {
-    const resp = await vm.$apollo.mutate({
+    await vm.$apollo.mutate({
       mutation: gql`
         mutation($url: String!, $description: String!) {
           createLink(url: $url, description: $description) {
@@ -33,8 +33,6 @@ const actions = {
         description: getters.getDescription
       }
     });
-    console.log(resp);
-    // commit("toggleUploadForm");
   }
 };
 

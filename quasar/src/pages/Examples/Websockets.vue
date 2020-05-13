@@ -38,7 +38,6 @@ export default {
   created() {
     this.$connect(this.wsUrl, { format: "json" });
     this.$socket.onmessage = i => {
-      console.log(i);
       const data = JSON.parse(i["data"]);
       data.vue_recv_pong = new Date().getTime();
       this.pongs.unshift(data);

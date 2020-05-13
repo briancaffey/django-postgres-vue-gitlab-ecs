@@ -35,15 +35,12 @@ export default {
   created() {
     this.getCachedValue();
     if (this.valueFromCache) {
-      console.log("here.");
       this.valueToSet = this.valueFromCache;
     }
   },
   methods: {
     clearCacheValue() {
-      this.$axios.delete("/api/debug/redis/").then(resp => {
-        console.log(resp);
-        console.log("getting here..");
+      this.$axios.delete("/api/debug/redis/").then(() => {
         this.valueFromCache = null;
       });
     },

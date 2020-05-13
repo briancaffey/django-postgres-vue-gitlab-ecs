@@ -36,7 +36,6 @@ export default {
         return this.$store.getters["banking/transactions/getPagination"];
       },
       set(v) {
-        console.log(v);
         this.$store.commit("banking/transactions/setPagination", v);
       }
     },

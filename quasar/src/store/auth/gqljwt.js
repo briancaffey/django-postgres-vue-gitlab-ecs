@@ -2,12 +2,12 @@ import gql from "graphql-tag";
 import { Cookies } from "quasar";
 
 const state = {
-  token: Cookies.get("user-token-gql") || ""
+  token: Cookies.get("user-token-gql") || "",
 };
 
 const getters = {
-  getToken: s => s.token,
-  isAuthenticated: s => !!s.token
+  getToken: (s) => s.token,
+  isAuthenticated: (s) => !!s.token,
 };
 
 const actions = {
@@ -22,19 +22,18 @@ const actions = {
       `,
       variables: {
         email,
-        password
-      }
+        password,
+      },
     });
     commit("authSuccess", resp.data);
-  }
+  },
 };
 
 const mutations = {
   authSuccess: (state, payload) => {
-    console.log(payload.tokenAuth.token);
     Cookies.set("user-token-gql", payload.tokenAuth.token);
     state.token = payload.tokenAuth.token;
-  }
+  },
 };
 
 export default {
@@ -42,5 +41,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

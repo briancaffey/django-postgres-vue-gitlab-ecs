@@ -2,18 +2,18 @@ import axios from "axios";
 
 export default async ({ Vue, store, router }) => {
   const apiCall = axios.create({
-    baseURL: process.env.API_URL
+    baseURL: process.env.API_URL,
   });
 
   apiCall.interceptors.request.use(
-    config => {
+    (config) => {
       const c = config;
       if (store.getters.isAuthenticated) {
         c.headers.Authorization = `Bearer ${store.getters.getToken}`;
       }
       return c;
     },
-    error => {
+    (error) => {
       Promise.reject(error);
     }
   );
@@ -23,7 +23,6 @@ export default async ({ Vue, store, router }) => {
   }
 
   function handleError(error) {
-    console.log(error);
     switch (error.response.status) {
       case 400:
         break;

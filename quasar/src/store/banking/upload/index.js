@@ -1,11 +1,11 @@
 const state = {
   date: null,
-  file: null
+  file: null,
 };
 
 const getters = {
-  getDate: s => s.date,
-  getFile: s => s.file
+  getDate: (s) => s.date,
+  getFile: (s) => s.file,
 };
 
 const actions = {
@@ -13,14 +13,10 @@ const actions = {
     const formData = new FormData();
     formData.append("file", getters.getFile);
     formData.append("form", JSON.stringify({ month: getters.getDate }));
-    payload.vm.$axios
-      .post("/api/statements/", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      })
-      .then(resp => {
-        console.log(resp);
-      });
-  }
+    payload.vm.$axios.post("/api/statements/", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
 };
 
 const mutations = {
@@ -29,7 +25,7 @@ const mutations = {
   },
   setFile: (state, payload) => {
     state.file = payload;
-  }
+  },
 };
 
 export default {
@@ -37,5 +33,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

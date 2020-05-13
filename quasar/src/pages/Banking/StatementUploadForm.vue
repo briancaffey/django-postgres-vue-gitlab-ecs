@@ -69,7 +69,6 @@ export default {
         return this.$store.getters["banking/upload/getDate"];
       },
       set(v) {
-        console.log(v);
         return this.$store.commit("banking/upload/setDate", v);
       }
     }

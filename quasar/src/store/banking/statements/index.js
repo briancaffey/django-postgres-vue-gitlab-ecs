@@ -9,38 +9,38 @@ const state = {
   columns: [
     { align: "left", field: "id", label: "ID" },
     { align: "left", field: "month", label: "Month" },
-    { align: "left", field: "statement_file", label: "File" }
-  ]
+    { align: "left", field: "statement_file", label: "File" },
+  ],
 };
 
 const getters = {
-  getLoading: s => s.loading,
-  getPagination: s => {
+  getLoading: (s) => s.loading,
+  getPagination: (s) => {
     return {
       pagination: {
         rowsPerPage: s.paginationLimit,
-        pagesNumber: s.count
-      }
+        pagesNumber: s.count,
+      },
     };
   },
-  getPaginationLimit: s => s.paginationLimit,
-  getFiles: s => s.files,
-  getCount: s => s.count,
-  getTableColumns: s => s.columns,
-  getCurrentPage: s => s.currentPage,
-  queryParams: s => {
+  getPaginationLimit: (s) => s.paginationLimit,
+  getFiles: (s) => s.files,
+  getCount: (s) => s.count,
+  getTableColumns: (s) => s.columns,
+  getCurrentPage: (s) => s.currentPage,
+  queryParams: (s) => {
     return {
       offset: (s.currentPage - 1) * s.paginationLimit,
-      limit: s.paginationLimit
+      limit: s.paginationLimit,
     };
-  }
+  },
 };
 
 const actions = {
   getFiles: ({ commit, getters }) => {
     commit("setLoading", true);
     const params = getters.queryParams;
-    Vue.prototype.$axios.get("/api/statements/", { params }).then(resp => {
+    Vue.prototype.$axios.get("/api/statements/", { params }).then((resp) => {
       commit("getFiles", resp.data);
       commit("setLoading", false);
     });
@@ -48,7 +48,7 @@ const actions = {
   setCurrentPage: ({ commit, dispatch }, payload) => {
     commit("setCurrentPage", payload);
     dispatch("getFiles");
-  }
+  },
 };
 
 const mutations = {
@@ -66,11 +66,7 @@ const mutations = {
   setCurrentPage: (state, payload) => {
     state.currentPage = payload;
   },
-  setPagination: (state, payload) => {
-    // console.log(state);
-    console.log("payload for pagination....");
-    console.log(payload);
-  }
+  setPagination: (state, payload) => {},
 };
 
 export default {
@@ -78,5 +74,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };
