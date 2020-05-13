@@ -50,9 +50,9 @@ class Backend(core.Construct):
             task_definition=self.backend_task,
             assign_public_ip=True,
             cluster=cluster,
-            # security_group=ec2.SecurityGroup.from_security_group_id(
-            #     self, "BackendSecurityGroup", security_group_id=security_group
-            # ),
+            security_group=ec2.SecurityGroup.from_security_group_id(
+                self, "BackendSecurityGroup", security_group_id=security_group
+            ),
         )
 
         load_balancer.https_listener.add_targets(

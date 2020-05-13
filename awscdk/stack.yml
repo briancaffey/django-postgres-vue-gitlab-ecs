@@ -254,7 +254,7 @@ Resources:
         Ref: VpcC3027511
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/Resource
-  ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendServiceSecurityGroupB9B0030A80009B40785B:
+  ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId:
@@ -265,12 +265,12 @@ Resources:
       Description: Load balancer to target
       DestinationSecurityGroupId:
         Fn::GetAtt:
-          - BackendBackendServiceSecurityGroupA039445A
-          - GroupId
+          - VpcC3027511
+          - DefaultSecurityGroup
       FromPort: 8000
       ToPort: 8000
     Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/to devmysitecomstackBackendBackendServiceSecurityGroupB9B0030A:8000
+      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/to devmysitecomstackBackendBackendSecurityGroup987E976C:8000
   ApplicationLoadBalancerALBALBListener3A5A512C:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -793,6 +793,23 @@ Resources:
         - Ref: BackendBackendTaskExecutionRole3B22D4E5
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
+  BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: Load balancer to target
+      FromPort: 8000
+      GroupId:
+        Fn::GetAtt:
+          - VpcC3027511
+          - DefaultSecurityGroup
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - ApplicationLoadBalancerALBSecurityGroup0D676F12
+          - GroupId
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendSecurityGroup/from devmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D03:8000
   BackendBackendService9DB18AD9:
     Type: AWS::ECS::Service
     Properties:
@@ -815,8 +832,8 @@ Resources:
           AssignPublicIp: ENABLED
           SecurityGroups:
             - Fn::GetAtt:
-                - BackendBackendServiceSecurityGroupA039445A
-                - GroupId
+                - VpcC3027511
+                - DefaultSecurityGroup
           Subnets:
             - Ref: VpcPublicSubnet1Subnet8E8DEDC0
             - Ref: VpcPublicSubnet2SubnetA811849C
@@ -826,35 +843,6 @@ Resources:
       - ApplicationLoadBalancerALBHTTPSListenerBackendTargetRule6CC8AE94
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/Service
-  BackendBackendServiceSecurityGroupA039445A:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: dev-mysite-com-stack/Backend/BackendService/SecurityGroup
-      SecurityGroupEgress:
-        - CidrIp: 0.0.0.0/0
-          Description: Allow all outbound traffic by default
-          IpProtocol: "-1"
-      VpcId:
-        Ref: VpcC3027511
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/SecurityGroup/Resource
-  BackendBackendServiceSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380002A813010:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      IpProtocol: tcp
-      Description: Load balancer to target
-      FromPort: 8000
-      GroupId:
-        Fn::GetAtt:
-          - BackendBackendServiceSecurityGroupA039445A
-          - GroupId
-      SourceSecurityGroupId:
-        Fn::GetAtt:
-          - ApplicationLoadBalancerALBSecurityGroup0D676F12
-          - GroupId
-      ToPort: 8000
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/SecurityGroup/from devmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D03:8000
   BackendTasksMigrateTaskTaskRoleAE7059C2:
     Type: AWS::IAM::Role
     Properties:
