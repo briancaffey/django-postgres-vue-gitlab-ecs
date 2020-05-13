@@ -5,7 +5,7 @@ variables:
   ECR_BASE_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
   ENVIRONMENT: dev
 
-.Build Quasar PWA Assets:
+Build Quasar PWA Assets:
   image: node:10
   stage: build
   only:
@@ -29,7 +29,7 @@ variables:
     - echo "Build Complete"
 
 
-.Sync Quasar PWA Assets:
+Sync Quasar PWA Assets:
   image: python:3.8
   stage: deploy
   only:
@@ -46,15 +46,15 @@ variables:
         --delete \
         --exclude index.html \
         --exclude service-worker.js \
-        ./dist/pwa/ s3://${ENVIRONMENT}.${DOMAIN_NAME}/
+        ./dist/pwa/ s3://${ENVIRONMENT}-${DOMAIN_NAME}-frontend/
     - |
       aws s3 cp \
         --cache-control 'max-age=0' \
-        ./dist/pwa/index.html s3://${ENVIRONMENT}.${DOMAIN_NAME}/
+        ./dist/pwa/index.html s3://${ENVIRONMENT}-${DOMAIN_NAME}-frontend/
     - |
       aws s3 cp \
         --cache-control 'max-age=0' \
-        ./dist/pwa/service-worker.js s3://${ENVIRONMENT}.${DOMAIN_NAME}/
+        ./dist/pwa/service-worker.js s3://${ENVIRONMENT}-${DOMAIN_NAME}-frontend/
   after_script:
     - echo "Deploy frontend complete"
 
