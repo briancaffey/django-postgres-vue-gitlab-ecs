@@ -67,6 +67,7 @@ cdk deploy:
     - master
   variables:
     ENVIRONMENT: dev
+    DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add --no-cache python3
     - python3 -V
@@ -85,22 +86,46 @@ collectstatic: &task
   stage: deploy
   only:
     - master
+  when: manual
   before_script:
     - pip install awscli
-  when: manual
+    - apt-get -qq update && apt-get -y install jq
+    - |
+      subnets=$( \
+        aws ec2 describe-subnets \
+          --filters \
+            Name=tag:aws:cloudformation:stack-name,Values=${ENVIRONMENT}-${APP_NAME}-stack \
+            Name=tag:aws-cdk:subnet-type,Values=Public \
+        | jq -r '.Subnets | map(.SubnetId) | join(",")')
   script:
     - |
       aws ecs run-task \
         --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-collectstatic
-
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-collectstatic \
+        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
+        --count 1 \
+        --launch-type FARGATE
 migrate:
   <<: *task
   script:
     - |
       aws ecs run-task \
         --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-migrate
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-migrate \
+        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
+        --count 1 \
+        --launch-type FARGATE
+
+createsuperuser:
+  <<: *task
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-create-superuser \
+        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
+        --count 1 \
+        --launch-type FARGATE
 
 .cdk destroy:
   image: python:3.8

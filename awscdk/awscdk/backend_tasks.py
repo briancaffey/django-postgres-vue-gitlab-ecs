@@ -1,10 +1,8 @@
+import os
+
 from aws_cdk import (
     core,
-    aws_ec2 as ec2,
     aws_ecs as ecs,
-    aws_rds as rds,
-    aws_secretsmanager as secrets,
-    aws_ssm as ssm,
 )
 
 
@@ -36,16 +34,43 @@ class BackendTasks(core.Construct):
             environment=environment_variables.regular_variables,
             secrets=environment_variables.secret_variables,
             command=["python3", "manage.py", "migrate", "--no-input"],
+            logging=ecs.LogDrivers.aws_logs(stream_prefix="MigrateCommand"),
         )
 
         self.collectstatic_task = ecs.FargateTaskDefinition(
             self, "CollecstaticTask", family=f"{full_app_name}-collectstatic"
         )
 
-        self.migrate_task.add_container(
+        self.collectstatic_task.add_container(
             "CollecstaticCommand",
             image=image,
             environment=environment_variables.regular_variables,
             secrets=environment_variables.secret_variables,
             command=["python3", "manage.py", "collectstatic", "--no-input"],
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix="CollectstaticCommand"
+            ),
+        )
+
+        self.create_superuser_task = ecs.FargateTaskDefinition(
+            self,
+            "CreateSuperuserTask",
+            family=f"{full_app_name}-create-superuser",
+        )
+
+        self.create_superuser_task.add_container(
+            "CreateSuperuserCommand",
+            image=image,
+            environment=environment_variables.regular_variables,
+            secrets=environment_variables.secret_variables.update(
+                {
+                    "SUPERUSER_PASSWORD": os.environ.get(
+                        "SUPERUSER_PASSWORD", "password"
+                    )
+                }
+            ),
+            command=["python3", "manage.py", "create_default_user"],
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix="CreateSuperuserCommand"
+            ),
         )

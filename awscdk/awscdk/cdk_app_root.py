@@ -83,6 +83,9 @@ class ApplicationStack(core.Stack):
             "Variables",
             bucket_name=self.assets.assets_bucket.bucket_name,
             db_secret=self.rds.db_secret,
+            postgres_host=self.rds.rds_cluster.get_att(
+                "Endpoint.Address"
+            ).to_string(),
         )
 
         self.backend = Backend(
@@ -107,7 +110,16 @@ class ApplicationStack(core.Stack):
         task_roles = [
             self.backend.backend_task.task_role,
             self.backend_tasks.collectstatic_task.task_role,
+            self.backend_tasks.create_superuser_task.task_role,
         ]
 
         for task_role in task_roles:
             self.assets.assets_bucket.grant_read_write(task_role)
+
+            # TODO: Is this necessary? what is the best way to grant task
+            # execution role to secrets?
+            for secret in [
+                self.variables.django_secret_key,
+                self.rds.db_secret,
+            ]:
+                secret.grant_read(task_role)

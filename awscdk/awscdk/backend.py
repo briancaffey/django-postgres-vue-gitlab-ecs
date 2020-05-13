@@ -24,11 +24,6 @@ class Backend(core.Construct):
 
         self.backend_task = ecs.FargateTaskDefinition(self, "BackendTask")
 
-        # TODO: Is this necessary? what is the best way to grant task
-        # execution role to secrets?
-        for secret in environment_variables.secret_variables.values():
-            secret.grant_read(self.backend_task.task_role)
-
         self.backend_task.add_container(
             "DjangoBackend",
             image=ecs.AssetImage(
