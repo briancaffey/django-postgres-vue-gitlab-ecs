@@ -29,6 +29,8 @@ class CloudFront(core.Construct):
             access_control=s3.BucketAccessControl.PUBLIC_READ,
             bucket_name=f"{full_app_name}-frontend",
             removal_policy=core.RemovalPolicy.DESTROY,
+            website_index_document="index.html",
+            website_error_document="index.html",
         )
 
         self.policy_statement = iam.PolicyStatement(
@@ -83,20 +85,20 @@ class CloudFront(core.Construct):
                 acm_cert_ref=certificate.certificate_arn,
                 names=[full_domain_name],
             ),
-            error_configurations=[
-                {
-                    "errorCode": 403,
-                    "errorCachingMinTtl": 0,
-                    "responseCode": 200,
-                    "responsePagePath": "/index.html",
-                },
-                {
-                    "errorCode": 404,
-                    "errorCachingMinTtl": 0,
-                    "responseCode": 200,
-                    "responsePagePath": "/index.html",
-                },
-            ],
+            # error_configurations=[
+            #     {
+            #         "errorCode": 403,
+            #         "errorCachingMinTtl": 0,
+            #         "responseCode": 200,
+            #         "responsePagePath": "/index.html",
+            #     },
+            #     {
+            #         "errorCode": 404,
+            #         "errorCachingMinTtl": 0,
+            #         "responseCode": 200,
+            #         "responsePagePath": "/index.html",
+            #     },
+            # ],
         )
 
         route53.ARecord(

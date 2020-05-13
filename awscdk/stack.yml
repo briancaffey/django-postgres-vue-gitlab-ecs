@@ -343,6 +343,9 @@ Resources:
     Properties:
       AccessControl: PublicRead
       BucketName: dev-mysite-com-frontend
+      WebsiteConfiguration:
+        ErrorDocument: index.html
+        IndexDocument: index.html
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
     Metadata:
@@ -437,15 +440,6 @@ Resources:
             PathPattern: /flower/*
             TargetOriginId: origin1
             ViewerProtocolPolicy: redirect-to-https
-        CustomErrorResponses:
-          - ErrorCachingMinTTL: 0
-            ErrorCode: 403
-            ResponseCode: 200
-            ResponsePagePath: /index.html
-          - ErrorCachingMinTTL: 0
-            ErrorCode: 404
-            ResponseCode: 200
-            ResponsePagePath: /index.html
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
