@@ -46,15 +46,15 @@ Sync Quasar PWA Assets:
         --delete \
         --exclude index.html \
         --exclude service-worker.js \
-        ./dist/pwa/ s3://${ENVIRONMENT}-${DOMAIN_NAME}-frontend/
+        ./dist/pwa/ s3://${ENVIRONMENT}-${APP_NAME}-frontend/
     - |
       aws s3 cp \
         --cache-control 'max-age=0' \
-        ./dist/pwa/index.html s3://${ENVIRONMENT}-${DOMAIN_NAME}-frontend/
+        ./dist/pwa/index.html s3://${ENVIRONMENT}-${APP_NAME}-frontend/
     - |
       aws s3 cp \
         --cache-control 'max-age=0' \
-        ./dist/pwa/service-worker.js s3://${ENVIRONMENT}-${DOMAIN_NAME}-frontend/
+        ./dist/pwa/service-worker.js s3://${ENVIRONMENT}-${APP_NAME}-frontend/
   after_script:
     - echo "Deploy frontend complete"
 
