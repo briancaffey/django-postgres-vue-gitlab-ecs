@@ -54,11 +54,11 @@ class CloudFront(core.Construct):
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
                         domain_name=alb,
-                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,  # noqa
+                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,
                     ),
                     behaviors=[
                         cloudfront.Behavior(
-                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,  # noqa
+                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
                             path_pattern=path_pattern,
                             forwarded_values={
                                 "headers": ["*"],
@@ -71,13 +71,13 @@ class CloudFront(core.Construct):
                 ),
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
-                        domain_name=self.static_site_bucket.bucket_domain_name,
-                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,  # noqa
+                        domain_name=self.static_site_bucket.bucket_regional_domain_name,
+                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,
                     ),
                     behaviors=[
                         cloudfront.Behavior(
                             is_default_behavior=True,
-                            cached_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,  # noqa
+                            cached_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,
                         )
                     ],
                 ),
