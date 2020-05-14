@@ -71,7 +71,7 @@ class CloudFront(core.Construct):
                 ),
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
-                        domain_name=self.static_site_bucket.bucket_regional_domain_name,
+                        domain_name=f"{self.static_site_bucket.bucket_name}.s3-website-us-east-1.amazonaws.com",
                         origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,
                     ),
                     behaviors=[

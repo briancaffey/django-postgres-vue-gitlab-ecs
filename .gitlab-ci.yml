@@ -16,7 +16,7 @@ include:
   # - local: /gitlab-ci/aws/cloudformation.yml
   #- local: /gitlab-ci/gcp/terraform.yml
 
-Pytest:
+.Pytest:
   image: python:3.8
   stage: test
   services:
