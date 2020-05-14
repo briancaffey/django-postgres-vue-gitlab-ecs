@@ -476,14 +476,15 @@ Resources:
               HTTPPort: 80
               HTTPSPort: 443
               OriginKeepaliveTimeout: 5
-              OriginProtocolPolicy: match-viewer
+              OriginProtocolPolicy: http-only
               OriginReadTimeout: 30
               OriginSSLProtocols:
                 - TLSv1.2
             DomainName:
-              Fn::GetAtt:
-                - StaticSiteStaticSiteBucket442CE34F
-                - RegionalDomainName
+              Fn::Join:
+                - ""
+                - - Ref: StaticSiteStaticSiteBucket442CE34F
+                  - .s3-website-us-east-1.amazonaws.com
             Id: origin2
         PriceClass: PriceClass_100
         ViewerCertificate:
