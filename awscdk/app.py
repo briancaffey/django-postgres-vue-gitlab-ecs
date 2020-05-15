@@ -16,7 +16,7 @@ full_app_name = f"{environment_name}-{base_app_name}"  # dev-mysite-com
 
 
 app = core.App()
-ApplicationStack(
+stack = ApplicationStack(
     app,
     f"{full_app_name}-stack",
     environment_name=environment_name,
@@ -26,5 +26,7 @@ ApplicationStack(
     full_app_name=full_app_name,
     env={"region": "us-east-1"},
 )
+
+stack.node.apply_aspect(core.Tag("StackName", full_app_name))
 
 app.synth()

@@ -6,6 +6,9 @@ Resources:
       DomainValidationOptions:
         - DomainName: dev.mysite.com
           ValidationDomain: mysite.com
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       ValidationMethod: DNS
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/SiteCert/Resource
@@ -17,6 +20,8 @@ Resources:
       EnableDnsSupport: true
       InstanceTenancy: default
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc
     Metadata:
@@ -33,6 +38,8 @@ Resources:
           - Fn::GetAZs: ""
       MapPublicIpOnLaunch: true
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1
         - Key: aws-cdk:subnet-name
@@ -47,6 +54,8 @@ Resources:
       VpcId:
         Ref: VpcC3027511
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1
     Metadata:
@@ -84,6 +93,8 @@ Resources:
           - Fn::GetAZs: ""
       MapPublicIpOnLaunch: true
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2
         - Key: aws-cdk:subnet-name
@@ -98,6 +109,8 @@ Resources:
       VpcId:
         Ref: VpcC3027511
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2
     Metadata:
@@ -135,6 +148,8 @@ Resources:
           - Fn::GetAZs: ""
       MapPublicIpOnLaunch: false
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1
         - Key: aws-cdk:subnet-name
@@ -149,6 +164,8 @@ Resources:
       VpcId:
         Ref: VpcC3027511
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1
     Metadata:
@@ -174,6 +191,8 @@ Resources:
           - Fn::GetAZs: ""
       MapPublicIpOnLaunch: false
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2
         - Key: aws-cdk:subnet-name
@@ -188,6 +207,8 @@ Resources:
       VpcId:
         Ref: VpcC3027511
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2
     Metadata:
@@ -205,6 +226,8 @@ Resources:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
+        - Key: StackName
+          Value: dev-mysite-com
         - Key: Name
           Value: dev-mysite-com-stack/Vpc/Vpc
     Metadata:
@@ -229,6 +252,9 @@ Resources:
       Subnets:
         - Ref: VpcPublicSubnet1Subnet8E8DEDC0
         - Ref: VpcPublicSubnet2SubnetA811849C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       Type: application
     DependsOn:
       - VpcPublicSubnet1DefaultRoute0F5C6C43
@@ -250,6 +276,9 @@ Resources:
           FromPort: 443
           IpProtocol: tcp
           ToPort: 443
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       VpcId:
         Ref: VpcC3027511
     Metadata:
@@ -308,6 +337,9 @@ Resources:
         HttpCode: 200-299
       Port: 80
       Protocol: HTTP
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       TargetType: ip
       VpcId:
         Ref: VpcC3027511
@@ -334,6 +366,9 @@ Resources:
     Properties:
       Port: 80
       Protocol: HTTP
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       VpcId:
         Ref: VpcC3027511
     Metadata:
@@ -343,6 +378,9 @@ Resources:
     Properties:
       AccessControl: PublicRead
       BucketName: dev-mysite-com-frontend
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       WebsiteConfiguration:
         ErrorDocument: index.html
         IndexDocument: index.html
@@ -491,6 +529,9 @@ Resources:
           AcmCertificateArn:
             Ref: SiteCert6025247C
           SslSupportMethod: sni-only
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/StaticSite/CloudFrontDistribution/CFDistribution
   StaticSiteAliasRecord4F27A661:
@@ -511,12 +552,18 @@ Resources:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: dev-mysite-com-cluster
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Ecs/EcsCluster/Resource
   BackendAssetsAssetsBucket62473847:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: dev-mysite-com-assets
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
@@ -550,6 +597,9 @@ Resources:
         IncludeSpace: false
         SecretStringTemplate: '{"username": "postgres"}'
       Name: dev-mysite-com-db-secret
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecret/Resource
   RdsDBClusterDBSecretArn023C20B8:
@@ -559,6 +609,8 @@ Resources:
       Value:
         Ref: RdsDBClusterDBSecret28397CCA
       Name: dev-mysite-com-secret-arn
+      Tags:
+        StackName: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecretArn/Resource
   RdsDBClusterDBSecurityGroup83AB5EDA:
@@ -573,6 +625,9 @@ Resources:
               - VpcC3027511
               - DefaultSecurityGroup
           ToPort: 5432
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       VpcId:
         Ref: VpcC3027511
     Metadata:
@@ -584,6 +639,9 @@ Resources:
       SubnetIds:
         - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
         - Ref: VpcIsolatedSubnet2SubnetB479B99C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/CfnDBSubnetGroup
   RdsDBCluster25564148:
@@ -608,6 +666,9 @@ Resources:
             - Ref: RdsDBClusterDBSecret28397CCA
             - :SecretString:password::}}
       Port: 5432
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       VpcSecurityGroupIds:
         - Fn::GetAtt:
             - RdsDBClusterDBSecurityGroup83AB5EDA
@@ -620,6 +681,9 @@ Resources:
       GenerateSecretString:
         ExcludePunctuation: true
         IncludeSpace: false
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Variables/DjangoSecretKey/Resource
   BackendBackendTaskTaskRoleD7BBECAE:
@@ -632,6 +696,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/TaskRole/Resource
   BackendBackendTaskTaskRoleDefaultPolicy35F40EEC:
@@ -732,6 +799,9 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       TaskRoleArn:
         Fn::GetAtt:
           - BackendBackendTaskTaskRoleD7BBECAE
@@ -754,6 +824,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/Resource
   BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2:
@@ -839,6 +912,9 @@ Resources:
           Subnets:
             - Ref: VpcPublicSubnet1Subnet8E8DEDC0
             - Ref: VpcPublicSubnet2SubnetA811849C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       TaskDefinition:
         Ref: BackendBackendTask22B2DD1D
     DependsOn:
@@ -855,6 +931,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/Resource
   BackendTasksMigrateTask9BDCB431:
@@ -918,6 +997,9 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       TaskRoleArn:
         Fn::GetAtt:
           - BackendTasksMigrateTaskTaskRoleAE7059C2
@@ -940,6 +1022,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/ExecutionRole/Resource
   BackendTasksMigrateTaskExecutionRoleDefaultPolicy033E9FC3:
@@ -991,6 +1076,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/TaskRole/Resource
   BackendTasksCollecstaticTaskTaskRoleDefaultPolicyDA990EDC:
@@ -1091,6 +1179,9 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       TaskRoleArn:
         Fn::GetAtt:
           - BackendTasksCollecstaticTaskTaskRole68FA2F7B
@@ -1113,6 +1204,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/ExecutionRole/Resource
   BackendTasksCollecstaticTaskExecutionRoleDefaultPolicyF6ED755C:
@@ -1164,6 +1258,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/TaskRole/Resource
   BackendTasksCreateSuperuserTaskTaskRoleDefaultPolicyF80ECD9D:
@@ -1259,6 +1356,9 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
       TaskRoleArn:
         Fn::GetAtt:
           - BackendTasksCreateSuperuserTaskTaskRoleD91E1780
@@ -1281,6 +1381,9 @@ Resources:
             Principal:
               Service: ecs-tasks.amazonaws.com
         Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/ExecutionRole/Resource
   BackendTasksCreateSuperuserTaskExecutionRoleDefaultPolicy6E375175:
