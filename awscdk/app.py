@@ -27,6 +27,10 @@ stack = ApplicationStack(
     env={"region": "us-east-1"},
 )
 
+# in order to be able to tag ECS resources, you need to go to
+# the ECS Console > Account Settings > Amazon ECS ARN and resource ID settings
+# and enable at least Service and Task. Optionally enable
+# CloudWatch Container Insights
 stack.node.apply_aspect(core.Tag("StackName", full_app_name))
 
 app.synth()
