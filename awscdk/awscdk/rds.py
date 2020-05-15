@@ -68,7 +68,7 @@ class Rds(core.Construct):
             "engine_mode": "serverless",
             "engine": "aurora-postgresql",
             "engine_version": "10.7",
-            "port": 5432,
+            # "port": 5432,
             "enable_http_endpoint": True,
             "master_username": self.db_secret.secret_value_from_json(
                 "username"
