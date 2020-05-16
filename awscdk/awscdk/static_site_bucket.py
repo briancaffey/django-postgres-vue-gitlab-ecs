@@ -1,5 +1,8 @@
+import os
+
 from aws_cdk import (
     aws_s3 as s3,
+    aws_s3_deployment as s3_deployment,
     aws_iam as iam,
     core,
 )
@@ -33,3 +36,7 @@ class StaticSiteBucket(core.Construct):
         )
 
         self.static_site_bucket.add_to_resource_policy(self.policy_statement)
+
+        if os.path.isdir("../quasar/dist/pwa"):
+            print("quasar assets dir")
+            # TODO: S3 Deployment if there are files in the pwa folder

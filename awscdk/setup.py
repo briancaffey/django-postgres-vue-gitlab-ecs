@@ -20,6 +20,7 @@ setuptools.setup(
         "aws-cdk.aws_secretsmanager==1.38.0",
         "aws-cdk.aws_route53==1.38.0",
         "aws-cdk.aws_s3==1.38.0",
+        "aws_cdk.aws_s3_deployment==1.38.0",
         "aws-cdk.aws_cloudfront==1.38.0",
         "aws-cdk.aws_route53_targets==1.38.0",
         "aws-cdk.aws_ecr==1.38.0",
