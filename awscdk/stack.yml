@@ -283,8 +283,8 @@ Resources:
         Ref: VpcC3027511
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/Resource
-  ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3:
-    Type: AWS::EC2::SecurityGroupEgress
+  ? ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3
+  : Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId:
         Fn::GetAtt:
@@ -373,7 +373,7 @@ Resources:
         Ref: VpcC3027511
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/DefaultTargetGroup/Resource
-  StaticSiteStaticSiteBucket442CE34F:
+  StaticSiteBucket6BF500B9:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
@@ -387,12 +387,12 @@ Resources:
     UpdateReplacePolicy: Delete
     DeletionPolicy: Delete
     Metadata:
-      aws:cdk:path: dev-mysite-com-stack/StaticSite/StaticSiteBucket/Resource
-  StaticSiteStaticSiteBucketPolicyC8E62485:
+      aws:cdk:path: dev-mysite-com-stack/StaticSiteBucket/StaticSiteBucket/Resource
+  StaticSiteBucketPolicy543699F0:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket:
-        Ref: StaticSiteStaticSiteBucket442CE34F
+        Ref: StaticSiteBucket6BF500B9
       PolicyDocument:
         Statement:
           - Action: s3:GetObject
@@ -402,12 +402,12 @@ Resources:
               Fn::Join:
                 - ""
                 - - Fn::GetAtt:
-                      - StaticSiteStaticSiteBucket442CE34F
+                      - StaticSiteBucket6BF500B9
                       - Arn
                   - /*
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: dev-mysite-com-stack/StaticSite/StaticSiteBucket/Policy/Resource
+      aws:cdk:path: dev-mysite-com-stack/StaticSiteBucket/StaticSiteBucket/Policy/Resource
   StaticSiteCloudFrontDistributionCFDistributionA70E78CD:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -521,7 +521,7 @@ Resources:
             DomainName:
               Fn::Join:
                 - ""
-                - - Ref: StaticSiteStaticSiteBucket442CE34F
+                - - Ref: StaticSiteBucket6BF500B9
                   - .s3-website-us-east-1.amazonaws.com
             Id: origin2
         PriceClass: PriceClass_100
@@ -820,7 +820,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
+                - /aws-cdk/assets:41bdd10a3c4f6c26292af664680559ccbaecfcd26073ddb0df264187ffa4fdfb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -915,8 +915,8 @@ Resources:
         - Ref: BackendBackendTaskExecutionRole3B22D4E5
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
-  BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722:
-    Type: AWS::EC2::SecurityGroupIngress
+  ? BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722
+  : Type: AWS::EC2::SecurityGroupIngress
     Properties:
       IpProtocol: tcp
       Description: Load balancer to target
@@ -1026,7 +1026,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
+                - /aws-cdk/assets:41bdd10a3c4f6c26292af664680559ccbaecfcd26073ddb0df264187ffa4fdfb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1213,7 +1213,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
+                - /aws-cdk/assets:41bdd10a3c4f6c26292af664680559ccbaecfcd26073ddb0df264187ffa4fdfb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1399,7 +1399,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:47065bc78cdd042647d95665e4f6fc1c352f98e0748ad1947d0b1d788cc1ec49
+                - /aws-cdk/assets:41bdd10a3c4f6c26292af664680559ccbaecfcd26073ddb0df264187ffa4fdfb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1487,4 +1487,3 @@ Resources:
     Type: AWS::CDK::Metadata
     Properties:
       Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.38.0,@aws-cdk/aws-apigateway=1.38.0,@aws-cdk/aws-applicationautoscaling=1.38.0,@aws-cdk/aws-autoscaling=1.38.0,@aws-cdk/aws-autoscaling-common=1.38.0,@aws-cdk/aws-autoscaling-hooktargets=1.38.0,@aws-cdk/aws-batch=1.38.0,@aws-cdk/aws-certificatemanager=1.38.0,@aws-cdk/aws-cloudformation=1.38.0,@aws-cdk/aws-cloudfront=1.38.0,@aws-cdk/aws-cloudwatch=1.38.0,@aws-cdk/aws-codebuild=1.38.0,@aws-cdk/aws-codecommit=1.38.0,@aws-cdk/aws-codepipeline=1.38.0,@aws-cdk/aws-cognito=1.38.0,@aws-cdk/aws-ec2=1.38.0,@aws-cdk/aws-ecr=1.38.0,@aws-cdk/aws-ecr-assets=1.38.0,@aws-cdk/aws-ecs=1.38.0,@aws-cdk/aws-ecs-patterns=1.38.0,@aws-cdk/aws-elasticache=1.38.0,@aws-cdk/aws-elasticloadbalancing=1.38.0,@aws-cdk/aws-elasticloadbalancingv2=1.38.0,@aws-cdk/aws-events=1.38.0,@aws-cdk/aws-events-targets=1.38.0,@aws-cdk/aws-iam=1.38.0,@aws-cdk/aws-kms=1.38.0,@aws-cdk/aws-lambda=1.38.0,@aws-cdk/aws-logs=1.38.0,@aws-cdk/aws-rds=1.38.0,@aws-cdk/aws-route53=1.38.0,@aws-cdk/aws-route53-targets=1.38.0,@aws-cdk/aws-s3=1.38.0,@aws-cdk/aws-s3-assets=1.38.0,@aws-cdk/aws-sam=1.38.0,@aws-cdk/aws-secretsmanager=1.38.0,@aws-cdk/aws-servicediscovery=1.38.0,@aws-cdk/aws-sns=1.38.0,@aws-cdk/aws-sns-subscriptions=1.38.0,@aws-cdk/aws-sqs=1.38.0,@aws-cdk/aws-ssm=1.38.0,@aws-cdk/aws-stepfunctions=1.38.0,@aws-cdk/cloud-assembly-schema=1.38.0,@aws-cdk/core=1.38.0,@aws-cdk/custom-resources=1.38.0,@aws-cdk/cx-api=1.38.0,@aws-cdk/region-info=1.38.0,jsii-runtime=Python/3.6.8
-

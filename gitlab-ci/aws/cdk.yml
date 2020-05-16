@@ -25,7 +25,6 @@ variables:
   after_script:
     - echo "Build Complete"
 
-
 .Sync Quasar PWA Assets:
   image: python:3.8
   stage: deploy
