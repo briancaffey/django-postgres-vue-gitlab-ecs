@@ -14,6 +14,7 @@ class Backend(core.Construct):
         self,
         scope: core.Construct,
         id: str,
+        image: ecs.AssetImage,
         load_balancer,
         cluster: ecs.ICluster,
         environment_variables: core.Construct,
@@ -28,11 +29,7 @@ class Backend(core.Construct):
 
         self.backend_task.add_container(
             "DjangoBackend",
-            image=ecs.AssetImage(
-                "../backend",
-                file="scripts/prod/Dockerfile",
-                target="production",
-            ),
+            image=image,
             logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
             environment=environment_variables.regular_variables,
             secrets=environment_variables.secret_variables,
