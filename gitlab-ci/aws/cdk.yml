@@ -4,7 +4,7 @@
 variables:
   ENVIRONMENT: dev
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:10
   stage: build
   only:
@@ -25,7 +25,7 @@ Build Quasar PWA Assets:
   after_script:
     - echo "Build Complete"
 
-Sync Quasar PWA Assets:
+.Sync Quasar PWA Assets:
   image: python:3.8
   stage: deploy
   only:
@@ -54,7 +54,7 @@ Sync Quasar PWA Assets:
   after_script:
     - echo "Deploy frontend complete"
 
-.cdk deploy:
+cdk deploy:
   image: docker:19.03.1
   services:
     - docker:19.03.5-dind
