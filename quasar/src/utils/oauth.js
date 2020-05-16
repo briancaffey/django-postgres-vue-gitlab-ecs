@@ -8,8 +8,8 @@ const oauth = {
       redirect_uri: `${url}/auth/github/callback`,
       login: "",
       scope: "user",
-      state: "eworifjeovivoiej"
-    }
+      state: "eworifjeovivoiej",
+    },
   },
   "google-oauth2": {
     url: "https://accounts.google.com/o/oauth2/v2/auth",
@@ -20,8 +20,8 @@ const oauth = {
       redirect_uri: `${url}/auth/google-oauth2/callback`,
       state: "eworifjeovivoiej", // TODO: change these
       nonce: "forewijf43oirjoifj",
-      login_hint: ""
-    }
+      login_hint: "",
+    },
   },
   facebook: {
     url: "https://www.facebook.com/v5.0/dialog/oauth",
@@ -29,9 +29,9 @@ const oauth = {
       client_id: process.env.FACEBOOK_KEY,
       redirect_uri: `${url}/auth/facebook/callback`,
       state: "eworifjeovivoiej", // TODO: change these
-      scope: "email"
-    }
-  }
+      scope: "email",
+    },
+  },
 };
 
 export default oauth;

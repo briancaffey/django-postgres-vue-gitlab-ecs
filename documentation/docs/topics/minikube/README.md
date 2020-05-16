@@ -775,11 +775,9 @@ services:
       context: ../
       dockerfile: nginx/minikube/Dockerfile
       args:
-        - DOMAIN_NAME=minikube.local
+        - FULL_DOMAIN_NAME=minikube.local
         - GOOGLE_OAUTH2_KEY=google123
         - GITHUB_KEY=github123
-        - WS_PROTOCOL=ws
-        - HTTP_PROTOCOL=http
 ```
 
 Make sure that your current shell has the correct environment variables set for the `DOCKER_HOST` by running:
