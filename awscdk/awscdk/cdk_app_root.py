@@ -92,7 +92,7 @@ class ApplicationStack(core.Stack):
             postgres_host=self.rds.rds_cluster.get_att(
                 "Endpoint.Address"
             ).to_string(),
-            redis_host=self.elasticache.elasticache.attr_configuration_endpoint_address,  # noqa
+            redis_host=self.elasticache.elasticache.attr_redis_endpoint_address,  # noqa
         )
 
         self.backend = Backend(

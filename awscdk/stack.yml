@@ -812,7 +812,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - ElastiCacheRedisElastiCacheClusterRedis25390D9F
-                  - ConfigurationEndpoint.Address
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -1018,7 +1018,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - ElastiCacheRedisElastiCacheClusterRedis25390D9F
-                  - ConfigurationEndpoint.Address
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -1205,7 +1205,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - ElastiCacheRedisElastiCacheClusterRedis25390D9F
-                  - ConfigurationEndpoint.Address
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -1391,7 +1391,7 @@ Resources:
               Value:
                 Fn::GetAtt:
                   - ElastiCacheRedisElastiCacheClusterRedis25390D9F
-                  - ConfigurationEndpoint.Address
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:
