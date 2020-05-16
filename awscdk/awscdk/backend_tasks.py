@@ -11,6 +11,7 @@ class BackendTasks(core.Construct):
         self,
         scope: core.Construct,
         id: str,
+        image: ecs.AssetImage,
         cluster: ecs.ICluster,
         environment_variables: core.Construct,
         full_app_name: str,
@@ -18,10 +19,6 @@ class BackendTasks(core.Construct):
     ) -> None:
         super().__init__(
             scope, id, **kwargs,
-        )
-
-        image = ecs.AssetImage(
-            "../backend", file="scripts/prod/Dockerfile", target="production",
         )
 
         self.migrate_task = ecs.FargateTaskDefinition(

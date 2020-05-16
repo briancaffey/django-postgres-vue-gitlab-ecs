@@ -1,7 +1,7 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
-module.exports = function(ctx) {
+module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -16,7 +16,7 @@ module.exports = function(ctx) {
       // "roboto-font-latin-ext", // this or either "roboto-font", NEVER both!
 
       "roboto-font", // optional, you are not bound to it
-      "material-icons" // optional, you are not bound to it
+      "material-icons", // optional, you are not bound to it
     ],
 
     framework: {
@@ -66,13 +66,13 @@ module.exports = function(ctx) {
         "QDate",
         "QPopupProxy",
         "QFile",
-        "QCardSection"
+        "QCardSection",
       ],
 
       directives: ["Ripple", "ClosePopup"],
 
       // Quasar plugins
-      plugins: ["Notify", "Cookies"]
+      plugins: ["Notify", "Cookies"],
     },
 
     // env: {
@@ -83,26 +83,18 @@ module.exports = function(ctx) {
     build: {
       env: ctx.dev
         ? {
-            API_URL: JSON.stringify(
-              `${process.env.HTTP_PROTOCOL}://${process.env.DOMAIN_NAME}`
-            ),
-            WS_PING_PONG: JSON.stringify(
-              `${process.env.WS_PROTOCOL}://${process.env.DOMAIN_NAME}/ws/ping-pong/`
-            ),
+            API_URL: JSON.stringify(`http://${process.env.FULL_DOMAIN_NAME}`),
+            WS_URL: JSON.stringify(`ws://${process.env.FULL_DOMAIN_NAME}`),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
             GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY),
-            FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY)
+            FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY),
           }
         : {
-            API_URL: JSON.stringify(
-              `${process.env.HTTP_PROTOCOL}://${process.env.DOMAIN_NAME}`
-            ),
-            WS_PING_PONG: JSON.stringify(
-              `${process.env.WS_PROTOCOL}://${process.env.DOMAIN_NAME}/ws/ping-pong/`
-            ),
+            API_URL: JSON.stringify(`https://${process.env.FULL_DOMAIN_NAME}`),
+            WS_URL: JSON.stringify(`$wss://${process.env.FULL_DOMAIN_NAME}`),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
             GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY),
-            FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY)
+            FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY),
           },
       scopeHoisting: true,
       useNotifier: false,
@@ -119,28 +111,28 @@ module.exports = function(ctx) {
           loader: "eslint-loader",
           exclude: /node_modules/,
           options: {
-            formatter: require("eslint").CLIEngine.getFormatter("stylish")
-          }
+            formatter: require("eslint").CLIEngine.getFormatter("stylish"),
+          },
         });
-      }
+      },
     },
 
     devServer: {
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers":
-          "Origin, X-Requested-With, Content-Type, Accept"
+          "Origin, X-Requested-With, Content-Type, Accept",
       },
       // https: true,
       port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
     },
 
     // animations: "all", // --- includes all animations
     animations: "all", //[],
 
     ssr: {
-      pwa: false
+      pwa: false,
     },
 
     pwa: {
@@ -158,30 +150,30 @@ module.exports = function(ctx) {
           {
             src: "statics/icons/icon-128x128.png",
             sizes: "128x128",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "statics/icons/icon-192x192.png",
             sizes: "192x192",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "statics/icons/icon-256x256.png",
             sizes: "256x256",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "statics/icons/icon-384x384.png",
             sizes: "384x384",
-            type: "image/png"
+            type: "image/png",
           },
           {
             src: "statics/icons/icon-512x512.png",
             sizes: "512x512",
-            type: "image/png"
-          }
-        ]
-      }
+            type: "image/png",
+          },
+        ],
+      },
     },
 
     cordova: {
@@ -211,7 +203,7 @@ module.exports = function(ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
         // appId: "quasarfrontend"
-      }
-    }
+      },
+    },
   };
 };

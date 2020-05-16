@@ -665,7 +665,6 @@ Resources:
           - - "{{resolve:secretsmanager:"
             - Ref: RdsDBClusterDBSecret28397CCA
             - :SecretString:password::}}
-      Port: 5432
       Tags:
         - Key: StackName
           Value: dev-mysite-com
@@ -675,6 +674,49 @@ Resources:
             - GroupId
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBCluster
+  ElastiCacheRedisElastiCacheSecurityGroupA36895A6:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ElastiCacheSecurityGroup
+      SecurityGroupIngress:
+        - FromPort: 6379
+          IpProtocol: tcp
+          SourceSecurityGroupId:
+            Fn::GetAtt:
+              - VpcC3027511
+              - DefaultSecurityGroup
+          ToPort: 6379
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      VpcId:
+        Ref: VpcC3027511
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/ElastiCacheRedis/ElastiCacheSecurityGroup
+  ElastiCacheRedisCfnSubnetGroup403949FE:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: The subnet group for ElastiCache
+      SubnetIds:
+        - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
+        - Ref: VpcIsolatedSubnet2SubnetB479B99C
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/ElastiCacheRedis/CfnSubnetGroup
+  ElastiCacheRedisElastiCacheClusterRedis25390D9F:
+    Type: AWS::ElastiCache::CacheCluster
+    Properties:
+      CacheNodeType: cache.t2.micro
+      Engine: redis
+      NumCacheNodes: 1
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      VpcSecurityGroupIds:
+        - Fn::GetAtt:
+            - ElastiCacheRedisElastiCacheSecurityGroupA36895A6
+            - GroupId
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/ElastiCacheRedis/ElastiCacheClusterRedis
   VariablesDjangoSecretKeyE4FA41EE:
     Type: AWS::SecretsManager::Secret
     Properties:
@@ -766,6 +808,11 @@ Resources:
                     - :SecretString:password::}}
             - Name: SECRET_KEY
               Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheRedisElastiCacheClusterRedis25390D9F
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -967,6 +1014,11 @@ Resources:
                     - :SecretString:password::}}
             - Name: SECRET_KEY
               Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheRedisElastiCacheClusterRedis25390D9F
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -1149,6 +1201,11 @@ Resources:
                     - :SecretString:password::}}
             - Name: SECRET_KEY
               Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheRedisElastiCacheClusterRedis25390D9F
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:
@@ -1330,6 +1387,11 @@ Resources:
                     - :SecretString:password::}}
             - Name: SECRET_KEY
               Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheRedisElastiCacheClusterRedis25390D9F
+                  - RedisEndpoint.Address
           Essential: true
           Image:
             Fn::Join:

@@ -30,14 +30,14 @@
 export default {
   data() {
     return {
-      wsUrl: process.env.WS_PING_PONG,
+      wsUrl: `${process.env.WS_URL}/ws/ping-pong/`,
       pongs: [],
-      showLatency: false
+      showLatency: false,
     };
   },
   created() {
     this.$connect(this.wsUrl, { format: "json" });
-    this.$socket.onmessage = i => {
+    this.$socket.onmessage = (i) => {
       const data = JSON.parse(i["data"]);
       data.vue_recv_pong = new Date().getTime();
       this.pongs.unshift(data);
@@ -49,14 +49,14 @@ export default {
         JSON.stringify({
           message: "ping",
           sender: 1,
-          ts: new Date().getTime()
+          ts: new Date().getTime(),
         })
       );
-    }
+    },
   },
   destroyed() {
     this.$disconnect();
-  }
+  },
 };
 </script>
 

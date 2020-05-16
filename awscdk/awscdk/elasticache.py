@@ -23,8 +23,7 @@ class ElastiCache(core.Construct):
                     ip_protocol="tcp",
                     to_port=6379,
                     from_port=6379,
-                    # TODO: replace this with ECS security group
-                    source_security_group_id="security-group-id",
+                    source_security_group_id=vpc.vpc_default_security_group,
                 )
             ],
         )
@@ -47,5 +46,5 @@ class ElastiCache(core.Construct):
             vpc_security_group_ids=[
                 self.elasticache_security_group.get_att("GroupId").to_string()
             ],
-            cache_subnet_group_name=self.elasticache_subnet_group.cache_subnet_group_name,
+            cache_subnet_group_name=self.elasticache_subnet_group.cache_subnet_group_name,  # noqa
         )

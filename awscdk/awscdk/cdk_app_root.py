@@ -1,4 +1,4 @@
-from aws_cdk import core
+from aws_cdk import core, aws_ecs as ecs
 
 from cert import SiteCertificate
 from hosted_zone import HostedZone
@@ -74,9 +74,15 @@ class ApplicationStack(core.Stack):
             self, "RdsDBCluster", vpc=self.vpc.vpc, full_app_name=full_app_name
         )
 
-        # self.elasticache = ElastiCache(
-        #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
-        # )
+        self.elasticache = ElastiCache(
+            self, "ElastiCacheRedis", vpc=self.vpc.vpc
+        )
+
+        # image used for all django containers
+        # gunicorn, daphne, celery workers, celery beat
+        self.image = ecs.AssetImage(
+            "../backend", file="scripts/prod/Dockerfile", target="production",
+        )
 
         self.variables = Variables(
             self,
@@ -86,11 +92,13 @@ class ApplicationStack(core.Stack):
             postgres_host=self.rds.rds_cluster.get_att(
                 "Endpoint.Address"
             ).to_string(),
+            redis_host=self.elasticache.elasticache.attr_redis_endpoint_address,  # noqa
         )
 
         self.backend = Backend(
             self,
             "Backend",
+            image=self.image,
             load_balancer=self.alb,
             cluster=self.ecs.cluster,
             environment_variables=self.variables,
@@ -101,6 +109,7 @@ class ApplicationStack(core.Stack):
         self.backend_tasks = BackendTasks(
             self,
             "BackendTasks",
+            image=self.image,
             cluster=self.ecs.cluster,
             environment_variables=self.variables,
             full_app_name=full_app_name,

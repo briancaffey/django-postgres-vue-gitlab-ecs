@@ -1,9 +1,7 @@
 import axios from "axios";
 
 export default async ({ Vue, store, router }) => {
-  const apiCall = axios.create({
-    baseURL: process.env.API_URL,
-  });
+  const apiCall = axios.create();
 
   apiCall.interceptors.request.use(
     (config) => {

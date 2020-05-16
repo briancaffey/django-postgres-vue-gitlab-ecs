@@ -2,7 +2,6 @@
 # and to deploy changes to the frontend and backend
 
 variables:
-  ECR_BASE_URL: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
   ENVIRONMENT: dev
 
 .Build Quasar PWA Assets:
@@ -11,11 +10,9 @@ variables:
   only:
     - master
   variables:
-    DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
+    FULL_DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
     GOOGLE_OAUTH2_KEY: google123
     GITHUB_KEY: github123
-    WS_PROTOCOL: wss
-    HTTP_PROTOCOL: https
   artifacts:
     paths:
       - quasar/dist/pwa
