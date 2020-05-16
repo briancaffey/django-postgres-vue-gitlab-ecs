@@ -11,6 +11,7 @@ from elasticache import ElastiCache
 from alb import ApplicationLoadBalancer
 from ecs import Ecs
 from env_vars import Variables
+from static_site_bucket import StaticSiteBucket
 
 from backend import Backend
 from backend_tasks import BackendTasks
@@ -47,10 +48,15 @@ class ApplicationStack(core.Stack):
             vpc=self.vpc.vpc,
         )
 
+        self.static_site_bucket = StaticSiteBucket(
+            self, "StaticSiteBucket", full_app_name=full_app_name
+        )
+
         self.cloudfront = CloudFront(
             self,
             "StaticSite",
             hosted_zone=self.hosted_zone,
+            static_site_bucket_name=self.static_site_bucket.static_site_bucket.bucket_name,  # noqa
             certificate=self.certificate,
             alb=self.alb.alb.load_balancer_dns_name,
             full_domain_name=full_domain_name,

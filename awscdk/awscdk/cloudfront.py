@@ -14,6 +14,7 @@ class CloudFront(core.Construct):
         self,
         scope: core.Construct,
         id: str,
+        static_site_bucket_name: str,
         hosted_zone: route53.IHostedZone,
         certificate: acm.ICertificate,
         alb: str,
@@ -23,29 +24,9 @@ class CloudFront(core.Construct):
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
-        self.static_site_bucket = s3.Bucket(
-            self,
-            "StaticSiteBucket",
-            access_control=s3.BucketAccessControl.PUBLIC_READ,
-            bucket_name=f"{full_app_name}-frontend",
-            removal_policy=core.RemovalPolicy.DESTROY,
-            website_index_document="index.html",
-            website_error_document="index.html",
+        s3_website_domain_name = (
+            f"{static_site_bucket_name}.s3-website-us-east-1.amazonaws.com"
         )
-
-        self.policy_statement = iam.PolicyStatement(
-            actions=["s3:GetObject"],
-            resources=[f"{self.static_site_bucket.bucket_arn}/*"],
-        )
-
-        self.policy_statement.add_any_principal()
-
-        self.static_site_policy_document = iam.PolicyDocument(
-            statements=[self.policy_statement]
-        )
-
-        self.static_site_bucket.add_to_resource_policy(self.policy_statement)
-
         path_patterns = ["/api/*", "/admin/*", "/flower/*"]
         self.distribution = cloudfront.CloudFrontWebDistribution(
             self,
@@ -71,7 +52,7 @@ class CloudFront(core.Construct):
                 ),
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
-                        domain_name=f"{self.static_site_bucket.bucket_name}.s3-website-us-east-1.amazonaws.com",
+                        domain_name=s3_website_domain_name,
                         origin_protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
                     ),
                     behaviors=[
