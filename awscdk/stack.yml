@@ -820,7 +820,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:1da57cd88c50ee3c4ef711e428963792b0ac58ea8173a192b45622a829fec77b
+                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1026,7 +1026,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:1da57cd88c50ee3c4ef711e428963792b0ac58ea8173a192b45622a829fec77b
+                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1213,7 +1213,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:1da57cd88c50ee3c4ef711e428963792b0ac58ea8173a192b45622a829fec77b
+                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1399,7 +1399,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:1da57cd88c50ee3c4ef711e428963792b0ac58ea8173a192b45622a829fec77b
+                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
           LogConfiguration:
             LogDriver: awslogs
             Options:
