@@ -7,7 +7,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
-  uri: `${process.env.API_URL}/graphql/`
+  uri: `/graphql/`,
 });
 
 // Cache implementation
@@ -22,18 +22,18 @@ export default ({ app, Vue, store }) => {
     return {
       headers: {
         ...headers,
-        authorization
-      }
+        authorization,
+      },
     };
   });
 
   const apolloClient = new ApolloClient({
     link: authLink.concat(httpLink),
-    cache
+    cache,
   });
 
   const apolloProvider = new VueApollo({
-    defaultClient: apolloClient
+    defaultClient: apolloClient,
   });
 
   Vue.use(VueApollo);

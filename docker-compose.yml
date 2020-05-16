@@ -73,9 +73,7 @@ services:
       - GITHUB_KEY=${GITHUB_KEY}
       - GOOGLE_OAUTH2_KEY=${GOOGLE_OAUTH2_KEY}
       - FACEBOOK_KEY=${FACEBOOK_KEY}
-      - HTTP_PROTOCOL=http
-      - WS_PROTOCOL=ws
-      - DOMAIN_NAME=${DOMAIN_NAME}
+      - FULL_DOMAIN_NAME=${DOMAIN_NAME}
     restart: "no"
 
   backend: &backend
@@ -182,7 +180,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-       - pgadmin:/root/.pgadmin
+      - pgadmin:/root/.pgadmin
     ports:
       - "5050:80"
     depends_on:
