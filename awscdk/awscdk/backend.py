@@ -15,7 +15,7 @@ class Backend(core.Construct):
         scope: core.Construct,
         id: str,
         image: ecs.AssetImage,
-        load_balancer,
+        https_listener: elbv2.IApplicationListener,
         cluster: ecs.ICluster,
         environment_variables: core.Construct,
         security_group: str,
@@ -52,7 +52,7 @@ class Backend(core.Construct):
             ),
         )
 
-        load_balancer.https_listener.add_targets(
+        https_listener.add_targets(
             "BackendTarget",
             port=80,
             targets=[self.backend_service],

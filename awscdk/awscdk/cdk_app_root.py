@@ -8,7 +8,7 @@ from vpc import Vpc
 from assets import Assets
 from rds import Rds
 from elasticache import ElastiCache
-from alb import ApplicationLoadBalancer
+from alb import ApplicationLoadBalancerResources
 from ecs import Ecs
 from env_vars import Variables
 from static_site_bucket import StaticSiteBucket
@@ -38,27 +38,31 @@ class ApplicationStack(core.Stack):
             self, "SiteCert", domain_name=full_domain_name
         )
 
-        self.vpc = Vpc(self, "Vpc")
+        self.vpc = Vpc(self, "Vpc").vpc
 
-        self.alb = ApplicationLoadBalancer(
+        self.alb_resources = ApplicationLoadBalancerResources(
             self,
             "ApplicationLoadBalancer",
             hosted_zone=self.hosted_zone,
             certificate=self.certificate,
-            vpc=self.vpc.vpc,
+            vpc=self.vpc,
         )
+
+        self.alb = self.alb_resources.alb
+
+        self.https_listener = self.alb_resources.https_listener
 
         self.static_site_bucket = StaticSiteBucket(
             self, "StaticSiteBucket", full_app_name=full_app_name
-        )
+        ).static_site_bucket
 
         self.cloudfront = CloudFront(
             self,
             "StaticSite",
             hosted_zone=self.hosted_zone,
-            static_site_bucket_name=self.static_site_bucket.static_site_bucket.bucket_name,  # noqa
+            static_site_bucket_name=self.static_site_bucket.bucket_name,  # noqa
             certificate=self.certificate,
-            alb=self.alb.alb.load_balancer_dns_name,
+            alb=self.alb.load_balancer_dns_name,
             full_domain_name=full_domain_name,
             full_app_name=full_app_name,
         )
@@ -68,21 +72,17 @@ class ApplicationStack(core.Stack):
         #     self, "ElasticContainerRepo", full_app_name=full_app_name
         # )
 
-        self.ecs = Ecs(
-            self, "Ecs", vpc=self.vpc.vpc, full_app_name=full_app_name
-        )
+        self.ecs = Ecs(self, "Ecs", vpc=self.vpc, full_app_name=full_app_name)
 
         self.assets = Assets(
             self, "BackendAssets", full_app_name=full_app_name
         )
 
         self.rds = Rds(
-            self, "RdsDBCluster", vpc=self.vpc.vpc, full_app_name=full_app_name
+            self, "RdsDBCluster", vpc=self.vpc, full_app_name=full_app_name
         )
 
-        self.elasticache = ElastiCache(
-            self, "ElastiCacheRedis", vpc=self.vpc.vpc
-        )
+        self.elasticache = ElastiCache(self, "ElastiCacheRedis", vpc=self.vpc)
 
         # image used for all django containers
         # gunicorn, daphne, celery workers, celery beat
@@ -105,10 +105,10 @@ class ApplicationStack(core.Stack):
             self,
             "Backend",
             image=self.image,
-            load_balancer=self.alb,
+            https_listener=self.https_listener,
             cluster=self.ecs.cluster,
             environment_variables=self.variables,
-            security_group=self.vpc.vpc.vpc_default_security_group,
+            security_group=self.vpc.vpc_default_security_group,
         )
 
         # migrate, collectstatic, createsuperuser

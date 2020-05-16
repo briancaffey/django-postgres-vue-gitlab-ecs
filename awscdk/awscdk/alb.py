@@ -8,7 +8,7 @@ from aws_cdk import (
 )
 
 
-class ApplicationLoadBalancer(core.Construct):
+class ApplicationLoadBalancerResources(core.Construct):
     def __init__(
         self,
         scope: core.Construct,
