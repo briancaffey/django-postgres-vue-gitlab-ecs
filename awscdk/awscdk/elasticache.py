@@ -46,5 +46,5 @@ class ElastiCache(core.Construct):
             vpc_security_group_ids=[
                 self.elasticache_security_group.get_att("GroupId").to_string()
             ],
-            cache_subnet_group_name=self.elasticache_subnet_group.cache_subnet_group_name,  # noqa
+            cache_subnet_group_name=self.elasticache_subnet_group.ref,  # noqa
         )
