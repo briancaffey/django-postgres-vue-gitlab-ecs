@@ -10,6 +10,7 @@ class Variables(core.Construct):
         id: str,
         bucket_name: str,
         postgres_host: str,
+        redis_host: str,
         db_secret: secrets.ISecret,
         **kwargs,
     ) -> None:
@@ -36,6 +37,7 @@ class Variables(core.Construct):
             "SECRET_KEY": os.environ.get(
                 "SECRET_KEY", "mysecretkey123"
             ),  # self.django_secret_key.to_string(),
+            "REDIS_SERVICE_HOST": redis_host,
         }
 
         self.secret_variables = {

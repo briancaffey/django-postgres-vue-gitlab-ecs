@@ -74,9 +74,9 @@ class ApplicationStack(core.Stack):
             self, "RdsDBCluster", vpc=self.vpc.vpc, full_app_name=full_app_name
         )
 
-        # self.elasticache = ElastiCache(
-        #     self, "ElastiCacheRedis", vpc=self.vpc.vpc
-        # )
+        self.elasticache = ElastiCache(
+            self, "ElastiCacheRedis", vpc=self.vpc.vpc
+        )
 
         # image used for all django containers
         # gunicorn, daphne, celery workers, celery beat
@@ -92,6 +92,7 @@ class ApplicationStack(core.Stack):
             postgres_host=self.rds.rds_cluster.get_att(
                 "Endpoint.Address"
             ).to_string(),
+            redis_host=self.elasticache.elasticache.attr_redis_endpoint_address,  # noqa
         )
 
         self.backend = Backend(
