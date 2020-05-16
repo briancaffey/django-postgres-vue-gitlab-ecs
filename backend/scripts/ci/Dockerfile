@@ -15,9 +15,7 @@ ADD backend/ /code/
 
 # build stage that generates quasar assets
 FROM node:10-alpine as build-stage
-ENV HTTP_PROTOCOL http
-ENV WS_PROTOCOL ws
-ENV DOMAIN_NAME localhost:9000
+ENV FULL_DOMAIN_NAME localhost:9000
 WORKDIR /app/
 COPY quasar/package.json /app/
 RUN npm cache verify
@@ -43,9 +41,9 @@ RUN npm -v
 
 # cypress dependencies
 RUN apt-get -qq install -y xvfb \
-  libgtk-3-dev \
-  libnotify-dev \
-  libgconf-2-4 \
-  libnss3 \
-  libxss1 \
-  libasound2
+    libgtk-3-dev \
+    libnotify-dev \
+    libgconf-2-4 \
+    libnss3 \
+    libxss1 \
+    libasound2

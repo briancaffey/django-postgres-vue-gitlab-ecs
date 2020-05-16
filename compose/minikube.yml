@@ -1,22 +1,18 @@
-version: '3.7'
+version: "3.7"
 
 services:
-
   frontend:
     image: frontend:2
     build:
       context: ../
       dockerfile: nginx/minikube/Dockerfile
       args:
-        - DOMAIN_NAME=minikube.local
+        - FULL_DOMAIN_NAME=minikube.local
         - GOOGLE_OAUTH2_KEY=google123
         - GITHUB_KEY=github123
-        - WS_PROTOCOL=ws
-        - HTTP_PROTOCOL=http
 
   backend:
     image: backend:1
     build:
       context: ../backend/
       dockerfile: scripts/dev/Dockerfile
-
