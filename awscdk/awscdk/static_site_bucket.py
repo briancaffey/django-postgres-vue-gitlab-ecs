@@ -18,7 +18,7 @@ class StaticSiteBucket(core.Construct):
             self,
             "StaticSiteBucket",
             access_control=s3.BucketAccessControl.PUBLIC_READ,
-            bucket_name=f"{full_app_name}-frontend-1",
+            bucket_name=f"{full_app_name}-frontend",
             removal_policy=core.RemovalPolicy.DESTROY,
             website_index_document="index.html",
             website_error_document="index.html",
