@@ -15,6 +15,11 @@ EMAIL_HOST_PASSWORD = os.environ.get(  # noqa
 STATICFILES_STORAGE = "backend.storage_backends.StaticStorage"
 STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
+FULL_DOMAIN_NAME = os.environ.get("FULL_DOMAIN_NAME", "dev.mysite.com")  # noqa
+
+STATIC_ROOT = f"//{FULL_DOMAIN_NAME}/{STATIC_URL}/"
+MEDIA_ROOT = f"//{FULL_DOMAIN_NAME}/{MEDIA_URL}/"
+
 
 # Logging
 

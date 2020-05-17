@@ -105,6 +105,7 @@ class ApplicationStack(core.Stack):
             "Variables",
             bucket_name=self.assets.assets_bucket.bucket_name,
             db_secret=self.rds.db_secret,
+            full_domain_name=full_domain_name,
             postgres_host=self.rds.rds_cluster.get_att(
                 "Endpoint.Address"
             ).to_string(),
