@@ -72,9 +72,7 @@ class CloudFront(core.Construct):
                         cloudfront.Behavior(
                             allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
                             path_pattern=path_pattern,
-                            forwarded_values={
-                                "query_string": True,
-                            },
+                            forwarded_values={"query_string": True},
                         )
                         for path_pattern in ["/static/*", "/media/*"]
                     ],
