@@ -73,8 +73,6 @@ class CloudFront(core.Construct):
                             allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
                             path_pattern=path_pattern,
                             forwarded_values={
-                                "headers": ["*"],
-                                "cookies": {"forward": "all"},
                                 "query_string": True,
                             },
                         )
