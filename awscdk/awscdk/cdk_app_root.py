@@ -58,6 +58,10 @@ class ApplicationStack(core.Stack):
             self, "StaticSiteBucket", full_app_name=full_app_name
         ).static_site_bucket
 
+        self.assets = Assets(
+            self, "BackendAssets", full_app_name=full_app_name
+        )
+
         self.cloudfront = CloudFront(
             self,
             "StaticSite",
@@ -65,6 +69,7 @@ class ApplicationStack(core.Stack):
             static_site_bucket_name=self.static_site_bucket.bucket_name,  # noqa
             certificate=self.certificate,
             alb=self.alb.load_balancer_dns_name,
+            assets_bucket=self.assets.assets_bucket,
             full_domain_name=full_domain_name,
             full_app_name=full_app_name,
         )
@@ -82,10 +87,6 @@ class ApplicationStack(core.Stack):
             )
 
         self.ecs = Ecs(self, "Ecs", vpc=self.vpc, full_app_name=full_app_name)
-
-        self.assets = Assets(
-            self, "BackendAssets", full_app_name=full_app_name
-        )
 
         self.rds = Rds(
             self, "RdsDBCluster", vpc=self.vpc, full_app_name=full_app_name

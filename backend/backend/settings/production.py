@@ -12,10 +12,9 @@ EMAIL_HOST_PASSWORD = os.environ.get(  # noqa
 
 # AWS S3 Static Files
 
-AWS_STATIC_LOCATION = "static"
 STATICFILES_STORAGE = "backend.storage_backends.StaticStorage"
-STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_STATIC_LOCATION}/"  # noqa
-
+STATIC_URL = "/static/"
+MEDIA_URL = "/media/"
 
 # Logging
 
