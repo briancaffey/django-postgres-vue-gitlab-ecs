@@ -17,6 +17,7 @@ class CloudFront(core.Construct):
         static_site_bucket_name: str,
         hosted_zone: route53.IHostedZone,
         certificate: acm.ICertificate,
+        assets_bucket: s3.IBucket,
         alb: str,
         full_domain_name: str,
         full_app_name: str,
@@ -28,6 +29,7 @@ class CloudFront(core.Construct):
             f"{static_site_bucket_name}.s3-website-us-east-1.amazonaws.com"
         )
         path_patterns = ["/api/*", "/admin/*", "/flower/*"]
+
         self.distribution = cloudfront.CloudFrontWebDistribution(
             self,
             "CloudFrontDistribution",
@@ -60,6 +62,23 @@ class CloudFront(core.Construct):
                             is_default_behavior=True,
                             cached_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,
                         )
+                    ],
+                ),
+                cloudfront.SourceConfiguration(
+                    s3_origin_source=cloudfront.S3OriginConfig(
+                        s3_bucket_source=assets_bucket
+                    ),
+                    behaviors=[
+                        cloudfront.Behavior(
+                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
+                            path_pattern=path_pattern,
+                            forwarded_values={
+                                "headers": ["*"],
+                                "cookies": {"forward": "all"},
+                                "query_string": True,
+                            },
+                        )
+                        for path_pattern in ["/static/*", "/media/*"]
                     ],
                 ),
             ],
