@@ -36,7 +36,3 @@ class StaticSiteBucket(core.Construct):
         )
 
         self.static_site_bucket.add_to_resource_policy(self.policy_statement)
-
-        if os.path.isdir("../quasar/dist/pwa"):
-            print("quasar assets dir")
-            # TODO: S3 Deployment if there are files in the pwa folder
