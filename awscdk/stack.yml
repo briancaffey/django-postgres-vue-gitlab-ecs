@@ -708,6 +708,8 @@ Resources:
       CacheNodeType: cache.t2.micro
       Engine: redis
       NumCacheNodes: 1
+      CacheSubnetGroupName:
+        Ref: ElastiCacheRedisCfnSubnetGroup403949FE
       Tags:
         - Key: StackName
           Value: dev-mysite-com
@@ -820,7 +822,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
+                - /aws-cdk/assets:315e2df1a1c69ccadd512a824f2ac30372ca3ad34f88048d06058db1be8f2bf9
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1026,7 +1028,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
+                - /aws-cdk/assets:315e2df1a1c69ccadd512a824f2ac30372ca3ad34f88048d06058db1be8f2bf9
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1213,7 +1215,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
+                - /aws-cdk/assets:315e2df1a1c69ccadd512a824f2ac30372ca3ad34f88048d06058db1be8f2bf9
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1399,7 +1401,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:e9bd2944752269283bca892a634e5fb9e54f6646415dbc7fc0118bca834b3e04
+                - /aws-cdk/assets:315e2df1a1c69ccadd512a824f2ac30372ca3ad34f88048d06058db1be8f2bf9
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1486,5 +1488,5 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.38.0,@aws-cdk/aws-apigateway=1.38.0,@aws-cdk/aws-applicationautoscaling=1.38.0,@aws-cdk/aws-autoscaling=1.38.0,@aws-cdk/aws-autoscaling-common=1.38.0,@aws-cdk/aws-autoscaling-hooktargets=1.38.0,@aws-cdk/aws-batch=1.38.0,@aws-cdk/aws-certificatemanager=1.38.0,@aws-cdk/aws-cloudformation=1.38.0,@aws-cdk/aws-cloudfront=1.38.0,@aws-cdk/aws-cloudwatch=1.38.0,@aws-cdk/aws-codebuild=1.38.0,@aws-cdk/aws-codecommit=1.38.0,@aws-cdk/aws-codepipeline=1.38.0,@aws-cdk/aws-cognito=1.38.0,@aws-cdk/aws-ec2=1.38.0,@aws-cdk/aws-ecr=1.38.0,@aws-cdk/aws-ecr-assets=1.38.0,@aws-cdk/aws-ecs=1.38.0,@aws-cdk/aws-ecs-patterns=1.38.0,@aws-cdk/aws-elasticache=1.38.0,@aws-cdk/aws-elasticloadbalancing=1.38.0,@aws-cdk/aws-elasticloadbalancingv2=1.38.0,@aws-cdk/aws-events=1.38.0,@aws-cdk/aws-events-targets=1.38.0,@aws-cdk/aws-iam=1.38.0,@aws-cdk/aws-kms=1.38.0,@aws-cdk/aws-lambda=1.38.0,@aws-cdk/aws-logs=1.38.0,@aws-cdk/aws-rds=1.38.0,@aws-cdk/aws-route53=1.38.0,@aws-cdk/aws-route53-targets=1.38.0,@aws-cdk/aws-s3=1.38.0,@aws-cdk/aws-s3-assets=1.38.0,@aws-cdk/aws-sam=1.38.0,@aws-cdk/aws-secretsmanager=1.38.0,@aws-cdk/aws-servicediscovery=1.38.0,@aws-cdk/aws-sns=1.38.0,@aws-cdk/aws-sns-subscriptions=1.38.0,@aws-cdk/aws-sqs=1.38.0,@aws-cdk/aws-ssm=1.38.0,@aws-cdk/aws-stepfunctions=1.38.0,@aws-cdk/cloud-assembly-schema=1.38.0,@aws-cdk/core=1.38.0,@aws-cdk/custom-resources=1.38.0,@aws-cdk/cx-api=1.38.0,@aws-cdk/region-info=1.38.0,jsii-runtime=Python/3.6.8
+      Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.38.0,@aws-cdk/aws-apigateway=1.38.0,@aws-cdk/aws-applicationautoscaling=1.38.0,@aws-cdk/aws-autoscaling=1.38.0,@aws-cdk/aws-autoscaling-common=1.38.0,@aws-cdk/aws-autoscaling-hooktargets=1.38.0,@aws-cdk/aws-batch=1.38.0,@aws-cdk/aws-certificatemanager=1.38.0,@aws-cdk/aws-cloudformation=1.38.0,@aws-cdk/aws-cloudfront=1.38.0,@aws-cdk/aws-cloudwatch=1.38.0,@aws-cdk/aws-codebuild=1.38.0,@aws-cdk/aws-codecommit=1.38.0,@aws-cdk/aws-codepipeline=1.38.0,@aws-cdk/aws-cognito=1.38.0,@aws-cdk/aws-ec2=1.38.0,@aws-cdk/aws-ecr=1.38.0,@aws-cdk/aws-ecr-assets=1.38.0,@aws-cdk/aws-ecs=1.38.0,@aws-cdk/aws-ecs-patterns=1.38.0,@aws-cdk/aws-elasticache=1.38.0,@aws-cdk/aws-elasticloadbalancing=1.38.0,@aws-cdk/aws-elasticloadbalancingv2=1.38.0,@aws-cdk/aws-events=1.38.0,@aws-cdk/aws-events-targets=1.38.0,@aws-cdk/aws-iam=1.38.0,@aws-cdk/aws-kms=1.38.0,@aws-cdk/aws-lambda=1.38.0,@aws-cdk/aws-logs=1.38.0,@aws-cdk/aws-rds=1.38.0,@aws-cdk/aws-route53=1.38.0,@aws-cdk/aws-route53-targets=1.38.0,@aws-cdk/aws-s3=1.38.0,@aws-cdk/aws-s3-assets=1.38.0,@aws-cdk/aws-s3-deployment=1.38.0,@aws-cdk/aws-sam=1.38.0,@aws-cdk/aws-secretsmanager=1.38.0,@aws-cdk/aws-servicediscovery=1.38.0,@aws-cdk/aws-sns=1.38.0,@aws-cdk/aws-sns-subscriptions=1.38.0,@aws-cdk/aws-sqs=1.38.0,@aws-cdk/aws-ssm=1.38.0,@aws-cdk/aws-stepfunctions=1.38.0,@aws-cdk/cloud-assembly-schema=1.38.0,@aws-cdk/core=1.38.0,@aws-cdk/custom-resources=1.38.0,@aws-cdk/cx-api=1.38.0,@aws-cdk/region-info=1.38.0,jsii-runtime=Python/3.6.8
 
