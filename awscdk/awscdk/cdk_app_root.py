@@ -1,4 +1,6 @@
-from aws_cdk import core, aws_ecs as ecs
+import os
+
+from aws_cdk import core, aws_ecs as ecs, aws_s3_deployment as s3_deployment
 
 from cert import SiteCertificate
 from hosted_zone import HostedZone
@@ -67,10 +69,17 @@ class ApplicationStack(core.Stack):
             full_app_name=full_app_name,
         )
 
-        # TODO: remove this
-        # self.ecr_repo = ElasticContainerRepo(
-        #     self, "ElasticContainerRepo", full_app_name=full_app_name
-        # )
+        # deploy frontend site if there are assets in the quasar pwa dist folder
+        # if there are no changes, the deployment will not happen becase
+        # ../quasar/dist/pwa will not exist
+        if os.path.isdir("../quasar/dist/pwa"):
+            s3_deployment.BucketDeployment(
+                self,
+                "BucketDeployment",
+                destination_bucket=self.static_site_bucket,
+                sources=[s3_deployment.Source.asset("../quasar/dist/pwa")],
+                distribution=self.cloudfront.distribution,
+            )
 
         self.ecs = Ecs(self, "Ecs", vpc=self.vpc, full_app_name=full_app_name)
 
