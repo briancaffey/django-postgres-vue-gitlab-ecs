@@ -17,6 +17,7 @@ from static_site_bucket import StaticSiteBucket
 
 from backend import Backend
 from backend_tasks import BackendTasks
+from celery_workers import CeleryDefaultWorkerService
 
 
 class ApplicationStack(core.Stack):
@@ -120,6 +121,10 @@ class ApplicationStack(core.Stack):
             cluster=self.ecs.cluster,
             environment_variables=self.variables,
             security_group=self.vpc.vpc_default_security_group,
+        )
+
+        self.celery_worker_service = CeleryDefaultWorkerService(
+            self, "CeleryWorkerService",
         )
 
         # migrate, collectstatic, createsuperuser
