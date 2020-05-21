@@ -32,6 +32,7 @@ setuptools.setup(
         "aws-cdk.aws_ecs==1.38.0",
         "aws-cdk.aws_ecs_patterns==1.38.0",
         "aws-cdk.aws_autoscaling==1.38.0",
+        "aws-cdk.aws_sqs==1.38.0",
     ],
     python_requires=">=3.6",
     classifiers=[
