@@ -142,8 +142,13 @@ class ApplicationStack(core.Stack):
             self.backend.backend_task.task_role,
             self.backend_tasks.collectstatic_task.task_role,
             self.backend_tasks.create_superuser_task.task_role,
-            self.celery_worker_service.celery_default_worker_task.task_role,
+            # self.celery_worker_service.celery_default_worker_task.task_role,
+            self.celery_worker_service.celery_default_worker_service.task_definition.task_role,
         ]
+
+        self.celery_worker_service.celery_default_worker_service.service.connections.security_groups.append(
+            self.vpc.vpc_default_security_group
+        )
 
         for task_role in task_roles:
             self.assets.assets_bucket.grant_read_write(task_role)
