@@ -5,7 +5,6 @@ from aws_cdk import core, aws_ecs as ecs, aws_s3_deployment as s3_deployment
 from cert import SiteCertificate
 from hosted_zone import HostedZone
 from cloudfront import CloudFront
-from ecr import ElasticContainerRepo
 from vpc import Vpc
 from assets import Assets
 from rds import Rds
@@ -143,6 +142,7 @@ class ApplicationStack(core.Stack):
             self.backend.backend_task.task_role,
             self.backend_tasks.collectstatic_task.task_role,
             self.backend_tasks.create_superuser_task.task_role,
+            self.celery_worker_service.celery_default_worker_task.task_role,
         ]
 
         for task_role in task_roles:

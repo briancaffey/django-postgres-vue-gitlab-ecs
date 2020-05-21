@@ -283,8 +283,8 @@ Resources:
         Ref: VpcC3027511
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/Resource
-  ? ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3
-  : Type: AWS::EC2::SecurityGroupEgress
+  ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3:
+    Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId:
         Fn::GetAtt:
@@ -959,8 +959,8 @@ Resources:
         - Ref: BackendBackendTaskExecutionRole3B22D4E5
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
-  ? BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722
-  : Type: AWS::EC2::SecurityGroupIngress
+  BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722:
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       IpProtocol: tcp
       Description: Load balancer to target
@@ -1027,6 +1027,43 @@ Resources:
           Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/TaskRole/Resource
+  CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRoleDefaultPolicyBD07F2FF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsAssetsBucket62473847
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsAssetsBucket62473847
+                        - Arn
+                    - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRoleDefaultPolicyBD07F2FF
+      Roles:
+        - Ref: CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRole6B1D91A7
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/TaskRole/DefaultPolicy/Resource
   CeleryWorkerServiceDefaultCeleryWorkerTask14365B86:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -1106,8 +1143,8 @@ Resources:
           - Arn
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/Resource
-  ? CeleryWorkerServiceDefaultCeleryWorkerTaskDefaultCeleryWorkerContaienrLogGroup31C824ED
-  : Type: AWS::Logs::LogGroup
+  CeleryWorkerServiceDefaultCeleryWorkerTaskDefaultCeleryWorkerContaienrLogGroup31C824ED:
+    Type: AWS::Logs::LogGroup
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
@@ -1719,3 +1756,4 @@ Resources:
     Type: AWS::CDK::Metadata
     Properties:
       Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.38.0,@aws-cdk/aws-apigateway=1.38.0,@aws-cdk/aws-applicationautoscaling=1.38.0,@aws-cdk/aws-autoscaling=1.38.0,@aws-cdk/aws-autoscaling-common=1.38.0,@aws-cdk/aws-autoscaling-hooktargets=1.38.0,@aws-cdk/aws-batch=1.38.0,@aws-cdk/aws-certificatemanager=1.38.0,@aws-cdk/aws-cloudformation=1.38.0,@aws-cdk/aws-cloudfront=1.38.0,@aws-cdk/aws-cloudwatch=1.38.0,@aws-cdk/aws-codebuild=1.38.0,@aws-cdk/aws-codecommit=1.38.0,@aws-cdk/aws-codepipeline=1.38.0,@aws-cdk/aws-cognito=1.38.0,@aws-cdk/aws-ec2=1.38.0,@aws-cdk/aws-ecr=1.38.0,@aws-cdk/aws-ecr-assets=1.38.0,@aws-cdk/aws-ecs=1.38.0,@aws-cdk/aws-ecs-patterns=1.38.0,@aws-cdk/aws-elasticache=1.38.0,@aws-cdk/aws-elasticloadbalancing=1.38.0,@aws-cdk/aws-elasticloadbalancingv2=1.38.0,@aws-cdk/aws-events=1.38.0,@aws-cdk/aws-events-targets=1.38.0,@aws-cdk/aws-iam=1.38.0,@aws-cdk/aws-kms=1.38.0,@aws-cdk/aws-lambda=1.38.0,@aws-cdk/aws-logs=1.38.0,@aws-cdk/aws-rds=1.38.0,@aws-cdk/aws-route53=1.38.0,@aws-cdk/aws-route53-targets=1.38.0,@aws-cdk/aws-s3=1.38.0,@aws-cdk/aws-s3-assets=1.38.0,@aws-cdk/aws-s3-deployment=1.38.0,@aws-cdk/aws-sam=1.38.0,@aws-cdk/aws-secretsmanager=1.38.0,@aws-cdk/aws-servicediscovery=1.38.0,@aws-cdk/aws-sns=1.38.0,@aws-cdk/aws-sns-subscriptions=1.38.0,@aws-cdk/aws-sqs=1.38.0,@aws-cdk/aws-ssm=1.38.0,@aws-cdk/aws-stepfunctions=1.38.0,@aws-cdk/cloud-assembly-schema=1.38.0,@aws-cdk/core=1.38.0,@aws-cdk/custom-resources=1.38.0,@aws-cdk/cx-api=1.38.0,@aws-cdk/region-info=1.38.0,jsii-runtime=Python/3.6.8
+

@@ -20,7 +20,9 @@ class CeleryDefaultWorkerService(core.Construct):
         self.celery_default_worker_task.add_container(
             "DefaultCeleryWorkerContaienr",
             image=scope.image,
-            logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix="CeleryDefaultWorker"
+            ),
             environment=scope.variables.regular_variables,
             secrets=scope.variables.secret_variables,
             command=[
