@@ -94,14 +94,18 @@ cdk deploy:
         --count 1 \
         --launch-type FARGATE
 
-.cdk destroy:
+cdk destroy:
   image: python:3.8
+  when: manual
   stage: deploy
   before_script:
     - apt-get -qq update && apt-get -y install nodejs npm
     - node -v
     - npm i -g aws-cdk
     - cd awscdk
+    - pip3 install awscli
     - pip3 install -r requirements.txt
   script:
+    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-frontend
+    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-assets
     - cdk destroy --require-approval never

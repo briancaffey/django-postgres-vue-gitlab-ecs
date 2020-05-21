@@ -12,6 +12,7 @@ class Variables(core.Construct):
         postgres_host: str,
         redis_host: str,
         db_secret: secrets.ISecret,
+        full_domain_name: str,
         **kwargs,
     ) -> None:
         super().__init__(
@@ -29,6 +30,7 @@ class Variables(core.Construct):
         self.regular_variables = {
             "DJANGO_SETTINGS_MODULE": "backend.settings.production",
             "DEBUG": "",
+            "FULL_DOMAIN_NAME": full_domain_name,
             "AWS_STORAGE_BUCKET_NAME": bucket_name,
             "POSTGRES_SERVICE_HOST": postgres_host,
             "POSTGRES_PASSWORD": db_secret.secret_value_from_json(

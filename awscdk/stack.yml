@@ -283,8 +283,8 @@ Resources:
         Ref: VpcC3027511
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/Resource
-  ? ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3
-  : Type: AWS::EC2::SecurityGroupEgress
+  ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3:
+    Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId:
         Fn::GetAtt:
@@ -522,10 +522,6 @@ Resources:
               - HEAD
             Compress: true
             ForwardedValues:
-              Cookies:
-                Forward: all
-              Headers:
-                - "*"
               QueryString: true
             PathPattern: /static/*
             TargetOriginId: origin3
@@ -543,10 +539,6 @@ Resources:
               - HEAD
             Compress: true
             ForwardedValues:
-              Cookies:
-                Forward: all
-              Headers:
-                - "*"
               QueryString: true
             PathPattern: /media/*
             TargetOriginId: origin3
@@ -841,6 +833,8 @@ Resources:
               Value: backend.settings.production
             - Name: DEBUG
               Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
@@ -870,7 +864,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:cecf15b2b6427c94fe8347ab93564105a951a8de4a7f7c927ada0374f2a9c97c
+                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -965,8 +959,8 @@ Resources:
         - Ref: BackendBackendTaskExecutionRole3B22D4E5
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
-  ? BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722
-  : Type: AWS::EC2::SecurityGroupIngress
+  BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722:
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       IpProtocol: tcp
       Description: Load balancer to target
@@ -1018,7 +1012,7 @@ Resources:
       - ApplicationLoadBalancerALBHTTPSListenerBackendTargetRule6CC8AE94
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/Service
-  BackendTasksMigrateTaskTaskRoleAE7059C2:
+  CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRole6B1D91A7:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -1032,21 +1026,62 @@ Resources:
         - Key: StackName
           Value: dev-mysite-com
     Metadata:
-      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/Resource
-  BackendTasksMigrateTask9BDCB431:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/TaskRole/Resource
+  CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRoleDefaultPolicyBD07F2FF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsAssetsBucket62473847
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsAssetsBucket62473847
+                        - Arn
+                    - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRoleDefaultPolicyBD07F2FF
+      Roles:
+        - Ref: CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRole6B1D91A7
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/TaskRole/DefaultPolicy/Resource
+  CeleryWorkerServiceDefaultCeleryWorkerTask14365B86:
     Type: AWS::ECS::TaskDefinition
     Properties:
       ContainerDefinitions:
         - Command:
-            - python3
-            - manage.py
-            - migrate
-            - --no-input
+            - celery
+            - worker
+            - -A
+            - backend.celery_app:app
+            - -l
+            - info
           Environment:
             - Name: DJANGO_SETTINGS_MODULE
               Value: backend.settings.production
             - Name: DEBUG
               Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
@@ -1076,7 +1111,187 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:cecf15b2b6427c94fe8347ab93564105a951a8de4a7f7c927ada0374f2a9c97c
+                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: CeleryWorkerServiceDefaultCeleryWorkerTaskDefaultCeleryWorkerContaienrLogGroup31C824ED
+              awslogs-stream-prefix: Backend
+              awslogs-region: us-east-1
+          Name: DefaultCeleryWorkerContaienr
+          Secrets:
+            - Name: DJANGO_SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - CeleryWorkerServiceDefaultCeleryWorkerTaskExecutionRole67DC8A03
+          - Arn
+      Family: devmysitecomstackCeleryWorkerServiceDefaultCeleryWorkerTask00846BD8
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskRoleArn:
+        Fn::GetAtt:
+          - CeleryWorkerServiceDefaultCeleryWorkerTaskTaskRole6B1D91A7
+          - Arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/Resource
+  CeleryWorkerServiceDefaultCeleryWorkerTaskDefaultCeleryWorkerContaienrLogGroup31C824ED:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/DefaultCeleryWorkerContaienr/LogGroup/Resource
+  CeleryWorkerServiceDefaultCeleryWorkerTaskExecutionRole67DC8A03:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/ExecutionRole/Resource
+  CeleryWorkerServiceDefaultCeleryWorkerTaskExecutionRoleDefaultPolicy301669C2:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - CeleryWorkerServiceDefaultCeleryWorkerTaskDefaultCeleryWorkerContaienrLogGroup31C824ED
+                - Arn
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+        Version: "2012-10-17"
+      PolicyName: CeleryWorkerServiceDefaultCeleryWorkerTaskExecutionRoleDefaultPolicy301669C2
+      Roles:
+        - Ref: CeleryWorkerServiceDefaultCeleryWorkerTaskExecutionRole67DC8A03
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerTask/ExecutionRole/DefaultPolicy/Resource
+  CeleryWorkerServiceDefaultCeleryWorkerServiceE0C9E2AA:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Ref: EcsEcsCluster51C39CA0
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - VpcC3027511
+                - DefaultSecurityGroup
+          Subnets:
+            - Ref: VpcPublicSubnet1Subnet8E8DEDC0
+            - Ref: VpcPublicSubnet2SubnetA811849C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskDefinition:
+        Ref: CeleryWorkerServiceDefaultCeleryWorkerTask14365B86
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerService/Service
+  BackendTasksMigrateTaskTaskRoleAE7059C2:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/Resource
+  BackendTasksMigrateTask9BDCB431:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - python3
+            - manage.py
+            - migrate
+            - --no-input
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Ref: BackendAssetsAssetsBucket62473847
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - RdsDBCluster25564148
+                  - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheRedisElastiCacheClusterRedis25390D9F
+                  - RedisEndpoint.Address
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1234,6 +1449,8 @@ Resources:
               Value: backend.settings.production
             - Name: DEBUG
               Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
@@ -1263,7 +1480,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:cecf15b2b6427c94fe8347ab93564105a951a8de4a7f7c927ada0374f2a9c97c
+                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1420,6 +1637,8 @@ Resources:
               Value: backend.settings.production
             - Name: DEBUG
               Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
                 Ref: BackendAssetsAssetsBucket62473847
@@ -1449,7 +1668,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:cecf15b2b6427c94fe8347ab93564105a951a8de4a7f7c927ada0374f2a9c97c
+                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1537,3 +1756,4 @@ Resources:
     Type: AWS::CDK::Metadata
     Properties:
       Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.38.0,@aws-cdk/aws-apigateway=1.38.0,@aws-cdk/aws-applicationautoscaling=1.38.0,@aws-cdk/aws-autoscaling=1.38.0,@aws-cdk/aws-autoscaling-common=1.38.0,@aws-cdk/aws-autoscaling-hooktargets=1.38.0,@aws-cdk/aws-batch=1.38.0,@aws-cdk/aws-certificatemanager=1.38.0,@aws-cdk/aws-cloudformation=1.38.0,@aws-cdk/aws-cloudfront=1.38.0,@aws-cdk/aws-cloudwatch=1.38.0,@aws-cdk/aws-codebuild=1.38.0,@aws-cdk/aws-codecommit=1.38.0,@aws-cdk/aws-codepipeline=1.38.0,@aws-cdk/aws-cognito=1.38.0,@aws-cdk/aws-ec2=1.38.0,@aws-cdk/aws-ecr=1.38.0,@aws-cdk/aws-ecr-assets=1.38.0,@aws-cdk/aws-ecs=1.38.0,@aws-cdk/aws-ecs-patterns=1.38.0,@aws-cdk/aws-elasticache=1.38.0,@aws-cdk/aws-elasticloadbalancing=1.38.0,@aws-cdk/aws-elasticloadbalancingv2=1.38.0,@aws-cdk/aws-events=1.38.0,@aws-cdk/aws-events-targets=1.38.0,@aws-cdk/aws-iam=1.38.0,@aws-cdk/aws-kms=1.38.0,@aws-cdk/aws-lambda=1.38.0,@aws-cdk/aws-logs=1.38.0,@aws-cdk/aws-rds=1.38.0,@aws-cdk/aws-route53=1.38.0,@aws-cdk/aws-route53-targets=1.38.0,@aws-cdk/aws-s3=1.38.0,@aws-cdk/aws-s3-assets=1.38.0,@aws-cdk/aws-s3-deployment=1.38.0,@aws-cdk/aws-sam=1.38.0,@aws-cdk/aws-secretsmanager=1.38.0,@aws-cdk/aws-servicediscovery=1.38.0,@aws-cdk/aws-sns=1.38.0,@aws-cdk/aws-sns-subscriptions=1.38.0,@aws-cdk/aws-sqs=1.38.0,@aws-cdk/aws-ssm=1.38.0,@aws-cdk/aws-stepfunctions=1.38.0,@aws-cdk/cloud-assembly-schema=1.38.0,@aws-cdk/core=1.38.0,@aws-cdk/custom-resources=1.38.0,@aws-cdk/cx-api=1.38.0,@aws-cdk/region-info=1.38.0,jsii-runtime=Python/3.6.8
+

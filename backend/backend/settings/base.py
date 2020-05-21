@@ -254,11 +254,11 @@ AWS_DEFAULT_ACL = None
 AWS_STORAGE_BUCKET_NAME = os.environ.get(
     "AWS_STORAGE_BUCKET_NAME", "bucketname"
 )
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
 }
 AWS_PRIVATE_MEDIA_LOCATION = "media/private"
+AWS_STATIC_LOCATION = "static"
 PRIVATE_FILE_STORAGE = "backend.storage_backends.PrivateMediaStorage"
 
 

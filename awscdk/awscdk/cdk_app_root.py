@@ -5,7 +5,6 @@ from aws_cdk import core, aws_ecs as ecs, aws_s3_deployment as s3_deployment
 from cert import SiteCertificate
 from hosted_zone import HostedZone
 from cloudfront import CloudFront
-from ecr import ElasticContainerRepo
 from vpc import Vpc
 from assets import Assets
 from rds import Rds
@@ -17,6 +16,7 @@ from static_site_bucket import StaticSiteBucket
 
 from backend import Backend
 from backend_tasks import BackendTasks
+from celery_workers import CeleryDefaultWorkerService
 
 
 class ApplicationStack(core.Stack):
@@ -105,6 +105,7 @@ class ApplicationStack(core.Stack):
             "Variables",
             bucket_name=self.assets.assets_bucket.bucket_name,
             db_secret=self.rds.db_secret,
+            full_domain_name=full_domain_name,
             postgres_host=self.rds.rds_cluster.get_att(
                 "Endpoint.Address"
             ).to_string(),
@@ -119,6 +120,10 @@ class ApplicationStack(core.Stack):
             cluster=self.ecs.cluster,
             environment_variables=self.variables,
             security_group=self.vpc.vpc_default_security_group,
+        )
+
+        self.celery_worker_service = CeleryDefaultWorkerService(
+            self, "CeleryWorkerService",
         )
 
         # migrate, collectstatic, createsuperuser
@@ -137,6 +142,7 @@ class ApplicationStack(core.Stack):
             self.backend.backend_task.task_role,
             self.backend_tasks.collectstatic_task.task_role,
             self.backend_tasks.create_superuser_task.task_role,
+            self.celery_worker_service.celery_default_worker_task.task_role,
         ]
 
         for task_role in task_roles:
