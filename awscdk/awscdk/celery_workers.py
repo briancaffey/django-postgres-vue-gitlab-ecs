@@ -72,6 +72,6 @@ class CeleryDefaultWorkerService(core.Construct):
             log_driver=ecs.LogDrivers.aws_logs(
                 stream_prefix="CeleryDefaultWorker"
             ),
-            vpc=scope.vpc,
+            cluster=scope.ecs.cluster,
             desired_task_count=1,
         )
