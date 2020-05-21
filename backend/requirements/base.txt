@@ -1,6 +1,7 @@
 boto3==1.9.130
 
 celery==4.3.0
+celery[sqs]==4.3.0
 
 channels==2.2.0
 channels-redis==2.4.0
