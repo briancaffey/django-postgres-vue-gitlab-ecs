@@ -45,6 +45,6 @@ LOGGING = {
 # Celery
 
 CELERY_BROKER_URL = "sqs://"  # f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
-CELERY_BROKER_TRANSPORT_OPTIONS = {'region': 'eu-west-1'}
+CELERY_BROKER_TRANSPORT_OPTIONS = {'region': 'us-east-1'}
 
 CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
