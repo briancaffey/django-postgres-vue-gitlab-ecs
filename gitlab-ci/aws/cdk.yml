@@ -4,7 +4,7 @@
 variables:
   ENVIRONMENT: dev
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:10
   stage: build
   only:
