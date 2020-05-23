@@ -139,9 +139,9 @@ class ApplicationStack(core.Stack):
         # TODO: loop over all task roles to grant bucket permissions
         # give the backend service read/write access to the assets bucket
         task_roles = [
-            self.backend.backend_task.task_role,
-            self.backend_tasks.collectstatic_task.task_role,
-            self.backend_tasks.create_superuser_task.task_role,
+            # self.backend.backend_task.task_role,
+            # self.backend_tasks.collectstatic_task.task_role,
+            # self.backend_tasks.create_superuser_task.task_role,
             # self.celery_worker_service.celery_default_worker_task.task_role,
             self.celery_worker_service.celery_default_worker_service.task_definition.task_role,
         ]

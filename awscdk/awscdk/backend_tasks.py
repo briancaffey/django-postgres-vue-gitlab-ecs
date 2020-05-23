@@ -25,6 +25,9 @@ class BackendTasks(core.Construct):
             self, "MigrateTask", family=f"{full_app_name}-migrate"
         )
 
+        for secret in [scope.variables.django_secret_key, scope.rds.db_secret]:
+            secret.grant_read(self.migrate_task.task_role)
+
         self.migrate_task.add_container(
             "MigrateCommand",
             image=image,
@@ -37,6 +40,13 @@ class BackendTasks(core.Construct):
         self.collectstatic_task = ecs.FargateTaskDefinition(
             self, "CollecstaticTask", family=f"{full_app_name}-collectstatic"
         )
+
+        scope.assets.assets_bucket.grant_read_write(
+            self.collectstatic_task.task_role
+        )
+
+        for secret in [scope.variables.django_secret_key, scope.rds.db_secret]:
+            secret.grant_read(self.collectstatic_task.task_role)
 
         self.collectstatic_task.add_container(
             "CollecstaticCommand",
@@ -54,6 +64,9 @@ class BackendTasks(core.Construct):
             "CreateSuperuserTask",
             family=f"{full_app_name}-create-superuser",
         )
+
+        for secret in [scope.variables.django_secret_key, scope.rds.db_secret]:
+            secret.grant_read(self.create_superuser_task.task_role)
 
         self.create_superuser_task.add_container(
             "CreateSuperuserCommand",

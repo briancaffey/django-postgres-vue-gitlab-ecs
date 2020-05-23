@@ -36,6 +36,13 @@ class Backend(core.Construct):
             command=["/start_prod.sh"],
         )
 
+        scope.assets.assets_bucket.grant_read_write(
+            self.backend_task.task_role
+        )
+
+        for secret in [scope.variables.django_secret_key, scope.rds.db_secret]:
+            secret.grant_read(self.backend_task.task_role)
+
         port_mapping = ecs.PortMapping(
             container_port=8000, protocol=ecs.Protocol.TCP
         )

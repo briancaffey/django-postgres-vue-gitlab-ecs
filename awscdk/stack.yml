@@ -1400,6 +1400,25 @@ Resources:
           Value: dev-mysite-com
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/Resource
+  BackendTasksMigrateTaskTaskRoleDefaultPolicyB1599105:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendTasksMigrateTaskTaskRoleDefaultPolicyB1599105
+      Roles:
+        - Ref: BackendTasksMigrateTaskTaskRoleAE7059C2
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/DefaultPolicy/Resource
   BackendTasksMigrateTask9BDCB431:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -1746,24 +1765,6 @@ Resources:
     Properties:
       PolicyDocument:
         Statement:
-          - Action:
-              - s3:GetObject*
-              - s3:GetBucket*
-              - s3:List*
-              - s3:DeleteObject*
-              - s3:PutObject*
-              - s3:Abort*
-            Effect: Allow
-            Resource:
-              - Fn::GetAtt:
-                  - BackendAssetsAssetsBucket62473847
-                  - Arn
-              - Fn::Join:
-                  - ""
-                  - - Fn::GetAtt:
-                        - BackendAssetsAssetsBucket62473847
-                        - Arn
-                    - /*
           - Action: secretsmanager:GetSecretValue
             Effect: Allow
             Resource:
