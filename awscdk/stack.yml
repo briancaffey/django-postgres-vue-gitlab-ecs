@@ -864,7 +864,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
+                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1136,7 +1136,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
+                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1232,7 +1232,7 @@ Resources:
     Type: AWS::ECS::Service
     Properties:
       Cluster:
-        Ref: EcsDefaultClusterMnL3mNNYNVpc18E0451A
+        Ref: EcsEcsCluster51C39CA0
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 50
@@ -1280,7 +1280,7 @@ Resources:
         Fn::Join:
           - ""
           - - service/
-            - Ref: EcsDefaultClusterMnL3mNNYNVpc18E0451A
+            - Ref: EcsEcsCluster51C39CA0
             - /
             - Fn::GetAtt:
                 - CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceE24E949E
@@ -1385,14 +1385,6 @@ Resources:
       Threshold: 100
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/TaskCount/Target/QueueMessagesVisibleScaling/UpperAlarm/Resource
-  EcsDefaultClusterMnL3mNNYNVpc18E0451A:
-    Type: AWS::ECS::Cluster
-    Properties:
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/EcsDefaultClusterMnL3mNNYNVpc/Resource
   BackendTasksMigrateTaskTaskRoleAE7059C2:
     Type: AWS::IAM::Role
     Properties:
@@ -1453,7 +1445,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
+                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1642,7 +1634,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
+                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1830,7 +1822,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:ff76cf98cc8769bd64cf6cadd69b7edf1f23745c2680ef7894d7531a8ecb58fb
+                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
           LogConfiguration:
             LogDriver: awslogs
             Options:
