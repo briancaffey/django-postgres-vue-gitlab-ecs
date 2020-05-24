@@ -1,6 +1,0 @@
-[flake8]
-exclude =
-    */migrations/*
-    notebooks
-ignore = C812, E226, C819, W503, C815, E203, E266, E501
-select = B,C,E,F,W,T4,B9

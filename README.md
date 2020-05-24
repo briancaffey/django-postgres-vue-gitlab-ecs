@@ -21,6 +21,7 @@ To work with CDK, do the following:
 - Make sure you are using at least version 10 of node: `nvm use 13`
 - Activate the virtual environment with `source awscdk/.env/bin/activate`
 - `pip install -e awscdk` to install CDK dependencies
+-
 
 ### Social Authentication Keys
 
