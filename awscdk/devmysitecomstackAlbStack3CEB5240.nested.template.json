@@ -1,0 +1,228 @@
+{
+  "Resources": {
+    "ALBAEE750D2": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "ALBSecurityGroup8B8624F8",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Ref": "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet1Subnet941F830ARef"
+          },
+          {
+            "Ref": "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet2SubnetD8939549Ref"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "StackName",
+            "Value": "dev-mysite-com"
+          }
+        ],
+        "Type": "application"
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/AlbStack/ALB/Resource"
+      }
+    },
+    "ALBSecurityGroup8B8624F8": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB devmysitecomstackAlbStackALBFDAC47BB",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Internet access ALB 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Internet access ALB 443",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "StackName",
+            "Value": "dev-mysite-com"
+          }
+        ],
+        "VpcId": {
+          "Ref": "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855Ref"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/AlbStack/ALB/SecurityGroup/Resource"
+      }
+    },
+    "ALBALBListenerDB80B4FD": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "DefaultTargetGroup00992EAD"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "ALBAEE750D2"
+        },
+        "Port": 80,
+        "Protocol": "HTTP"
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/AlbStack/ALB/ALBListener/Resource"
+      }
+    },
+    "ALBHTTPSListener0B89DFF0": {
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "DefaultTargetGroup00992EAD"
+            },
+            "Type": "forward"
+          }
+        ],
+        "LoadBalancerArn": {
+          "Ref": "ALBAEE750D2"
+        },
+        "Port": 443,
+        "Protocol": "HTTPS",
+        "Certificates": [
+          {
+            "CertificateArn": {
+              "Ref": "referencetodevmysitecomstackSiteCert6D266B29Ref"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/AlbStack/ALB/HTTPSListener/Resource"
+      }
+    },
+    "ALBHTTPSListenerBackendTargetGroup083A8286": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "HealthCheckPath": "/api/hello-world",
+        "Matcher": {
+          "HttpCode": "200-299"
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "StackName",
+            "Value": "dev-mysite-com"
+          }
+        ],
+        "TargetType": "ip",
+        "VpcId": {
+          "Ref": "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855Ref"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/AlbStack/ALB/HTTPSListener/BackendTargetGroup/Resource"
+      }
+    },
+    "ALBHTTPSListenerBackendTargetRuleD94944C2": {
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+      "Properties": {
+        "Actions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "ALBHTTPSListenerBackendTargetGroup083A8286"
+            },
+            "Type": "forward"
+          }
+        ],
+        "Conditions": [
+          {
+            "Field": "path-pattern",
+            "Values": [
+              "*"
+            ]
+          }
+        ],
+        "ListenerArn": {
+          "Ref": "ALBHTTPSListener0B89DFF0"
+        },
+        "Priority": 1
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/AlbStack/ALB/HTTPSListener/BackendTargetRule/Resource"
+      }
+    },
+    "DefaultTargetGroup00992EAD": {
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+      "Properties": {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "StackName",
+            "Value": "dev-mysite-com"
+          }
+        ],
+        "TargetType": "ip",
+        "VpcId": {
+          "Ref": "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855Ref"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/AlbStack/DefaultTargetGroup/Resource"
+      }
+    }
+  },
+  "Parameters": {
+    "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet1Subnet941F830ARef": {
+      "Type": "String"
+    },
+    "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet2SubnetD8939549Ref": {
+      "Type": "String"
+    },
+    "referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855Ref": {
+      "Type": "String"
+    },
+    "referencetodevmysitecomstackSiteCert6D266B29Ref": {
+      "Type": "String"
+    }
+  },
+  "Outputs": {
+    "devmysitecomstackAlbStackALB6404BF3DDNSName": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ALBAEE750D2",
+          "DNSName"
+        ]
+      }
+    },
+    "devmysitecomstackAlbStackALBSecurityGroupDC2CC7C0GroupId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ALBSecurityGroup8B8624F8",
+          "GroupId"
+        ]
+      }
+    },
+    "devmysitecomstackAlbStackALBHTTPSListenerBackendTargetGroupA82F195BRef": {
+      "Value": {
+        "Ref": "ALBHTTPSListenerBackendTargetGroup083A8286"
+      }
+    }
+  }
+}

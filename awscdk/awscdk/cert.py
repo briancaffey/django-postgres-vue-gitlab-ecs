@@ -7,13 +7,11 @@ from aws_cdk import (
 
 
 class SiteCertificate(acm.Certificate):
-    def __init__(
-        self, scope: core.Construct, id: str, domain_name: str, **kwargs
-    ) -> None:
+    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(
             scope,
             id,
-            domain_name=domain_name,
+            domain_name=scope.full_domain_name,
             validation_method=acm.ValidationMethod.DNS,
             **kwargs,
         )

@@ -1,14 +1,17 @@
-from aws_cdk import aws_iam as iam, aws_s3 as s3, core
+from aws_cdk import (
+    aws_iam as iam,
+    aws_s3 as s3,
+    core,
+    aws_cloudformation as cloudformation,
+)
 
 
-class Assets(core.Construct):
-    def __init__(
-        self, scope: core.Construct, id: str, full_app_name: str, **kwargs
-    ) -> None:
+class BackendAssetsStack(cloudformation.NestedStack):
+    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.assets_bucket = s3.Bucket(
-            self, "AssetsBucket", bucket_name=f"{full_app_name}-assets"
+            self, "AssetsBucket", bucket_name=f"{scope.full_app_name}-assets"
         )
 
         self.policy_statement = iam.PolicyStatement(

@@ -16,7 +16,9 @@ setuptools.setup(
     packages=setuptools.find_packages(where="awscdk"),
     install_requires=[
         "aws-cdk.core==1.41.0",
+        "aws-cdk.aws_cloudformation==1.41.0",
         "aws-cdk.aws_certificatemanager==1.41.0",
+        "aws-cdk.aws_logs==1.41.0",
         "aws-cdk.aws_secretsmanager==1.41.0",
         "aws-cdk.aws_route53==1.41.0",
         "aws-cdk.aws_s3==1.41.0",

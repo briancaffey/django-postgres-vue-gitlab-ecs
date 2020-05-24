@@ -12,613 +12,168 @@ Resources:
       ValidationMethod: DNS
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/SiteCert/Resource
-  VpcC3027511:
-    Type: AWS::EC2::VPC
+  VpcNestedStackVpcNestedStackResourceC40EA5DD:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      CidrBlock: 10.0.0.0/16
-      EnableDnsHostnames: true
-      EnableDnsSupport: true
-      InstanceTenancy: default
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/Resource
-  VpcPublicSubnet1Subnet8E8DEDC0:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.0.0/24
-      VpcId:
-        Ref: VpcC3027511
-      AvailabilityZone:
-        Fn::Select:
-          - 0
-          - Fn::GetAZs: ""
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1
-        - Key: aws-cdk:subnet-name
-          Value: Public
-        - Key: aws-cdk:subnet-type
-          Value: Public
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/Subnet
-  VpcPublicSubnet1RouteTable431DD755:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId:
-        Ref: VpcC3027511
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/RouteTable
-  VpcPublicSubnet1RouteTableAssociationBBCB7AA1:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: VpcPublicSubnet1RouteTable431DD755
-      SubnetId:
-        Ref: VpcPublicSubnet1Subnet8E8DEDC0
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/RouteTableAssociation
-  VpcPublicSubnet1DefaultRoute0F5C6C43:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId:
-        Ref: VpcPublicSubnet1RouteTable431DD755
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId:
-        Ref: VpcIGW488B0FEB
-    DependsOn:
-      - VpcVPCGW42EC8516
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet1/DefaultRoute
-  VpcPublicSubnet2SubnetA811849C:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.1.0/24
-      VpcId:
-        Ref: VpcC3027511
-      AvailabilityZone:
-        Fn::Select:
-          - 1
-          - Fn::GetAZs: ""
-      MapPublicIpOnLaunch: true
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2
-        - Key: aws-cdk:subnet-name
-          Value: Public
-        - Key: aws-cdk:subnet-type
-          Value: Public
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/Subnet
-  VpcPublicSubnet2RouteTable77FB35FC:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId:
-        Ref: VpcC3027511
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/RouteTable
-  VpcPublicSubnet2RouteTableAssociation3AFE92E6:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: VpcPublicSubnet2RouteTable77FB35FC
-      SubnetId:
-        Ref: VpcPublicSubnet2SubnetA811849C
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/RouteTableAssociation
-  VpcPublicSubnet2DefaultRouteD629179A:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId:
-        Ref: VpcPublicSubnet2RouteTable77FB35FC
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId:
-        Ref: VpcIGW488B0FEB
-    DependsOn:
-      - VpcVPCGW42EC8516
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/PublicSubnet2/DefaultRoute
-  VpcIsolatedSubnet1SubnetDC3C6AF8:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.2.0/24
-      VpcId:
-        Ref: VpcC3027511
-      AvailabilityZone:
-        Fn::Select:
-          - 0
-          - Fn::GetAZs: ""
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1
-        - Key: aws-cdk:subnet-name
-          Value: Isolated
-        - Key: aws-cdk:subnet-type
-          Value: Isolated
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1/Subnet
-  VpcIsolatedSubnet1RouteTableF057227C:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId:
-        Ref: VpcC3027511
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1/RouteTable
-  VpcIsolatedSubnet1RouteTableAssociation0FC379C3:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: VpcIsolatedSubnet1RouteTableF057227C
-      SubnetId:
-        Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet1/RouteTableAssociation
-  VpcIsolatedSubnet2SubnetB479B99C:
-    Type: AWS::EC2::Subnet
-    Properties:
-      CidrBlock: 10.0.3.0/24
-      VpcId:
-        Ref: VpcC3027511
-      AvailabilityZone:
-        Fn::Select:
-          - 1
-          - Fn::GetAZs: ""
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2
-        - Key: aws-cdk:subnet-name
-          Value: Isolated
-        - Key: aws-cdk:subnet-type
-          Value: Isolated
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2/Subnet
-  VpcIsolatedSubnet2RouteTableBAB510EF:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId:
-        Ref: VpcC3027511
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2/RouteTable
-  VpcIsolatedSubnet2RouteTableAssociation8E8989F5:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId:
-        Ref: VpcIsolatedSubnet2RouteTableBAB510EF
-      SubnetId:
-        Ref: VpcIsolatedSubnet2SubnetB479B99C
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IsolatedSubnet2/RouteTableAssociation
-  VpcIGW488B0FEB:
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-        - Key: Name
-          Value: dev-mysite-com-stack/Vpc/Vpc
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/IGW
-  VpcVPCGW42EC8516:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      VpcId:
-        Ref: VpcC3027511
-      InternetGatewayId:
-        Ref: VpcIGW488B0FEB
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Vpc/Vpc/VPCGW
-  ApplicationLoadBalancerALBE88818A8:
-    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    Properties:
-      Scheme: internet-facing
-      SecurityGroups:
-        - Fn::GetAtt:
-            - ApplicationLoadBalancerALBSecurityGroup0D676F12
-            - GroupId
-      Subnets:
-        - Ref: VpcPublicSubnet1Subnet8E8DEDC0
-        - Ref: VpcPublicSubnet2SubnetA811849C
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-      Type: application
-    DependsOn:
-      - VpcPublicSubnet1DefaultRoute0F5C6C43
-      - VpcPublicSubnet2DefaultRouteD629179A
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/Resource
-  ApplicationLoadBalancerALBSecurityGroup0D676F12:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Automatically created Security Group for ELB devmysitecomstackApplicationLoadBalancerALB35990729
-      SecurityGroupIngress:
-        - CidrIp: 0.0.0.0/0
-          Description: Internet access ALB 80
-          FromPort: 80
-          IpProtocol: tcp
-          ToPort: 80
-        - CidrIp: 0.0.0.0/0
-          Description: Internet access ALB 443
-          FromPort: 443
-          IpProtocol: tcp
-          ToPort: 443
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-      VpcId:
-        Ref: VpcC3027511
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/Resource
-  ApplicationLoadBalancerALBSecurityGrouptodevmysitecomstackBackendBackendSecurityGroup987E976C8000947E9AB3:
-    Type: AWS::EC2::SecurityGroupEgress
-    Properties:
-      GroupId:
-        Fn::GetAtt:
-          - ApplicationLoadBalancerALBSecurityGroup0D676F12
-          - GroupId
-      IpProtocol: tcp
-      Description: Load balancer to target
-      DestinationSecurityGroupId:
-        Fn::GetAtt:
-          - VpcC3027511
-          - DefaultSecurityGroup
-      FromPort: 8000
-      ToPort: 8000
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/SecurityGroup/to devmysitecomstackBackendBackendSecurityGroup987E976C:8000
-  ApplicationLoadBalancerALBALBListener3A5A512C:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DefaultActions:
-        - TargetGroupArn:
-            Ref: ApplicationLoadBalancerDefaultTargetGroupF1B3D7D1
-          Type: forward
-      LoadBalancerArn:
-        Ref: ApplicationLoadBalancerALBE88818A8
-      Port: 80
-      Protocol: HTTP
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/ALBListener/Resource
-  ApplicationLoadBalancerALBHTTPSListenerE47034B1:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DefaultActions:
-        - TargetGroupArn:
-            Ref: ApplicationLoadBalancerDefaultTargetGroupF1B3D7D1
-          Type: forward
-      LoadBalancerArn:
-        Ref: ApplicationLoadBalancerALBE88818A8
-      Port: 443
-      Protocol: HTTPS
-      Certificates:
-        - CertificateArn:
-            Ref: SiteCert6025247C
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/HTTPSListener/Resource
-  ApplicationLoadBalancerALBHTTPSListenerBackendTargetGroupEFEFD916:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      HealthCheckPath: /api/hello-world
-      Matcher:
-        HttpCode: 200-299
-      Port: 80
-      Protocol: HTTP
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-      TargetType: ip
-      VpcId:
-        Ref: VpcC3027511
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/HTTPSListener/BackendTargetGroup/Resource
-  ApplicationLoadBalancerALBHTTPSListenerBackendTargetRule6CC8AE94:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    Properties:
-      Actions:
-        - TargetGroupArn:
-            Ref: ApplicationLoadBalancerALBHTTPSListenerBackendTargetGroupEFEFD916
-          Type: forward
-      Conditions:
-        - Field: path-pattern
-          Values:
-            - "*"
-      ListenerArn:
-        Ref: ApplicationLoadBalancerALBHTTPSListenerE47034B1
-      Priority: 1
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/ALB/HTTPSListener/BackendTargetRule/Resource
-  ApplicationLoadBalancerDefaultTargetGroupF1B3D7D1:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      Port: 80
-      Protocol: HTTP
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-      VpcId:
-        Ref: VpcC3027511
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/ApplicationLoadBalancer/DefaultTargetGroup/Resource
-  StaticSiteBucket6BF500B9:
-    Type: AWS::S3::Bucket
-    Properties:
-      AccessControl: PublicRead
-      BucketName: dev-mysite-com-frontend
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-      WebsiteConfiguration:
-        ErrorDocument: index.html
-        IndexDocument: index.html
-    UpdateReplacePolicy: Delete
-    DeletionPolicy: Delete
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/StaticSiteBucket/StaticSiteBucket/Resource
-  StaticSiteBucketPolicy543699F0:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket:
-        Ref: StaticSiteBucket6BF500B9
-      PolicyDocument:
-        Statement:
-          - Action: s3:GetObject
-            Effect: Allow
-            Principal: "*"
-            Resource:
-              Fn::Join:
-                - ""
-                - - Fn::GetAtt:
-                      - StaticSiteBucket6BF500B9
-                      - Arn
-                  - /*
-        Version: "2012-10-17"
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/StaticSiteBucket/StaticSiteBucket/Policy/Resource
-  BackendAssetsAssetsBucket62473847:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: dev-mysite-com-assets
-      Tags:
-        - Key: StackName
-          Value: dev-mysite-com
-    UpdateReplacePolicy: Retain
-    DeletionPolicy: Retain
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/BackendAssets/AssetsBucket/Resource
-  BackendAssetsAssetsBucketPolicyE8C83357:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket:
-        Ref: BackendAssetsAssetsBucket62473847
-      PolicyDocument:
-        Statement:
-          - Action: s3:GetObject
-            Effect: Allow
-            Principal: "*"
-            Resource:
-              Fn::Join:
-                - ""
-                - - Fn::GetAtt:
-                      - BackendAssetsAssetsBucket62473847
-                      - Arn
-                  - /static/*
-        Version: "2012-10-17"
-    Metadata:
-      aws:cdk:path: dev-mysite-com-stack/BackendAssets/AssetsBucket/Policy/Resource
-  StaticSiteCloudFrontDistributionCFDistributionA70E78CD:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Aliases:
-          - dev.mysite.com
-        CacheBehaviors:
-          - AllowedMethods:
-              - DELETE
-              - GET
-              - HEAD
-              - OPTIONS
-              - PATCH
-              - POST
-              - PUT
-            CachedMethods:
-              - GET
-              - HEAD
-            Compress: true
-            ForwardedValues:
-              Cookies:
-                Forward: all
-              Headers:
-                - "*"
-              QueryString: true
-            PathPattern: /api/*
-            TargetOriginId: origin1
-            ViewerProtocolPolicy: redirect-to-https
-          - AllowedMethods:
-              - DELETE
-              - GET
-              - HEAD
-              - OPTIONS
-              - PATCH
-              - POST
-              - PUT
-            CachedMethods:
-              - GET
-              - HEAD
-            Compress: true
-            ForwardedValues:
-              Cookies:
-                Forward: all
-              Headers:
-                - "*"
-              QueryString: true
-            PathPattern: /admin/*
-            TargetOriginId: origin1
-            ViewerProtocolPolicy: redirect-to-https
-          - AllowedMethods:
-              - DELETE
-              - GET
-              - HEAD
-              - OPTIONS
-              - PATCH
-              - POST
-              - PUT
-            CachedMethods:
-              - GET
-              - HEAD
-            Compress: true
-            ForwardedValues:
-              Cookies:
-                Forward: all
-              Headers:
-                - "*"
-              QueryString: true
-            PathPattern: /flower/*
-            TargetOriginId: origin1
-            ViewerProtocolPolicy: redirect-to-https
-          - AllowedMethods:
-              - DELETE
-              - GET
-              - HEAD
-              - OPTIONS
-              - PATCH
-              - POST
-              - PUT
-            CachedMethods:
-              - GET
-              - HEAD
-            Compress: true
-            ForwardedValues:
-              QueryString: true
-            PathPattern: /static/*
-            TargetOriginId: origin3
-            ViewerProtocolPolicy: redirect-to-https
-          - AllowedMethods:
-              - DELETE
-              - GET
-              - HEAD
-              - OPTIONS
-              - PATCH
-              - POST
-              - PUT
-            CachedMethods:
-              - GET
-              - HEAD
-            Compress: true
-            ForwardedValues:
-              QueryString: true
-            PathPattern: /media/*
-            TargetOriginId: origin3
-            ViewerProtocolPolicy: redirect-to-https
-        DefaultCacheBehavior:
-          AllowedMethods:
-            - GET
-            - HEAD
-          CachedMethods:
-            - GET
-            - HEAD
-          Compress: true
-          ForwardedValues:
-            Cookies:
-              Forward: none
-            QueryString: false
-          TargetOriginId: origin2
-          ViewerProtocolPolicy: redirect-to-https
-        DefaultRootObject: index.html
-        Enabled: true
-        HttpVersion: http2
-        IPV6Enabled: true
-        Origins:
-          - CustomOriginConfig:
-              HTTPPort: 80
-              HTTPSPort: 443
-              OriginKeepaliveTimeout: 5
-              OriginProtocolPolicy: match-viewer
-              OriginReadTimeout: 30
-              OriginSSLProtocols:
-                - TLSv1.2
-            DomainName:
-              Fn::GetAtt:
-                - ApplicationLoadBalancerALBE88818A8
-                - DNSName
-            Id: origin1
-          - CustomOriginConfig:
-              HTTPPort: 80
-              HTTPSPort: 443
-              OriginKeepaliveTimeout: 5
-              OriginProtocolPolicy: http-only
-              OriginReadTimeout: 30
-              OriginSSLProtocols:
-                - TLSv1.2
-            DomainName:
-              Fn::Join:
-                - ""
-                - - Ref: StaticSiteBucket6BF500B9
-                  - .s3-website-us-east-1.amazonaws.com
-            Id: origin2
-          - DomainName:
-              Fn::GetAtt:
-                - BackendAssetsAssetsBucket62473847
-                - RegionalDomainName
-            Id: origin3
-            S3OriginConfig: {}
-        PriceClass: PriceClass_100
-        ViewerCertificate:
-          AcmCertificateArn:
-            Ref: SiteCert6025247C
-          SslSupportMethod: sni-only
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3Bucket2548A2B5
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3VersionKey07AA7D40
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3VersionKey07AA7D40
       Tags:
         - Key: StackName
           Value: dev-mysite-com
     Metadata:
-      aws:cdk:path: dev-mysite-com-stack/StaticSite/CloudFrontDistribution/CFDistribution
-  StaticSiteAliasRecord4F27A661:
-    Type: AWS::Route53::RecordSet
+      aws:cdk:path: dev-mysite-com-stack/Vpc.NestedStack/Vpc.NestedStackResource
+  AlbStackNestedStackAlbStackNestedStackResource5931881A:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      Name: dev.mysite.com.
-      Type: A
-      AliasTarget:
-        DNSName:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3BucketA5B81864
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3VersionKeyD17D1E5D
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3VersionKeyD17D1E5D
+      Parameters:
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet1Subnet941F830ARef:
           Fn::GetAtt:
-            - StaticSiteCloudFrontDistributionCFDistributionA70E78CD
-            - DomainName
-        HostedZoneId: Z2FDTNDATAQYW2
-      HostedZoneId: ABC123
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcPublicSubnet1Subnet941F830ARef
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet2SubnetD8939549Ref:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcPublicSubnet2SubnetD8939549Ref
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855Ref:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpc8106B855Ref
+        referencetodevmysitecomstackSiteCert6D266B29Ref:
+          Ref: SiteCert6025247C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    DependsOn:
+      - VpcNestedStackVpcNestedStackResourceC40EA5DD
     Metadata:
-      aws:cdk:path: dev-mysite-com-stack/StaticSite/AliasRecord/Resource
+      aws:cdk:path: dev-mysite-com-stack/AlbStack.NestedStack/AlbStack.NestedStackResource
+  StaticSiteBucketNestedStackStaticSiteBucketNestedStackResource6F68ACD3:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameterse87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23S3BucketE6F5CCF4
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameterse87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23S3VersionKey1841044D
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameterse87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23S3VersionKey1841044D
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/StaticSiteBucket.NestedStack/StaticSiteBucket.NestedStackResource
+  BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3Bucket0F024384
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3VersionKey94AE1C77
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3VersionKey94AE1C77
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendAssetsStack.NestedStack/BackendAssetsStack.NestedStackResource
+  CloudFrontStackNestedStackCloudFrontStackNestedStackResourceA467518D:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersc98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9bS3Bucket4A21A526
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersc98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9bS3VersionKey9C200952
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersc98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9bS3VersionKey9C200952
+      Parameters:
+        referencetodevmysitecomstackAlbStackNestedStackAlbStackNestedStackResourceAD0999BDOutputsdevmysitecomstackAlbStackALB6404BF3DDNSName:
+          Fn::GetAtt:
+            - AlbStackNestedStackAlbStackNestedStackResource5931881A
+            - Outputs.devmysitecomstackAlbStackALB6404BF3DDNSName
+        referencetodevmysitecomstackStaticSiteBucketNestedStackStaticSiteBucketNestedStackResource9D02B4C8OutputsdevmysitecomstackStaticSiteBucket261A2E15Ref:
+          Fn::GetAtt:
+            - StaticSiteBucketNestedStackStaticSiteBucketNestedStackResource6F68ACD3
+            - Outputs.devmysitecomstackStaticSiteBucket261A2E15Ref
+        referencetodevmysitecomstackBackendAssetsStackNestedStackBackendAssetsStackNestedStackResource36A5396FOutputsdevmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRegionalDomainName:
+          Fn::GetAtt:
+            - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+            - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRegionalDomainName
+        referencetodevmysitecomstackSiteCert6D266B29Ref:
+          Ref: SiteCert6025247C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CloudFrontStack.NestedStack/CloudFrontStack.NestedStackResource
   EcsEcsCluster51C39CA0:
     Type: AWS::ECS::Cluster
     Properties:
@@ -662,14 +217,16 @@ Resources:
           IpProtocol: tcp
           SourceSecurityGroupId:
             Fn::GetAtt:
-              - VpcC3027511
-              - DefaultSecurityGroup
+              - VpcNestedStackVpcNestedStackResourceC40EA5DD
+              - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
           ToPort: 5432
       Tags:
         - Key: StackName
           Value: dev-mysite-com
       VpcId:
-        Ref: VpcC3027511
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855Ref
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecurityGroup
   RdsDBClusterCfnDBSubnetGroup38D3A78B:
@@ -677,8 +234,12 @@ Resources:
     Properties:
       DBSubnetGroupDescription: dev-mysite-com-db-subnet-group
       SubnetIds:
-        - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
-        - Ref: VpcIsolatedSubnet2SubnetB479B99C
+        - Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet1SubnetDCCE15C8Ref
+        - Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet2Subnet44DEA593Ref
       Tags:
         - Key: StackName
           Value: dev-mysite-com
@@ -723,14 +284,16 @@ Resources:
           IpProtocol: tcp
           SourceSecurityGroupId:
             Fn::GetAtt:
-              - VpcC3027511
-              - DefaultSecurityGroup
+              - VpcNestedStackVpcNestedStackResourceC40EA5DD
+              - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
           ToPort: 6379
       Tags:
         - Key: StackName
           Value: dev-mysite-com
       VpcId:
-        Ref: VpcC3027511
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855Ref
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/ElastiCacheRedis/ElastiCacheSecurityGroup
   ElastiCacheRedisCfnSubnetGroup403949FE:
@@ -738,8 +301,12 @@ Resources:
     Properties:
       Description: The subnet group for ElastiCache
       SubnetIds:
-        - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
-        - Ref: VpcIsolatedSubnet2SubnetB479B99C
+        - Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet1SubnetDCCE15C8Ref
+        - Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet2Subnet44DEA593Ref
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/ElastiCacheRedis/CfnSubnetGroup
   ElastiCacheRedisElastiCacheClusterRedis25390D9F:
@@ -800,13 +367,13 @@ Resources:
             Effect: Allow
             Resource:
               - Fn::GetAtt:
-                  - BackendAssetsAssetsBucket62473847
-                  - Arn
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
               - Fn::Join:
                   - ""
                   - - Fn::GetAtt:
-                        - BackendAssetsAssetsBucket62473847
-                        - Arn
+                        - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                        - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
                     - /*
           - Action: secretsmanager:GetSecretValue
             Effect: Allow
@@ -837,7 +404,9 @@ Resources:
               Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
-                Ref: BackendAssetsAssetsBucket62473847
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
             - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
@@ -864,7 +433,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -959,7 +528,7 @@ Resources:
         - Ref: BackendBackendTaskExecutionRole3B22D4E5
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
-  BackendBackendSecurityGroupfromdevmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D0380003CD57722:
+  BackendBackendSecurityGroupfromdevmysitecomstackAlbStackALBSecurityGroupFE49D4AC8000485E0E43:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       IpProtocol: tcp
@@ -967,15 +536,32 @@ Resources:
       FromPort: 8000
       GroupId:
         Fn::GetAtt:
-          - VpcC3027511
-          - DefaultSecurityGroup
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
       SourceSecurityGroupId:
         Fn::GetAtt:
-          - ApplicationLoadBalancerALBSecurityGroup0D676F12
-          - GroupId
+          - AlbStackNestedStackAlbStackNestedStackResource5931881A
+          - Outputs.devmysitecomstackAlbStackALBSecurityGroupDC2CC7C0GroupId
       ToPort: 8000
     Metadata:
-      aws:cdk:path: dev-mysite-com-stack/Backend/BackendSecurityGroup/from devmysitecomstackApplicationLoadBalancerALBSecurityGroup41CD7D03:8000
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendSecurityGroup/from devmysitecomstackAlbStackALBSecurityGroupFE49D4AC:8000
+  BackendBackendSecurityGroupdevmysitecomstackAlbStackALBSecurityGroupFE49D4AC8000from0DBE26B3:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId:
+        Fn::GetAtt:
+          - AlbStackNestedStackAlbStackNestedStackResource5931881A
+          - Outputs.devmysitecomstackAlbStackALBSecurityGroupDC2CC7C0GroupId
+      IpProtocol: tcp
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
+      FromPort: 8000
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendSecurityGroup/devmysitecomstackAlbStackALBSecurityGroupFE49D4AC:8000 from
   BackendBackendService9DB18AD9:
     Type: AWS::ECS::Service
     Properties:
@@ -992,24 +578,30 @@ Resources:
         - ContainerName: DjangoBackend
           ContainerPort: 8000
           TargetGroupArn:
-            Ref: ApplicationLoadBalancerALBHTTPSListenerBackendTargetGroupEFEFD916
+            Fn::GetAtt:
+              - AlbStackNestedStackAlbStackNestedStackResource5931881A
+              - Outputs.devmysitecomstackAlbStackALBHTTPSListenerBackendTargetGroupA82F195BRef
       NetworkConfiguration:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           SecurityGroups:
             - Fn::GetAtt:
-                - VpcC3027511
-                - DefaultSecurityGroup
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
           Subnets:
-            - Ref: VpcPublicSubnet1Subnet8E8DEDC0
-            - Ref: VpcPublicSubnet2SubnetA811849C
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcPublicSubnet1Subnet941F830ARef
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcPublicSubnet2SubnetD8939549Ref
       Tags:
         - Key: StackName
           Value: dev-mysite-com
       TaskDefinition:
         Ref: BackendBackendTask22B2DD1D
     DependsOn:
-      - ApplicationLoadBalancerALBHTTPSListenerBackendTargetRule6CC8AE94
+      - AlbStackNestedStackAlbStackNestedStackResource5931881A
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/Service
   CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1:
@@ -1062,13 +654,13 @@ Resources:
             Effect: Allow
             Resource:
               - Fn::GetAtt:
-                  - BackendAssetsAssetsBucket62473847
-                  - Arn
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
               - Fn::Join:
                   - ""
                   - - Fn::GetAtt:
-                        - BackendAssetsAssetsBucket62473847
-                        - Arn
+                        - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                        - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
                     - /*
           - Action: secretsmanager:GetSecretValue
             Effect: Allow
@@ -1104,7 +696,9 @@ Resources:
               Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
-                Ref: BackendAssetsAssetsBucket62473847
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
             - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
@@ -1136,7 +730,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1247,8 +841,12 @@ Resources:
                 - CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceSecurityGroup5FAD8F0F
                 - GroupId
           Subnets:
-            - Ref: VpcIsolatedSubnet1SubnetDC3C6AF8
-            - Ref: VpcIsolatedSubnet2SubnetB479B99C
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcIsolatedSubnet1SubnetDCCE15C8Ref
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcIsolatedSubnet2Subnet44DEA593Ref
       Tags:
         - Key: StackName
           Value: dev-mysite-com
@@ -1268,7 +866,9 @@ Resources:
         - Key: StackName
           Value: dev-mysite-com
       VpcId:
-        Ref: VpcC3027511
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855Ref
     Metadata:
       aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/SecurityGroup/Resource
   CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTarget98A4BA84:
@@ -1437,7 +1037,9 @@ Resources:
               Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
-                Ref: BackendAssetsAssetsBucket62473847
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
             - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
@@ -1464,7 +1066,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1586,13 +1188,13 @@ Resources:
             Effect: Allow
             Resource:
               - Fn::GetAtt:
-                  - BackendAssetsAssetsBucket62473847
-                  - Arn
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
               - Fn::Join:
                   - ""
                   - - Fn::GetAtt:
-                        - BackendAssetsAssetsBucket62473847
-                        - Arn
+                        - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                        - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
                     - /*
           - Action: secretsmanager:GetSecretValue
             Effect: Allow
@@ -1626,7 +1228,9 @@ Resources:
               Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
-                Ref: BackendAssetsAssetsBucket62473847
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
             - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
@@ -1653,7 +1257,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1796,7 +1400,9 @@ Resources:
               Value: dev.mysite.com
             - Name: AWS_STORAGE_BUCKET_NAME
               Value:
-                Ref: BackendAssetsAssetsBucket62473847
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
             - Name: POSTGRES_SERVICE_HOST
               Value:
                 Fn::GetAtt:
@@ -1823,7 +1429,7 @@ Resources:
               - - Ref: AWS::AccountId
                 - .dkr.ecr.us-east-1.
                 - Ref: AWS::URLSuffix
-                - /aws-cdk/assets:c865db65633dc02146a1654fe621d02d29d2f9ba0b6cd7a5f0ba05600e36cf9b
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -1910,7 +1516,7 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=1.38.0,@aws-cdk/assets=1.38.0,@aws-cdk/aws-apigateway=1.38.0,@aws-cdk/aws-applicationautoscaling=1.38.0,@aws-cdk/aws-autoscaling=1.38.0,@aws-cdk/aws-autoscaling-common=1.38.0,@aws-cdk/aws-autoscaling-hooktargets=1.38.0,@aws-cdk/aws-batch=1.38.0,@aws-cdk/aws-certificatemanager=1.38.0,@aws-cdk/aws-cloudformation=1.38.0,@aws-cdk/aws-cloudfront=1.38.0,@aws-cdk/aws-cloudwatch=1.38.0,@aws-cdk/aws-codebuild=1.38.0,@aws-cdk/aws-codecommit=1.38.0,@aws-cdk/aws-codepipeline=1.38.0,@aws-cdk/aws-cognito=1.38.0,@aws-cdk/aws-ec2=1.38.0,@aws-cdk/aws-ecr=1.38.0,@aws-cdk/aws-ecr-assets=1.38.0,@aws-cdk/aws-ecs=1.38.0,@aws-cdk/aws-ecs-patterns=1.38.0,@aws-cdk/aws-elasticache=1.38.0,@aws-cdk/aws-elasticloadbalancing=1.38.0,@aws-cdk/aws-elasticloadbalancingv2=1.38.0,@aws-cdk/aws-events=1.38.0,@aws-cdk/aws-events-targets=1.38.0,@aws-cdk/aws-iam=1.38.0,@aws-cdk/aws-kms=1.38.0,@aws-cdk/aws-lambda=1.38.0,@aws-cdk/aws-logs=1.38.0,@aws-cdk/aws-rds=1.38.0,@aws-cdk/aws-route53=1.38.0,@aws-cdk/aws-route53-targets=1.38.0,@aws-cdk/aws-s3=1.38.0,@aws-cdk/aws-s3-assets=1.38.0,@aws-cdk/aws-s3-deployment=1.38.0,@aws-cdk/aws-sam=1.38.0,@aws-cdk/aws-secretsmanager=1.38.0,@aws-cdk/aws-servicediscovery=1.38.0,@aws-cdk/aws-sns=1.38.0,@aws-cdk/aws-sns-subscriptions=1.38.0,@aws-cdk/aws-sqs=1.38.0,@aws-cdk/aws-ssm=1.38.0,@aws-cdk/aws-stepfunctions=1.38.0,@aws-cdk/cloud-assembly-schema=1.38.0,@aws-cdk/core=1.38.0,@aws-cdk/custom-resources=1.38.0,@aws-cdk/cx-api=1.38.0,@aws-cdk/region-info=1.38.0,jsii-runtime=Python/3.6.8
+      Modules: aws-cdk=1.41.0,@aws-cdk/assets=1.41.0,@aws-cdk/aws-apigateway=1.41.0,@aws-cdk/aws-applicationautoscaling=1.41.0,@aws-cdk/aws-autoscaling=1.41.0,@aws-cdk/aws-autoscaling-common=1.41.0,@aws-cdk/aws-autoscaling-hooktargets=1.41.0,@aws-cdk/aws-batch=1.41.0,@aws-cdk/aws-certificatemanager=1.41.0,@aws-cdk/aws-cloudformation=1.41.0,@aws-cdk/aws-cloudfront=1.41.0,@aws-cdk/aws-cloudwatch=1.41.0,@aws-cdk/aws-codebuild=1.41.0,@aws-cdk/aws-codecommit=1.41.0,@aws-cdk/aws-codepipeline=1.41.0,@aws-cdk/aws-cognito=1.41.0,@aws-cdk/aws-ec2=1.41.0,@aws-cdk/aws-ecr=1.41.0,@aws-cdk/aws-ecr-assets=1.41.0,@aws-cdk/aws-ecs=1.41.0,@aws-cdk/aws-ecs-patterns=1.41.0,@aws-cdk/aws-elasticache=1.41.0,@aws-cdk/aws-elasticloadbalancing=1.41.0,@aws-cdk/aws-elasticloadbalancingv2=1.41.0,@aws-cdk/aws-events=1.41.0,@aws-cdk/aws-events-targets=1.41.0,@aws-cdk/aws-iam=1.41.0,@aws-cdk/aws-kms=1.41.0,@aws-cdk/aws-lambda=1.41.0,@aws-cdk/aws-logs=1.41.0,@aws-cdk/aws-rds=1.41.0,@aws-cdk/aws-route53=1.41.0,@aws-cdk/aws-route53-targets=1.41.0,@aws-cdk/aws-s3=1.41.0,@aws-cdk/aws-s3-assets=1.41.0,@aws-cdk/aws-s3-deployment=1.41.0,@aws-cdk/aws-sam=1.41.0,@aws-cdk/aws-secretsmanager=1.41.0,@aws-cdk/aws-servicediscovery=1.41.0,@aws-cdk/aws-sns=1.41.0,@aws-cdk/aws-sns-subscriptions=1.41.0,@aws-cdk/aws-sqs=1.41.0,@aws-cdk/aws-ssm=1.41.0,@aws-cdk/aws-stepfunctions=1.41.0,@aws-cdk/cdk-assets-schema=1.41.0,@aws-cdk/cloud-assembly-schema=1.41.0,@aws-cdk/core=1.41.0,@aws-cdk/custom-resources=1.41.0,@aws-cdk/cx-api=1.41.0,@aws-cdk/region-info=1.41.0,jsii-runtime=Python/3.6.8
 Outputs:
   CeleryWorkerServiceCeleryDefaultWorkerServiceSQSQueue48757187:
     Value:
@@ -1922,4 +1528,50 @@ Outputs:
       Fn::GetAtt:
         - CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1
         - Arn
+Parameters:
+  AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3Bucket2548A2B5:
+    Type: String
+    Description: S3 bucket for asset "5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206d"
+  AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3VersionKey07AA7D40:
+    Type: String
+    Description: S3 key for asset version "5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206d"
+  AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dArtifactHashA099A687:
+    Type: String
+    Description: Artifact hash for asset "5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206d"
+  AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3BucketA5B81864:
+    Type: String
+    Description: S3 bucket for asset "73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1a"
+  AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3VersionKeyD17D1E5D:
+    Type: String
+    Description: S3 key for asset version "73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1a"
+  AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aArtifactHashAD19648A:
+    Type: String
+    Description: Artifact hash for asset "73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1a"
+  AssetParameterse87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23S3BucketE6F5CCF4:
+    Type: String
+    Description: S3 bucket for asset "e87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23"
+  AssetParameterse87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23S3VersionKey1841044D:
+    Type: String
+    Description: S3 key for asset version "e87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23"
+  AssetParameterse87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23ArtifactHashE6C5DBDC:
+    Type: String
+    Description: Artifact hash for asset "e87519d66918c137189f55c525612c66032d2631d3c7f5034ae6694889967e23"
+  AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3Bucket0F024384:
+    Type: String
+    Description: S3 bucket for asset "8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914"
+  AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3VersionKey94AE1C77:
+    Type: String
+    Description: S3 key for asset version "8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914"
+  AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914ArtifactHash4BFD74BE:
+    Type: String
+    Description: Artifact hash for asset "8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914"
+  AssetParametersc98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9bS3Bucket4A21A526:
+    Type: String
+    Description: S3 bucket for asset "c98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9b"
+  AssetParametersc98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9bS3VersionKey9C200952:
+    Type: String
+    Description: S3 key for asset version "c98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9b"
+  AssetParametersc98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9bArtifactHash8991B4D1:
+    Type: String
+    Description: Artifact hash for asset "c98e0cf49c5a40903c10125f55ed5ebc54314b9103efe1a1002813bb970e3f9b"
 

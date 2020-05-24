@@ -1,26 +1,15 @@
-import os
-
 from aws_cdk import (
     core,
     aws_ec2 as ec2,
     aws_ecs as ecs,
-    aws_ecs_patterns as ecs_patterns,
+    aws_logs as logs,
+    aws_cloudformation as cloudformation,
     aws_elasticloadbalancingv2 as elbv2,
 )
 
 
-class Backend(core.Construct):
-    def __init__(
-        self,
-        scope: core.Construct,
-        id: str,
-        image: ecs.AssetImage,
-        https_listener: elbv2.IApplicationListener,
-        cluster: ecs.ICluster,
-        environment_variables: core.Construct,
-        security_group: str,
-        **kwargs,
-    ) -> None:
+class BackendStack(cloudformation.NestedStack):
+    def __init__(self, scope: core.Construct, id: str, **kwargs,) -> None:
         super().__init__(
             scope, id, **kwargs,
         )
@@ -28,15 +17,18 @@ class Backend(core.Construct):
         self.backend_task = ecs.FargateTaskDefinition(self, "BackendTask")
 
         self.backend_task.add_container(
-            "DjangoBackend",
-            image=image,
-            logging=ecs.LogDrivers.aws_logs(stream_prefix="Backend"),
-            environment=environment_variables.regular_variables,
-            secrets=environment_variables.secret_variables,
+            "BackendContainer",
+            image=scope.image,
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix="BackendContainer",
+                log_retention=logs.RetentionDays.ONE_WEEK,
+            ),
+            environment=scope.variables.regular_variables,
+            secrets=scope.variables.secret_variables,
             command=["/start_prod.sh"],
         )
 
-        scope.assets.assets_bucket.grant_read_write(
+        scope.backend_assets_bucket.grant_read_write(
             self.backend_task.task_role
         )
 
@@ -53,13 +45,15 @@ class Backend(core.Construct):
             "BackendService",
             task_definition=self.backend_task,
             assign_public_ip=True,
-            cluster=cluster,
+            cluster=scope.cluster,
             security_group=ec2.SecurityGroup.from_security_group_id(
-                self, "BackendSecurityGroup", security_group_id=security_group
+                self,
+                "BackendServiceSecurityGroup",
+                security_group_id=scope.vpc.vpc_default_security_group,
             ),
         )
 
-        https_listener.add_targets(
+        scope.https_listener.add_targets(
             "BackendTarget",
             port=80,
             targets=[self.backend_service],

@@ -1,0 +1,270 @@
+{
+  "Resources": {
+    "CloudFrontDistributionCFDistribution599ADCC4": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Aliases": [
+            "dev.mysite.com"
+          ],
+          "CacheBehaviors": [
+            {
+              "AllowedMethods": [
+                "DELETE",
+                "GET",
+                "HEAD",
+                "OPTIONS",
+                "PATCH",
+                "POST",
+                "PUT"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD"
+              ],
+              "Compress": true,
+              "ForwardedValues": {
+                "Cookies": {
+                  "Forward": "all"
+                },
+                "Headers": [
+                  "*"
+                ],
+                "QueryString": true
+              },
+              "PathPattern": "/api/*",
+              "TargetOriginId": "origin1",
+              "ViewerProtocolPolicy": "redirect-to-https"
+            },
+            {
+              "AllowedMethods": [
+                "DELETE",
+                "GET",
+                "HEAD",
+                "OPTIONS",
+                "PATCH",
+                "POST",
+                "PUT"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD"
+              ],
+              "Compress": true,
+              "ForwardedValues": {
+                "Cookies": {
+                  "Forward": "all"
+                },
+                "Headers": [
+                  "*"
+                ],
+                "QueryString": true
+              },
+              "PathPattern": "/admin/*",
+              "TargetOriginId": "origin1",
+              "ViewerProtocolPolicy": "redirect-to-https"
+            },
+            {
+              "AllowedMethods": [
+                "DELETE",
+                "GET",
+                "HEAD",
+                "OPTIONS",
+                "PATCH",
+                "POST",
+                "PUT"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD"
+              ],
+              "Compress": true,
+              "ForwardedValues": {
+                "Cookies": {
+                  "Forward": "all"
+                },
+                "Headers": [
+                  "*"
+                ],
+                "QueryString": true
+              },
+              "PathPattern": "/flower/*",
+              "TargetOriginId": "origin1",
+              "ViewerProtocolPolicy": "redirect-to-https"
+            },
+            {
+              "AllowedMethods": [
+                "DELETE",
+                "GET",
+                "HEAD",
+                "OPTIONS",
+                "PATCH",
+                "POST",
+                "PUT"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD"
+              ],
+              "Compress": true,
+              "ForwardedValues": {
+                "QueryString": true
+              },
+              "MaxTTL": 0,
+              "MinTTL": 0,
+              "PathPattern": "/static/*",
+              "TargetOriginId": "origin3",
+              "ViewerProtocolPolicy": "redirect-to-https"
+            },
+            {
+              "AllowedMethods": [
+                "DELETE",
+                "GET",
+                "HEAD",
+                "OPTIONS",
+                "PATCH",
+                "POST",
+                "PUT"
+              ],
+              "CachedMethods": [
+                "GET",
+                "HEAD"
+              ],
+              "Compress": true,
+              "ForwardedValues": {
+                "QueryString": true
+              },
+              "MaxTTL": 0,
+              "MinTTL": 0,
+              "PathPattern": "/media/*",
+              "TargetOriginId": "origin3",
+              "ViewerProtocolPolicy": "redirect-to-https"
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "Compress": true,
+            "ForwardedValues": {
+              "Cookies": {
+                "Forward": "none"
+              },
+              "QueryString": false
+            },
+            "TargetOriginId": "origin2",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "HTTPPort": 80,
+                "HTTPSPort": 443,
+                "OriginKeepaliveTimeout": 5,
+                "OriginProtocolPolicy": "match-viewer",
+                "OriginReadTimeout": 30,
+                "OriginSSLProtocols": [
+                  "TLSv1.2"
+                ]
+              },
+              "DomainName": {
+                "Ref": "referencetodevmysitecomstackAlbStackNestedStackAlbStackNestedStackResourceAD0999BDOutputsdevmysitecomstackAlbStackALB6404BF3DDNSName"
+              },
+              "Id": "origin1"
+            },
+            {
+              "CustomOriginConfig": {
+                "HTTPPort": 80,
+                "HTTPSPort": 443,
+                "OriginKeepaliveTimeout": 5,
+                "OriginProtocolPolicy": "http-only",
+                "OriginReadTimeout": 30,
+                "OriginSSLProtocols": [
+                  "TLSv1.2"
+                ]
+              },
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "referencetodevmysitecomstackStaticSiteStackNestedStackStaticSiteStackNestedStackResource591C1758OutputsdevmysitecomstackStaticSiteStackStaticSiteBucketC455AC38Ref"
+                    },
+                    ".s3-website-us-east-1.amazonaws.com"
+                  ]
+                ]
+              },
+              "Id": "origin2"
+            },
+            {
+              "DomainName": {
+                "Ref": "referencetodevmysitecomstackBackendAssetsStackNestedStackBackendAssetsStackNestedStackResource36A5396FOutputsdevmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRegionalDomainName"
+              },
+              "Id": "origin3",
+              "S3OriginConfig": {}
+            }
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": {
+            "AcmCertificateArn": {
+              "Ref": "referencetodevmysitecomstackSiteCert6D266B29Ref"
+            },
+            "SslSupportMethod": "sni-only"
+          }
+        },
+        "Tags": [
+          {
+            "Key": "StackName",
+            "Value": "dev-mysite-com"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/CloudFrontStack/CloudFrontDistribution/CFDistribution"
+      }
+    },
+    "AliasRecord851000D2": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "Name": "dev.mysite.com.",
+        "Type": "A",
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "CloudFrontDistributionCFDistribution599ADCC4",
+              "DomainName"
+            ]
+          },
+          "HostedZoneId": "Z2FDTNDATAQYW2"
+        },
+        "HostedZoneId": "ABC123"
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/CloudFrontStack/AliasRecord/Resource"
+      }
+    }
+  },
+  "Parameters": {
+    "referencetodevmysitecomstackAlbStackNestedStackAlbStackNestedStackResourceAD0999BDOutputsdevmysitecomstackAlbStackALB6404BF3DDNSName": {
+      "Type": "String"
+    },
+    "referencetodevmysitecomstackStaticSiteStackNestedStackStaticSiteStackNestedStackResource591C1758OutputsdevmysitecomstackStaticSiteStackStaticSiteBucketC455AC38Ref": {
+      "Type": "String"
+    },
+    "referencetodevmysitecomstackBackendAssetsStackNestedStackBackendAssetsStackNestedStackResource36A5396FOutputsdevmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRegionalDomainName": {
+      "Type": "String"
+    },
+    "referencetodevmysitecomstackSiteCert6D266B29Ref": {
+      "Type": "String"
+    }
+  }
+}

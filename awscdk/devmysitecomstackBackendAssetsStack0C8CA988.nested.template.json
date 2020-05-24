@@ -1,0 +1,79 @@
+{
+  "Resources": {
+    "AssetsBucket5CB76180": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "dev-mysite-com-assets",
+        "Tags": [
+          {
+            "Key": "StackName",
+            "Value": "dev-mysite-com"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/BackendAssetsStack/AssetsBucket/Resource"
+      }
+    },
+    "AssetsBucketPolicyFFACF6C4": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "AssetsBucket5CB76180"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "AssetsBucket5CB76180",
+                        "Arn"
+                      ]
+                    },
+                    "/static/*"
+                  ]
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "dev-mysite-com-stack/BackendAssetsStack/AssetsBucket/Policy/Resource"
+      }
+    }
+  },
+  "Outputs": {
+    "devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRegionalDomainName": {
+      "Value": {
+        "Fn::GetAtt": [
+          "AssetsBucket5CB76180",
+          "RegionalDomainName"
+        ]
+      }
+    },
+    "devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "AssetsBucket5CB76180",
+          "Arn"
+        ]
+      }
+    },
+    "devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef": {
+      "Value": {
+        "Ref": "AssetsBucket5CB76180"
+      }
+    }
+  }
+}

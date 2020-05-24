@@ -1,0 +1,1610 @@
+Resources:
+  SiteCert6025247C:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: dev.mysite.com
+      DomainValidationOptions:
+        - DomainName: dev.mysite.com
+          ValidationDomain: mysite.com
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      ValidationMethod: DNS
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/SiteCert/Resource
+  VpcNestedStackVpcNestedStackResourceC40EA5DD:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3Bucket2548A2B5
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3VersionKey07AA7D40
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3VersionKey07AA7D40
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Vpc.NestedStack/Vpc.NestedStackResource
+  AlbStackNestedStackAlbStackNestedStackResource5931881A:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3BucketA5B81864
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3VersionKeyD17D1E5D
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3VersionKeyD17D1E5D
+      Parameters:
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet1Subnet941F830ARef:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcPublicSubnet1Subnet941F830ARef
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcPublicSubnet2SubnetD8939549Ref:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcPublicSubnet2SubnetD8939549Ref
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855Ref:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpc8106B855Ref
+        referencetodevmysitecomstackSiteCert6D266B29Ref:
+          Ref: SiteCert6025247C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    DependsOn:
+      - VpcNestedStackVpcNestedStackResourceC40EA5DD
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/AlbStack.NestedStack/AlbStack.NestedStackResource
+  StaticSiteStackNestedStackStaticSiteStackNestedStackResource91C04682:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersb4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08S3Bucket682CC05E
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersb4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08S3VersionKeyDF569397
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersb4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08S3VersionKeyDF569397
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/StaticSiteStack.NestedStack/StaticSiteStack.NestedStackResource
+  BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3Bucket0F024384
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3VersionKey94AE1C77
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3VersionKey94AE1C77
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendAssetsStack.NestedStack/BackendAssetsStack.NestedStackResource
+  CloudFrontStackNestedStackCloudFrontStackNestedStackResourceA467518D:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersb808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10S3Bucket4CD35D24
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersb808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10S3VersionKey9A440E4C
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersb808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10S3VersionKey9A440E4C
+      Parameters:
+        referencetodevmysitecomstackAlbStackNestedStackAlbStackNestedStackResourceAD0999BDOutputsdevmysitecomstackAlbStackALB6404BF3DDNSName:
+          Fn::GetAtt:
+            - AlbStackNestedStackAlbStackNestedStackResource5931881A
+            - Outputs.devmysitecomstackAlbStackALB6404BF3DDNSName
+        referencetodevmysitecomstackStaticSiteStackNestedStackStaticSiteStackNestedStackResource591C1758OutputsdevmysitecomstackStaticSiteStackStaticSiteBucketC455AC38Ref:
+          Fn::GetAtt:
+            - StaticSiteStackNestedStackStaticSiteStackNestedStackResource91C04682
+            - Outputs.devmysitecomstackStaticSiteStackStaticSiteBucketC455AC38Ref
+        referencetodevmysitecomstackBackendAssetsStackNestedStackBackendAssetsStackNestedStackResource36A5396FOutputsdevmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRegionalDomainName:
+          Fn::GetAtt:
+            - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+            - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRegionalDomainName
+        referencetodevmysitecomstackSiteCert6D266B29Ref:
+          Ref: SiteCert6025247C
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CloudFrontStack.NestedStack/CloudFrontStack.NestedStackResource
+  EcsStackNestedStackEcsStackNestedStackResource48283A58:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParameters01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5S3Bucket6DDF043C
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5S3VersionKeyDC16DEC1
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParameters01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5S3VersionKeyDC16DEC1
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/EcsStack.NestedStack/EcsStack.NestedStackResource
+  RdsDBClusterDBSecret28397CCA:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        ExcludePunctuation: true
+        GenerateStringKey: password
+        IncludeSpace: false
+        SecretStringTemplate: '{"username": "postgres"}'
+      Name: dev-mysite-com-db-secret
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecret/Resource
+  RdsDBClusterDBSecretArn023C20B8:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: String
+      Value:
+        Ref: RdsDBClusterDBSecret28397CCA
+      Name: dev-mysite-com-secret-arn
+      Tags:
+        StackName: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecretArn/Resource
+  RdsDBClusterDBSecurityGroup83AB5EDA:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: DBSecurityGroup
+      SecurityGroupIngress:
+        - FromPort: 5432
+          IpProtocol: tcp
+          SourceSecurityGroupId:
+            Fn::GetAtt:
+              - VpcNestedStackVpcNestedStackResourceC40EA5DD
+              - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
+          ToPort: 5432
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      VpcId:
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855Ref
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBSecurityGroup
+  RdsDBClusterCfnDBSubnetGroup38D3A78B:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: dev-mysite-com-db-subnet-group
+      SubnetIds:
+        - Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet1SubnetDCCE15C8Ref
+        - Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet2Subnet44DEA593Ref
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/CfnDBSubnetGroup
+  RdsDBCluster25564148:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      Engine: aurora-postgresql
+      DBSubnetGroupName:
+        Ref: RdsDBClusterCfnDBSubnetGroup38D3A78B
+      EnableHttpEndpoint: true
+      EngineMode: serverless
+      EngineVersion: "10.7"
+      MasterUsername:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: RdsDBClusterDBSecret28397CCA
+            - :SecretString:username::}}
+      MasterUserPassword:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: RdsDBClusterDBSecret28397CCA
+            - :SecretString:password::}}
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      VpcSecurityGroupIds:
+        - Fn::GetAtt:
+            - RdsDBClusterDBSecurityGroup83AB5EDA
+            - GroupId
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/RdsDBCluster/DBCluster
+  ElastiCacheStackNestedStackElastiCacheStackNestedStackResource4FFEBC8B:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Join:
+          - ""
+          - - https://s3.us-east-1.
+            - Ref: AWS::URLSuffix
+            - /
+            - Ref: AssetParametersb680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131S3Bucket08D18C1D
+            - /
+            - Fn::Select:
+                - 0
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersb680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131S3VersionKey27377FCE
+            - Fn::Select:
+                - 1
+                - Fn::Split:
+                    - "||"
+                    - Ref: AssetParametersb680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131S3VersionKey27377FCE
+      Parameters:
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855DefaultSecurityGroup:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpc8106B855Ref:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpc8106B855Ref
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcIsolatedSubnet1SubnetDCCE15C8Ref:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet1SubnetDCCE15C8Ref
+        referencetodevmysitecomstackVpcNestedStackVpcNestedStackResource873B7958OutputsdevmysitecomstackVpcIsolatedSubnet2Subnet44DEA593Ref:
+          Fn::GetAtt:
+            - VpcNestedStackVpcNestedStackResourceC40EA5DD
+            - Outputs.devmysitecomstackVpcIsolatedSubnet2Subnet44DEA593Ref
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/ElastiCacheStack.NestedStack/ElastiCacheStack.NestedStackResource
+  VariablesDjangoSecretKeyE4FA41EE:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        ExcludePunctuation: true
+        IncludeSpace: false
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Variables/DjangoSecretKey/Resource
+  BackendBackendTaskTaskRoleD7BBECAE:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/TaskRole/Resource
+  BackendBackendTaskTaskRoleDefaultPolicy35F40EEC:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                        - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
+                    - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendBackendTaskTaskRoleDefaultPolicy35F40EEC
+      Roles:
+        - Ref: BackendBackendTaskTaskRoleD7BBECAE
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/TaskRole/DefaultPolicy/Resource
+  BackendBackendTask22B2DD1D:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - /start_prod.sh
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - RdsDBCluster25564148
+                  - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheStackNestedStackElastiCacheStackNestedStackResource4FFEBC8B
+                  - Outputs.devmysitecomstackElastiCacheStackElastiCacheClusterRedisD95A8DAARedisEndpointAddress
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: BackendBackendTaskDjangoBackendLogGroup020EB920
+              awslogs-stream-prefix: Backend
+              awslogs-region: us-east-1
+          Name: DjangoBackend
+          PortMappings:
+            - ContainerPort: 8000
+              Protocol: tcp
+          Secrets:
+            - Name: DJANGO_SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - BackendBackendTaskExecutionRole3B22D4E5
+          - Arn
+      Family: devmysitecomstackBackendBackendTask23526354
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskRoleArn:
+        Fn::GetAtt:
+          - BackendBackendTaskTaskRoleD7BBECAE
+          - Arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/Resource
+  BackendBackendTaskDjangoBackendLogGroup020EB920:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/DjangoBackend/LogGroup/Resource
+  BackendBackendTaskExecutionRole3B22D4E5:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/Resource
+  BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - BackendBackendTaskDjangoBackendLogGroup020EB920
+                - Arn
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+        Version: "2012-10-17"
+      PolicyName: BackendBackendTaskExecutionRoleDefaultPolicyDCB452D2
+      Roles:
+        - Ref: BackendBackendTaskExecutionRole3B22D4E5
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendTask/ExecutionRole/DefaultPolicy/Resource
+  BackendBackendSecurityGroupfromdevmysitecomstackAlbStackALBSecurityGroupFE49D4AC8000485E0E43:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: Load balancer to target
+      FromPort: 8000
+      GroupId:
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - AlbStackNestedStackAlbStackNestedStackResource5931881A
+          - Outputs.devmysitecomstackAlbStackALBSecurityGroupDC2CC7C0GroupId
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendSecurityGroup/from devmysitecomstackAlbStackALBSecurityGroupFE49D4AC:8000
+  BackendBackendSecurityGroupdevmysitecomstackAlbStackALBSecurityGroupFE49D4AC8000from0DBE26B3:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId:
+        Fn::GetAtt:
+          - AlbStackNestedStackAlbStackNestedStackResource5931881A
+          - Outputs.devmysitecomstackAlbStackALBSecurityGroupDC2CC7C0GroupId
+      IpProtocol: tcp
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
+      FromPort: 8000
+      ToPort: 8000
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendSecurityGroup/devmysitecomstackAlbStackALBSecurityGroupFE49D4AC:8000 from
+  BackendBackendService9DB18AD9:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Fn::GetAtt:
+          - EcsStackNestedStackEcsStackNestedStackResource48283A58
+          - Outputs.devmysitecomstackEcsStackEcsCluster0ECD51DBRef
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      HealthCheckGracePeriodSeconds: 60
+      LaunchType: FARGATE
+      LoadBalancers:
+        - ContainerName: DjangoBackend
+          ContainerPort: 8000
+          TargetGroupArn:
+            Fn::GetAtt:
+              - AlbStackNestedStackAlbStackNestedStackResource5931881A
+              - Outputs.devmysitecomstackAlbStackALBHTTPSListenerBackendTargetGroupA82F195BRef
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpc8106B855DefaultSecurityGroup
+          Subnets:
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcPublicSubnet1Subnet941F830ARef
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcPublicSubnet2SubnetD8939549Ref
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskDefinition:
+        Ref: BackendBackendTask22B2DD1D
+    DependsOn:
+      - AlbStackNestedStackAlbStackNestedStackResource5931881A
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/Backend/BackendService/Service
+  CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: default
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/DefaultCeleryWorkerQueue/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefTaskRole57283A4B:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingTaskDef/TaskRole/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefTaskRoleDefaultPolicyFCD0B661:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - sqs:ReceiveMessage
+              - sqs:ChangeMessageVisibility
+              - sqs:GetQueueUrl
+              - sqs:DeleteMessage
+              - sqs:GetQueueAttributes
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1
+                - Arn
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                        - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
+                    - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefTaskRoleDefaultPolicyFCD0B661
+      Roles:
+        - Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefTaskRole57283A4B
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingTaskDef/TaskRole/DefaultPolicy/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefB29793C2:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - celery
+            - worker
+            - -A
+            - backend.celery_app:app
+            - -l
+            - info
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - RdsDBCluster25564148
+                  - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheStackNestedStackElastiCacheStackNestedStackResource4FFEBC8B
+                  - Outputs.devmysitecomstackElastiCacheStackElastiCacheClusterRedisD95A8DAARedisEndpointAddress
+            - Name: QUEUE_NAME
+              Value:
+                Fn::GetAtt:
+                  - CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1
+                  - QueueName
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefQueueProcessingContainerLogGroupC1F6B27B
+              awslogs-stream-prefix: CeleryDefaultWorker
+              awslogs-region: us-east-1
+          Name: QueueProcessingContainer
+          Secrets:
+            - Name: DJANGO_SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefExecutionRoleDC3CBC31
+          - Arn
+      Family: celery-default-worker
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskRoleArn:
+        Fn::GetAtt:
+          - CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefTaskRole57283A4B
+          - Arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingTaskDef/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefQueueProcessingContainerLogGroupC1F6B27B:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingTaskDef/QueueProcessingContainer/LogGroup/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefExecutionRoleDC3CBC31:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingTaskDef/ExecutionRole/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefExecutionRoleDefaultPolicy61C24523:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefQueueProcessingContainerLogGroupC1F6B27B
+                - Arn
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+        Version: "2012-10-17"
+      PolicyName: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefExecutionRoleDefaultPolicy61C24523
+      Roles:
+        - Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefExecutionRoleDC3CBC31
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingTaskDef/ExecutionRole/DefaultPolicy/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceE24E949E:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster:
+        Fn::GetAtt:
+          - EcsStackNestedStackEcsStackNestedStackResource48283A58
+          - Outputs.devmysitecomstackEcsStackEcsCluster0ECD51DBRef
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      EnableECSManagedTags: false
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - Fn::GetAtt:
+                - CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceSecurityGroup5FAD8F0F
+                - GroupId
+          Subnets:
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcIsolatedSubnet1SubnetDCCE15C8Ref
+            - Fn::GetAtt:
+                - VpcNestedStackVpcNestedStackResourceC40EA5DD
+                - Outputs.devmysitecomstackVpcIsolatedSubnet2Subnet44DEA593Ref
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskDefinition:
+        Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingTaskDefB29793C2
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/Service
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceSecurityGroup5FAD8F0F:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/SecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      VpcId:
+        Fn::GetAtt:
+          - VpcNestedStackVpcNestedStackResourceC40EA5DD
+          - Outputs.devmysitecomstackVpc8106B855Ref
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/SecurityGroup/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTarget98A4BA84:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 2
+      MinCapacity: 1
+      ResourceId:
+        Fn::Join:
+          - ""
+          - - service/
+            - Fn::GetAtt:
+                - EcsStackNestedStackEcsStackNestedStackResource48283A58
+                - Outputs.devmysitecomstackEcsStackEcsCluster0ECD51DBRef
+            - /
+            - Fn::GetAtt:
+                - CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceE24E949E
+                - Name
+      RoleARN:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":iam::"
+            - Ref: AWS::AccountId
+            - :role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/TaskCount/Target/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetCpuScaling053CCBC0:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: devmysitecomstackCeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetCpuScaling29C46487
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId:
+        Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTarget98A4BA84
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        TargetValue: 50
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/TaskCount/Target/CpuScaling/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingLowerPolicyBC5F0028:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: devmysitecomstackCeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingLowerPolicy799FDB87
+      PolicyType: StepScaling
+      ScalingTargetId:
+        Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTarget98A4BA84
+      StepScalingPolicyConfiguration:
+        AdjustmentType: ChangeInCapacity
+        MetricAggregationType: Maximum
+        StepAdjustments:
+          - MetricIntervalUpperBound: 0
+            ScalingAdjustment: -1
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/TaskCount/Target/QueueMessagesVisibleScaling/LowerPolicy/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingLowerAlarmAFD606D1:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ComparisonOperator: LessThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      AlarmActions:
+        - Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingLowerPolicyBC5F0028
+      AlarmDescription: Lower threshold scaling alarm
+      Dimensions:
+        - Name: QueueName
+          Value:
+            Fn::GetAtt:
+              - CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1
+              - QueueName
+      MetricName: ApproximateNumberOfMessagesVisible
+      Namespace: AWS/SQS
+      Period: 300
+      Statistic: Maximum
+      Threshold: 0
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/TaskCount/Target/QueueMessagesVisibleScaling/LowerAlarm/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingUpperPolicyEC402468:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: devmysitecomstackCeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingUpperPolicy49786727
+      PolicyType: StepScaling
+      ScalingTargetId:
+        Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTarget98A4BA84
+      StepScalingPolicyConfiguration:
+        AdjustmentType: ChangeInCapacity
+        MetricAggregationType: Maximum
+        StepAdjustments:
+          - MetricIntervalLowerBound: 0
+            MetricIntervalUpperBound: 400
+            ScalingAdjustment: 1
+          - MetricIntervalLowerBound: 400
+            ScalingAdjustment: 5
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/TaskCount/Target/QueueMessagesVisibleScaling/UpperPolicy/Resource
+  CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingUpperAlarm1EB2F2E6:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      AlarmActions:
+        - Ref: CeleryWorkerServiceCeleryDefaultWorkerServiceQueueProcessingFargateServiceTaskCountTargetQueueMessagesVisibleScalingUpperPolicyEC402468
+      AlarmDescription: Upper threshold scaling alarm
+      Dimensions:
+        - Name: QueueName
+          Value:
+            Fn::GetAtt:
+              - CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1
+              - QueueName
+      MetricName: ApproximateNumberOfMessagesVisible
+      Namespace: AWS/SQS
+      Period: 300
+      Statistic: Maximum
+      Threshold: 100
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/CeleryWorkerService/CeleryDefaultWorkerService/QueueProcessingFargateService/TaskCount/Target/QueueMessagesVisibleScaling/UpperAlarm/Resource
+  BackendTasksMigrateTaskTaskRoleAE7059C2:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/Resource
+  BackendTasksMigrateTaskTaskRoleDefaultPolicyB1599105:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendTasksMigrateTaskTaskRoleDefaultPolicyB1599105
+      Roles:
+        - Ref: BackendTasksMigrateTaskTaskRoleAE7059C2
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/TaskRole/DefaultPolicy/Resource
+  BackendTasksMigrateTask9BDCB431:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - python3
+            - manage.py
+            - migrate
+            - --no-input
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - RdsDBCluster25564148
+                  - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheStackNestedStackElastiCacheStackNestedStackResource4FFEBC8B
+                  - Outputs.devmysitecomstackElastiCacheStackElastiCacheClusterRedisD95A8DAARedisEndpointAddress
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: BackendTasksMigrateTaskMigrateCommandLogGroup94452D93
+              awslogs-stream-prefix: MigrateCommand
+              awslogs-region: us-east-1
+          Name: MigrateCommand
+          Secrets:
+            - Name: DJANGO_SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - BackendTasksMigrateTaskExecutionRole44C9D955
+          - Arn
+      Family: dev-mysite-com-migrate
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskRoleArn:
+        Fn::GetAtt:
+          - BackendTasksMigrateTaskTaskRoleAE7059C2
+          - Arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/Resource
+  BackendTasksMigrateTaskMigrateCommandLogGroup94452D93:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/MigrateCommand/LogGroup/Resource
+  BackendTasksMigrateTaskExecutionRole44C9D955:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/ExecutionRole/Resource
+  BackendTasksMigrateTaskExecutionRoleDefaultPolicy033E9FC3:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - BackendTasksMigrateTaskMigrateCommandLogGroup94452D93
+                - Arn
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+        Version: "2012-10-17"
+      PolicyName: BackendTasksMigrateTaskExecutionRoleDefaultPolicy033E9FC3
+      Roles:
+        - Ref: BackendTasksMigrateTaskExecutionRole44C9D955
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/MigrateTask/ExecutionRole/DefaultPolicy/Resource
+  BackendTasksCollecstaticTaskTaskRole68FA2F7B:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/TaskRole/Resource
+  BackendTasksCollecstaticTaskTaskRoleDefaultPolicyDA990EDC:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject*
+              - s3:GetBucket*
+              - s3:List*
+              - s3:DeleteObject*
+              - s3:PutObject*
+              - s3:Abort*
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                        - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDArn
+                    - /*
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendTasksCollecstaticTaskTaskRoleDefaultPolicyDA990EDC
+      Roles:
+        - Ref: BackendTasksCollecstaticTaskTaskRole68FA2F7B
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/TaskRole/DefaultPolicy/Resource
+  BackendTasksCollecstaticTask92B4EE6A:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - python3
+            - manage.py
+            - collectstatic
+            - --no-input
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - RdsDBCluster25564148
+                  - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheStackNestedStackElastiCacheStackNestedStackResource4FFEBC8B
+                  - Outputs.devmysitecomstackElastiCacheStackElastiCacheClusterRedisD95A8DAARedisEndpointAddress
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: BackendTasksCollecstaticTaskCollecstaticCommandLogGroupE150F561
+              awslogs-stream-prefix: CollectstaticCommand
+              awslogs-region: us-east-1
+          Name: CollecstaticCommand
+          Secrets:
+            - Name: DJANGO_SECRET_KEY
+              ValueFrom:
+                Ref: VariablesDjangoSecretKeyE4FA41EE
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - BackendTasksCollecstaticTaskExecutionRole64C8813C
+          - Arn
+      Family: dev-mysite-com-collectstatic
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskRoleArn:
+        Fn::GetAtt:
+          - BackendTasksCollecstaticTaskTaskRole68FA2F7B
+          - Arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/Resource
+  BackendTasksCollecstaticTaskCollecstaticCommandLogGroupE150F561:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/CollecstaticCommand/LogGroup/Resource
+  BackendTasksCollecstaticTaskExecutionRole64C8813C:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/ExecutionRole/Resource
+  BackendTasksCollecstaticTaskExecutionRoleDefaultPolicyF6ED755C:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - BackendTasksCollecstaticTaskCollecstaticCommandLogGroupE150F561
+                - Arn
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+        Version: "2012-10-17"
+      PolicyName: BackendTasksCollecstaticTaskExecutionRoleDefaultPolicyF6ED755C
+      Roles:
+        - Ref: BackendTasksCollecstaticTaskExecutionRole64C8813C
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CollecstaticTask/ExecutionRole/DefaultPolicy/Resource
+  BackendTasksCreateSuperuserTaskTaskRoleD91E1780:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/TaskRole/Resource
+  BackendTasksCreateSuperuserTaskTaskRoleDefaultPolicyF80ECD9D:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: VariablesDjangoSecretKeyE4FA41EE
+          - Action: secretsmanager:GetSecretValue
+            Effect: Allow
+            Resource:
+              Ref: RdsDBClusterDBSecret28397CCA
+        Version: "2012-10-17"
+      PolicyName: BackendTasksCreateSuperuserTaskTaskRoleDefaultPolicyF80ECD9D
+      Roles:
+        - Ref: BackendTasksCreateSuperuserTaskTaskRoleD91E1780
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/TaskRole/DefaultPolicy/Resource
+  BackendTasksCreateSuperuserTask71A5D516:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Command:
+            - python3
+            - manage.py
+            - create_default_user
+          Environment:
+            - Name: DJANGO_SETTINGS_MODULE
+              Value: backend.settings.production
+            - Name: DEBUG
+              Value: ""
+            - Name: FULL_DOMAIN_NAME
+              Value: dev.mysite.com
+            - Name: AWS_STORAGE_BUCKET_NAME
+              Value:
+                Fn::GetAtt:
+                  - BackendAssetsStackNestedStackBackendAssetsStackNestedStackResource6CF38F1F
+                  - Outputs.devmysitecomstackBackendAssetsStackAssetsBucketF77E80DDRef
+            - Name: POSTGRES_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - RdsDBCluster25564148
+                  - Endpoint.Address
+            - Name: POSTGRES_PASSWORD
+              Value:
+                Fn::Join:
+                  - ""
+                  - - "{{resolve:secretsmanager:"
+                    - Ref: RdsDBClusterDBSecret28397CCA
+                    - :SecretString:password::}}
+            - Name: SECRET_KEY
+              Value: mysecretkey123
+            - Name: REDIS_SERVICE_HOST
+              Value:
+                Fn::GetAtt:
+                  - ElastiCacheStackNestedStackElastiCacheStackNestedStackResource4FFEBC8B
+                  - Outputs.devmysitecomstackElastiCacheStackElastiCacheClusterRedisD95A8DAARedisEndpointAddress
+          Essential: true
+          Image:
+            Fn::Join:
+              - ""
+              - - Ref: AWS::AccountId
+                - .dkr.ecr.us-east-1.
+                - Ref: AWS::URLSuffix
+                - /aws-cdk/assets:3fdc94c5be2f683173c0dc26f90051b2cdc7e43b5c67f85cb1836c07eff7c887
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group:
+                Ref: BackendTasksCreateSuperuserTaskCreateSuperuserCommandLogGroup6BB56070
+              awslogs-stream-prefix: CreateSuperuserCommand
+              awslogs-region: us-east-1
+          Name: CreateSuperuserCommand
+      Cpu: "256"
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - BackendTasksCreateSuperuserTaskExecutionRoleD1618D80
+          - Arn
+      Family: dev-mysite-com-create-superuser
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+      TaskRoleArn:
+        Fn::GetAtt:
+          - BackendTasksCreateSuperuserTaskTaskRoleD91E1780
+          - Arn
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/Resource
+  BackendTasksCreateSuperuserTaskCreateSuperuserCommandLogGroup6BB56070:
+    Type: AWS::Logs::LogGroup
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/CreateSuperuserCommand/LogGroup/Resource
+  BackendTasksCreateSuperuserTaskExecutionRoleD1618D80:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: StackName
+          Value: dev-mysite-com
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/ExecutionRole/Resource
+  BackendTasksCreateSuperuserTaskExecutionRoleDefaultPolicy6E375175:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:"
+                  - Ref: AWS::Partition
+                  - ":ecr:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - :repository/aws-cdk/assets
+          - Action: ecr:GetAuthorizationToken
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - BackendTasksCreateSuperuserTaskCreateSuperuserCommandLogGroup6BB56070
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: BackendTasksCreateSuperuserTaskExecutionRoleDefaultPolicy6E375175
+      Roles:
+        - Ref: BackendTasksCreateSuperuserTaskExecutionRoleD1618D80
+    Metadata:
+      aws:cdk:path: dev-mysite-com-stack/BackendTasks/CreateSuperuserTask/ExecutionRole/DefaultPolicy/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.41.0,@aws-cdk/assets=1.41.0,@aws-cdk/aws-apigateway=1.41.0,@aws-cdk/aws-applicationautoscaling=1.41.0,@aws-cdk/aws-autoscaling=1.41.0,@aws-cdk/aws-autoscaling-common=1.41.0,@aws-cdk/aws-autoscaling-hooktargets=1.41.0,@aws-cdk/aws-batch=1.41.0,@aws-cdk/aws-certificatemanager=1.41.0,@aws-cdk/aws-cloudformation=1.41.0,@aws-cdk/aws-cloudfront=1.41.0,@aws-cdk/aws-cloudwatch=1.41.0,@aws-cdk/aws-codebuild=1.41.0,@aws-cdk/aws-codecommit=1.41.0,@aws-cdk/aws-codepipeline=1.41.0,@aws-cdk/aws-cognito=1.41.0,@aws-cdk/aws-ec2=1.41.0,@aws-cdk/aws-ecr=1.41.0,@aws-cdk/aws-ecr-assets=1.41.0,@aws-cdk/aws-ecs=1.41.0,@aws-cdk/aws-ecs-patterns=1.41.0,@aws-cdk/aws-elasticache=1.41.0,@aws-cdk/aws-elasticloadbalancing=1.41.0,@aws-cdk/aws-elasticloadbalancingv2=1.41.0,@aws-cdk/aws-events=1.41.0,@aws-cdk/aws-events-targets=1.41.0,@aws-cdk/aws-iam=1.41.0,@aws-cdk/aws-kms=1.41.0,@aws-cdk/aws-lambda=1.41.0,@aws-cdk/aws-logs=1.41.0,@aws-cdk/aws-rds=1.41.0,@aws-cdk/aws-route53=1.41.0,@aws-cdk/aws-route53-targets=1.41.0,@aws-cdk/aws-s3=1.41.0,@aws-cdk/aws-s3-assets=1.41.0,@aws-cdk/aws-s3-deployment=1.41.0,@aws-cdk/aws-sam=1.41.0,@aws-cdk/aws-secretsmanager=1.41.0,@aws-cdk/aws-servicediscovery=1.41.0,@aws-cdk/aws-sns=1.41.0,@aws-cdk/aws-sns-subscriptions=1.41.0,@aws-cdk/aws-sqs=1.41.0,@aws-cdk/aws-ssm=1.41.0,@aws-cdk/aws-stepfunctions=1.41.0,@aws-cdk/cdk-assets-schema=1.41.0,@aws-cdk/cloud-assembly-schema=1.41.0,@aws-cdk/core=1.41.0,@aws-cdk/custom-resources=1.41.0,@aws-cdk/cx-api=1.41.0,@aws-cdk/region-info=1.41.0,jsii-runtime=Python/3.6.8
+Outputs:
+  CeleryWorkerServiceCeleryDefaultWorkerServiceSQSQueue48757187:
+    Value:
+      Fn::GetAtt:
+        - CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1
+        - QueueName
+  CeleryWorkerServiceCeleryDefaultWorkerServiceSQSQueueArn770F9CFC:
+    Value:
+      Fn::GetAtt:
+        - CeleryWorkerServiceDefaultCeleryWorkerQueueE10248A1
+        - Arn
+Parameters:
+  AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3Bucket2548A2B5:
+    Type: String
+    Description: S3 bucket for asset "5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206d"
+  AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dS3VersionKey07AA7D40:
+    Type: String
+    Description: S3 key for asset version "5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206d"
+  AssetParameters5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206dArtifactHashA099A687:
+    Type: String
+    Description: Artifact hash for asset "5c7a963c90b15c1037aecc6c9526544f44734bb117d157d642865c0d1482206d"
+  AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3BucketA5B81864:
+    Type: String
+    Description: S3 bucket for asset "73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1a"
+  AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aS3VersionKeyD17D1E5D:
+    Type: String
+    Description: S3 key for asset version "73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1a"
+  AssetParameters73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1aArtifactHashAD19648A:
+    Type: String
+    Description: Artifact hash for asset "73253f6b5b5a311e6acf3f59981d9e4fc722f812cd20b597340cc4b144218a1a"
+  AssetParametersb4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08S3Bucket682CC05E:
+    Type: String
+    Description: S3 bucket for asset "b4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08"
+  AssetParametersb4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08S3VersionKeyDF569397:
+    Type: String
+    Description: S3 key for asset version "b4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08"
+  AssetParametersb4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08ArtifactHash040723F9:
+    Type: String
+    Description: Artifact hash for asset "b4d0c6df8d1482627f105ff07ed9e98166c2571f973330d4049d18298074cb08"
+  AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3Bucket0F024384:
+    Type: String
+    Description: S3 bucket for asset "8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914"
+  AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914S3VersionKey94AE1C77:
+    Type: String
+    Description: S3 key for asset version "8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914"
+  AssetParameters8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914ArtifactHash4BFD74BE:
+    Type: String
+    Description: Artifact hash for asset "8196c54a515977618e306b313148bfa7a18dd8106ef6a42ea5dd77f1862bd914"
+  AssetParametersb808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10S3Bucket4CD35D24:
+    Type: String
+    Description: S3 bucket for asset "b808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10"
+  AssetParametersb808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10S3VersionKey9A440E4C:
+    Type: String
+    Description: S3 key for asset version "b808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10"
+  AssetParametersb808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10ArtifactHashE9C3A541:
+    Type: String
+    Description: Artifact hash for asset "b808bafec79e9e8a1f6523f35d470e9ad4ea63bdbb2bdd4a92ecbe5946d08b10"
+  AssetParameters01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5S3Bucket6DDF043C:
+    Type: String
+    Description: S3 bucket for asset "01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5"
+  AssetParameters01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5S3VersionKeyDC16DEC1:
+    Type: String
+    Description: S3 key for asset version "01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5"
+  AssetParameters01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5ArtifactHashC0343686:
+    Type: String
+    Description: Artifact hash for asset "01bafd09f534e326695e8f2fd7e337746dd41d366003c01231df22f8112e8fb5"
+  AssetParametersb680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131S3Bucket08D18C1D:
+    Type: String
+    Description: S3 bucket for asset "b680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131"
+  AssetParametersb680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131S3VersionKey27377FCE:
+    Type: String
+    Description: S3 key for asset version "b680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131"
+  AssetParametersb680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131ArtifactHash35B845E7:
+    Type: String
+    Description: Artifact hash for asset "b680f5edbfcc210660aa6172b27ac9e82f502524cfb3bd087ccc61b9eb158131"
+

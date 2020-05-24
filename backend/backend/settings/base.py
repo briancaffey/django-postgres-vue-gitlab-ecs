@@ -166,6 +166,8 @@ ASGI_APPLICATION = "backend.routing.application"
 
 REDIS_SERVICE_HOST = os.environ.get("REDIS_SERVICE_HOST", "redis")
 
+# Channels
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -200,6 +202,8 @@ REST_FRAMEWORK = {
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
+CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"
@@ -256,3 +260,11 @@ PRIVATE_FILE_STORAGE = "backend.storage_backends.PrivateMediaStorage"
 
 EMAIL_HOST = os.environ.get("DJANGO_EMAIL_HOST", "mailhog")
 EMAIL_PORT = os.environ.get("DJANGO_EMAIL_PORT", "1025")
+
+# Assets
+
+STATIC_URL = "/static/"
+STATIC_ROOT = "/static/"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")

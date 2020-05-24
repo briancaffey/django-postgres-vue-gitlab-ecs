@@ -18,3 +18,4 @@ backend/celerybeat-schedule
 .~lock.*
 notes/
 .vscode
+cdk.out

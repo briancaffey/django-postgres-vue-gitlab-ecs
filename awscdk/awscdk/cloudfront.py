@@ -1,5 +1,6 @@
 from aws_cdk import (
     aws_certificatemanager as acm,
+    aws_cloudformation as cloudformation,
     aws_s3 as s3,
     aws_cloudfront as cloudfront,
     aws_route53 as route53,
@@ -8,26 +9,20 @@ from aws_cdk import (
     core,
 )
 
+MATCH_VIEWER = cloudfront.OriginProtocolPolicy.MATCH_VIEWER
+ALL_METHODS = cloudfront.CloudFrontAllowedMethods.ALL
+HTTP_ONLY = cloudfront.OriginProtocolPolicy.HTTP_ONLY
+GET_HEAD = cloudfront.CloudFrontAllowedMethods.GET_HEAD
 
-class CloudFront(core.Construct):
-    def __init__(
-        self,
-        scope: core.Construct,
-        id: str,
-        static_site_bucket_name: str,
-        hosted_zone: route53.IHostedZone,
-        certificate: acm.ICertificate,
-        assets_bucket: s3.IBucket,
-        alb: str,
-        full_domain_name: str,
-        full_app_name: str,
-        **kwargs,
-    ) -> None:
+
+class CloudFrontStack(cloudformation.NestedStack):
+    def __init__(self, scope: core.Construct, id: str, **kwargs,) -> None:
         super().__init__(scope, id, **kwargs)
 
-        s3_website_domain_name = (
-            f"{static_site_bucket_name}.s3-website-us-east-1.amazonaws.com"
-        )
+        s3_domain_prefix = scope.static_site_bucket.bucket_name
+        s3_domain_suffix = ".s3-website-us-east-1.amazonaws.com"
+        s3_website_domain_name = s3_domain_prefix + s3_domain_suffix
+
         path_patterns = ["/api/*", "/admin/*", "/flower/*"]
 
         self.distribution = cloudfront.CloudFrontWebDistribution(
@@ -36,12 +31,12 @@ class CloudFront(core.Construct):
             origin_configs=[
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
-                        domain_name=alb,
-                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.MATCH_VIEWER,
+                        domain_name=scope.alb.load_balancer_dns_name,
+                        origin_protocol_policy=MATCH_VIEWER,
                     ),
                     behaviors=[
                         cloudfront.Behavior(
-                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
+                            allowed_methods=ALL_METHODS,
                             path_pattern=path_pattern,
                             forwarded_values={
                                 "headers": ["*"],
@@ -55,23 +50,24 @@ class CloudFront(core.Construct):
                 cloudfront.SourceConfiguration(
                     custom_origin_source=cloudfront.CustomOriginConfig(
                         domain_name=s3_website_domain_name,
-                        origin_protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+                        origin_protocol_policy=HTTP_ONLY,
                     ),
                     behaviors=[
                         cloudfront.Behavior(
-                            is_default_behavior=True,
-                            cached_methods=cloudfront.CloudFrontAllowedMethods.GET_HEAD,
+                            is_default_behavior=True, cached_methods=GET_HEAD,
                         )
                     ],
                 ),
                 cloudfront.SourceConfiguration(
                     s3_origin_source=cloudfront.S3OriginConfig(
-                        s3_bucket_source=assets_bucket
+                        s3_bucket_source=scope.backend_assets_bucket
                     ),
                     behaviors=[
                         cloudfront.Behavior(
-                            allowed_methods=cloudfront.CloudFrontAllowedMethods.ALL,
+                            allowed_methods=ALL_METHODS,
                             path_pattern=path_pattern,
+                            max_ttl=core.Duration.seconds(0),
+                            min_ttl=core.Duration.seconds(0),
                             forwarded_values={"query_string": True},
                         )
                         for path_pattern in ["/static/*", "/media/*"]
@@ -79,8 +75,8 @@ class CloudFront(core.Construct):
                 ),
             ],
             alias_configuration=cloudfront.AliasConfiguration(
-                acm_cert_ref=certificate.certificate_arn,
-                names=[full_domain_name],
+                acm_cert_ref=scope.certificate.certificate_arn,
+                names=[scope.full_domain_name],
             ),
         )
 
@@ -90,6 +86,6 @@ class CloudFront(core.Construct):
             target=route53.AddressRecordTarget.from_alias(
                 targets.CloudFrontTarget(self.distribution)
             ),
-            zone=hosted_zone.hosted_zone,
-            record_name=f"{full_domain_name}.",
+            zone=scope.hosted_zone,
+            record_name=f"{scope.full_domain_name}.",
         )

@@ -5,26 +5,20 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_rds as rds,
     aws_secretsmanager as secrets,
+    aws_cloudformation as cloudformation,
     aws_ssm as ssm,
 )
 
 
-class Rds(core.Construct):
-    def __init__(
-        self,
-        scope: core.Construct,
-        id: str,
-        full_app_name: str,
-        vpc: ec2.IVpc,
-        **kwargs,
-    ) -> None:
+class RdsStack(cloudformation.NestedStack):
+    def __init__(self, scope: core.Construct, id: str, **kwargs,) -> None:
         super().__init__(scope, id, **kwargs)
 
         # secrets manager for DB password
         self.db_secret = secrets.Secret(
             self,
             "DBSecret",
-            secret_name=f"{full_app_name}-db-secret",
+            secret_name=f"{scope.full_app_name}-db-secret",
             generate_secret_string=secrets.SecretStringGenerator(
                 secret_string_template=json.dumps({"username": "postgres"}),
                 exclude_punctuation=True,
@@ -36,21 +30,21 @@ class Rds(core.Construct):
         self.db_secret_arn = ssm.StringParameter(
             self,
             "DBSecretArn",
-            parameter_name=f"{full_app_name}-secret-arn",
+            parameter_name=f"{scope.full_app_name}-secret-arn",
             string_value=self.db_secret.secret_arn,
         )
 
         self.db_security_group = ec2.CfnSecurityGroup(
             self,
             "DBSecurityGroup",
-            vpc_id=vpc.vpc_id,
+            vpc_id=scope.vpc.vpc_id,
             group_description="DBSecurityGroup",
             security_group_ingress=[
                 ec2.CfnSecurityGroup.IngressProperty(
                     ip_protocol="tcp",
                     to_port=5432,
                     from_port=5432,
-                    source_security_group_id=vpc.vpc_default_security_group,
+                    source_security_group_id=scope.vpc.vpc_default_security_group,
                 )
             ],
         )
@@ -58,10 +52,10 @@ class Rds(core.Construct):
         self.db_subnet_group = rds.CfnDBSubnetGroup(
             self,
             "CfnDBSubnetGroup",
-            subnet_ids=vpc.select_subnets(
+            subnet_ids=scope.vpc.select_subnets(
                 subnet_type=ec2.SubnetType.ISOLATED
             ).subnet_ids,
-            db_subnet_group_description=f"{full_app_name}-db-subnet-group",
+            db_subnet_group_description=f"{scope.full_app_name}-db-subnet-group",
         )
 
         self.db_config = {
