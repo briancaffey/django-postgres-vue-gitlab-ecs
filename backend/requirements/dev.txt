@@ -1,7 +1,6 @@
 better_exceptions==0.2.2
-pyupio==1.0.2
-django-extensions==2.1.6  # NOTE: in installed_apps
-Werkzeug==0.15.2 # used for runserver_plus exception console
-ipython==7.4.0
+django-extensions==2.2.9  # NOTE: in installed_apps
+Werkzeug==1.0.1 # used for runserver_plus exception console
+ipython==7.14.0
 jupyter==1.0.0
-gql==0.3.0
+gql==2.0.0

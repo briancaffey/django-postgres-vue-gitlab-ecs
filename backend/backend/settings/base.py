@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 import redis
-from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(
@@ -32,13 +31,6 @@ DEBUG = bool(os.environ.get("DEBUG", True))
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOW_HEADERS = default_headers + (
-    "access-control-allow-headers",
-    "access-control-allow-methods",
-    "access-control-allow-origin",
-)
 
 # Application definition
 
