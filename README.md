@@ -21,7 +21,7 @@ To work with CDK, do the following:
 - Make sure you are using at least version 10 of node: `nvm use 13`
 - Activate the virtual environment with `source awscdk/.env/bin/activate`
 - `pip install -e awscdk` to install CDK dependencies
--
+- run `cdk synth --app awscdk/app.py --output awscdk/cdk.out` and view the resulting JSON for the nested CloudFormation stacks in `awscdk/cdk.out`
 
 ### Social Authentication Keys
 
