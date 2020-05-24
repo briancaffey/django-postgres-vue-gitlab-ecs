@@ -8,7 +8,7 @@ from aws_cdk import (
 )
 
 
-class CeleryDefaultStack(cloudformation.NestedStack):
+class CeleryDefaultServiceStack(cloudformation.NestedStack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(
             scope, id, **kwargs,
@@ -23,7 +23,7 @@ class CeleryDefaultStack(cloudformation.NestedStack):
             image=scope.image,
             logging=ecs.LogDrivers.aws_logs(
                 stream_prefix="CeleryDefaultWorkerContainer",
-                logs=logs.RetentionDays.ONE_WEEK,
+                log_retention=logs.RetentionDays.ONE_WEEK,
             ),
             environment=scope.variables.regular_variables,
             secrets=scope.variables.secret_variables,

@@ -8,7 +8,7 @@ from aws_cdk import (
 )
 
 
-class BackendStack(cloudformation.NestedStack):
+class BackendServiceStack(cloudformation.NestedStack):
     def __init__(self, scope: core.Construct, id: str, **kwargs,) -> None:
         super().__init__(
             scope, id, **kwargs,
@@ -45,7 +45,7 @@ class BackendStack(cloudformation.NestedStack):
             "BackendService",
             task_definition=self.backend_task,
             assign_public_ip=True,
-            cluster=scope.cluster,
+            cluster=scope.ecs.cluster,
             security_group=ec2.SecurityGroup.from_security_group_id(
                 self,
                 "BackendServiceSecurityGroup",
