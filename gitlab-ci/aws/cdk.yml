@@ -4,7 +4,7 @@
 variables:
   ENVIRONMENT: dev
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:10
   stage: build
   only:
@@ -25,7 +25,7 @@ Build Quasar PWA Assets:
   after_script:
     - echo "Build Complete"
 
-cdk deploy:
+.cdk deploy:
   image: docker:19.03.1
   services:
     - docker:19.03.5-dind
@@ -45,6 +45,7 @@ cdk deploy:
     - cdk deploy --app awscdk/app.py --require-approval never
 
 .base_task: &task
+  image: python:3.8
   only:
     - master
   when: manual
