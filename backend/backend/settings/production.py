@@ -1,6 +1,12 @@
 from .base import *  # noqa
+import requests
 
-ALLOWED_HOSTS = [os.environ.get("FULL_DOMAIN_NAME")]  # noqa
+ALLOWED_HOSTS = []  # noqa
+
+# https://stackoverflow.com/questions/49828259/when-deploying-django-into-aws-fargate-how-do-you-add-the-local-ip-into-allowed
+METADATA_URI = os.environ['ECS_CONTAINER_METADATA_URI']  # noqa
+container_metadata = requests.get(METADATA_URI).json()
+ALLOWED_HOSTS.append(container_metadata['Networks'][0]['IPv4Addresses'][0])
 
 # Email
 
