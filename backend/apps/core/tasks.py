@@ -15,7 +15,6 @@ class BaseTask(celery.Task):
 @task(bind=True, base=BaseTask)
 def debug_task(self):
     time.sleep(10)
-    print("Task is done")
 
 
 @periodic_task(
@@ -30,8 +29,8 @@ def debug_periodic_task():
 @task(bind=True, base=BaseTask)
 def send_test_email_task(self):
     send_mail(
-        "Subject here",
-        "Here is the message.",
+        "Email subject",
+        "Email message.",
         "from@example.com",
         ["to@example.com"],
         fail_silently=False,
@@ -40,6 +39,5 @@ def send_test_email_task(self):
 
 @task(bind=True, base=BaseTask)
 def sleep_task(self, seconds):
-    print("sleeping")
     time.sleep(int(seconds))
     return f"Slept {seconds} seconds"

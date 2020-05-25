@@ -4,7 +4,6 @@ from aws_cdk import (
     aws_ecs as ecs,
     aws_logs as logs,
     aws_cloudformation as cloudformation,
-    aws_sqs as sqs,
 )
 
 
