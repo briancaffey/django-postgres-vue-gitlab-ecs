@@ -11,7 +11,7 @@ class BackendAssetsStack(cloudformation.NestedStack):
         super().__init__(scope, id, **kwargs)
 
         self.assets_bucket = s3.Bucket(
-            self, "AssetsBucket", bucket_name=f"{scope.full_app_name}-assets1"
+            self, "AssetsBucket", bucket_name=f"{scope.full_app_name}-assets"
         )
 
         self.policy_statement = iam.PolicyStatement(
