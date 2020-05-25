@@ -4,7 +4,7 @@
 variables:
   ENVIRONMENT: dev
 
-.Build Quasar PWA Assets:
+Build Quasar PWA Assets:
   image: node:10
   stage: build
   only:
@@ -59,7 +59,7 @@ cdk deploy:
             Name=tag:aws-cdk:subnet-type,Values=Public \
         | jq -r '.Subnets | map(.SubnetId) | join(",")')
 
-.collectstatic:
+collectstatic:
   <<: *task
   script:
     - |
@@ -70,7 +70,7 @@ cdk deploy:
         --count 1 \
         --launch-type FARGATE
 
-.migrate:
+migrate:
   <<: *task
   script:
     - |
@@ -81,7 +81,7 @@ cdk deploy:
         --count 1 \
         --launch-type FARGATE
 
-.createsuperuser:
+createsuperuser:
   <<: *task
   script:
     - |

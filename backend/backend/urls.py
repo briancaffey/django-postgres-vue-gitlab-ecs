@@ -36,13 +36,7 @@ if settings.DEBUG:
 
     urlpatterns = (
         urlpatterns
-        + [
-            # path('', index_view, name='index'),
-            path("admin/__debug__/", include(debug_toolbar.urls),),
-            # catch all rule so that we can navigate to
-            # routes in vue app other than "/"
-            # re_path(r'^(?!js)(?!css)(?!statics)(?!fonts)(?!service\-worker\.js)(?!manifest\.json)(?!precache).*', index_view, name='index') # noqa
-        ]
+        + [path("admin/__debug__/", include(debug_toolbar.urls),)]
         + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT,)
         + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,)
     )

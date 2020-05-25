@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       valueToSet: null,
-      valueFromCache: null
+      valueFromCache: null,
     };
   },
   created() {
@@ -45,7 +45,7 @@ export default {
       });
     },
     getCachedValue() {
-      this.$axios.get("/api/debug/redis/").then(resp => {
+      this.$axios.get("/api/debug/redis/").then((resp) => {
         this.valueFromCache = resp.data["count"];
       });
     },
@@ -53,12 +53,12 @@ export default {
       if (this.valueToSet) {
         this.$axios
           .post("/api/debug/redis/", { count: this.valueToSet })
-          .then(resp => {
+          .then((resp) => {
             this.valueFromCache = resp.data.count;
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

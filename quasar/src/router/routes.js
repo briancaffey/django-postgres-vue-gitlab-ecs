@@ -31,47 +31,38 @@ const routes = [
     children: [
       {
         path: "auth/:provider/callback",
-        component: () => import("pages/Auth/Callback.vue")
+        component: () => import("pages/Auth/Callback.vue"),
       },
       {
         path: "",
-        component: () => import("pages/Index.vue")
+        component: () => import("pages/Index.vue"),
       },
       { path: "login", component: () => import("pages/Auth/Login.vue") },
       { path: "login-gql", component: () => import("pages/Auth/LoginGQL.vue") },
       { path: "signup", component: () => import("pages/Auth/SignUp.vue") },
       {
         path: "about",
-        component: () => import("pages/About.vue")
+        component: () => import("pages/About.vue"),
       },
       {
         path: "banking",
-        component: () => import("pages/Banking/index.vue")
+        component: () => import("pages/Banking/index.vue"),
       },
       {
         path: "hn-clone",
-        component: () => import("pages/HackerNewsClone/index.vue")
+        component: () => import("pages/HackerNewsClone/index.vue"),
       },
       {
         path: "transactions",
-        component: () => import("pages/Transactions/index.vue")
-      },
-      {
-        path: "protected",
-        // beforeEnter: ifAuthenticated,
-        component: () => import("pages/Protected.vue")
-      },
-      {
-        path: "to-do",
-        component: () => import("pages/ToDo.vue")
+        component: () => import("pages/Transactions/index.vue"),
       },
       {
         path: "services",
-        component: () => import("pages/Services/index.vue")
+        component: () => import("pages/Services/index.vue"),
       },
       {
         path: "debug/environment-variables",
-        component: () => import("pages/Environment.vue")
+        component: () => import("pages/Environment.vue"),
       },
       {
         path: "examples/",
@@ -81,24 +72,29 @@ const routes = [
           {
             path: "websockets",
             // beforeEnter: ifAuthenticated,
-            component: () => import("pages/Examples/Websockets.vue")
+            component: () => import("pages/Examples/Websockets.vue"),
+          },
+          {
+            path: "celery",
+            // beforeEnter: ifAuthenticated,
+            component: () => import("pages/Celery/index.vue"),
           },
           {
             path: "redis",
             // beforeEnter: ifAuthenticated,
-            component: () => import("pages/Examples/Redis.vue")
-          }
-        ]
-      }
-    ]
-  }
+            component: () => import("pages/Examples/Redis.vue"),
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 // Always leave this as last one
 if (process.env.MODE !== "ssr") {
   routes.push({
     path: "*",
-    component: () => import("pages/Error404.vue")
+    component: () => import("pages/Error404.vue"),
   });
 }
 

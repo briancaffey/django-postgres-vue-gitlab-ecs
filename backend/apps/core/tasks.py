@@ -36,3 +36,10 @@ def send_test_email_task(self):
         ["to@example.com"],
         fail_silently=False,
     )
+
+
+@task(bind=True, base=BaseTask)
+def sleep_task(self, seconds):
+    print("sleeping")
+    time.sleep(int(seconds))
+    return f"Slept {seconds} seconds"
