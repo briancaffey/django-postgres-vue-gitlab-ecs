@@ -43,7 +43,9 @@ def sleep_task_view(request):
     sleep_task.apply_async(
         [sleep_seconds], queue=settings.CELERY_QUEUE_DEFAULT
     )
-    return JsonResponse({"message": f"Sleep task submitted ({sleep_seconds})"})
+    return JsonResponse(
+        {"message": f"Sleep task submitted ({sleep_seconds} seconds)"}
+    )
 
 
 def send_test_email(request):

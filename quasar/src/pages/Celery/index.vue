@@ -24,9 +24,16 @@ export default {
   },
   methods: {
     submitTask() {
-      this.$axios.post("/api/celery/sleep-task/", {
-        seconds: this.sleepSeconds,
-      });
+      this.$axios
+        .post("/api/celery/sleep-task/", {
+          seconds: this.sleepSeconds,
+        })
+        .then((resp) => {
+          this.$q.notify({
+            title: "Task received.",
+            message: resp.data["message"],
+          });
+        });
     },
   },
 };
