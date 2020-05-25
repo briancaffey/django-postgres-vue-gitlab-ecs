@@ -17,7 +17,7 @@ class StaticSiteStack(cloudformation.NestedStack):
             self,
             "StaticSiteBucket",
             access_control=s3.BucketAccessControl.PUBLIC_READ,
-            bucket_name=f"{scope.full_app_name}-frontend",
+            bucket_name=f"{scope.full_app_name}-frontend1",
             removal_policy=core.RemovalPolicy.DESTROY,
             website_index_document="index.html",
             website_error_document="index.html",
