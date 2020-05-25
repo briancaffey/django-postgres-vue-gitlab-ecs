@@ -57,7 +57,7 @@ variables:
       subnets=$( \
         aws ec2 describe-subnets \
           --filters \
-            Name=tag:aws:cloudformation:stack-name,Values=${ENVIRONMENT}-${APP_NAME}-stack \
+            Name=tag:StackName,Values=${ENVIRONMENT}-${APP_NAME} \
             Name=tag:aws-cdk:subnet-type,Values=Public \
         | jq -r '.Subnets | map(.SubnetId) | join(",")')
 
