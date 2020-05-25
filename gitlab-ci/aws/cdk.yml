@@ -4,7 +4,7 @@
 variables:
   ENVIRONMENT: dev
 
-Build Quasar PWA Assets:
+.Build Quasar PWA Assets:
   image: node:10
   stage: build
   only:
@@ -36,21 +36,15 @@ cdk deploy:
     ENVIRONMENT: dev
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apk add --no-cache python3
-    - python3 -V
-    - pip3 -V
     - apk add nodejs-current npm
-    - node -v
     - npm i -g aws-cdk
-    - cd awscdk
-    - pip3 install -r requirements.txt
+    - apk add --no-cache python3
+    - pip3 install -e awscdk
   script:
-    - cdk bootstrap aws://$AWS_ACCOUNT_ID/$AWS_DEFAULT_REGION
-    - cdk deploy --require-approval never
+    - cdk bootstrap --app awscdk/app.py aws://$AWS_ACCOUNT_ID/$AWS_DEFAULT_REGION
+    - cdk deploy --app awscdk/app.py --require-approval never
 
-.collectstatic: &task
-  image: python:3.8
-  stage: deploy
+.base_task: &task
   only:
     - master
   when: manual
@@ -64,6 +58,9 @@ cdk deploy:
             Name=tag:aws:cloudformation:stack-name,Values=${ENVIRONMENT}-${APP_NAME}-stack \
             Name=tag:aws-cdk:subnet-type,Values=Public \
         | jq -r '.Subnets | map(.SubnetId) | join(",")')
+
+.collectstatic:
+  <<: *task
   script:
     - |
       aws ecs run-task \
@@ -72,6 +69,7 @@ cdk deploy:
         --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
         --count 1 \
         --launch-type FARGATE
+
 .migrate:
   <<: *task
   script:

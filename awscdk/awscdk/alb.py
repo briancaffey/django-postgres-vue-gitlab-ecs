@@ -1,27 +1,17 @@
 from aws_cdk import (
-    aws_iam as iam,
     aws_ec2 as ec2,
-    aws_route53 as route53,
-    aws_certificatemanager as acm,
     aws_elasticloadbalancingv2 as elbv2,
+    aws_cloudformation as cloudformation,
     core,
 )
 
 
-class ApplicationLoadBalancerResources(core.Construct):
-    def __init__(
-        self,
-        scope: core.Construct,
-        id: str,
-        hosted_zone: route53.IHostedZone,
-        certificate: acm.ICertificate,
-        vpc: ec2.IVpc,
-        **kwargs
-    ) -> None:
+class AlbStack(cloudformation.NestedStack):
+    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         self.alb = elbv2.ApplicationLoadBalancer(
-            self, "ALB", internet_facing=True, vpc=vpc
+            self, "ALB", internet_facing=True, vpc=scope.vpc
         )
 
         self.alb.connections.allow_from_any_ipv4(
@@ -37,7 +27,10 @@ class ApplicationLoadBalancerResources(core.Construct):
         )
 
         self.https_listener = self.alb.add_listener(
-            "HTTPSListener", port=443, certificates=[certificate], open=True
+            "HTTPSListener",
+            port=443,
+            certificates=[scope.certificate],
+            open=True,
         )
 
         # self.listener.add_redirect_response(
@@ -49,7 +42,8 @@ class ApplicationLoadBalancerResources(core.Construct):
             "DefaultTargetGroup",
             port=80,
             protocol=elbv2.ApplicationProtocol.HTTP,
-            vpc=vpc,
+            vpc=scope.vpc,
+            target_type=elbv2.TargetType.IP,
         )
 
         self.listener.add_target_groups(

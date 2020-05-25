@@ -4,7 +4,6 @@ Documentation for this project can be found here:
 
 [https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/](https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/)
 
-
 ## Architecture
 
 ![png](/architecture.png)
@@ -16,6 +15,13 @@ First, copy `.env.template` to a new file in the project's root directory called
 ## Current Project Goals
 
 Currently I am working on replacing CloudFormation with CDK for infrastructure and deployment.
+
+To work with CDK, do the following:
+
+- Make sure you are using at least version 10 of node: `nvm use 13`
+- Activate the virtual environment with `source awscdk/.env/bin/activate`
+- `pip install -e awscdk` to install CDK dependencies
+- run `cdk synth --app awscdk/app.py --output awscdk/cdk.out` and view the resulting JSON for the nested CloudFormation stacks in `awscdk/cdk.out`
 
 ### Social Authentication Keys
 
@@ -49,7 +55,6 @@ docker-compose -f compose/docs.yml up --build
 ```
 
 This will make the docs available at `http://localhost:8082/docs/`. Hot-reloading through websockets is supported, so changes will show up as they are saved in your code editor.
-
 
 ### Access Django Shell in Jupyter Notebook
 

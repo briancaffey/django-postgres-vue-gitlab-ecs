@@ -6,13 +6,18 @@ from aws_cdk import core
 from awscdk.cdk_app_root import ApplicationStack
 
 # naming conventions, also used for ACM certs, DNS Records, resource naming
-# Note: dynamically generated resource names created in CDK are used
-# in GitLab CI, such as cluster name, task definitions, etc.
+# Dynamically generated resource names created in CDK are used in GitLab CI
+# such as cluster name, task definitions, etc.
 environment_name = f"{os.environ.get('ENVIRONMENT', 'dev')}"
 base_domain_name = os.environ.get("DOMAIN_NAME", "mysite.com")
+# if the the production environent subdomain should nott be included in the URL
+# redefine `full_domain_name` to `base_domain_name` for that environment
 full_domain_name = f"{environment_name}.{base_domain_name}"  # dev.mysite.com
+# if environment_name == "prod":
+#     full_domain_name = base_domain_name
 base_app_name = os.environ.get("APP_NAME", "mysite-com")
 full_app_name = f"{environment_name}-{base_app_name}"  # dev-mysite-com
+aws_region = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
 
 
 app = core.App()
@@ -24,7 +29,7 @@ stack = ApplicationStack(
     full_domain_name=full_domain_name,
     base_app_name=base_app_name,
     full_app_name=full_app_name,
-    env={"region": "us-east-1"},
+    env={"region": aws_region},
 )
 
 # in order to be able to tag ECS resources, you need to go to

@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 import redis
-from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(
@@ -32,13 +31,6 @@ DEBUG = bool(os.environ.get("DEBUG", True))
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOW_HEADERS = default_headers + (
-    "access-control-allow-headers",
-    "access-control-allow-methods",
-    "access-control-allow-origin",
-)
 
 # Application definition
 
@@ -61,7 +53,6 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "corsheaders",
     "social_django",
     "graphene_django",
 ]
@@ -127,7 +118,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -176,6 +166,8 @@ ASGI_APPLICATION = "backend.routing.application"
 
 REDIS_SERVICE_HOST = os.environ.get("REDIS_SERVICE_HOST", "redis")
 
+# Channels
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -210,6 +202,8 @@ REST_FRAMEWORK = {
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
+CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"
@@ -266,3 +260,11 @@ PRIVATE_FILE_STORAGE = "backend.storage_backends.PrivateMediaStorage"
 
 EMAIL_HOST = os.environ.get("DJANGO_EMAIL_HOST", "mailhog")
 EMAIL_PORT = os.environ.get("DJANGO_EMAIL_PORT", "1025")
+
+# Assets
+
+STATIC_URL = "/static/"
+STATIC_ROOT = "/static/"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
