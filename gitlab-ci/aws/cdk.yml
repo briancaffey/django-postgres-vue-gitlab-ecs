@@ -25,7 +25,7 @@ variables:
   after_script:
     - echo "Build Complete"
 
-.cdk deploy:
+cdk deploy:
   image: docker:19.03.1
   services:
     - docker:19.03.5-dind

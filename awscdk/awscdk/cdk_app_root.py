@@ -55,12 +55,12 @@ class ApplicationStack(core.Stack):
         self.static_site_stack = StaticSiteStack(self, "StaticSiteStack")
         self.static_site_bucket = self.static_site_stack.static_site_bucket
 
-        if os.path.isdir("./quasar/dist/pwa"):
+        if os.path.isdir("../quasar/dist/pwa"):
             s3_deployment.BucketDeployment(
                 self,
                 "BucketDeployment",
                 destination_bucket=self.static_site_bucket,
-                sources=[s3_deployment.Source.asset("./quasar/dist/pwa")],
+                sources=[s3_deployment.Source.asset("../quasar/dist/pwa")],
                 distribution=self.cloudfront.distribution,
             )
 
