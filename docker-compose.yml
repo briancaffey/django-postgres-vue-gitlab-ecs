@@ -128,11 +128,8 @@ services:
 
   celery:
     <<: *backend
-    build:
-      context: ./backend
-      dockerfile: scripts/dev/Dockerfile
     container_name: celery
-    command: bash -c 'python3 manage.py watch_celery'
+    command: bash -c 'python3 manage.py watch_celery --queue default --concurrency=2'
     volumes:
       - ./backend:/code
     ports: []

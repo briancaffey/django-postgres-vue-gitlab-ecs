@@ -32,7 +32,7 @@
       </span>
       <q-select dark dense color="white" v-model="lang" :options="langs" />
 
-      <q-btn
+      <!-- <q-btn
         id="login"
         :ripple="false"
         color="white"
@@ -51,7 +51,7 @@
         v-if="$store.getters['gqljwt/isAuthenticated']"
         no-caps
         @click="logout"
-      />
+      /> -->
 
       <q-btn
         id="login"
@@ -85,20 +85,20 @@ export default {
       lang: {
         label: "US English",
         value: "en-us",
-        emoji: ":flag-us:"
+        emoji: ":flag-us:",
       },
       langs: [
         {
           label: "US English",
           value: "en-us",
-          emoji: ":flag-us:"
+          emoji: ":flag-us:",
         },
         {
           label: "Chinese",
           value: "cn-cn",
-          emoji: ":flag-cn:"
-        }
-      ]
+          emoji: ":flag-cn:",
+        },
+      ],
     };
   },
   methods: {
@@ -111,7 +111,7 @@ export default {
     },
     toggleLeftDrawer() {
       this.$store.commit("toggleLeftDrawer");
-    }
+    },
   },
   created() {
     this.$i18n.locale = "en-us";
@@ -122,8 +122,8 @@ export default {
       // import(`quasar/i18n/${lang}`).then(language => {
       //   this.$q.lang.set(language.default)
       // })
-    }
-  }
+    },
+  },
 };
 </script>
 

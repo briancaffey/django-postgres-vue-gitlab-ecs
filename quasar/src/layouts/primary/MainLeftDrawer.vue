@@ -35,41 +35,13 @@
       />
 
       <left-menu-link
-        :label="$t('leftDrawer.protected.main')"
-        to="/protected"
-        icon="lock"
-        :caption="$t('leftDrawer.protected.sub')"
-      />
-
-      <left-menu-link
-        :label="$t('leftDrawer.toDo.main')"
-        to="/to-do"
-        icon="check"
-        :caption="$t('leftDrawer.toDo.sub')"
-      />
-
-      <left-menu-link
         v-if="$store.getters.isAuthenticated"
         :label="$t('leftDrawer.services.main')"
         to="/services"
         icon="insert_chart_outlined"
         :caption="$t('leftDrawer.services.sub')"
       />
-      <q-expansion-item
-        :content-inset-level="0.5"
-        v-if="$store.getters.isAuthenticated"
-        expand-separator
-        icon="perm_identity"
-        :label="$t('leftDrawer.examples.main')"
-        :caption="$t('leftDrawer.tests.sub')"
-      >
-        <left-menu-link
-          :label="$t('leftDrawer.examples.websockets.main')"
-          to="/examples/websockets"
-          icon="offline_bolt"
-          :caption="$t('leftDrawer.examples.websockets.sub')"
-        />
-      </q-expansion-item>
+
       <q-expansion-item
         :content-inset-level="0.5"
         v-if="$store.getters.isAuthenticated"
@@ -84,13 +56,25 @@
           icon="offline_bolt"
           :caption="$t('leftDrawer.tests.redis.sub')"
         />
+        <left-menu-link
+          :label="$t('leftDrawer.examples.websockets.main')"
+          to="/examples/websockets"
+          icon="offline_bolt"
+          :caption="$t('leftDrawer.examples.websockets.sub')"
+        />
+        <left-menu-link
+          :label="$t('leftDrawer.environment.main')"
+          to="/debug/environment-variables"
+          icon="offline_bolt"
+          :caption="$t('leftDrawer.environment.sub')"
+        />
+        <left-menu-link
+          :label="$t('leftDrawer.celery.main')"
+          to="/examples/celery"
+          icon="local_florist"
+          :caption="$t('leftDrawer.celery.sub')"
+        />
       </q-expansion-item>
-      <left-menu-link
-        :label="$t('leftDrawer.environment.main')"
-        to="/debug/environment-variables"
-        icon="offline_bolt"
-        :caption="$t('leftDrawer.environment.main')"
-      />
     </q-list>
   </q-drawer>
 </template>
@@ -102,24 +86,24 @@ export default {
       get() {
         return this.$store.getters.leftDrawerOpen;
       },
-      set() {}
-    }
+      set() {},
+    },
   },
   methods: {
     showDrawer() {
       this.$store.commit("toggleLeftDrawer", {
-        leftDrawerOpen: true
+        leftDrawerOpen: true,
       });
     },
     hideDrawer() {
       this.$store.commit("toggleLeftDrawer", {
-        leftDrawerOpen: false
+        leftDrawerOpen: false,
       });
     },
     toggleLeftDrawer() {
       this.$store.commit("toggleLeftDrawer");
-    }
-  }
+    },
+  },
 };
 </script>
 

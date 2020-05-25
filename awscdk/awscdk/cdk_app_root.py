@@ -55,6 +55,11 @@ class ApplicationStack(core.Stack):
         self.static_site_stack = StaticSiteStack(self, "StaticSiteStack")
         self.static_site_bucket = self.static_site_stack.static_site_bucket
 
+        self.backend_assets = BackendAssetsStack(self, "BackendAssetsStack")
+        self.backend_assets_bucket = self.backend_assets.assets_bucket
+
+        self.cloudfront = CloudFrontStack(self, "CloudFrontStack")
+
         if os.path.isdir("./quasar/dist/pwa"):
             s3_deployment.BucketDeployment(
                 self,
@@ -63,11 +68,6 @@ class ApplicationStack(core.Stack):
                 sources=[s3_deployment.Source.asset("./quasar/dist/pwa")],
                 distribution=self.cloudfront.distribution,
             )
-
-        self.backend_assets = BackendAssetsStack(self, "BackendAssetsStack")
-        self.backend_assets_bucket = self.backend_assets.assets_bucket
-
-        self.cloudfront = CloudFrontStack(self, "CloudFrontStack")
 
         self.ecs = EcsStack(self, "EcsStack")
 

@@ -137,15 +137,13 @@ module.exports = function (ctx) {
 
     pwa: {
       // workboxPluginMode: "InjectManifest",
-      workboxOptions: {
-        navigateFallback: "/index.html",
-        navigateFallbackDenylist: [
-          // not sure which regex format is correct
-          // is the leading `/` needed?
-          /\/[admin,api,flower]+\/.*/,
-          /[admin,api,flower]+\/.*/,
-        ],
-      }, // only for NON InjectManifest
+      // workboxOptions: {
+      //   navigateFallback: "/index.html",
+      //   navigateFallbackDenylist: [
+      //     /\/[admin,api,flower]+\/.*/,
+      //     /[admin,api,flower]+\/.*/,
+      //   ],
+      // },
       manifest: {
         // name: "Verbose Equals True",
         // short_name: "Verbose Equals True",

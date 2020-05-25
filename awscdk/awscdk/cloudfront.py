@@ -65,10 +65,11 @@ class CloudFrontStack(cloudformation.NestedStack):
                     behaviors=[
                         cloudfront.Behavior(
                             allowed_methods=ALL_METHODS,
-                            path_pattern=path_pattern,
-                            max_ttl=core.Duration.seconds(0),
-                            min_ttl=core.Duration.seconds(0),
                             forwarded_values={"query_string": True},
+                            path_pattern=path_pattern,
+                            min_ttl=core.Duration.seconds(0),
+                            default_ttl=core.Duration.seconds(0),
+                            max_ttl=core.Duration.seconds(0),
                         )
                         for path_pattern in ["/static/*", "/media/*"]
                     ],
