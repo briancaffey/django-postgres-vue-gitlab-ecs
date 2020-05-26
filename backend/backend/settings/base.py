@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+from kombu import Queue
 import redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -202,8 +203,12 @@ REST_FRAMEWORK = {
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
-CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/0"  # noqa
+CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/1"  # noqa
+CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/2"  # noqa
+
+CELERY_QUEUE_DEFAULT = 'default'
+
+CELERY_QUEUES = (Queue(CELERY_QUEUE_DEFAULT, routing_key='default'),)
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"

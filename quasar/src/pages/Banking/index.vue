@@ -16,8 +16,8 @@ import StatementUploadWidget from "./StatementUploadWidget.vue";
 export default {
   components: {
     StatementFileTable,
-    StatementUploadWidget
-  }
+    StatementUploadWidget,
+  },
 };
 </script>
 

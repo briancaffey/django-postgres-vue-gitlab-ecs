@@ -13,6 +13,7 @@ from elasticache import ElastiCacheStack
 from ecs import EcsStack
 from env_vars import Variables
 from static_site_bucket import StaticSiteStack
+from flower import FlowerServiceStack
 
 from backend import BackendServiceStack
 from backend_tasks import BackendTasksStack
@@ -55,6 +56,11 @@ class ApplicationStack(core.Stack):
         self.static_site_stack = StaticSiteStack(self, "StaticSiteStack")
         self.static_site_bucket = self.static_site_stack.static_site_bucket
 
+        self.backend_assets = BackendAssetsStack(self, "BackendAssetsStack")
+        self.backend_assets_bucket = self.backend_assets.assets_bucket
+
+        self.cloudfront = CloudFrontStack(self, "CloudFrontStack")
+
         if os.path.isdir("./quasar/dist/pwa"):
             s3_deployment.BucketDeployment(
                 self,
@@ -63,11 +69,6 @@ class ApplicationStack(core.Stack):
                 sources=[s3_deployment.Source.asset("./quasar/dist/pwa")],
                 distribution=self.cloudfront.distribution,
             )
-
-        self.backend_assets = BackendAssetsStack(self, "BackendAssetsStack")
-        self.backend_assets_bucket = self.backend_assets.assets_bucket
-
-        self.cloudfront = CloudFrontStack(self, "CloudFrontStack")
 
         self.ecs = EcsStack(self, "EcsStack")
 
@@ -93,6 +94,7 @@ class ApplicationStack(core.Stack):
         )
 
         self.backend_service = BackendServiceStack(self, "BackendServiceStack")
+        self.flower_service = FlowerServiceStack(self, "FlowerServiceStack")
 
         self.celery_default_service = CeleryDefaultServiceStack(
             self, "CeleryDefaultServiceStack"

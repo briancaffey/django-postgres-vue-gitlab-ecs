@@ -2,7 +2,6 @@ Description: >
   This is an example of a long running ECS service that serves a JSON API of products.
 
 Parameters:
-
   StackName:
     Description: The name of the stack
     Type: String
@@ -37,15 +36,13 @@ Parameters:
     Type: String
 
 Resources:
-
   FlowerService:
     Type: AWS::ECS::Service
     DependsOn: FlowerListenerRule
     Properties:
       # Cluster: !Ref ECSCluster
       Cluster:
-        Fn::ImportValue:
-          !Sub ${StackName}:ECSCluster
+        Fn::ImportValue: !Sub ${StackName}:ECSCluster
       Role: !Ref ServiceRole
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref FlowerTaskDefinition
@@ -64,7 +61,7 @@ Resources:
           Image: mher/flower
           Memory: 128
           Command:
-            - 'flower'
+            - "flower"
             - !Sub "--broker=redis://${ElastiCacheHost}:6379//"
             - !Sub "--basic_auth=${FlowerUsername}:${FlowerPassword}"
           PortMappings:
@@ -85,8 +82,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       VpcId:
-        Fn::ImportValue:
-          !Sub ${StackName}:VpcId
+        Fn::ImportValue: !Sub ${StackName}:VpcId
       Port: 80
       Protocol: HTTP
       Matcher:

@@ -57,9 +57,9 @@ class BackendServiceStack(cloudformation.NestedStack):
             "BackendTarget",
             port=80,
             targets=[self.backend_service],
-            priority=1,
+            priority=2,
             path_patterns=["*"],
             health_check=elbv2.HealthCheck(
-                healthy_http_codes="200-299", path="/api/hello-world",
+                healthy_http_codes="200-299", path="/api/health-check/",
             ),
         )
