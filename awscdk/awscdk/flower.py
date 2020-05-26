@@ -63,6 +63,6 @@ class FlowerServiceStack(cloudformation.NestedStack):
             priority=1,
             path_patterns=["/flower/*", "flower/*"],
             health_check=elbv2.HealthCheck(
-                healthy_http_codes="200-299", path="/flower/"
+                healthy_http_codes="200-401", path="/flower/"
             ),
         )
