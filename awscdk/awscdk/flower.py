@@ -32,7 +32,7 @@ class FlowerServiceStack(cloudformation.NestedStack):
             ),
             command=[
                 "flower",
-                "--url_prefix=flower",
+                "--url_prefix=flower/",
                 f"--broker={CELERY_BROKER_URL}",
                 f"--basic_auth=flower:{FLOWER_PASSWORD}",
             ],
@@ -63,6 +63,6 @@ class FlowerServiceStack(cloudformation.NestedStack):
             priority=1,
             path_patterns=["/flower/*", "flower/*"],
             health_check=elbv2.HealthCheck(
-                healthy_http_codes="200-299", path="/api/health-check/"
+                healthy_http_codes="200-299", path="/flower/"
             ),
         )
