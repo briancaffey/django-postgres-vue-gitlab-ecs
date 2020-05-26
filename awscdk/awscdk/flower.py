@@ -31,6 +31,7 @@ class FlowerServiceStack(cloudformation.NestedStack):
                 log_retention=logs.RetentionDays.ONE_DAY,
             ),
             command=[
+                "flower",
                 "--url_prefix=flower",
                 f"--broker={CELERY_BROKER_URL}",
                 f"--basic_auth=flower:{FLOWER_PASSWORD}",
@@ -62,6 +63,6 @@ class FlowerServiceStack(cloudformation.NestedStack):
             priority=1,
             path_patterns=["/flower/*", "flower/*"],
             health_check=elbv2.HealthCheck(
-                healthy_http_codes="200-401", path="/flower/"
+                healthy_http_codes="200-299", path="/api/health-check/"
             ),
         )
