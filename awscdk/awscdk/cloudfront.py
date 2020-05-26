@@ -23,7 +23,7 @@ class CloudFrontStack(cloudformation.NestedStack):
         s3_domain_suffix = ".s3-website-us-east-1.amazonaws.com"
         s3_website_domain_name = s3_domain_prefix + s3_domain_suffix
 
-        path_patterns = ["/api/*", "/admin/*", "/flower/*"]
+        path_patterns = ["/api/*", "/admin/*", "/flower*"]
 
         self.distribution = cloudfront.CloudFrontWebDistribution(
             self,
