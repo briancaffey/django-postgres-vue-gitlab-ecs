@@ -24,7 +24,7 @@ class FlowerServiceStack(cloudformation.NestedStack):
         )
         CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"
         self.flower_task.add_container(
-            "BackendContainer",
+            "FlowerContainer",
             image=ecs.ContainerImage.from_registry("mher/flower"),
             logging=ecs.LogDrivers.aws_logs(
                 stream_prefix="FlowerContainer",
@@ -36,13 +36,6 @@ class FlowerServiceStack(cloudformation.NestedStack):
                 f"--basic_auth=flower:{FLOWER_PASSWORD}",
             ],
         )
-
-        scope.backend_assets_bucket.grant_read_write(
-            self.backend_task.task_role
-        )
-
-        for secret in [scope.variables.django_secret_key, scope.rds.db_secret]:
-            secret.grant_read(self.backend_task.task_role)
 
         port_mapping = ecs.PortMapping(
             container_port=5555, protocol=ecs.Protocol.TCP
@@ -57,16 +50,18 @@ class FlowerServiceStack(cloudformation.NestedStack):
             cluster=scope.ecs.cluster,
             security_group=ec2.SecurityGroup.from_security_group_id(
                 self,
-                "BackendServiceSecurityGroup",
+                "FlowerServiceSecurityGroup",
                 security_group_id=scope.vpc.vpc_default_security_group,
             ),
         )
 
         scope.https_listener.add_targets(
-            "BackendTarget",
+            "FlowerTarget",
             port=80,
             targets=[self.flower_service],
             priority=1,
-            path_patterns=["/flower/*"],
-            health_check=elbv2.HealthCheck(healthy_http_codes="200-401",),
+            path_patterns=["/flower/*", "flower/*"],
+            health_check=elbv2.HealthCheck(
+                healthy_http_codes="200-401", path="/flower/"
+            ),
         )

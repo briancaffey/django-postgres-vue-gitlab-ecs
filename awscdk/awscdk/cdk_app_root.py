@@ -13,6 +13,7 @@ from elasticache import ElastiCacheStack
 from ecs import EcsStack
 from env_vars import Variables
 from static_site_bucket import StaticSiteStack
+from flower import FlowerServiceStack
 
 from backend import BackendServiceStack
 from backend_tasks import BackendTasksStack
@@ -93,6 +94,7 @@ class ApplicationStack(core.Stack):
         )
 
         self.backend_service = BackendServiceStack(self, "BackendServiceStack")
+        self.flower_service = FlowerServiceStack(self, "FlowerServiceStack")
 
         self.celery_default_service = CeleryDefaultServiceStack(
             self, "CeleryDefaultServiceStack"
