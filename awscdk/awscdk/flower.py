@@ -39,7 +39,9 @@ class FlowerServiceStack(cloudformation.NestedStack):
         )
 
         self.flower_task.add_container(
-            "FlowerProxyContainer", image=ecs.AssetImage("./nginx/flowerproxy")
+            "FlowerProxyContainer",
+            # image=ecs.AssetImage("./nginx/flowerproxy"),
+            image=ecs.ContainerImage.from_registry("nginx"),
         )
 
         port_mapping = ecs.PortMapping(
@@ -67,6 +69,6 @@ class FlowerServiceStack(cloudformation.NestedStack):
             priority=1,
             path_patterns=["/flower/*", "/flower*"],
             health_check=elbv2.HealthCheck(
-                healthy_http_codes="200-401", path="/flower"
+                healthy_http_codes="200-404", path="/flower"
             ),
         )
