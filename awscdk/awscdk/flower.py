@@ -40,8 +40,8 @@ class FlowerServiceStack(cloudformation.NestedStack):
 
         self.flower_task.add_container(
             "FlowerProxyContainer",
-            # image=ecs.AssetImage("./nginx/flowerproxy"),
-            image=ecs.ContainerImage.from_registry("nginx"),
+            image=ecs.AssetImage("./nginx/flowerproxy"),
+            # image=ecs.ContainerImage.from_registry("nginx"),
         )
 
         port_mapping = ecs.PortMapping(
