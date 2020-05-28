@@ -137,13 +137,13 @@ module.exports = function (ctx) {
 
     pwa: {
       // workboxPluginMode: "InjectManifest",
-      // workboxOptions: {
-      //   navigateFallback: "/index.html",
-      //   navigateFallbackDenylist: [
-      //     /\/[admin,api,flower]+\/.*/,
-      //     /[admin,api,flower]+\/.*/,
-      //   ],
-      // },
+      workboxOptions: {
+        navigateFallback: "/index.html",
+        navigateFallbackBlacklist: [
+          /\/[admin,api,flower]+\/.*/,
+          /[admin,api,flower]+\/.*/,
+        ],
+      },
       manifest: {
         // name: "Verbose Equals True",
         // short_name: "Verbose Equals True",
