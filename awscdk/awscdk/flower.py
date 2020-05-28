@@ -22,7 +22,8 @@ class FlowerServiceStack(cloudformation.NestedStack):
         REDIS_SERVICE_HOST = (
             scope.elasticache.elasticache.attr_redis_endpoint_address
         )
-        CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"
+        CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/1"
+
         self.flower_task.add_container(
             "FlowerContainer",
             image=ecs.ContainerImage.from_registry("mher/flower"),
@@ -37,8 +38,14 @@ class FlowerServiceStack(cloudformation.NestedStack):
             ],
         )
 
+        self.flower_task.add_container(
+            "FlowerProxyContainer",
+            image=ecs.AssetImage("./nginx/flowerproxy"),
+            # image=ecs.ContainerImage.from_registry("nginx"),
+        )
+
         port_mapping = ecs.PortMapping(
-            container_port=5555, protocol=ecs.Protocol.TCP
+            container_port=80, protocol=ecs.Protocol.TCP
         )
         self.flower_task.default_container.add_port_mappings(port_mapping)
 
