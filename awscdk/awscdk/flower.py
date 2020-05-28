@@ -22,7 +22,7 @@ class FlowerServiceStack(cloudformation.NestedStack):
         REDIS_SERVICE_HOST = (
             scope.elasticache.elasticache.attr_redis_endpoint_address
         )
-        CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/0"
+        CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/1"
 
         self.flower_task.add_container(
             "FlowerContainer",
