@@ -38,4 +38,6 @@ stack = ApplicationStack(
 # CloudWatch Container Insights
 stack.node.apply_aspect(core.Tag("StackName", full_app_name))
 
+print(len(stack.node.children))
+
 app.synth()

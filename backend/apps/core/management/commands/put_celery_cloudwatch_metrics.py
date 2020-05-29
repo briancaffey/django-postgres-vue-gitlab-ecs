@@ -19,6 +19,7 @@ class Command(BaseCommand):
         and values are lists of active tasks for the worker
 
         """
+        print("inspecting celery queue")
         i = celery_app.control.inspect()
 
         active = i.active()
@@ -45,6 +46,7 @@ class Command(BaseCommand):
                     ]
                 )
 
+        print("connecting to redis")
         r = redis.Redis(
             host=settings.REDIS_SERVICE_HOST,
             port=6379,
@@ -58,13 +60,16 @@ class Command(BaseCommand):
         return active_count + reserved_count + queue_length
 
     def publish_queue_metrics(self, queue_names):
+        print("gathering queue data")
         metric_data = {
             queue_name: self.active_and_reserved_tasks_by_queue_name(
                 queue_name
             )
             for queue_name in queue_names
         }
+        print("sending cloudwatch data")
         if not settings.DEBUG:
+            print("connecting aws api")
             client = boto3.client('cloudwatch')
             client.put_metric_data(
                 Namespace=os.environ.get("FULL_APP_NAME", "FULL_APP_NAME"),
@@ -75,5 +80,5 @@ class Command(BaseCommand):
             )
 
     def handle(self, *args, **options):
-
+        print("starting task")
         self.publish_queue_metrics(["default"])
