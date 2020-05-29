@@ -54,9 +54,6 @@ class Command(BaseCommand):
         )
 
         queue_length = r.llen("default")
-        print(f"Active count: {active_count}")
-        print(f"Reserved count: {reserved_count}")
-        print(f"Queue length: {queue_length}")
 
         return active_count + reserved_count + queue_length
 
