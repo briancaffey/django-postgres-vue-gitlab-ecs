@@ -80,8 +80,8 @@ class CeleryDefaultServiceStack(cloudformation.NestedStack):
             "CeleryDefaultQueueAutoscaling",
             metric=self.default_celery_queue_cw_metric,
             scaling_steps=[
-                aas.ScalingInterval(change=1, lower=0),
-                aas.ScalingInterval(change=-1, lower=1),
+                aas.ScalingInterval(change=-1, lower=0),
+                aas.ScalingInterval(change=1, lower=1),
             ],
             adjustment_type=aas.AdjustmentType.CHANGE_IN_CAPACITY,
         )
