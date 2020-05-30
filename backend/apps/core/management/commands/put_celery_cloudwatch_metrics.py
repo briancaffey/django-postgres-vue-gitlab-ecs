@@ -56,8 +56,12 @@ class Command(BaseCommand):
         )
 
         queue_length = r.llen("default")
-
-        return active_count + reserved_count + queue_length
+        total = active_count + reserved_count + queue_length
+        print(f"Active count: {active_count}")
+        print(f"Reserved count: {reserved_count}")
+        print(f"Queue length: {queue_length}")
+        print(f"Total: {total}")
+        return total
 
     def publish_queue_metrics(self, queue_names):
         print("gathering queue data")

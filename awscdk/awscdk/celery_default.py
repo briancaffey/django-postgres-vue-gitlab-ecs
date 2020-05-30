@@ -76,18 +76,51 @@ class CeleryDefaultServiceStack(cloudformation.NestedStack):
             min_capacity=0, max_capacity=2
         )
 
-        # self.celery_default_queue_asg.scale_on_metric(
-        #     "CeleryDefaultQueueAutoscaling",
-        #     metric=self.default_celery_queue_cloudwatch_metric,
-        #     scaling_steps=[
-        #         app_autoscaling.ScalingInterval(change=1, lower=0),
-        #         app_autoscaling.ScalingInterval(change=-1, lower=1),
-        #     ],
-        #     adjustment_type=app_autoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
-        # )
-        # self.celery_default_cloudwatch_monitoring_task = ecs.FargateTaskDefinition(
-        #     self, "CeleryDefaultCloudWatchMonitoringTask"
-        # )
+        self.celery_default_queue_asg.scale_on_metric(
+            "CeleryDefaultQueueAutoscaling",
+            metric=self.default_celery_queue_cloudwatch_metric,
+            scaling_steps=[
+                aas.ScalingInterval(change=1, lower=0),
+                aas.ScalingInterval(change=-1, lower=1),
+            ],
+            adjustment_type=aas.AdjustmentType.CHANGE_IN_CAPACITY,
+        )
+
+        self.celery_default_cloudwatch_monitor_task = ecs.FargateTaskDefinition(
+            self, "CeleryDefaultCloudWatchMonitoringTask"
+        )
+
+        self.celery_default_cloudwatch_monitor_task.add_container(
+            "CeleryDefaultCWMonitoringTaskContainer",
+            image=scope.image,
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix="CeleryDefaultCWMonitoringContainerLogs",
+                log_retention=logs.RetentionDays.ONE_DAY,
+            ),
+            environment=scope.variables.regular_variables,
+            secrets=scope.variables.secret_variables,
+            command=["python3", "manage.py", "put_celery_cloudwatch_metrics"],
+        )
+
+        self.celery_default_cw_metric_schedule = events.Rule(
+            self,
+            "CeleryDefaultCWMetricSchedule",
+            schedule=events.Schedule.rate(core.Duration.minutes(5)),
+            targets=[
+                events_targets.EcsTask(
+                    cluster=scope.cluster,
+                    task_definition=self.celery_default_cloudwatch_monitor_task,
+                    subnet_selection=ec2.SubnetSelection(
+                        subnet_type=ec2.SubnetType.PUBLIC
+                    ),
+                    security_group=ec2.SecurityGroup.from_security_group_id(
+                        self,
+                        "CeleryDefaultCWMetricScheduleSG",
+                        security_group_id=scope.vpc.vpc_default_security_group,
+                    ),
+                )
+            ],
+        )
 
         # self.celery_default_cloudwatch_monitoring_task.add_container(
         #     "CeleryDefaultCloudWatchMonitoringContainer",
