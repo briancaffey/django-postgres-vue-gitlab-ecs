@@ -71,6 +71,7 @@ class ApplicationStack(core.Stack):
             )
 
         self.ecs = EcsStack(self, "EcsStack")
+        self.cluster = self.ecs.cluster
 
         self.rds = RdsStack(self, "RdsStack")
 
