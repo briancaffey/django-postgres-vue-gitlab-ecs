@@ -22,6 +22,8 @@ setuptools.setup(
         "aws-cdk.aws_certificatemanager==1.42.0",
         "aws-cdk.aws_cloudwatch==1.42.0",
         "aws-cdk.aws_logs==1.42.0",
+        "aws-cdk.aws_events==1.42.0",
+        "aws-cdk.aws_events_targets==1.42.0",
         "aws-cdk.aws_secretsmanager==1.42.0",
         "aws-cdk.aws_route53==1.42.0",
         "aws-cdk.aws_s3==1.42.0",

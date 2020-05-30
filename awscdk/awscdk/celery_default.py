@@ -2,11 +2,13 @@ from aws_cdk import (
     core,
     aws_ec2 as ec2,
     aws_ecs as ecs,
+    aws_events as events,
+    aws_events_targets as events_targets,
     aws_ecs_patterns as ecs_patterns,
     aws_logs as logs,
     aws_cloudformation as cloudformation,
     aws_cloudwatch as cloudwatch,
-    aws_applicationautoscaling as app_autoscaling,
+    aws_applicationautoscaling as aas,
 )
 
 
@@ -74,42 +76,27 @@ class CeleryDefaultServiceStack(cloudformation.NestedStack):
             min_capacity=0, max_capacity=2
         )
 
-        self.celery_default_queue_asg.scale_on_metric(
-            "CeleryDefaultQueueAutoscaling",
-            metric=self.default_celery_queue_cloudwatch_metric,
-            scaling_steps=[
-                app_autoscaling.ScalingInterval(change=1, lower=0),
-                app_autoscaling.ScalingInterval(change=-1, lower=1),
-            ],
-            adjustment_type=app_autoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
-        )
-        self.celery_default_cloudwatch_monitoring_task = ecs.FargateTaskDefinition(
-            self, "CeleryDefaultCloudWatchMonitoringTask"
-        )
+        # self.celery_default_queue_asg.scale_on_metric(
+        #     "CeleryDefaultQueueAutoscaling",
+        #     metric=self.default_celery_queue_cloudwatch_metric,
+        #     scaling_steps=[
+        #         app_autoscaling.ScalingInterval(change=1, lower=0),
+        #         app_autoscaling.ScalingInterval(change=-1, lower=1),
+        #     ],
+        #     adjustment_type=app_autoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
+        # )
+        # self.celery_default_cloudwatch_monitoring_task = ecs.FargateTaskDefinition(
+        #     self, "CeleryDefaultCloudWatchMonitoringTask"
+        # )
 
-        self.celery_default_cloudwatch_monitoring_task.add_container(
-            "CeleryDefaultCloudWatchMonitoringContainer",
-            image=scope.image,
-            logging=ecs.LogDrivers.aws_logs(
-                stream_prefix="CeleryDefaultCloudWatchMonitoringContainerLogs",
-                log_retention=logs.RetentionDays.ONE_DAY,
-            ),
-            environment=scope.variables.regular_variables,
-            secrets=scope.variables.secret_variables,
-            command=["python3", "manage.py", "put_celery_cloudwatch_metrics"],
-        )
-        self.celery_default_cloudwatch_monitoring_scheduled_task = ecs_patterns.ScheduledFargateTask(
-            self,
-            "CeleryDefaultFargateScheduledTask",
-            scheduled_fargate_task_definition_options=ecs_patterns.ScheduledFargateTaskDefinitionOptions(
-                task_definition=self.celery_default_cloudwatch_monitoring_task,
-            ),
-            schedule=app_autoscaling.Schedule.cron(minute="0/5"),
-            cluster=scope.cluster,
-            subnet_selection=ec2.SubnetSelection(
-                subnet_type=ec2.SubnetType.PUBLIC
-            ),
-        )
-        self.default_celery_queue_cloudwatch_metric.grant_put_metric_data(
-            self.celery_default_cloudwatch_monitoring_scheduled_task.task_definition.task_role
-        )
+        # self.celery_default_cloudwatch_monitoring_task.add_container(
+        #     "CeleryDefaultCloudWatchMonitoringContainer",
+        #     image=scope.image,
+        #     logging=ecs.LogDrivers.aws_logs(
+        #         stream_prefix="CeleryDefaultCloudWatchMonitoringContainerLogs",
+        #         log_retention=logs.RetentionDays.ONE_DAY,
+        #     ),
+        #     environment=scope.variables.regular_variables,
+        #     secrets=scope.variables.secret_variables,
+        #     command=["python3", "manage.py", "put_celery_cloudwatch_metrics"],
+        # )
