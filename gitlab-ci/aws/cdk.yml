@@ -30,8 +30,8 @@ cdk deploy:
   services:
     - docker:19.03.5-dind
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   variables:
     ENVIRONMENT: dev
     DOCKER_TLS_CERTDIR: ""
