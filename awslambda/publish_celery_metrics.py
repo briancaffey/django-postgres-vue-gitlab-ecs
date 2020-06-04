@@ -18,4 +18,4 @@ def lambda_handler(event, context):
         headers={'content-type': 'application/json'},
     )
     response = urllib.request.urlopen(req)
-    return response
+    return response.read()
