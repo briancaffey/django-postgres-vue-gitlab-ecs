@@ -4,7 +4,12 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
+
 
 from .utils.celery_utils import publish_celery_metrics
 from apps.core.tasks import debug_task, send_test_email_task, sleep_task
@@ -50,6 +55,8 @@ def sleep_task_view(request):
 
 
 @api_view(["POST"])
+@permission_classes([])
+@authentication_classes([])
 def celery_metrics(request):
     if request.data.get("celery_metrics_token") == os.environ.get(
         "CELERY_METRICS_TOKEN"
