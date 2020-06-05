@@ -37,29 +37,8 @@ module.exports = {
         ],
       },
       {
-        text: "Guide",
-        items: [
-          { text: "Testing", link: "/guide/testing/" },
-          { text: "Project Setup", link: "/guide/project-setup/" },
-          { text: "Backend API", link: "/guide/django-rest-framework/" },
-          { text: "Vue App", link: "/guide/vue-app/" },
-          {
-            text: "Connecting Backend & Frontend",
-            link: "/guide/connecting-backend-frontend/",
-          },
-          { text: "NGINX", link: "/guide/nginx/" },
-          { text: "Celery & Redis", link: "/guide/celery-and-redis/" },
-          {
-            text: "Production Environment",
-            link: "/guide/production-environment/",
-          },
-          { text: "Vue Authentication", link: "/guide/vue-authentication/" },
-        ],
-      },
-      {
         text: "DevOps",
         items: [
-          { text: "AWS", link: "/devops/aws/" },
           { text: "AWS CDK", link: "/devops/aws-cdk/" },
           { text: "GCP", link: "/devops/gcp/" },
         ],
@@ -69,13 +48,7 @@ module.exports = {
         items: [
           { text: "GraphQL", link: "/topics/graphql/" },
           { text: "Minikube", link: "/topics/minikube/" },
-          { text: "Helm", link: "/topics/helm/" },
         ],
-      },
-      {
-        text: "Source Code",
-        link:
-          "https://gitlab.com/verbose-equals-true/django-postgres-vue-gitlab-ecs",
       },
     ],
   },
