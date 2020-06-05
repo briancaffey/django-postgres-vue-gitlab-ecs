@@ -14,6 +14,7 @@ from ecs import EcsStack
 from env_vars import Variables
 from static_site_bucket import StaticSiteStack
 from flower import FlowerServiceStack
+from celery_autoscaling import CeleryAutoscalingStack
 
 from backend import BackendServiceStack
 from backend_tasks import BackendTasksStack
@@ -99,6 +100,12 @@ class ApplicationStack(core.Stack):
 
         self.celery_default_service = CeleryDefaultServiceStack(
             self, "CeleryDefaultServiceStack"
+        )
+
+        # define other celery queues here, or combine in a single construct
+
+        self.celery_autoscaling = CeleryAutoscalingStack(
+            self, "CeleryAutoscalingStack"
         )
 
         # migrate, collectstatic, createsuperuser
