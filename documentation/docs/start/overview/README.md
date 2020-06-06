@@ -15,7 +15,7 @@ This is an overview of a Proof-of-Concept web application I'm working on called 
 - AWS
 - and last but not least, **AWS Cloud Development Kit (CDK)**
 
-This README will start by describing some features of the application I'm building and how the different technologies are used together. I also share my experience in moving from CloudFormation to CDK for managing cloud infrastructure on AWS. Finally, I discuss my solution to a specific question I have been trying to answer: what's the best way to scale celery workers to zero?
+This README will start by describing some features of the application I'm building and how the different technologies are used together. I also share my experience in adopting CDK for managing cloud infrastructure on AWS. Finally, I discuss my solution to a specific question I have been trying to answer: what's the best way to scale Celery workers to zero to reduce Total Cost of Ownership?
 
 ## Development Philosophies and Best Practices
 
@@ -343,6 +343,106 @@ I use `cdk boostrap` and CDK assets in a similar way for building and pushing my
 This image is then referenced by multiple `NestedStack`s that define Fargate services and tasks (`gunicorn`, `daphne`, `celery` workers, etc.) This keeps our CDK code DRY.. Don't Repeat Yourself! Similarly, we aren't rebuilding, pushing and pulling the backend container when there are no changes to the code in `backend` directory.
 
 I'm not setting up an ECR image repository for my application, but I believe there is a way to do this. One question that I have about using `ecs.AssetImage` is about image lifecycle management. I know that you can implement rules about how many images you want to keep in an ECR image repository, but **I'm not sure how this works with CDK Image Assets**.
+
+### Quick tour of `ApplicationStack`
+
+Here's a very quick look at the structure of my CDK code, focusing on the `ApplicationStack`, the "master stack" or "skeleton stack" that contains.
+
+#### `hosted_zone`
+
+We get the hosted zone using the `DOMAIN_NAME` and `HOSTED_ZONE_ID`. This is not a nested stack.
+
+#### `site_certificate`
+
+The ACM Certificate that will be used for the given environment. This references the `full_domain_name` (environment + application).
+
+#### `vpc_stack`
+
+A `NestedStack` for defining VPC resources. This construct generates lots of CloudFormation resources. I currently have `nat_gateways` set to zero, and I'm `PUBLIC` and `PRIVATE` subnets spread over 2 AZs. As I mentioned earlier, this is primarily for cost considerations and it is a best practice to use the tiered security model and run our Fargate tasks in private subnets instead of public subnets. I think I need to add NACL resources in this `NestedStack`.
+
+#### `alb_stack`
+
+This defines the load balancer, configures that will send traffic to our Fargate services (such as our Django API). I was a little bit unclear about needing a `listener` and `https_listener`. I might be able to get away with removing the `listener` and only using `https_listener`.
+
+#### `static_site_stack`
+
+This stack defines the S3 bucket and policies that will be used for hosting our static site (Quasar PWA).
+
+#### `backend_assets`
+
+This stack defines the bucket and policies for managing the bucket that holds static and media assets for Django.
+
+#### `cloudfront`
+
+This defines the CloudFront distribution that ties together several different parts of the application. It is the "front desk" of the application, and acts as a CDN and proxy. There is a separate CloudFront distribution for each environment (dev, staging, production). This stack also defines the Route53 `ARecord` that will be used to send traffic to a specific subdomain to the correct CloudFront distribution.
+
+There are three `origin_configs` for each distribution:
+
+1. `CustomOriginConfig` for the ALB
+1. `CustomOriginConfig` for the S3 bucket website
+1. `S3OriginConfig` for the Django static assets
+
+Note that these `origin_configs` each have different `behaviors`, and that list comprehension is used to keep this code DRY.
+
+#### `BucketDeployment`
+
+This will deploy our static site assets to the S3 bucket defined in `static_site_stack` if the static site assets are present at the time of deployment. If they are not present, this means that there were no changes made to the frontend site.
+
+#### `ecs`
+
+Defines the ECS Cluster.
+
+#### `rds`
+
+There is no L2 construct for `DBCluster`, so I used `CfnDBCluster` in order to use the Aurora Postgres `engine` and the `serverless` `engine_mode`.
+
+#### `elasticache`
+
+I also had to use L1 constructs for ElastiCache, but this one is pretty straightforward.
+
+For both RDS and ElastiCache I used the `vpc_default_security_group` as the `source_security_group`. It might be a better idea to define another security group altogether, but this approach works.
+
+#### `AssetImage`
+
+The docker image that references Django application code in the `backend` directory. This image is referenced in Fargate services and tasks.
+
+#### `variables`
+
+This section defines and organizes all of the environment variables and secrets for my application.
+
+#### `backend_service`
+
+It might be a better idea to replace this with `NetworkLoadBalancedFargateService`, but instead I implemented this with lower-level constructs just to be clear about what I'm doing. To add a load balanced service, here is what I did:
+
+1. Define the Fargate task
+1. Add the container to this task with other information (secrets, logging, `command`, etc.)
+1. Give the task role permissions it needs such as access to Secrets, S3 permissions. (It might be a good idea to refactor this into a function that can be called on `task_role`, but for now I am explicitly granting all permissions)
+1. Create and add a port mapping
+1. Define an ECS Fargate Service that reference the previously defined Fargate task, configure security group
+1. Add the service as a target to the `https_listener` defined previously in `alb_stack`.
+1. Optionally configure autoscaling for the Fargate service
+
+#### `flower_service`
+
+Flower is a monitoring utility for Celery. I had trouble getting this to work correctly, but I managed to make it work by adding a simple nginx container that passes traffic to the flower container running in the same task. https://flower.readthedocs.io/en/latest/reverse-proxy.html
+
+#### `celery_default_service`
+
+This stack defines the default celery queue. This is discussed later in more detail, but the basic idea is to:
+
+1. Define the Fargate task
+1. Add the container
+1. Define the Fargate service
+1. Grant permissions
+1. Configure autoscaling
+
+#### `celery_autoscaling`
+
+This stack defines the Lambda function and schedule on which this Lambda is called. This stack is discussed in more detail later on.
+
+#### `backend_tasks`
+
+These are administrative tasks that are executed by running manual GitLab CI jobs such as `migrate`, `collectstatic` and `createsuperuser`.
 
 ## Why `X`? Why not `Y`?
 
