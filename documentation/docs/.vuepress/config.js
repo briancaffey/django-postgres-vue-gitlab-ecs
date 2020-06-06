@@ -14,7 +14,7 @@ module.exports = {
   dest: "../public",
   plugins: {
     "@vuepress/google-analytics": {
-      ga: "UA-131443776-1",
+      ga: process.env.GOOGLE_ANALYTICS_CODE,
     },
   },
   serviceWorker: false,
@@ -35,6 +35,10 @@ module.exports = {
           { text: "Overview", link: "/start/overview/" },
           { text: "Tools Used", link: "/start/tools/" },
         ],
+      },
+      {
+        text: "Guide",
+        items: [{ text: "Testing", link: "/guide/testing/" }],
       },
       {
         text: "DevOps",

@@ -7,7 +7,7 @@ To run Pytest and Jest, you can use `docker-compose exec`, or you can shell into
 Using `docker-compose exec`:
 
 ```
-docker-compose exec backend pytest
+docker exec backend pytest
 ```
 
 ```
@@ -18,7 +18,7 @@ root@b24c4206002e:/code# pytest
 To run Jest tests, you can run:
 
 ```
-docker-compose exec frontend npm run test
+docker exec frontend npm run test
 ```
 
 ## Integration tests
