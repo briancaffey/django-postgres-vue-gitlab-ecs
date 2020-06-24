@@ -105,4 +105,4 @@ cdk destroy:
   script:
     # - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-frontend
     # - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-assets
-    - cdk destroy --app awscdk/app.py --require-approval never
+    - cdk destroy --app awscdk/app.py --force
