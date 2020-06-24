@@ -5,6 +5,8 @@ workflow:
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
       when: always
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
 
 variables:
   ENVIRONMENT: dev
@@ -12,8 +14,9 @@ variables:
 .quasar build pwa:
   image: node:10
   stage: build
-  only:
-    - master
+  rules:
+    - changes:
+        - quasar/**/*
   variables:
     FULL_DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
     GOOGLE_OAUTH2_KEY: google123
@@ -101,6 +104,6 @@ cdk destroy:
     - pip3 install awscli
     - pip3 install -r requirements.txt
   script:
-    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-frontend
-    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-assets
+    - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-frontend
+    - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-assets
     - cdk destroy --require-approval never
