@@ -7,15 +7,15 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        "@assets": path.resolve(__dirname, "../assets")
-      }
-    }
+        "@assets": path.resolve(__dirname, "../assets"),
+      },
+    },
   },
   dest: "../public",
   plugins: {
     "@vuepress/google-analytics": {
-      ga: "UA-131443776-1"
-    }
+      ga: process.env.GOOGLE_ANALYTICS_CODE,
+    },
   },
   serviceWorker: false,
   themeConfig: {
@@ -33,49 +33,27 @@ module.exports = {
         text: "Start Here",
         items: [
           { text: "Overview", link: "/start/overview/" },
-          { text: "Tools Used", link: "/start/tools/" }
-        ]
+          { text: "Tools Used", link: "/start/tools/" },
+        ],
       },
       {
         text: "Guide",
-        items: [
-          { text: "Project Setup", link: "/guide/project-setup/" },
-          { text: "Backend API", link: "/guide/django-rest-framework/" },
-          { text: "Vue App", link: "/guide/vue-app/" },
-          {
-            text: "Connecting Backend & Frontend",
-            link: "/guide/connecting-backend-frontend/"
-          },
-          { text: "NGINX", link: "/guide/nginx/" },
-          { text: "Celery & Redis", link: "/guide/celery-and-redis/" },
-          {
-            text: "Production Environment",
-            link: "/guide/production-environment/"
-          },
-          { text: "Vue Authentication", link: "/guide/vue-authentication/" }
-        ]
+        items: [{ text: "Testing", link: "/guide/testing/" }],
       },
       {
         text: "DevOps",
         items: [
-          { text: "AWS", link: "/devops/aws/" },
           { text: "AWS CDK", link: "/devops/aws-cdk/" },
-          { text: "GCP", link: "/devops/gcp/" }
-        ]
+          { text: "GCP", link: "/devops/gcp/" },
+        ],
       },
       {
         text: "Topics",
         items: [
           { text: "GraphQL", link: "/topics/graphql/" },
           { text: "Minikube", link: "/topics/minikube/" },
-          { text: "Helm", link: "/topics/helm/" }
-        ]
+        ],
       },
-      {
-        text: "Source Code",
-        link:
-          "https://gitlab.com/verbose-equals-true/django-postgres-vue-gitlab-ecs"
-      }
-    ]
-  }
+    ],
+  },
 };

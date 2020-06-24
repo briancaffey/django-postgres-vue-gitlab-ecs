@@ -165,7 +165,6 @@ Let's install Helm in our cluster. This guide shows how to setup Tiller with a s
 
 Create the following service account:
 
-
 ```
 apiVersion: v1
 kind: ServiceAccount
@@ -198,7 +197,6 @@ If this is successful, initialize Helm with the following command:
 ```
 helm init --service-account helm
 ```
-
 
 https://medium.com/google-cloud/helm-on-gke-cluster-quick-hands-on-guide-ecffad94b0
 
@@ -239,11 +237,9 @@ tiller-deploy-57f498469-9ck5t                                    1/1     Running
 
 ### Install Postgres with the Bitnami Helm Chart
 
-
 Here is a slightly outdated guide from Bitnami that shows how to install postgres with Helm:
 
 [https://engineering.bitnami.com/articles/create-a-production-ready-postgresql-cluster-bitnami-kubernetes-and-helm.html](https://engineering.bitnami.com/articles/create-a-production-ready-postgresql-cluster-bitnami-kubernetes-and-helm.html)
-
 
 First, download the `values-production.yaml` file using the following command:
 
@@ -269,8 +265,8 @@ helm install --name my-postgres stable/postgresql \
     --set replication.password=REPLICATION_PASSWORD
     --set metrics.enabled=false
 ```
-### How to delete all resources
 
+### How to delete all resources
 
 The `stable/helm` release creates several resources:
 
@@ -300,7 +296,7 @@ When we delete the helm release with the following command:
 helm delete my-release
 ```
 
-The PVs and PVCs are not deleted. They *persist*. Let's show this:
+The PVs and PVCs are not deleted. They _persist_. Let's show this:
 
 ```
 k get pv
@@ -590,7 +586,6 @@ Do you want to continue (Y/n)?
 The resources were not found
 :::
 
-
 ### Deploying to Terraform from GitLab CI
 
 Now that we can deploy Terraform resources from the command line, let's automate this in our GitLab CI pipeline.
@@ -602,7 +597,6 @@ cat terraform/account.json | base64 -w0
 ```
 
 Save the output of this command to a GitLab CI environment variable called `GCP_SERVICE_ACCOUNT`.
-
 
 Next we need to define Terraform jobs that will be triggered in our GitLab CI pipeline.
 
@@ -622,8 +616,8 @@ Terraform Plan: &terraform
   image:
     name: hashicorp/terraform:light
     entrypoint:
-      - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+      - "/usr/bin/env"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   before_script:
     - cd terraform
     - echo $GCP_SERVICE_ACCOUNT | base64 -d > ./account.json
@@ -644,7 +638,6 @@ Terraform Apply:
   when: manual
   artifacts: {}
 ```
-
 
 ::: warning In progress
 This section is not complete. Updates coming soon.

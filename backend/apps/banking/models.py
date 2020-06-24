@@ -1,10 +1,14 @@
+from backend.storage_backends import PrivateMediaStorage
+
 from django.db import models
 
 # Create your models here.
 
 
 class StatementFile(models.Model):
-    statement_file = models.FileField()
+    statement_file = models.FileField(
+        storage=PrivateMediaStorage, upload_to="banking"
+    )
     month = models.DateField(null=False, blank=False)
 
     def __str__(self):

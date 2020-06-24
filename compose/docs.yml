@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   vuepress:
@@ -10,6 +10,6 @@ services:
       - "8082:8080"
       - "8081:8081"
     volumes:
-      - ../documentation/docs:/app/docs
+      - ../documentation:/app/
     environment:
       CI_PROJECT_URL: ${CI_PROJECT_URL}

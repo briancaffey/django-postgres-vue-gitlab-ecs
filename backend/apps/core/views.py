@@ -4,8 +4,14 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.views.generic import TemplateView
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 
+
+from .utils.celery_utils import publish_celery_metrics
 from apps.core.tasks import debug_task, send_test_email_task, sleep_task
 
 r = settings.REDIS
@@ -46,6 +52,19 @@ def sleep_task_view(request):
     return JsonResponse(
         {"message": f"Sleep task submitted ({sleep_seconds} seconds)"}
     )
+
+
+@api_view(["POST"])
+@permission_classes([])
+@authentication_classes([])
+def celery_metrics(request):
+    if request.data.get("celery_metrics_token") == os.environ.get(
+        "CELERY_METRICS_TOKEN"
+    ):
+        published_celery_metrics = publish_celery_metrics()
+        return JsonResponse(published_celery_metrics)
+    else:
+        return JsonResponse({"message": "Unauthorized"}, status=401)
 
 
 def send_test_email(request):

@@ -32,6 +32,7 @@ class Variables(core.Construct):
             "DEBUG": "",
             "FULL_DOMAIN_NAME": full_domain_name,
             "FULL_APP_NAME": scope.full_app_name,
+            "CELERY_METRICS_TOKEN": "my-secret-token",
             "AWS_STORAGE_BUCKET_NAME": bucket_name,
             "POSTGRES_SERVICE_HOST": postgres_host,
             "POSTGRES_PASSWORD": db_secret.secret_value_from_json(

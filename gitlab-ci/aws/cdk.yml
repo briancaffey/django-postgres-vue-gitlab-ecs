@@ -1,6 +1,11 @@
 # This template uses AWS CDK and AWS CLI to make infrastrcutre updates
 # and to deploy changes to the frontend and backend
 
+workflow:
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+      when: always
+
 variables:
   ENVIRONMENT: dev
 
@@ -60,39 +65,29 @@ cdk deploy:
             Name=tag:StackName,Values=${ENVIRONMENT}-${APP_NAME} \
             Name=tag:aws-cdk:subnet-type,Values=Public \
         | jq -r '.Subnets | map(.SubnetId) | join(",")')
+  script:
+    - |
+      aws ecs run-task \
+        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-${TASK_SUFFIX} \
+        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
+        --count 1 \
+        --launch-type FARGATE
 
 collectstatic:
   <<: *task
-  script:
-    - |
-      aws ecs run-task \
-        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-collectstatic \
-        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
-        --count 1 \
-        --launch-type FARGATE
+  variables:
+    TASK_SUFFIX: collectstatic
 
 migrate:
   <<: *task
-  script:
-    - |
-      aws ecs run-task \
-        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-migrate \
-        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
-        --count 1 \
-        --launch-type FARGATE
+  variables:
+    TASK_SUFFIX: migrate
 
 createsuperuser:
   <<: *task
-  script:
-    - |
-      aws ecs run-task \
-        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-create-superuser \
-        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
-        --count 1 \
-        --launch-type FARGATE
+  variables:
+    TASK_SUFFIX: create-superuser
 
 cdk destroy:
   image: python:3.8
