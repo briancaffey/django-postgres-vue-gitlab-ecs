@@ -26,7 +26,7 @@ social-auth-core==3.3.3
 
 # Django page caching is not working with this version of Redis
 # but this version is required by Celery
-django-redis==4.11.0
+django-redis==4.12.1
 
 django-storages==1.9.1
 
