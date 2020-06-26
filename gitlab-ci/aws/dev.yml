@@ -1,12 +1,17 @@
-# workflow:
-#   rules:
-#     # - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
-#     #   when: always
-#     - if: '$CI_COMMIT_BRANCH == "master"'
-#       when: always
+workflow:
+  rules:
+    # - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    #   when: always
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
 
 variables:
   ENVIRONMENT: dev
+
+test_job:
+  image: node:10
+  script:
+    - echo "testing"
 
 quasar_build_pwa (dev):
   extends: .quasar_build_pwa
