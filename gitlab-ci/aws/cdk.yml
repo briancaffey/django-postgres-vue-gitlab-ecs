@@ -30,7 +30,6 @@
     name: ${ENVIRONMENT}-${APP_NAME}
     url: https://${ENVIRONMENT}.${DOMAIN_NAME}
   variables:
-    ENVIRONMENT: dev
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add nodejs-current npm
