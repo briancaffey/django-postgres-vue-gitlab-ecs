@@ -5,9 +5,6 @@ workflow:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
 
-include:
-  - local: /gitlab-ci/aws/cdk.yml
-
 variables:
   ENVIRONMENT: dev
 

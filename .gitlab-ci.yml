@@ -11,6 +11,7 @@ stages:
 include:
   - local: /gitlab-ci/documentation.yml
   - local: /gitlab-ci/renovate.yml
+  - local: /gitlab-ci/aws/cdk.yml
   - local: /gitlab-ci/aws/dev.yml
   - local: /gitlab-ci/aws/app.yml
 
