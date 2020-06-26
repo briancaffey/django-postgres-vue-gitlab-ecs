@@ -20,8 +20,6 @@
     - npm install --progress=false
   script:
     - quasar build -m pwa
-  after_script:
-    - echo "Build Complete"
 
 .cdk_deploy:
   image: docker:19.03.1
