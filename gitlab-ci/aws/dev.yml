@@ -1,7 +1,7 @@
 workflow:
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
-      when: always
+    # - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
+    #   when: always
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
 
