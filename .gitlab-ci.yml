@@ -5,7 +5,6 @@ stages:
   - build
   - integration
   - release
-  - plan
   - deploy
 
 # gitlab ci deployment options

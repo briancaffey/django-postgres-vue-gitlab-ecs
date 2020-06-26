@@ -42,10 +42,7 @@ module.exports = {
       },
       {
         text: "DevOps",
-        items: [
-          { text: "AWS CDK", link: "/devops/aws-cdk/" },
-          { text: "GCP", link: "/devops/gcp/" },
-        ],
+        items: [{ text: "AWS CDK", link: "/devops/aws-cdk/" }],
       },
       {
         text: "Topics",
