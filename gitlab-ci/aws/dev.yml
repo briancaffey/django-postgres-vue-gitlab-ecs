@@ -8,10 +8,8 @@ workflow:
 variables:
   ENVIRONMENT: dev
 
-test_job:
-  image: node:10
-  script:
-    - echo "testing"
+include:
+  - local: /gitlab-ci/aws/cdk.yml
 
 quasar_build_pwa (dev):
   extends: .quasar_build_pwa
