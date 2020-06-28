@@ -13,8 +13,8 @@ base_domain_name = os.environ.get("DOMAIN_NAME", "mysite.com")
 # if the the production environent subdomain should nott be included in the URL
 # redefine `full_domain_name` to `base_domain_name` for that environment
 full_domain_name = f"{environment_name}.{base_domain_name}"  # dev.mysite.com
-# if environment_name == "prod":
-#     full_domain_name = base_domain_name
+if environment_name == "app":
+    full_domain_name = base_domain_name
 base_app_name = os.environ.get("APP_NAME", "mysite-com")
 full_app_name = f"{environment_name}-{base_app_name}"  # dev-mysite-com
 aws_region = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
