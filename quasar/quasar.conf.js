@@ -137,11 +137,11 @@ module.exports = function (ctx) {
 
     pwa: {
       // workboxPluginMode: "InjectManifest",
+      workboxPluginMode: "GenerateSW", // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {
         navigateFallback: "/index.html",
-        navigateFallbackBlacklist: [
-          /\/[admin,api,flower]+\/.*/,
-          /[admin,api,flower]+\/.*/,
+        navigateFallbackDenylist: [
+          /\/[admin,api,flower,pgadmin,rediscommander]+\/.*/,
         ],
       },
       manifest: {

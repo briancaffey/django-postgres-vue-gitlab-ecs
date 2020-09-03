@@ -19,30 +19,30 @@ export default {
   data() {
     return {
       pagination: {
-        rowsPerPage: 0
+        rowsPerPage: 0,
       },
       columns: [
         {
           name: "key",
           align: "left",
           label: "Environment Variable",
-          field: "key"
+          field: "key",
         },
         {
           name: "value",
           align: "left",
           label: "Value",
-          field: "value"
-        }
+          field: "value",
+        },
       ],
-      env: Object.keys(process.env).map(x => {
+      env: Object.keys(process.env).map((x) => {
         return {
           key: x,
-          value: process.env[x]
+          value: process.env[x],
         };
-      })
+      }),
     };
-  }
+  },
 };
 </script>
 

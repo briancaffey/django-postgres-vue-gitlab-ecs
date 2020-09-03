@@ -11,9 +11,9 @@ export default {
       },
       set() {
         this.$store.commit("toggleDarkMode");
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

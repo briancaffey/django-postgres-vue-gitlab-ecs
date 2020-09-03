@@ -4,4 +4,4 @@ npm install -g @quasar/cli
 
 npm install
 
-quasar dev
+quasar dev -m pwa

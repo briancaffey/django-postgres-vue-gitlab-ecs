@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from pathlib import Path
 
 from kombu import Queue
 import redis
@@ -266,7 +267,7 @@ EMAIL_PORT = os.environ.get("DJANGO_EMAIL_PORT", "1025")
 # Assets
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "media")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

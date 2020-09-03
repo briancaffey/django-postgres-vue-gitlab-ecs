@@ -7,6 +7,6 @@ export default {
   modules: {
     statements,
     transactions,
-    upload
-  }
+    upload,
+  },
 };

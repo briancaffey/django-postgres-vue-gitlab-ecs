@@ -25,7 +25,7 @@
     <base-btn
       :disabled="
         !$store.getters['banking/upload/getFile'] ||
-          !$store.getters['banking/upload/getDate']
+        !$store.getters['banking/upload/getDate']
       "
       @click.native="uploadFile"
       >Upload File</base-btn
@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      showCalendar: false
+      showCalendar: false,
     };
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
     options(date) {
       const parts = date.split("/");
       return parts[2] === "01";
-    }
+    },
   },
   computed: {
     statementFile: {
@@ -62,7 +62,7 @@ export default {
       },
       set(f) {
         return this.$store.commit("banking/upload/setFile", f);
-      }
+      },
     },
     month: {
       get() {
@@ -70,9 +70,9 @@ export default {
       },
       set(v) {
         return this.$store.commit("banking/upload/setDate", v);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

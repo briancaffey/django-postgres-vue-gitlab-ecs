@@ -15,7 +15,7 @@
       v-model="current"
       :max="
         $store.getters['banking/statements/getCount'] /
-          $store.getters['banking/statements/getPaginationLimit']
+        $store.getters['banking/statements/getPaginationLimit']
       "
     >
     </q-pagination>
@@ -34,7 +34,7 @@ export default {
       },
       set(v) {
         this.$store.commit("banking/statements/setPagination", v);
-      }
+      },
     },
     current: {
       get() {
@@ -42,9 +42,9 @@ export default {
       },
       set(v) {
         this.$store.dispatch("banking/statements/setCurrentPage", v);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

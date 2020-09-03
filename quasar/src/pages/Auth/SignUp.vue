@@ -16,8 +16,8 @@
 import SignUpForm from "components/auth/SignUpForm.vue";
 export default {
   components: {
-    SignUpForm
-  }
+    SignUpForm,
+  },
 };
 </script>
 

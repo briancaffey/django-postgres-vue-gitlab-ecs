@@ -37,7 +37,7 @@ export default {
       },
       set(v) {
         this.$store.commit("banking/transactions/setPagination", v);
-      }
+      },
     },
     current: {
       get() {
@@ -45,9 +45,9 @@ export default {
       },
       set(v) {
         this.$store.dispatch("banking/transactions/setCurrentPage", v);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 
