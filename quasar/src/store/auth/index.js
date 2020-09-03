@@ -15,13 +15,13 @@ import gqljwt from "./gqljwt";
 const state = {
   token: Cookies.get("user-token") || "",
   status: "",
-  hasLoadedOnce: false
+  hasLoadedOnce: false,
 };
 
 const getters = {
-  getToken: s => s.token,
-  isAuthenticated: s => !!s.token,
-  authStatus: s => s.status
+  getToken: (s) => s.token,
+  isAuthenticated: (s) => !!s.token,
+  authStatus: (s) => s.status,
 };
 
 const actions = {
@@ -30,14 +30,14 @@ const actions = {
       commit(AUTH_REQUEST);
       Vue.prototype.$axios
         .post("/api/auth/obtain_token/", user)
-        .then(resp => {
+        .then((resp) => {
           Cookies.set("refresh-token", resp.data.refresh);
           Cookies.set("user-token", resp.data.access);
           commit(AUTH_SUCCESS, resp);
           dispatch(USER_REQUEST);
           resolve(resp);
         })
-        .catch(err => {
+        .catch((err) => {
           commit(AUTH_ERROR, err);
           Cookies.remove("user-token");
           Cookies.remove("refresh-token");
@@ -55,17 +55,17 @@ const actions = {
     new Promise((resolve, reject) => {
       Vue.prototype.$axios
         .post("/api/auth/refresh_token/", {
-          refresh: Cookies.get("refresh-token")
+          refresh: Cookies.get("refresh-token"),
         })
-        .then(resp => {
+        .then((resp) => {
           Cookies.set("user-token", resp.data.access);
           commit(AUTH_SUCCESS, resp);
         });
-    })
+    }),
 };
 
 const mutations = {
-  [AUTH_REQUEST]: requestState => {
+  [AUTH_REQUEST]: (requestState) => {
     const s = requestState;
     s.status = "loading";
   },
@@ -74,19 +74,19 @@ const mutations = {
     s.token = resp.data.access;
     s.hasLoadedOnce = true;
   },
-  [AUTH_ERROR]: errorState => {
+  [AUTH_ERROR]: (errorState) => {
     const s = errorState;
     s.status = "error";
     s.hasLoadedOnce = true;
   },
-  [AUTH_LOGOUT]: logoutState => {
+  [AUTH_LOGOUT]: (logoutState) => {
     const s = logoutState;
     s.token = "";
-  }
+  },
 };
 
 const modules = {
-  gqljwt
+  gqljwt,
 };
 
 export default {
@@ -94,5 +94,5 @@ export default {
   getters,
   actions,
   mutations,
-  modules
+  modules,
 };

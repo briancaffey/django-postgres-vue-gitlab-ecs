@@ -13,13 +13,13 @@
 import StatementUploadForm from "./StatementUploadForm.vue";
 export default {
   components: {
-    StatementUploadForm
+    StatementUploadForm,
   },
   data() {
     return {
-      show: false
+      show: false,
     };
-  }
+  },
 };
 </script>
 

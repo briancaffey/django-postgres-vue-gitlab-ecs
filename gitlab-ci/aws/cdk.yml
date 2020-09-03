@@ -1,14 +1,12 @@
 # This template uses AWS CDK and AWS CLI to make infrastrcutre updates
 # and to deploy changes to the frontend and backend
 
-variables:
-  ENVIRONMENT: dev
-
-.quasar build pwa:
+.quasar_build_pwa:
   image: node:10
   stage: build
-  only:
-    - master
+  rules:
+    - changes:
+        - quasar/**/*
   variables:
     FULL_DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
     GOOGLE_OAUTH2_KEY: google123
@@ -22,18 +20,16 @@ variables:
     - npm install --progress=false
   script:
     - quasar build -m pwa
-  after_script:
-    - echo "Build Complete"
 
-cdk deploy:
+.cdk_deploy:
   image: docker:19.03.1
   services:
     - docker:19.03.5-dind
   stage: deploy
-  only:
-    - master
+  environment:
+    name: ${ENVIRONMENT}-${APP_NAME}
+    url: https://${ENVIRONMENT}.${DOMAIN_NAME}
   variables:
-    ENVIRONMENT: dev
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add nodejs-current npm
@@ -47,8 +43,6 @@ cdk deploy:
 .base_task: &task
   image: python:3.8
   stage: deploy
-  only:
-    - master
   when: manual
   before_script:
     - pip install awscli
@@ -60,41 +54,31 @@ cdk deploy:
             Name=tag:StackName,Values=${ENVIRONMENT}-${APP_NAME} \
             Name=tag:aws-cdk:subnet-type,Values=Public \
         | jq -r '.Subnets | map(.SubnetId) | join(",")')
-
-collectstatic:
-  <<: *task
   script:
     - |
       aws ecs run-task \
         --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-collectstatic \
+        --task-definition ${ENVIRONMENT}-${APP_NAME}-${TASK_SUFFIX} \
         --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
         --count 1 \
         --launch-type FARGATE
 
-migrate:
+.collectstatic:
   <<: *task
-  script:
-    - |
-      aws ecs run-task \
-        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-migrate \
-        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
-        --count 1 \
-        --launch-type FARGATE
+  variables:
+    TASK_SUFFIX: collectstatic
 
-createsuperuser:
+.migrate:
   <<: *task
-  script:
-    - |
-      aws ecs run-task \
-        --cluster ${ENVIRONMENT}-${APP_NAME}-cluster \
-        --task-definition ${ENVIRONMENT}-${APP_NAME}-create-superuser \
-        --network-configuration "awsvpcConfiguration={subnets=[${subnets}],assignPublicIp=ENABLED}" \
-        --count 1 \
-        --launch-type FARGATE
+  variables:
+    TASK_SUFFIX: migrate
 
-cdk destroy:
+.createsuperuser:
+  <<: *task
+  variables:
+    TASK_SUFFIX: create-superuser
+
+.cdk_destroy:
   image: python:3.8
   when: manual
   stage: deploy
@@ -102,10 +86,9 @@ cdk destroy:
     - apt-get -qq update && apt-get -y install nodejs npm
     - node -v
     - npm i -g aws-cdk
-    - cd awscdk
     - pip3 install awscli
-    - pip3 install -r requirements.txt
+    - pip3 install -e awscdk
   script:
-    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-frontend
-    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-assets
-    - cdk destroy --require-approval never
+    - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-frontend
+    - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-assets
+    - cdk destroy --app awscdk/app.py --force

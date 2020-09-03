@@ -12,8 +12,8 @@ export default {
   props: {
     size: {
       type: Number,
-      default: 1.25
-    }
-  }
+      default: 1.25,
+    },
+  },
 };
 </script>

@@ -9,8 +9,8 @@
 import TransactionsTable from "./TransactionsTable.vue";
 export default {
   components: {
-    TransactionsTable
-  }
+    TransactionsTable,
+  },
 };
 </script>
 

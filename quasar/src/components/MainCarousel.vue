@@ -11,11 +11,9 @@
       padding
       arrows
       height="300px"
-      :class="
-        `text-white shadow-1 rounded-borders ${
-          $store.getters.isDark ? 'carousel-dark' : 'carousel-light'
-        }`
-      "
+      :class="`text-white shadow-1 rounded-borders ${
+        $store.getters.isDark ? 'carousel-dark' : 'carousel-light'
+      }`"
     >
       <q-carousel-slide name="style" class="column no-wrap flex-center">
         <q-icon name="layers" size="56px" />
@@ -47,9 +45,9 @@ export default {
   data() {
     return {
       lorem: "Abc123",
-      slide: "style"
+      slide: "style",
     };
-  }
+  },
 };
 </script>
 

@@ -9,6 +9,6 @@
 <script>
 export default {
   name: "PageIndex",
-  mounted() {}
+  mounted() {},
 };
 </script>

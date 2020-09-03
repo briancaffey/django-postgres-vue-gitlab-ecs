@@ -6,7 +6,7 @@
           linkInfo.url
         }}</a
         >)
-        <span style="float:right" v-if="linkInfo.postedBy">
+        <span style="float: right;" v-if="linkInfo.postedBy">
           posted by {{ linkInfo.postedBy.email }}
         </span>
       </div>
@@ -19,9 +19,9 @@ export default {
   props: {
     linkInfo: {
       type: Object,
-      default: () => {}
-    }
-  }
+      default: () => {},
+    },
+  },
 };
 </script>
 

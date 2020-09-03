@@ -7,13 +7,11 @@ services:
     networks:
       - main
     ports:
-      - "5434:5432"
+      - "5432:5432"
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_USER=${POSTGRES_USERNAME}
-      - POSTGRES_DB=${POSTGRES_NAME}
+      - POSTGRES_PASSWORD=postgres
 
   redis:
     image: redis:alpine
@@ -40,8 +38,8 @@ services:
   nginx:
     container_name: nginx
     build:
-      context: .
-      dockerfile: nginx/dev/Dockerfile
+      context: ./nginx
+      dockerfile: dev/Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -91,18 +89,10 @@ services:
     networks:
       - main
     environment:
-      - CI_PIPELINE_TRIGGERED=True
       - SECRET_KEY=secret-key-for-development
       - DEBUG=True
       - DJANGO_EMAIL_HOST=${DJANGO_EMAIL_HOST}
       - DJANGO_EMAIL_PORT=${DJANGO_EMAIL_PORT}
-      - POSTGRES_NAME=${POSTGRES_NAME}
-      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_SERVICE_HOST=${POSTGRES_SERVICE_HOST}
-      - POSTGRES_SERVICE_PORT=${POSTGRES_SERVICE_PORT}
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
       - DJANGO_SETTINGS_MODULE=backend.settings.development
       - GITHUB_KEY=${GITHUB_KEY}
       - GITHUB_SECRET=${GITHUB_SECRET}
@@ -129,18 +119,42 @@ services:
   celery:
     <<: *backend
     container_name: celery
-    command: bash -c 'python3 manage.py watch_celery --queue default --concurrency=2'
-    volumes:
-      - ./backend:/code
+    command:
+      - "watchmedo"
+      - "auto-restart"
+      - "--directory=./"
+      - "--pattern=*.py"
+      - "--recursive"
+      - "--"
+      - "celery"
+      - "worker"
+      - "--app=backend.celery_app:app"
+      - "-Q"
+      - "default"
+      - "--concurrency=1"
+      - "--loglevel=INFO"
     ports: []
 
   beat:
     <<: *backend
-    build:
-      context: ./backend
-      dockerfile: scripts/dev/Dockerfile
     container_name: beat
-    command: /start_beat.sh
+    command:
+      - "sh"
+      - "-c"
+      - |
+        # remove celerybeat.pid and celerybeat-schedule if they exist
+        rm -f /code/celerybeat*;
+        watchmedo \
+          auto-restart \
+          --directory=./ \
+          --pattern=*.py \
+          --recursive \
+          -- \
+          celery \
+          beat \
+          --app=backend.celery_app:app \
+          --loglevel=INFO \
+          --pidfile=/code/celerybeat.pid
     volumes:
       - ./backend:/code
     ports: []
@@ -150,7 +164,7 @@ services:
     container_name: flower
     command: --url_prefix=flower --inspect_timeout=20000
     environment:
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_BROKER_URL=redis://redis:6379/0
       - FLOWER_PORT=5555
     ports:
       - 5555:5555
@@ -187,7 +201,7 @@ services:
     restart: unless-stopped
 
 volumes:
-  pg-data:
+  pgdata:
   django-static:
   redis-data:
   pgadmin:

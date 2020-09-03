@@ -10,7 +10,7 @@
 export default {
   name: "App",
 
-  created: function() {
+  created: function () {
     // if (this.$store.getters.isAuthenticated) {
     //   this.$store.dispatch("USER_REQUEST");
     //   // refresh the token every 4 minutes while the user is logged in in production
@@ -20,7 +20,7 @@ export default {
     //     this.$store.dispatch("AUTH_REFRESH");
     //   }, 1000 * 60 * refreshFrequency);
     // }
-  }
+  },
   // TODO: set this in Vuex
   // const isDesktop = this.$q.platform.is.desktop;
 };
