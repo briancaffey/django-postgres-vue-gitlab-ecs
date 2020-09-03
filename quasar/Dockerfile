@@ -1,13 +1,7 @@
-FROM node:12.16.3
+FROM node:10-alpine
 
 WORKDIR /app/
 
 COPY . .
-
-RUN npm install -g @quasar/cli && \
-    npm install -g @vue/cli && \
-    npm install -g @vue/cli-init
-
-COPY start_dev.sh .
 
 CMD ["/app/start_dev.sh"]
