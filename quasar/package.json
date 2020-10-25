@@ -17,7 +17,7 @@
     "apollo-link": "1.2.14",
     "apollo-link-context": "1.0.20",
     "apollo-link-http": "1.5.17",
-    "axios": "0.19.2",
+    "axios": "0.21.0",
     "emoji-mart-vue": "2.6.6",
     "graphql": "15.0.0",
     "graphql-tag": "2.10.3",
