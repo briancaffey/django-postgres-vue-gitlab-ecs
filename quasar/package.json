@@ -31,7 +31,7 @@
     "vue-native-websocket": "2.0.14"
   },
   "devDependencies": {
-    "@quasar/app": "1.9.6",
+    "@quasar/app": "2.1.5",
     "@vue/eslint-config-prettier": "6.0.0",
     "babel-eslint": "10.1.0",
     "eslint": "7.12.0",
