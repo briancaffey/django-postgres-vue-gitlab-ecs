@@ -2,7 +2,6 @@ import os
 
 from django.conf import settings
 from django.http import JsonResponse
-from django.views.generic import TemplateView
 from rest_framework import viewsets
 from rest_framework.decorators import (
     api_view,
@@ -12,7 +11,7 @@ from rest_framework.decorators import (
 
 
 from .utils.celery_utils import publish_celery_metrics
-from apps.core.tasks import debug_task, send_test_email_task, sleep_task
+from apps.core.tasks import send_test_email_task, sleep_task
 
 r = settings.REDIS
 
