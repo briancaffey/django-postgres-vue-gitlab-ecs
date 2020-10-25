@@ -21,7 +21,7 @@ gevent==20.9.0
 
 # Python Social Auth
 
-social-auth-app-django==3.1.0
+social-auth-app-django==3.4.0
 social-auth-core==3.3.3
 
 # Django page caching is not working with this version of Redis
@@ -40,4 +40,4 @@ psycopg2-binary==2.8.6
 
 redis==3.5.3
 
-requests==2.23.0
+requests==2.24.0
