@@ -17,7 +17,7 @@ djangorestframework==3.11.0
 djangorestframework_simplejwt==4.4.0
 django-debug-toolbar==2.2
 
-gevent==20.6.2
+gevent==20.9.0
 
 # Python Social Auth
 
