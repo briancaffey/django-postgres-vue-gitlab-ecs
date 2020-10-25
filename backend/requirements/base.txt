@@ -28,7 +28,7 @@ social-auth-core==3.3.3
 # but this version is required by Celery
 django-redis==4.12.1
 
-django-storages==1.9.1
+django-storages==1.10.1
 
 # TODO: figure out why pandas is taking a long time to download
 # in cdk deploy step
