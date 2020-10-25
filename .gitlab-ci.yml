@@ -42,7 +42,7 @@ include:
   #     - backend/**/*
 
 .Jest:
-  image: node:12.16.3
+  image: node:12.19.0
   stage: test
   before_script:
     - cd quasar

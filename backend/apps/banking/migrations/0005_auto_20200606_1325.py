@@ -14,6 +14,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='statementfile',
             name='statement_file',
-            field=models.FileField(storage=backend.storage_backends.PrivateMediaStorage, upload_to='banking'),
+            field=models.FileField(
+                storage=backend.storage_backends.PrivateMediaStorage,
+                upload_to='banking',
+            ),
         ),
     ]
