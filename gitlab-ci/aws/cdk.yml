@@ -1,19 +1,12 @@
 # This template uses AWS CDK and AWS CLI to make infrastrcutre updates
 # and to deploy changes to the frontend and backend
 
-workflow:
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
-      when: always
-
-variables:
-  ENVIRONMENT: dev
-
-.quasar build pwa:
+.quasar_build_pwa:
   image: node:10
   stage: build
-  only:
-    - master
+  rules:
+    - changes:
+        - quasar/**/*
   variables:
     FULL_DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
     GOOGLE_OAUTH2_KEY: google123
@@ -27,16 +20,13 @@ variables:
     - npm install --progress=false
   script:
     - quasar build -m pwa
-  after_script:
-    - echo "Build Complete"
 
-cdk deploy:
+.cdk_deploy:
   image: docker:19.03.1
   services:
     - docker:19.03.5-dind
   stage: deploy
   variables:
-    ENVIRONMENT: dev
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add nodejs-current npm
@@ -71,22 +61,22 @@ cdk deploy:
         --count 1 \
         --launch-type FARGATE
 
-collectstatic:
+.collectstatic:
   <<: *task
   variables:
     TASK_SUFFIX: collectstatic
 
-migrate:
+.migrate:
   <<: *task
   variables:
     TASK_SUFFIX: migrate
 
-createsuperuser:
+.createsuperuser:
   <<: *task
   variables:
     TASK_SUFFIX: create-superuser
 
-cdk destroy:
+.cdk_destroy:
   image: python:3.8
   when: manual
   stage: deploy
@@ -94,10 +84,9 @@ cdk destroy:
     - apt-get -qq update && apt-get -y install nodejs npm
     - node -v
     - npm i -g aws-cdk
-    - cd awscdk
     - pip3 install awscli
-    - pip3 install -r requirements.txt
+    - pip3 install -e awscdk
   script:
-    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-frontend
-    - aws s3 rb --force s3://${ENVIRONMENT}-{APP_NAME}-assets
-    - cdk destroy --require-approval never
+    - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-frontend
+    - aws s3 rb --force s3://${ENVIRONMENT}-${APP_NAME}-assets
+    - cdk destroy --app awscdk/app.py --force
