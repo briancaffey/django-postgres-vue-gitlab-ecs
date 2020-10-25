@@ -4,7 +4,6 @@ Documentation for this project can be found here:
 
 [https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/](https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/)
 
-
 ## Project Architecture Overview
 
 Here is an overview of the project architecture, including the CI/CD pipeline and the AWS infrastructure that will be automatically provisioned through the AWS Cloud Development Kit:

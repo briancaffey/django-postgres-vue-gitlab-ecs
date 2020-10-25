@@ -26,9 +26,6 @@
   services:
     - docker:19.03.5-dind
   stage: deploy
-  environment:
-    name: ${ENVIRONMENT}-${APP_NAME}
-    url: https://${ENVIRONMENT}.${DOMAIN_NAME}
   variables:
     DOCKER_TLS_CERTDIR: ""
   before_script:
@@ -43,7 +40,8 @@
 .base_task: &task
   image: python:3.8
   stage: deploy
-  when: manual
+  rules:
+    - when: manual
   before_script:
     - pip install awscli
     - apt-get -qq update && apt-get -y install jq
