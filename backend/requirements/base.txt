@@ -1,6 +1,6 @@
-boto3==1.13.16
+boto3==1.16.4
 
-celery==4.4.2
+celery==4.4.7
 kombu==4.6.8
 
 channels==2.4.0
@@ -8,7 +8,7 @@ channels-redis==2.4.2
 
 daphne==2.5.0
 
-graphene-django==2.10.1
+graphene-django==2.13.0
 django-graphql-jwt==0.3.1
 
 Django==3.1.2
@@ -17,7 +17,7 @@ djangorestframework==3.11.0
 djangorestframework_simplejwt==4.4.0
 django-debug-toolbar==2.2
 
-gevent==20.6.2
+gevent==20.9.0
 
 # Python Social Auth
 
@@ -26,7 +26,7 @@ social-auth-core==3.3.3
 
 # Django page caching is not working with this version of Redis
 # but this version is required by Celery
-django-redis==4.11.0
+django-redis==4.12.1
 
 django-storages==1.9.1
 
