@@ -47,6 +47,7 @@ class BastionHost(cloudformation.NestedStack):
         self.bastion_host_task = ecs.Ec2TaskDefinition(self, "BastionHostTask")
 
         self.bastion_host_task.add_container(
+            "BastionHostContainer",
             image=scope.image,
             command=["/start_prod.sh"],
             environment=scope.variables.regular_variables,
