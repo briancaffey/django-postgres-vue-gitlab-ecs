@@ -11,9 +11,16 @@ from aws_cdk import (
 
 
 class FlowerServiceStack(cloudformation.NestedStack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs,) -> None:
+    def __init__(
+        self,
+        scope: core.Construct,
+        id: str,
+        **kwargs,
+    ) -> None:
         super().__init__(
-            scope, id, **kwargs,
+            scope,
+            id,
+            **kwargs,
         )
 
         self.flower_task = ecs.FargateTaskDefinition(self, "FlowerTask")
@@ -26,7 +33,7 @@ class FlowerServiceStack(cloudformation.NestedStack):
 
         self.flower_task.add_container(
             "FlowerContainer",
-            image=ecs.ContainerImage.from_registry("mher/flower"),
+            image=ecs.ContainerImage.from_registry("mher/flower:0.9"),
             logging=ecs.LogDrivers.aws_logs(
                 stream_prefix="FlowerContainer",
                 log_retention=logs.RetentionDays.ONE_DAY,
