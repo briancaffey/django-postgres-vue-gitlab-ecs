@@ -21,7 +21,7 @@ quasar_build_pwa (dev):
   extends: .quasar_build_pwa
 
 cdk_deploy (dev):
-  <<: *manual_dev_settings
+  <<: *dev_settings
   extends: .cdk_deploy
 
 collectstatic (dev):
