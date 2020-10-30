@@ -27,6 +27,11 @@ class BastionHost(cloudformation.NestedStack):
             "AutoScalingGroup",
             instance_type=ec2.InstanceType("t2.micro"),
             machine_image=ecs.EcsOptimizedAmi(),
+            security_group=ec2.from_security_group_id(
+                self,
+                "DefaultSecurityGroupId",
+                scope.vpc.vpc_default_security_group,
+            ),
             associate_public_ip_address=True,
             update_type=autoscaling.UpdateType.REPLACING_UPDATE,
             desired_capacity=1,
