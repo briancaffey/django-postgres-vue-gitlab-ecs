@@ -16,7 +16,12 @@ GET_HEAD = cloudfront.CloudFrontAllowedMethods.GET_HEAD
 
 
 class CloudFrontStack(cloudformation.NestedStack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs,) -> None:
+    def __init__(
+        self,
+        scope: core.Construct,
+        id: str,
+        **kwargs,
+    ) -> None:
         super().__init__(scope, id, **kwargs)
 
         s3_domain_prefix = scope.static_site_bucket.bucket_name
@@ -54,7 +59,8 @@ class CloudFrontStack(cloudformation.NestedStack):
                     ),
                     behaviors=[
                         cloudfront.Behavior(
-                            is_default_behavior=True, cached_methods=GET_HEAD,
+                            is_default_behavior=True,
+                            cached_methods=GET_HEAD,
                         )
                     ],
                 ),
