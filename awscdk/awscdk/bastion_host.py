@@ -31,15 +31,10 @@ class BastionHost(cloudformation.NestedStack):
             update_type=autoscaling.UpdateType.REPLACING_UPDATE,
             desired_capacity=1,
             vpc=scope.vpc,
+            key_name=os.environ.get("KEY_NAME"),
             vpc_subnets={'subnet_type': ec2.SubnetType.PUBLIC},
         )
 
-        self.cluster = ecs.Cluster(self, 'EcsCluster', vpc=scope.vpc)
+        self.cluster = scope.cluster
 
         self.cluster.add_auto_scaling_group(self.asg)
-        self.cluster.add_capacity(
-            "DefaultAutoScalingGroup",
-            instance_type=ec2.InstanceType("t2.micro"),
-            max_capacity=2,
-            key_name=os.environ.get("KEY_NAME"),
-        )
