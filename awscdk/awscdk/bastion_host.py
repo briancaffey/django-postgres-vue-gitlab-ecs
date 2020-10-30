@@ -51,7 +51,7 @@ class BastionHost(cloudformation.NestedStack):
             image=scope.image,
             command=["/start_prod.sh"],
             environment=scope.variables.regular_variables,
-            secrets=scope.variables.secret_variables,
+            # secrets=scope.variables.secret_variables,
         )
 
         self.bastion_host_service = ecs.Ec2Service(
