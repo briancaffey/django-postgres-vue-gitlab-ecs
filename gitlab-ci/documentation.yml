@@ -1,7 +1,5 @@
-pages:
+.pages:
   image: node:latest
-  rules:
-    - if: "$CI_COMMIT_BRANCH == 'main'"
   stage: documentation
   script:
     - ./documentation/build_documentation.sh
