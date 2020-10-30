@@ -3,7 +3,7 @@ import os
 
 from aws_cdk import core
 
-from awscdk.cdk_app_root import ApplicationStack
+from awscdk.app_stack import ApplicationStack
 
 # naming conventions, also used for ACM certs, DNS Records, resource naming
 # Dynamically generated resource names created in CDK are used in GitLab CI

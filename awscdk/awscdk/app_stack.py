@@ -15,6 +15,7 @@ from env_vars import Variables
 from static_site_bucket import StaticSiteStack
 from flower import FlowerServiceStack
 from celery_autoscaling import CeleryAutoscalingStack
+from bastion_host import BastionHost
 
 from backend import BackendServiceStack
 from backend_tasks import BackendTasksStack
@@ -80,7 +81,9 @@ class ApplicationStack(core.Stack):
 
         # image used for all django containers: gunicorn, daphne, celery, beat
         self.image = ecs.AssetImage(
-            "./backend", file="scripts/prod/Dockerfile", target="production",
+            "./backend",
+            file="scripts/prod/Dockerfile",
+            target="production",
         )
 
         self.variables = Variables(
@@ -110,3 +113,6 @@ class ApplicationStack(core.Stack):
 
         # migrate, collectstatic, createsuperuser
         self.backend_tasks = BackendTasksStack(self, "BackendTasksStack")
+
+        # bastion host
+        self.bastion_host = BastionHost(self, "BastionHost")
