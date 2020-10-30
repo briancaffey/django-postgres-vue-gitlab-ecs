@@ -43,3 +43,19 @@ class BastionHost(cloudformation.NestedStack):
         self.cluster = scope.cluster
 
         self.cluster.add_auto_scaling_group(self.asg)
+
+        self.bastion_host_task = ecs.Ec2TaskDefinition(self, "BastionHostTask")
+
+        self.bastion_host_task.add_container(
+            image=scope.image,
+            command=["/start_prod.sh"],
+            environment=scope.variables.regular_variables,
+            secrets=scope.variables.secret_variables,
+        )
+
+        self.bastion_host_service = ecs.Ec2Service(
+            self,
+            "BastionHostService",
+            task_definition=self.bastion_host_task,
+            cluster=self.cluster,
+        )
