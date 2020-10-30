@@ -6,9 +6,6 @@ workflow:
 variables:
   ENVIRONMENT: dev
 
-include:
-  - local: /gitlab-ci/aws/cdk.yml
-
 quasar_build_pwa (dev):
   extends: .quasar_build_pwa
 
