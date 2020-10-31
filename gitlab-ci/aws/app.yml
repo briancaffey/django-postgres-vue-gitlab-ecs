@@ -1,25 +1,40 @@
-workflow:
+.base_app_env: &base_app_env
+  variables:
+    ENVIRONMENT: app
+    # DB_SNAPSHOT_ID:
+
+.workflow_app: &app_settings
+  <<: *base_app_env
   rules:
     - if: "$CI_COMMIT_TAG =~ /^v/"
       when: always
 
-variables:
-  ENVIRONMENT: app
+.manual_job_app: &manual_app_settings
+  <<: *base_app_env
+  rules:
+    - if: "$CI_COMMIT_TAG =~ /^v/"
+      when: manual
 
 quasar_build_pwa (app):
+  <<: *app_settings
   extends: .quasar_build_pwa
 
 cdk_deploy (app):
+  <<: *app_settings
   extends: .cdk_deploy
 
 collectstatic (app):
+  <<: *manual_app_settings
   extends: .collectstatic
 
 migrate (app):
+  <<: *manual_app_settings
   extends: .migrate
 
 createsuperuser (app):
+  <<: *manual_app_settings
   extends: .createsuperuser
 
 cdk_destroy (app):
+  <<: *manual_app_settings
   extends: .cdk_destroy

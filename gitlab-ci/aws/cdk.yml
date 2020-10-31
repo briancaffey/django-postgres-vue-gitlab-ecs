@@ -40,8 +40,6 @@
 .base_task: &task
   image: python:3.8
   stage: deploy
-  rules:
-    - when: manual
   before_script:
     - pip install awscli
     - apt-get -qq update && apt-get -y install jq
@@ -78,7 +76,6 @@
 
 .cdk_destroy:
   image: python:3.8
-  when: manual
   stage: deploy
   before_script:
     - apt-get -qq update && apt-get -y install nodejs npm

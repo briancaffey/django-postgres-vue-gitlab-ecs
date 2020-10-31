@@ -1,28 +1,41 @@
-workflow:
+.base_dev_env: &base_dev_env
+  variables:
+    ENVIRONMENT: dev
+    # RDS_INSTANCE_SIZE:
+    # DB_SNAPSHOT_ID:
+
+.workflow_dev: &dev_settings
+  <<: *base_dev_env
   rules:
     - if: "$CI_COMMIT_TAG =~ /^rc/"
       when: always
 
-variables:
-  ENVIRONMENT: dev
-
-include:
-  - local: /gitlab-ci/aws/cdk.yml
+.manual_job_dev: &manual_dev_settings
+  <<: *base_dev_env
+  rules:
+    - if: "$CI_COMMIT_TAG =~ /^rc/"
+      when: manual
 
 quasar_build_pwa (dev):
+  <<: *dev_settings
   extends: .quasar_build_pwa
 
 cdk_deploy (dev):
+  <<: *dev_settings
   extends: .cdk_deploy
 
 collectstatic (dev):
+  <<: *manual_dev_settings
   extends: .collectstatic
 
 migrate (dev):
+  <<: *manual_dev_settings
   extends: .migrate
 
 createsuperuser (dev):
+  <<: *manual_dev_settings
   extends: .createsuperuser
 
 cdk_destroy (dev):
+  <<: *manual_dev_settings
   extends: .cdk_destroy
