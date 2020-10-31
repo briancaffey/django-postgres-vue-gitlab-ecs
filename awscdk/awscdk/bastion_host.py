@@ -22,6 +22,16 @@ class BastionHost(cloudformation.NestedStack):
             **kwargs,
         )
 
+        # add ingress rule on port 22 for SSH
+        ec2.SecurityGroup.from_security_group_id(
+            self,
+            "DefaultSecurityGroupForIngress",
+            scope.vpc.vpc_default_security_group,
+        ).add_ingress_rule(
+            ec2.Peer.any_ipv4(),
+            ec2.Port.tcp(22),
+        )
+
         self.asg = autoscaling.AutoScalingGroup(
             self,
             "AutoScalingGroup",
