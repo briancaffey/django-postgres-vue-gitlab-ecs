@@ -91,7 +91,7 @@ module.exports = function (ctx) {
           }
         : {
             API_URL: JSON.stringify(`https://${process.env.FULL_DOMAIN_NAME}`),
-            WS_URL: JSON.stringify(`$wss://${process.env.FULL_DOMAIN_NAME}`),
+            WS_URL: JSON.stringify(`wss://${process.env.FULL_DOMAIN_NAME}`),
             GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
             GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY),
             FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY),
