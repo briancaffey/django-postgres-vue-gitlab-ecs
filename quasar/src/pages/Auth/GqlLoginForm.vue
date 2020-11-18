@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       email: process.env.NODE_ENV === "production" ? "" : "admin@company.com",
-      password: process.env.NODE_ENV === "production" ? "" : "password"
+      password: process.env.NODE_ENV === "production" ? "" : "password",
     };
   },
   methods: {
@@ -46,9 +46,9 @@ export default {
       this.$store.dispatch("gqljwt/authRequest", {
         email: this.email,
         password: this.password,
-        vm: this
+        vm: this,
       });
-    }
+    },
     // login() {
     //   const vm = this;
     //   this.$store
@@ -67,7 +67,7 @@ export default {
     //   this.email = "";
     //   this.password = "";
     // }
-  }
+  },
 };
 </script>
 

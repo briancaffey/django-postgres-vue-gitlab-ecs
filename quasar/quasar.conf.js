@@ -84,10 +84,10 @@ module.exports = function (ctx) {
       env: ctx.dev
         ? {
             API_URL: JSON.stringify(`http://${process.env.FULL_DOMAIN_NAME}`),
-            WS_URL: JSON.stringify(`ws://${process.env.FULL_DOMAIN_NAME}`),
-            GITHUB_KEY: JSON.stringify(process.env.GITHUB_KEY),
-            GOOGLE_OAUTH2_KEY: JSON.stringify(process.env.GOOGLE_OAUTH2_KEY),
-            FACEBOOK_KEY: JSON.stringify(process.env.FACEBOOK_KEY),
+            WS_URL: `ws://${process.env.FULL_DOMAIN_NAME}`,
+            GITHUB_KEY: process.env.GITHUB_KEY,
+            GOOGLE_OAUTH2_KEY: process.env.GOOGLE_OAUTH2_KEY,
+            FACEBOOK_KEY: process.env.FACEBOOK_KEY,
           }
         : {
             API_URL: JSON.stringify(`https://${process.env.FULL_DOMAIN_NAME}`),

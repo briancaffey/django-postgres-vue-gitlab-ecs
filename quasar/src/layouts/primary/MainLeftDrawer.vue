@@ -2,6 +2,7 @@
   <q-drawer
     @hide="hideDrawer"
     @show="showDrawer"
+    @input="hideDrawer"
     v-model="leftDrawerOpen"
     content-class="bg-grey-5"
   >
