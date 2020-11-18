@@ -1,6 +1,11 @@
 import os
 
-from aws_cdk import core, aws_ecs as ecs, aws_cloudformation as cloudformation
+from aws_cdk import (
+    core,
+    aws_ecs as ecs,
+    aws_cloudformation as cloudformation,
+    aws_logs as logs,
+)
 
 # These tasks are executed from manual GitLab CI jobs. The cluster is
 # specified with:
@@ -9,9 +14,16 @@ from aws_cdk import core, aws_ecs as ecs, aws_cloudformation as cloudformation
 
 
 class BackendTasksStack(cloudformation.NestedStack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs,) -> None:
+    def __init__(
+        self,
+        scope: core.Construct,
+        id: str,
+        **kwargs,
+    ) -> None:
         super().__init__(
-            scope, id, **kwargs,
+            scope,
+            id,
+            **kwargs,
         )
 
         # migrate
@@ -28,7 +40,10 @@ class BackendTasksStack(cloudformation.NestedStack):
             environment=scope.variables.regular_variables,
             secrets=scope.variables.secret_variables,
             command=["python3", "manage.py", "migrate", "--no-input"],
-            logging=ecs.LogDrivers.aws_logs(stream_prefix="MigrateCommand"),
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix="MigrateCommand",
+                log_retention=logs.RetentionDays.ONE_DAY,
+            ),
         )
 
         # collectstatic
@@ -79,6 +94,7 @@ class BackendTasksStack(cloudformation.NestedStack):
             ),
             command=["python3", "manage.py", "create_default_user"],
             logging=ecs.LogDrivers.aws_logs(
-                stream_prefix="CreateSuperuserCommand"
+                stream_prefix="CreateSuperuserCommand",
+                log_retention=logs.RetentionDays.ONE_DAY,
             ),
         )

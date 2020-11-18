@@ -35,8 +35,11 @@
 import LoginForm from "components/auth/LoginForm.vue";
 export default {
   components: {
-    LoginForm
-  }
+    LoginForm,
+  },
+  created() {
+    this.$axios.get("/api/login-set-cookie/");
+  },
 };
 </script>
 
