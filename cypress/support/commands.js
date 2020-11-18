@@ -9,22 +9,18 @@
 // ***********************************************
 //
 //
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add("login", () => {
   cy.request({
-    url: '/api/auth/obtain_token/',
-    method: 'POST',
+    url: "/api/auth/obtain_token/",
+    method: "POST",
     body: {
       email: "admin@company.com",
-      password: "password"
+      password: "password",
     },
   })
-  .its('body')
-  .then((body) => {
-    cy.setCookie('user-token', body['access']);
-    cy.setCookie('refresh-token', body['refresh']);
-  });
-})
-
+    .its("body")
+    .then(() => {});
+});
 
 //
 //

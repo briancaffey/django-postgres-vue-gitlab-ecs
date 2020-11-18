@@ -1,14 +1,29 @@
 import axios from "axios";
 
 export default async ({ Vue, store, router }) => {
+  // https://stackoverflow.com/a/15724300
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+
   const apiCall = axios.create();
 
   apiCall.interceptors.request.use(
     (config) => {
+      // Do something before each request is sent
       const c = config;
-      if (store.getters.isAuthenticated) {
-        c.headers.Authorization = `Bearer ${store.getters.getToken}`;
+
+      // this cookie must be sent with each axios request
+      // in order for POST / PUT /DELETE http methods to work
+
+      const cookie = getCookie("csrftoken") || "";
+
+      if (cookie) {
+        c.headers["X-CSRFToken"] = cookie;
       }
+
       return c;
     },
     (error) => {

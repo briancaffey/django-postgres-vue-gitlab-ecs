@@ -1,4 +1,4 @@
-pages:
+.pages:
   image: node:latest
   stage: documentation
   script:
