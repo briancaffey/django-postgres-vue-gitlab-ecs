@@ -28,7 +28,8 @@
     "quasar": "1.14.2",
     "vue-apollo": "3.0.5",
     "vue-i18n": "8.22.1",
-    "vue-native-websocket": "2.0.14"
+    "vue-native-websocket": "2.0.14",
+    "workbox-webpack-plugin": "5.0.0"
   },
   "devDependencies": {
     "@quasar/app": "2.1.5",
