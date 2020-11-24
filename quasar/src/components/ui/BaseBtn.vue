@@ -7,13 +7,13 @@ export default {
   props: {
     color: {
       type: String,
-      default: "white"
-    }
+      default: "white",
+    },
   },
   textColor: {
     type: String,
-    default: "black"
-  }
+    default: "black",
+  },
 };
 </script>
 

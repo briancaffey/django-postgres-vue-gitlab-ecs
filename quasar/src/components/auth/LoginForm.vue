@@ -36,29 +36,26 @@ export default {
   data() {
     return {
       email: process.env.NODE_ENV === "production" ? "" : "admin@company.com",
-      password: process.env.NODE_ENV === "production" ? "" : "password"
+      password: process.env.NODE_ENV === "production" ? "" : "password",
     };
   },
   methods: {
     login() {
       const vm = this;
+      const { email, password } = this;
       this.$store
         .dispatch("AUTH_REQUEST", {
-          email: this.email,
-          password: this.password
+          email,
+          password,
         })
         .then(() => {
           vm.$router.push("/");
-          const refreshFrequency =
-            process.env.NODE_ENV === "development" ? 0.1 : 4;
-          setInterval(() => {
-            vm.$store.dispatch("AUTH_REFRESH");
-          }, 1000 * 60 * refreshFrequency);
+          console.log("login success");
         });
       this.email = "";
       this.password = "";
-    }
-  }
+    },
+  },
 };
 </script>
 

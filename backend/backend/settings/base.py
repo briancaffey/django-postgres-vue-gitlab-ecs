@@ -172,7 +172,9 @@ REDIS_SERVICE_HOST = os.environ.get("REDIS_SERVICE_HOST", "redis")
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [(REDIS_SERVICE_HOST, 6379)],},  # noqa
+        "CONFIG": {
+            "hosts": [(REDIS_SERVICE_HOST, 6379)],
+        },  # noqa
     },
 }
 
@@ -193,9 +195,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        # 'rest_framework.authentication.BasicAuthentication',
     ),
 }
 

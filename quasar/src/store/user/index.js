@@ -9,51 +9,51 @@ import { AUTH_LOGOUT } from "../auth";
 
 const state = {
   status: "",
-  profile: {}
+  profile: {},
 };
 
 const getters = {
-  getProfile: s => s.profile,
-  isProfileLoaded: s => !!s.profile.name
+  getProfile: (s) => s.profile,
+  isProfileLoaded: (s) => !!s.profile.name,
 };
 
 const actions = {
   [USER_REQUEST]: ({ dispatch, commit }) => {
     Vue.prototype.$axios
       .get("/api/users/profile/")
-      .then(resp => {
+      .then((resp) => {
         const profile = resp.data;
         commit(USER_SUCCESS, {
-          email: profile.email
+          email: profile.email,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         commit(USER_ERROR);
         dispatch(AUTH_LOGOUT);
       });
-  }
+  },
 };
 
 const mutations = {
-  [USER_REQUEST]: s => {
+  [USER_REQUEST]: (s) => {
     s.status = "loading";
   },
   [USER_SUCCESS]: (s, resp) => {
     // s.status = "success";
     Vue.set(state, "profile", resp);
   },
-  [USER_ERROR]: s => {
+  [USER_ERROR]: (s) => {
     s.status = "error";
   },
-  [AUTH_LOGOUT]: s => {
+  [AUTH_LOGOUT]: (s) => {
     s.profile = {};
     s.status = "";
-  }
+  },
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

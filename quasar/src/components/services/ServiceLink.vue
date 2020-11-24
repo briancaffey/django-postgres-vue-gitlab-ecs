@@ -9,25 +9,25 @@ export default {
   props: {
     href: {
       type: String,
-      default: "#"
+      default: "#",
     },
     name: {
       type: String,
-      default: ""
+      default: "",
     },
     icon: {
       type: String,
-      default: ""
+      default: "",
     },
     target: {
       type: String,
-      default: "_blank"
+      default: "_blank",
     },
     type: {
       type: String,
-      default: "a"
-    }
-  }
+      default: "a",
+    },
+  },
 };
 </script>
 

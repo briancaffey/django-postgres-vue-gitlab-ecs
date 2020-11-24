@@ -11,8 +11,8 @@
 import GqlLoginForm from "./GqlLoginForm.vue";
 export default {
   components: {
-    GqlLoginForm
-  }
+    GqlLoginForm,
+  },
 };
 </script>
 
