@@ -50,7 +50,6 @@ export default {
         })
         .then(() => {
           vm.$router.push("/");
-          console.log("login success");
         });
       this.email = "";
       this.password = "";

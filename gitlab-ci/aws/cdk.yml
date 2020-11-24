@@ -4,9 +4,6 @@
 .quasar_build_pwa:
   image: node:10
   stage: build
-  rules:
-    - changes:
-        - quasar/**/*
   variables:
     FULL_DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
     GOOGLE_OAUTH2_KEY: google123

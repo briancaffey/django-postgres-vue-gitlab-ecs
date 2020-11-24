@@ -139,7 +139,7 @@ module.exports = function (ctx) {
       // workboxPluginMode: "InjectManifest",
       workboxOptions: {
         navigateFallback: "/index.html",
-        navigateFallbackBlacklist: [
+        navigateFallbackDenylist: [
           /\/[admin,api,flower]+\/.*/,
           /[admin,api,flower]+\/.*/,
         ],
