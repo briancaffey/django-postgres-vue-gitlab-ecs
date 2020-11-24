@@ -2,7 +2,7 @@
 # and to deploy changes to the frontend and backend
 
 .quasar_build_pwa:
-  image: node:10
+  image: node:12
   stage: build
   variables:
     FULL_DOMAIN_NAME: ${ENVIRONMENT}.${DOMAIN_NAME}
