@@ -22,11 +22,11 @@ import UploadForm from "./UploadForm.vue";
 export default {
   components: {
     HackerNewsLink,
-    UploadForm
+    UploadForm,
   },
   created() {
     this.$store.dispatch("hn/getLinks", { vm: this });
-  }
+  },
 };
 </script>
 

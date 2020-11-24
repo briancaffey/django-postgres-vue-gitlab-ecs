@@ -9,16 +9,16 @@ export default {
     githubAuth() {
       this.$axios
         .post("/api/social/github/", { code: this.$route.query.code })
-        .then(resp => {
+        .then((resp) => {
           Cookies.set("refresh-token", resp.data.refresh);
           Cookies.set("user-token", resp.data.access);
           window.location.href = "/";
         });
-    }
+    },
   },
   created() {
     this.githubAuth();
-  }
+  },
 };
 </script>
 

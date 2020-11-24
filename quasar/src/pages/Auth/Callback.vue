@@ -12,12 +12,12 @@ export default {
       const provider = this.$route.params.provider;
       this.$axios
         .post(`/api/social/${provider}/`, { code: this.$route.query.code })
-        .then(resp => {
+        .then((resp) => {
           Cookies.set("refresh-token", resp.data.refresh);
           Cookies.set("user-token", resp.data.access);
           window.location.href = "/";
         });
-    }
+    },
   },
   created() {
     this.handleOauthCallback();
@@ -25,8 +25,8 @@ export default {
   computed: {
     provider() {
       return this.$route.params.provider;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       email: process.env.NODE_ENV === "production" ? "" : "admin@company.com",
-      password: process.env.NODE_ENV === "production" ? "" : "password"
+      password: process.env.NODE_ENV === "production" ? "" : "password",
     };
   },
   methods: {
@@ -45,7 +45,7 @@ export default {
       this.$store
         .dispatch("AUTH_REQUEST", {
           email: this.email,
-          password: this.password
+          password: this.password,
         })
         .then(() => {
           vm.$router.push("/");
@@ -57,8 +57,8 @@ export default {
         });
       this.email = "";
       this.password = "";
-    }
-  }
+    },
+  },
 };
 </script>
 

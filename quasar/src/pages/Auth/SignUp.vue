@@ -2,7 +2,7 @@
   <base-page>
     <div class="login">
       <page-header>Sign Up</page-header>
-      <base-card style="max-width: 95%; min-width: 320px; padding: 20px;">
+      <base-card style="max-width: 95%; min-width: 320px; padding: 20px">
         <sign-up-form></sign-up-form>
       </base-card>
       <span class="login_link">
@@ -16,8 +16,8 @@
 import SignUpForm from "components/auth/SignUpForm.vue";
 export default {
   components: {
-    SignUpForm
-  }
+    SignUpForm,
+  },
 };
 </script>
 

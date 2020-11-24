@@ -1,32 +1,32 @@
 const todos = [
   {
     title: "Add ToDo Page",
-    complete: true
+    complete: true,
   },
   {
     title: "Use Vuex",
-    complete: true
+    complete: true,
   },
   {
     title: "Implement Dark Mode Option",
-    complete: false
+    complete: false,
   },
   {
     title: "Complete authentication",
-    complete: true
+    complete: true,
   },
   {
     title: "Add Carousel to Home Page",
-    complete: true
+    complete: true,
   },
   {
     title: "Show the menu if on desktop",
-    complete: false
+    complete: false,
   },
   {
     title: "Add pgadmin4 to services",
-    complete: false
-  }
+    complete: false,
+  },
 ];
 
 export default todos;

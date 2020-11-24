@@ -2,9 +2,7 @@
   <div>
     <q-dialog v-model="show">
       <base-card class="card">
-        <q-card-section>
-          Upload new link
-        </q-card-section>
+        <q-card-section> Upload new link </q-card-section>
         <q-card-section>
           <base-input v-model="url" label="URL"></base-input>
         </q-card-section>
@@ -26,7 +24,7 @@ export default {
   methods: {
     submit() {
       this.$store.dispatch("hn/upload/submitLink", { vm: this });
-    }
+    },
   },
   computed: {
     url: {
@@ -35,7 +33,7 @@ export default {
       },
       set(v) {
         this.$store.commit("hn/upload/setUrl", v);
-      }
+      },
     },
     description: {
       get() {
@@ -43,7 +41,7 @@ export default {
       },
       set(v) {
         this.$store.commit("hn/upload/setDescription", v);
-      }
+      },
     },
     show: {
       get() {
@@ -51,9 +49,9 @@ export default {
       },
       set() {
         this.$store.commit("hn/upload/toggleUploadForm");
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 
