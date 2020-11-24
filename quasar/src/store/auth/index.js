@@ -29,7 +29,7 @@ const actions = {
       Vue.prototype.$axios
         .post("/api/login/", user)
         .then((resp) => {
-          localStorage.setItem("user-token", "success!!!");
+          localStorage.setItem("user-token", "success");
           commit(AUTH_SUCCESS, resp);
           dispatch(USER_REQUEST);
           resolve(resp);

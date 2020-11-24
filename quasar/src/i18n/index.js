@@ -3,5 +3,5 @@ import cnCN from "./cn-cn";
 
 export default {
   "en-us": enUS,
-  "cn-cn": cnCN
+  "cn-cn": cnCN,
 };

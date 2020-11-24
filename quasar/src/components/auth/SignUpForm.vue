@@ -41,7 +41,7 @@ export default {
     return {
       email: "",
       password: "",
-      visible: false
+      visible: false,
     };
   },
   methods: {
@@ -51,7 +51,7 @@ export default {
         .then(() => {
           this.$q.notify({
             title: "User registered",
-            message: "Thank you for registering!"
+            message: "Thank you for registering!",
           });
           this.visible = false;
           this.$router.push("/");
@@ -60,8 +60,8 @@ export default {
           this.visible = false;
           this.$q.notify("There was an error.");
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

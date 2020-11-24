@@ -3,13 +3,13 @@ import gql from "graphql-tag";
 const state = {
   url: "",
   description: "",
-  showUploadForm: false
+  showUploadForm: false,
 };
 
 const getters = {
-  getUrl: s => s.url,
-  getDescription: s => s.description,
-  getShowUploadForm: s => s.showUploadForm
+  getUrl: (s) => s.url,
+  getDescription: (s) => s.description,
+  getShowUploadForm: (s) => s.showUploadForm,
 };
 
 const actions = {
@@ -30,10 +30,10 @@ const actions = {
       `,
       variables: {
         url: getters.getUrl,
-        description: getters.getDescription
-      }
+        description: getters.getDescription,
+      },
     });
-  }
+  },
 };
 
 const mutations = {
@@ -43,9 +43,9 @@ const mutations = {
   setDescription: (state, payload) => {
     state.description = payload;
   },
-  toggleUploadForm: state => {
+  toggleUploadForm: (state) => {
     state.showUploadForm = !state.showUploadForm;
-  }
+  },
 };
 
 export default {
@@ -53,5 +53,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

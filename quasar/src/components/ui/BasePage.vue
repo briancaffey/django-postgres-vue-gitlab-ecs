@@ -13,8 +13,8 @@ export default {
   methods: {
     getStyle() {
       return { color: "white" };
-    }
-  }
+    },
+  },
 };
 </script>
 

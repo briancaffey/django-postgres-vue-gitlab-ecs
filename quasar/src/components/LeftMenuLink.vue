@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  props: ["label", "to", "icon", "caption"]
+  props: ["label", "to", "icon", "caption"],
 };
 </script>
 

@@ -3,12 +3,12 @@ import upload from "./upload";
 
 const state = {
   links: null,
-  searchTerm: ""
+  searchTerm: "",
 };
 
 const getters = {
-  getLinks: s => s.links,
-  getSearchTerm: s => s.searchTerm
+  getLinks: (s) => s.links,
+  getSearchTerm: (s) => s.searchTerm,
 };
 
 const actions = {
@@ -34,23 +34,23 @@ const actions = {
         }
       `,
       variables: {
-        search: getters.getSearchTerm
-      }
+        search: getters.getSearchTerm,
+      },
     });
 
     const links = resp.data.links;
     commit("setLinks", { links });
-  }
+  },
 };
 
 const mutations = {
   setLinks: (state, { links }) => {
     state.links = links;
-  }
+  },
 };
 
 const modules = {
-  upload
+  upload,
 };
 
 export default {
@@ -59,5 +59,5 @@ export default {
   getters,
   actions,
   mutations,
-  modules
+  modules,
 };
