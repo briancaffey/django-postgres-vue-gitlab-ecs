@@ -18,9 +18,7 @@ def debug_task(self):
 
 
 @periodic_task(
-    run_every=(crontab(minute="*/1")),
-    name="debug_periodic_task",
-    ignore_result=True,
+    run_every=(crontab(minute="*/1")), name="debug_periodic_task", ignore_result=True,
 )
 def debug_periodic_task():
     print("Periodic task complete")

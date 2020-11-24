@@ -6,16 +6,10 @@ urlpatterns = [
     path("health-check/", views.health_check, name="health-check"),
     path("celery-metrics/", views.celery_metrics, name="celery-metrics"),
     path("celery/sleep-task/", views.sleep_task_view, name="sleep-task"),
-    path(
-        "debug/send-test-email/",
-        views.send_test_email,
-        name="send-test-email",
-    ),
+    path("debug/send-test-email/", views.send_test_email, name="send-test-email",),
     path(
         "debug/redis/",
-        views.DebugRedis.as_view(
-            {"get": "get", "post": "post", "delete": "delete"}
-        ),
+        views.DebugRedis.as_view({"get": "get", "post": "post", "delete": "delete"}),
         name="debug-redis",
     ),
 ]

@@ -37,9 +37,7 @@ class StatementViewSet(viewsets.ViewSet):
         # we could also do this on the frontend
         date = form_data["month"]
         formatted_date = (
-            datetime.datetime.strptime(date, "%Y-%m-%d")
-            .date()
-            .strftime("%Y-%m-%d")
+            datetime.datetime.strptime(date, "%Y-%m-%d").date().strftime("%Y-%m-%d")
         )
         form_data.update(dict(month_year=formatted_date))
         source_file = request.FILES["file"]

@@ -15,9 +15,7 @@ class Migration(migrations.Migration):
             model_name="statementfile",
             name="statement_file",
             field=models.FileField(
-                storage=django.core.files.storage.FileSystemStorage(
-                    location="/code/"
-                ),
+                storage=django.core.files.storage.FileSystemStorage(location="/code/"),
                 upload_to="",
             ),
         ),

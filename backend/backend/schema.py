@@ -12,9 +12,7 @@ class Query(
 
 
 class Mutation(
-    apps.accounts.schema.Mutation,
-    apps.hn.schema.Mutation,
-    graphene.ObjectType,
+    apps.accounts.schema.Mutation, apps.hn.schema.Mutation, graphene.ObjectType,
 ):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

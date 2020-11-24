@@ -9,9 +9,7 @@ User = get_user_model()
 
 class UsersManagersTests(TestCase):
     def test_create_user(self):
-        user = User.objects.create_user(
-            email="normal@user.com", password="foo"
-        )
+        user = User.objects.create_user(email="normal@user.com", password="foo")
         self.assertEqual(user.email, "normal@user.com")
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
@@ -58,17 +56,13 @@ class AccountsTests(APITestCase):
         u.save()
 
         resp = self.client.post(
-            url,
-            {"email": "user@foo.com", "password": "password"},
-            format="json",
+            url, {"email": "user@foo.com", "password": "password"}, format="json",
         )
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
         u.is_active = True
         u.save()
         resp = self.client.post(
-            url,
-            {"email": "user@foo.com", "password": "password"},
-            format="json",
+            url, {"email": "user@foo.com", "password": "password"}, format="json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertTrue("access" in resp.data)

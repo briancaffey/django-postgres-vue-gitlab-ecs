@@ -16,17 +16,13 @@ class CoreConsumer(AsyncWebsocketConsumer):
 
         # Join room group
         print(self.channel_name)  # noqa
-        await self.channel_layer.group_add(
-            self.ping_pong_group, self.channel_name
-        )
+        await self.channel_layer.group_add(self.ping_pong_group, self.channel_name)
 
         await self.accept()
 
     async def disconnect(self, close_code):
         # Leave room group
-        await self.channel_layer.group_discard(
-            self.ping_pong_group, self.channel_name
-        )
+        await self.channel_layer.group_discard(self.ping_pong_group, self.channel_name)
 
     # Receive message from WebSocket
     async def receive(self, text_data):

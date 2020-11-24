@@ -7,16 +7,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('banking', '0004_transaction_source_file'),
+        ("banking", "0004_transaction_source_file"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='statementfile',
-            name='statement_file',
+            model_name="statementfile",
+            name="statement_file",
             field=models.FileField(
                 storage=backend.storage_backends.PrivateMediaStorage,
-                upload_to='banking',
+                upload_to="banking",
             ),
         ),
     ]

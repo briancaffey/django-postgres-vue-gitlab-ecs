@@ -25,7 +25,7 @@ def active_and_reserved_tasks_by_queue_name(queue_name):
                 [
                     task
                     for task in active_tasks
-                    if task['delivery_info']['routing_key'] == queue_name
+                    if task["delivery_info"]["routing_key"] == queue_name
                 ]
             )
 
@@ -37,7 +37,7 @@ def active_and_reserved_tasks_by_queue_name(queue_name):
                 [
                     task
                     for task in reserved_tasks
-                    if task['delivery_info']['routing_key'] == queue_name
+                    if task["delivery_info"]["routing_key"] == queue_name
                 ]
             )
 
@@ -68,7 +68,7 @@ def publish_queue_metrics(queue_names):
     print("sending cloudwatch data")
     if not settings.DEBUG:
         print("connecting aws api")
-        client = boto3.client('cloudwatch')
+        client = boto3.client("cloudwatch")
         client.put_metric_data(
             Namespace=os.environ.get("FULL_APP_NAME", "FULL_APP_NAME"),
             MetricData=[
