@@ -18,15 +18,11 @@ DATABASES = {
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(os.environ.get("REDIS_SERVICE_HOST"), 6379,)],  # noqa
-        },
+        "CONFIG": {"hosts": [(os.environ.get("REDIS_SERVICE_HOST"), 6379,)],},  # noqa
     },
 }
 
 # Celery Configuration
 
 CELERY_BROKER_URL = f"redis://{os.environ.get('REDIS_SERVICE_HOST')}/1"  # noqa
-CELERY_RESULT_BACKEND = (
-    f"redis://{os.environ.get('REDIS_SERVICE_HOST')}/1"  # noqa
-)
+CELERY_RESULT_BACKEND = f"redis://{os.environ.get('REDIS_SERVICE_HOST')}/1"  # noqa

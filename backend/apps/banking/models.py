@@ -6,9 +6,7 @@ from django.db import models
 
 
 class StatementFile(models.Model):
-    statement_file = models.FileField(
-        storage=PrivateMediaStorage, upload_to="banking"
-    )
+    statement_file = models.FileField(storage=PrivateMediaStorage, upload_to="banking")
     month = models.DateField(null=False, blank=False)
 
     def __str__(self):

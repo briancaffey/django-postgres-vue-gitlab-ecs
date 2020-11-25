@@ -45,12 +45,8 @@ def health_check(request):
 @api_view(["POST"])
 def sleep_task_view(request):
     sleep_seconds = request.data.get("seconds")
-    sleep_task.apply_async(
-        [sleep_seconds], queue=settings.CELERY_QUEUE_DEFAULT
-    )
-    return JsonResponse(
-        {"message": f"Sleep task submitted ({sleep_seconds} seconds)"}
-    )
+    sleep_task.apply_async([sleep_seconds], queue=settings.CELERY_QUEUE_DEFAULT)
+    return JsonResponse({"message": f"Sleep task submitted ({sleep_seconds} seconds)"})
 
 
 @api_view(["POST"])

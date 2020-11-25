@@ -43,14 +43,10 @@ class HealthCheckMiddleware(object):
                 cursor.execute("SELECT 1;")
                 row = cursor.fetchone()
                 if row is None:
-                    return HttpResponseServerError(
-                        "Postgres: invalid response"
-                    )
+                    return HttpResponseServerError("Postgres: invalid response")
         except Exception as e:
             logger.exception(e)
-            return HttpResponseServerError(
-                "Postgres: cannot connect to database."
-            )
+            return HttpResponseServerError("Postgres: cannot connect to database.")
 
         # Call get_stats() to connect to each memcached
         # instance and get it's stats.

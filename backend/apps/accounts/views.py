@@ -43,8 +43,8 @@ def login_view(request):
     and HttpOnly cookie, the `sessionid` cookie
     """
     data = json.loads(request.body)
-    email = data.get('email')
-    password = data.get('password')
+    email = data.get("email")
+    password = data.get("password")
     if email is None or password is None:
         return JsonResponse(
             {"errors": {"__all__": "Please enter both username and password"}},
@@ -71,10 +71,7 @@ class SocialSerializer(serializers.Serializer):
     Serializer which accepts an OAuth2 code.
     """
 
-    code = serializers.CharField(
-        allow_blank=False,
-        trim_whitespace=True,
-    )
+    code = serializers.CharField(allow_blank=False, trim_whitespace=True,)
 
 
 @api_view(http_method_names=["POST"])

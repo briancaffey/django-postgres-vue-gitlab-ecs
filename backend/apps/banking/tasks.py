@@ -22,9 +22,7 @@ def process_statement_file(self, statement_file_id):
     of the transactions with one bulk create database operation
     """
 
-    statement_file = StatementFile.objects.get(
-        id=statement_file_id
-    ).statement_file
+    statement_file = StatementFile.objects.get(id=statement_file_id).statement_file
     file_data = statement_file.read().decode("utf-8")
     csv_data = csv.DictReader(StringIO(file_data), delimiter=",")
 

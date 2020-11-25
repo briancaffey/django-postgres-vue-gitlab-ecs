@@ -16,9 +16,7 @@ from kombu import Exchange, Queue
 import redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -181,18 +179,12 @@ CACHES = {
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(REDIS_SERVICE_HOST, 6379)],
-        },  # noqa
+        "CONFIG": {"hosts": [(REDIS_SERVICE_HOST, 6379)],},  # noqa
     },
 }
 
 REDIS = redis.Redis(
-    host=REDIS_SERVICE_HOST,
-    port=6379,
-    db=3,
-    charset="utf-8",
-    decode_responses=True,
+    host=REDIS_SERVICE_HOST, port=6379, db=3, charset="utf-8", decode_responses=True,
 )
 
 # REST FRAMEWORK
@@ -200,9 +192,7 @@ REDIS = redis.Redis(
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",  # noqa
     "PAGE_SIZE": 10,
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
     ),
@@ -218,9 +208,9 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
-CELERY_QUEUE_DEFAULT = 'default'
+CELERY_QUEUE_DEFAULT = "default"
 
-CELERY_QUEUES = (Queue(CELERY_QUEUE_DEFAULT, routing_key='default'),)
+CELERY_QUEUES = (Queue(CELERY_QUEUE_DEFAULT, routing_key="default"),)
 
 CELERY_QUEUES = (
     Queue(
@@ -241,9 +231,9 @@ CELERY_TASK_DEFAULT_EXCHANGE = CELERY_QUEUE_DEFAULT
 CELERY_TASK_DEFAULT_ROUTING_KEY = CELERY_QUEUE_DEFAULT
 
 CELERY_BEAT_SCHEDULE = {
-    'debug-periodic': {
-        'task': 'apps.core.tasks.debug_periodic_task',
-        'schedule': 30,  # scrape suppliers once every 5 minutes
+    "debug-periodic": {
+        "task": "apps.core.tasks.debug_periodic_task",
+        "schedule": 30,  # scrape suppliers once every 5 minutes
     },
 }
 
@@ -257,9 +247,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",  # noqa
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},  # noqa
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",  # noqa
     },
@@ -287,9 +275,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 AWS_DEFAULT_ACL = None
-AWS_STORAGE_BUCKET_NAME = os.environ.get(
-    "AWS_STORAGE_BUCKET_NAME", "bucketname"
-)
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "bucketname")
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
 }
