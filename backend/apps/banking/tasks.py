@@ -3,16 +3,17 @@ import datetime
 from io import StringIO
 
 import celery
-from celery.task import task
 
 from apps.banking.models import StatementFile, Transaction
+
+from backend.celery_app import app
 
 
 class BaseTask(celery.Task):
     pass
 
 
-@task(bind=True, base=BaseTask)
+@app.task(bind=True, base=BaseTask)
 def process_statement_file(self, statement_file_id):
 
     """

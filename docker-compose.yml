@@ -40,8 +40,8 @@ services:
   nginx:
     container_name: nginx
     build:
-      context: .
-      dockerfile: nginx/dev/Dockerfile
+      context: ./nginx
+      dockerfile: dev/Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -126,10 +126,23 @@ services:
       - ./backend:/code
     ports: []
 
-  celery:
+  celery_default:
     <<: *backend
-    container_name: celery
-    command: bash -c 'python3 manage.py watch_celery --queue default --concurrency=2'
+    container_name: celery_default
+    command:
+      - "watchmedo"
+      - "auto-restart"
+      - "--directory=./"
+      - "--pattern=*.py"
+      - "--recursive"
+      - "--"
+      - "celery"
+      - "--app=backend.celery_app:app"
+      - "worker"
+      - "-Q"
+      - "default"
+      - "--concurrency=1"
+      - "--loglevel=INFO"
     volumes:
       - ./backend:/code
     ports: []
@@ -140,13 +153,29 @@ services:
       context: ./backend
       dockerfile: scripts/dev/Dockerfile
     container_name: beat
-    command: /start_beat.sh
+    command:
+      - "sh"
+      - "-c"
+      - |
+        # remove celerybeat.pid and celerybeat-schedule if they exist
+        rm -f /code/celerybeat*;
+        watchmedo \
+          auto-restart \
+          --directory=./ \
+          --pattern=*.py \
+          --recursive \
+          -- \
+          celery \
+          --app=backend.celery_app:app \
+          beat \
+          --loglevel=INFO \
+          --pidfile=/code/celerybeat.pid
     volumes:
       - ./backend:/code
     ports: []
 
   flower:
-    image: mher/flower
+    image: mher/flower:0.9
     container_name: flower
     command: flower --url_prefix=flower
     environment:
@@ -157,7 +186,6 @@ services:
     networks:
       - main
     depends_on:
-      - celery
       - redis
       - beat
 
