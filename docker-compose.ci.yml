@@ -2,20 +2,31 @@ version: '3.7'
 
 services:
 
+services:
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:11.5
     networks:
       - main
+    ports:
+      - "5434:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres123
 
   backend: &backend
     container_name: backend
     build:
       context: ./backend
       dockerfile: scripts/prod/Dockerfile
-    command: /start_ci.sh
+    command: >
+      bash -c "
+        python3 manage.py makemigrations
+        python3 manage.py migrate --no-input
+        python3 manage.py create_default_user
+        gunicorn -t 300 -b 0.0.0.0:8000 backend.wsgi
+      "
     networks:
       - main
     volumes:
@@ -27,11 +38,18 @@ services:
       - SECRET_KEY='secret'
       - DEBUG=True
       - DJANGO_SETTINGS_MODULE=backend.settings.gitlab-ci
+      - POSTGRES_PASSWORD=postgres123
 
   asgiserver:
     <<: *backend
     container_name: asgiserver
-    entrypoint: /start_asgi.sh
+    command:
+      - "daphne"
+      - "backend.asgi:application"
+      - "--bind"
+      - "0.0.0.0"
+      - "--port"
+      - "9000"
     volumes:
       - ./backend:/code
 
