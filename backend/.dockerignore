@@ -1,0 +1,6 @@
+data/*
+static/*
+backup.json
+media/*
+notebooks/*
+.pytest_cache/

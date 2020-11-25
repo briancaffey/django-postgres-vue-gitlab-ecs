@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
-from kombu import Queue
+from kombu import Exchange, Queue
 import redis
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -167,15 +167,30 @@ REDIS_SERVICE_HOST = os.environ.get("REDIS_SERVICE_HOST", "redis")
 
 # Channels
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_SERVICE_HOST}:6379/4",
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        "KEY_PREFIX": "djangoredis",
+    }
+}
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [(REDIS_SERVICE_HOST, 6379)],},  # noqa
+        "CONFIG": {
+            "hosts": [(REDIS_SERVICE_HOST, 6379)],
+        },  # noqa
     },
 }
 
 REDIS = redis.Redis(
-    host=REDIS_SERVICE_HOST, port=6379, db=3, charset="utf-8", decode_responses=True,
+    host=REDIS_SERVICE_HOST,
+    port=6379,
+    db=3,
+    charset="utf-8",
+    decode_responses=True,
 )
 
 # REST FRAMEWORK
@@ -190,15 +205,41 @@ REST_FRAMEWORK = {
 }
 
 # Celery Configuration
+CELERY_QUEUE_DEFAULT = "default"
+CELERY_QUEUE_OTHER = "other"
+
+CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/1"  # noqa
+CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/2"  # noqa
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-CELERY_BROKER_URL = f"redis://{REDIS_SERVICE_HOST}:6379/1"  # noqa
-CELERY_RESULT_BACKEND = f"redis://{REDIS_SERVICE_HOST}:6379/2"  # noqa
 
 CELERY_QUEUE_DEFAULT = "default"
 
-CELERY_QUEUES = (Queue(CELERY_QUEUE_DEFAULT, routing_key="default"),)
+CELERY_QUEUES = (
+    Queue(
+        CELERY_QUEUE_DEFAULT,
+        Exchange(CELERY_QUEUE_DEFAULT),
+        routing_key=CELERY_QUEUE_DEFAULT,
+    ),
+    Queue(
+        CELERY_QUEUE_OTHER,
+        Exchange(CELERY_QUEUE_OTHER),
+        routing_key=CELERY_QUEUE_OTHER,
+    ),
+)
+
+CELERY_DEFAULT_EXCHANGE_TYPE = "direct"
+CELERY_TASK_DEFAULT_QUEUE = CELERY_QUEUE_DEFAULT
+CELERY_TASK_DEFAULT_EXCHANGE = CELERY_QUEUE_DEFAULT
+CELERY_TASK_DEFAULT_ROUTING_KEY = CELERY_QUEUE_DEFAULT
+
+CELERY_BEAT_SCHEDULE = {
+    "debug-periodic": {
+        "task": "apps.core.tasks.debug_periodic_task",
+        "schedule": 30,  # scrape suppliers once every 5 minutes
+    },
+}
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"
@@ -210,7 +251,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},  # noqa
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },  # noqa
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",  # noqa
     },

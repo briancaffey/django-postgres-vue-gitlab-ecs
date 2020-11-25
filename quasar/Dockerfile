@@ -4,9 +4,7 @@ WORKDIR /app/
 
 COPY . .
 
-RUN npm install -g @quasar/cli && \
-    npm install -g @vue/cli && \
-    npm install -g @vue/cli-init
+RUN npm install -g @quasar/cli
 
 COPY start_dev.sh .
 
