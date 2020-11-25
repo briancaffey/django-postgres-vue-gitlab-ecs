@@ -179,9 +179,7 @@ CACHES = {
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(REDIS_SERVICE_HOST, 6379)],
-        },  # noqa
+        "CONFIG": {"hosts": [(REDIS_SERVICE_HOST, 6379)]},
     },
 }
 
