@@ -6,6 +6,8 @@ This file inherits from `backend/backend/settings.py`
 
 from .base import *  # noqa
 
+ASGI_APPLICATION = "backend.routing.application"
+
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS  # noqa  # noqa
 
 DATABASES = {
