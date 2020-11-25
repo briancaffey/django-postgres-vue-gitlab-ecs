@@ -1,7 +1,6 @@
 import time
 
 import celery
-from celery.decorators import periodic_task
 from django.core.mail import send_mail
 
 from backend.celery_app import app
