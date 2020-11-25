@@ -18,7 +18,7 @@ def debug_task(self):
 
 
 @app.task(bind=True, base=BaseTask)
-def debug_periodic_task():
+def debug_periodic_task(self):
     print("Periodic task complete")
 
 
