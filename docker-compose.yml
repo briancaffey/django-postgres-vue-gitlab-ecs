@@ -121,7 +121,17 @@ services:
     build:
       context: ./backend
       dockerfile: scripts/dev/Dockerfile
-    command: bash -c 'python3 manage.py watch_daphne'
+    command:
+      - "watchmedo"
+      - "auto-restart"
+      - "--directory=./"
+      - "--pattern=*.py"
+      - "--recursive"
+      - "--"
+      - "python3"
+      - "manage.py"
+      - "runserver"
+      - "0.0.0.0:9000"
     volumes:
       - ./backend:/code
     ports: []
