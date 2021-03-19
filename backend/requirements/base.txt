@@ -3,7 +3,7 @@ boto3==1.16.23
 celery==5.0.2
 kombu==5.0.2
 
-channels==3.0.2
+channels==3.0.3
 channels-redis==3.2.0
 
 daphne==3.0.1
