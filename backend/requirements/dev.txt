@@ -1,5 +1,5 @@
 watchdog==0.10.3
-pyyaml==5.3.1
+pyyaml==5.4
 argh==0.26.2
 django-extensions==2.2.9  # NOTE: in installed_apps
 Werkzeug==1.0.1 # used for runserver_plus exception console
